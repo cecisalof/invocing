@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const getBaseUrl = () => "https://employees.codepremium.es/doc/?format=openapi";
+export const getBaseUrl = () => "https://employees.codepremium.es/api/";
 export const getBaseHeaders = () => ({ 'Content-type': 'application/json' });
 export const getTimeout = () => 60000;
 export const successHandler = (response) => response;

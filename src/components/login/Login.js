@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
-
-const axios = require('axios').default;
+import axios from 'axios';
+import './style.css';
 
 const Login = () => {
-    const [email, setEmail] = useState("");
-    console.log('email', email);
-    const [password, setPassword] = useState("");
-    console.log('password', password);
+    const [email, setEmail] = useState("cecilia@codepremium.es");
+    const [password, setPassword] = useState("Y4098842A");
     
     const isValidEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
 
@@ -15,54 +13,74 @@ const Login = () => {
         if  (email && email.match(isValidEmail)){
             setEmail(e.target.value)
         } else{
-            console.log('Formato de email incorrecto');
+          console.log('Formato de email incorrecto');
         }
     }
 
     const handlePasswordChange = (event) => {
-        setPassword(event.target.value.toLowerCase().trim());
+        setPassword(event.target.value.trim());
     }
-//     const getToken = async () => {
-//     try{
-//       const response = await axios.post(BASE_URL + API_URL.LOGIN,
-//         {
-//           email: email,
-//           password: password
-//         })
-//       const data = response.data;
-//     //   setUserInfo(data);
-//     //   setUserToken(data.token);
-//     } catch (error){
-//       console.log("Entra en error Login");
-//       console.log(error.response.data);
-//     }
 
-//  };
+   const handleClick = () => {
+    if (email !== "" && password !== "") {
+      getToken();
+    }
+   }
+  
+   const getToken = async () => {
+    try{
+      const response = await axios.post('https://employees.codepremium.es/api/login',
+        {
+          email: email,
+          password: password
+        })
+      const data = response.data;
+      console.log('data', data);
+    } catch (error){
+      console.log(error);
+    }
+ };
 
   return (
-    <div className="App">
-      <div class="container-fluid text-center px-4 py-4">
-      <div class="mb-3 row">
-        <label for="staticEmail" class="col-sm-2 col-form-label">Email</label>
-        <div class="col-sm-10">
-            <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="" 
+      <div className="Auth-form-container">
+        <form className="Auth-form">
+          <div className="Auth-form-content">
+            <div className='logo'>
+              <img src="logo.png" className="img-fluid" alt="Logo" />
+            </div>
+            <h3 className="Auth-form-title">Inicio de Sesión</h3>
+            <div className="form-group mt-3">
+              <label>Email</label>
+              <input
+                type="email"
+                className="form-control mt-1"
+                placeholder="Email"
                 value={email}
                 onChange={validateEmail}
-            />
-        </div>
+              />
+            </div>
+            <div className="form-group mt-3">
+              <label>Contraseña</label>
+              <input
+                type="password"
+                className="form-control mt-1"
+                placeholder="Contraseña"
+                value={password}
+                onChange={handlePasswordChange}
+              />
+            </div>
+            <div className="d-grid gap-2 mt-3">
+              <button type="button" className="btn btn-primary"
+                onClick={handleClick}>
+                Iniciar sesión
+              </button>
+            </div>
+            {/* <p className="forgot-password text-right mt-2">
+              ¿Has olvidado la <a href="#">contraseña?</a>
+            </p> */}
+          </div>
+        </form>
       </div>
-      <div class="mb-3 row">
-        <label for="inputPassword" class="col-sm-2 col-form-label">Password</label>
-        <div class="col-sm-10">
-          <input type="password" class="form-control" id="inputPassword" 
-            value={password}
-            onChange={handlePasswordChange}
-            />
-        </div>
-      </div>
-      <button type="button" class="btn btn-outline-primary">Iniciar sesión</button>
-      </div>
-    </div>
   );
 }
 
