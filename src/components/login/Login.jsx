@@ -3,7 +3,7 @@ import { Navigate } from 'react-router-dom';
 import axios from 'axios';
 import './style.css';
 
-const Login = () => {
+export const Login = () => {
     const [email, setEmail] = useState("cecilia@codepremium.es");
     const [password, setPassword] = useState("Y4098842A");
     const [userData, setUserData] = useState({});

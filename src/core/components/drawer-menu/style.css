@@ -1,0 +1,71 @@
+
+@media screen and (min-width:992px) {
+  .navbar,
+  .container-fluid,
+  .navbar-collapse, .navbar-expand-lg .navbar-nav {
+    flex-direction: column;
+    align-items: flex-start !important;
+    z-index:1;
+  }
+
+  .navbar {
+    width: 20%;
+    height: 100vh;
+    align-items: flex-start;
+  }
+
+  a.navbar-brand {
+    margin-left: .5rem;
+  }
+
+  .navabar .navabar-nav .nav-link {
+    color: #000;
+  }
+}
+  .navbar .navbar-nav .nav-link {
+    color: #000;
+  }
+  .navbar-brand {
+    font-size: 1.5em !important;
+    font-weight: bold !important;
+    color: #000;
+  }
+  .navbarlogo {
+    margin-bottom: 70px;
+    margin-top: 52px;
+  }
+
+  .img-fluid{
+    max-width: 198px;
+    max-height: 60px;
+  }
+
+  .nav-link {
+    color: #005CFF !important;
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 19px;
+    line-height: 26px;
+  }
+
+  .nav-item {
+    margin: 9px;
+    margin-left: 8px;
+    list-style-type: none;
+  }
+  
+  .logout {
+    margin-top: 180px;
+  }
+
+  .menuItemContainer {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+  }
+
+  .menuIcon {
+    max-width: 60px;
+    max-height: 60px;
+  }

@@ -20,6 +20,7 @@
     width: auto;
     height: 60px;
   }
+
   .Auth-form {
     width: 420px;
     box-shadow: rgb(0 0 0 / 16%) 1px 1px 10px;
@@ -39,11 +40,19 @@
     margin-bottom: 1em;
     font-size: 24px;
     color: rgb(34, 34, 34);
-    font-weight: 800;
+    font-weight: 700;
   }
   
   label {
     font-size: 14px;
     font-weight: 600;
     color: rgb(34, 34, 34);
+  }
+
+  .btn-primary {
+    background-color: #005CFF !important;
+  }
+
+  .forgot-password {
+    font-size: 12px;
   }
