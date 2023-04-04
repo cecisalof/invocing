@@ -1,7 +1,7 @@
 import { useLocation } from 'react-router-dom'
 import { AppBar } from "../components/appBar/AppBar";
 
-export const Payroll = () => {
+export const Invoices = () => {
   const location = useLocation();
 
   return (
@@ -9,7 +9,7 @@ export const Payroll = () => {
       <div>
         <AppBar location={location}/>
       </div>
-      <div>Payroll</div>
+      <div>Aquí facturas!!</div>
     </>
   )
 }

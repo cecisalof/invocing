@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { Navigate } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import './style.css';
@@ -11,8 +10,8 @@ export const Login = () => {
     const navigate = useNavigate();
     
   useEffect( () => {
-    if (userData.token) {
-      navigate("/");
+    if (userData.token && userData.name) {
+      navigate("/", { state: userData, replace: true });
     }
   }, [userData])
     

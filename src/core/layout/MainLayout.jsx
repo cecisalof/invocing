@@ -1,20 +1,19 @@
 import React from 'react'
 import { DrawerComponent } from "../components/drawer/DrawerComponent";
+import { AppBar } from "../../components/appBar/AppBar";
+import { useLocation } from 'react-router-dom';
+import "./style.css";
   
-  export const MainLayout = (props) => {
-    // const classes = mainLayoutStyles();
-    // // Informs whole app if drawer is open
-    // const openMenuStatus = useSelector(makeSelectMenuOpenStatus());
-    // // Informs whole app if responsive menu is open
-    // const openResponsiveMenuStatus = useSelector(makeSelectResponsiveMenuOpenStatus());
-    // const userData = useSelector(makeSelectUserData());
-  
-    // const sp = useSelector(makeSelectSellingPartner());
-    // const dispatch = useDispatch();
-  
+  export const MainLayout = () => {
+  //  const location = useLocation();
+   
     return (
-      <div className="">
-        <DrawerComponent />
-      </div>
+      <>
+        <div className="mainContainer">
+          <div className="">
+            <DrawerComponent />
+          </div>
+        </div>
+      </>
     );
   };
