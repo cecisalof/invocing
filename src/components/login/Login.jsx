@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import './style.css';
 
@@ -7,12 +8,13 @@ export const Login = () => {
     const [email, setEmail] = useState("cecilia@codepremium.es");
     const [password, setPassword] = useState("Y4098842A");
     const [userData, setUserData] = useState({});
+    const navigate = useNavigate();
     
-  // useEffect( () => {
-  //   if (userData) {
-  //     <Navigate to="/main" replace={true} />
-  //   }
-  // })
+  useEffect( () => {
+    if (userData.token) {
+      navigate("/");
+    }
+  }, [userData])
     
     const isValidEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
 
@@ -35,9 +37,6 @@ export const Login = () => {
     }
    }
   
-  //  const navigate = useNavigate();
-  //  const handleNavigation = () => navigate('/main');
-
    const getToken = async () => {
     try{
       const response = await axios.post('https://employees.codepremium.es/api/login',
@@ -46,8 +45,7 @@ export const Login = () => {
           password: password
         })
       const data = response.data;
-      setUserData(data)
-      console.log('data', data);
+      setUserData(data);
     } catch (error){
       console.log(error);
     }
