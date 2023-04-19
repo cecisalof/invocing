@@ -84,7 +84,7 @@ export const DrawerMenuComponent = () => {
                 <li className="nav-item">
                   <div className="menuItemContainer logout">
                     <img className="menuIcon" src={logoutIcon} alt="Profile" />
-                    <NavLink className="nav-link" to="/documents">Salir</NavLink>
+                    <Link className="nav-link" to="/logout">Salir</Link>
                   </div>
                 </li>
               </div>

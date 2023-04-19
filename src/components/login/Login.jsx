@@ -2,18 +2,21 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import './style.css';
+import Context from '../../contexts/context';
+import { useContext } from 'react'; 
 
 export const Login = () => {
     const [email, setEmail] = useState("cecilia@codepremium.es");
     const [password, setPassword] = useState("Y4098842A");
-    const [userData, setUserData] = useState({});
+    const userDataContext = useContext(Context);
     const navigate = useNavigate();
     
-  useEffect( () => {
-    if (userData.token && userData.name) {
-      navigate("/", { state: userData, replace: true });
+  useEffect( () => { // Check if user is already logged in
+    if (userDataContext.userData && userDataContext.userData.token && userDataContext.userData.uuid) {
+      console.log('Already logged in!')
+      navigate("/", { replace: true });
     }
-  }, [userData])
+  }, [userDataContext])
     
     const isValidEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
 
@@ -38,13 +41,13 @@ export const Login = () => {
   
    const getToken = async () => {
     try{
-      const response = await axios.post('https://employees.codepremium.es/api/login',
+      const response = await axios.post('https://data.tramitgo.com/api/login',
         {
           email: email,
           password: password
         })
       const data = response.data;
-      setUserData(data);
+      userDataContext.updateUserData(data) // Update info with new user!
     } catch (error){
       console.log(error);
     }
