@@ -31,9 +31,8 @@ export const DrawerMenuComponent = () => {
               </li>
               <li className="nav-item">
                 <div className="menuItemContainer">
-                  <NavLink className={(navData) => (navData.isActive ? 'active' : 'nav-link')}  to="/income">Ventas
-                    <img className="menuIcon" src={sellIcon} alt="Profile" />
-                  </NavLink>
+                  <img className="menuIcon" src={sellIcon} alt="Profile" />
+                  <NavLink className={(navData) => (navData.isActive ? 'active' : 'nav-link')}  to="/income">Ventas</NavLink>
                 </div>
               </li>
               <li className="nav-item">
