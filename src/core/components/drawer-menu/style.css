@@ -80,3 +80,9 @@
     max-width: 48px;
     max-height: 48px;
   }
+
+  .active {
+    font-size: 25px;
+    text-decoration: none;
+  }
+  
