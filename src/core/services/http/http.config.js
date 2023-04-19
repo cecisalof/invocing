@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const getBaseUrl = () => "https://employees.codepremium.es/api/";
+export const getBaseUrl = () => "http://data.tramitgo.com/api/";
 export const getBaseHeaders = () => ({ 'Content-type': 'application/json' });
 export const getTimeout = () => 60000;
 export const successHandler = (response) => response;

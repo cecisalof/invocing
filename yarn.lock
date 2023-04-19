@@ -2432,7 +2432,7 @@ ag-grid-community@^29.2.0:
 
 ag-grid-react@^29.2.0:
   version "29.2.0"
-  resolved "https://registry.yarnpkg.com/ag-grid-react/-/ag-grid-react-29.2.0.tgz#512f41e98cfd7ec291832aae8601f76b52c366c8"
+  resolved "https://registry.npmjs.org/ag-grid-react/-/ag-grid-react-29.2.0.tgz"
   integrity sha512-FZEWhbe51KNkvu+MohGXxXixIJdakJrs5XDdJ/h1jqmCX9WZzHNT2OvoYHIXB7gcKKj5pf47YJB8eaEqsRlpbg==
   dependencies:
     prop-types "^15.8.1"
