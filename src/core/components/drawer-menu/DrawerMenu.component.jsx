@@ -51,7 +51,7 @@ export const DrawerMenuComponent = () => {
                         </div>
                         <div className="menuItemContainer">
                           {/* <img className="menuIcon" src={cashIcon} alt="Cash" /> */}
-                          <NavLink className={(navData) => (navData.isActive ? 'active' : 'nav-link')}  to="/outcome/invoices">Facturas</NavLink>
+                          <NavLink className={(navData) => (navData.isActive ? 'active' : 'nav-link')}  to="/outcome/invoices-to-pay">Facturas</NavLink>
                         </div>
                         <div className="menuItemContainer">
                           {/* <img className="menuIcon" src={cashIcon} alt="Profile" /> */}

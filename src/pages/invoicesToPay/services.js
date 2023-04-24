@@ -5,7 +5,8 @@ export const getInvoices = async (token) => {
         const response = await axios.get( 'https://data.tramitgo.com/api/invoice-to-pay/', {
             headers: { 
                 'accept': 'application/json', 
-                'Authorization': 'Token ${token}', 
+                'Authorization': `Token ${token}`
+                //'Authorization': 'Token ab501632ab4cde6d6b923ba427d341cbbbc69480', 
             },
             params: {
                 limit: 500,

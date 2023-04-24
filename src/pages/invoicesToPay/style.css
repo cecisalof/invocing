@@ -1,0 +1,35 @@
+.title{
+    color: #005CFF;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 48px;
+    margin: 24px;
+}
+.ag-theme-alpine {
+    /* disable all borders */
+    --ag-borders: none;
+
+}
+
+.ag-theme-alpine {
+    --ag-header-height: 100px;
+    --ag-header-foreground-color: black;
+    --ag-header-background-color: white;
+    font-size: 16px;
+}
+.ag-root-wrapper { border-radius: 20px }
+
+.custom-header {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  
+  .custom-header input {
+    width: 100px;
+  }
+  
+  :focus {
+    background: #F7FAFF;
+  }
