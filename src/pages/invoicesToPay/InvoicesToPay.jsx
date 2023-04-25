@@ -2,7 +2,7 @@ import { useLocation } from 'react-router-dom'
 import { AppBar } from "../../components/appBar/AppBar";
 import { AgGridReact } from 'ag-grid-react'; // the AG Grid React Component
 import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
-import { getInvoices } from "./services";
+import { getInvoices, deleteInvoice } from "./services";
 import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
 import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
 import './style.css';
@@ -18,11 +18,8 @@ export const InvoicesToPay = (props) => {
   const [userToken, setUserToken] = useState('');
   
   const gridRef = useRef(); // Optional - for accessing Grid's API
-
-  const [gridApi, setGridApi] = useState(null);
-  const [gridColumnApi, setGridColumnApi] = useState(null);
   const [rowData, setRowData] = useState(); // Set rowData to Array of Objects, one Object per Row
-  const [searchTerm, setSearchTerm] = useState('');
+
  
   const gridStyle = useMemo(() => ({ height: '60vh', width: '95%', marginTop: 24, marginBottom: 32 }), []);
 
@@ -104,6 +101,7 @@ export const InvoicesToPay = (props) => {
     };
   }, []);
 
+
   function getRowStyle(props) {
     if (props.node.rowIndex % 2 === 0) {
         // Fila par
@@ -121,9 +119,26 @@ function handleFilterClick() {
 
 function handleTrashClick() {
   console.log('Botón de basura clickeado');
+  const selectedNodes = gridRef.current.api.getSelectedNodes();
+  const selectedData = selectedNodes.map((node) => node.data);
+  console.log(selectedData);
   
-
+  // Crear una Promesa que se resuelva cuando se hayan eliminado todas las facturas
+  const deletePromises = selectedData.map((obj) => {
+    console.log(obj.uuid);
+    return deleteInvoice(obj.uuid, userToken);
+  });
+  
+  Promise.all(deletePromises)
+    .then(() => {
+      // Llamada a getData() después de que se hayan eliminado todas las facturas
+      getData(userToken);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 }
+
 
   return (
     <>
@@ -143,6 +158,7 @@ function handleTrashClick() {
           animateRows={true} // Optional - set to 'true' to have rows animate when sorted
           rowSelection='multiple' // Options - allows click selection of rows
           getRowStyle={getRowStyle}
+          pagination={true}
         />
       </div>
     </>
