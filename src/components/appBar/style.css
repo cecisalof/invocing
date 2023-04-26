@@ -1,0 +1,41 @@
+.title{
+    font-style: normal;
+    font-weight: 400;
+    font-size: 35px;
+    line-height: 48px;
+    color: #000000;
+    flex: 1;
+}
+
+.searchBar {
+    flex: 1;
+}
+
+.appBarContainer{
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.tools {
+    flex: 1;
+    display: flex;
+    margin: 8px;
+}
+
+.settings {
+    flex: 1;
+    margin: 8px;
+}
+
+.notifications {
+    flex: 1;
+    margin: 8px;
+}
+
+.avatar {
+    flex: 1;
+    margin: 8px;
+}

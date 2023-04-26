@@ -1,0 +1,12 @@
+@media screen and (min-width:992px) {
+    .rootContainer {
+        display: flex;
+        align-items: baseline;
+    }
+
+    .mainContainer{
+        display: flex;
+        flex: 1;
+    }
+    
+}
