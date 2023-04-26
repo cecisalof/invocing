@@ -58,15 +58,17 @@ export const InvoicesToPay = (props) => {
       field: 'state',
       headerName: 'Estado',
       cellRenderer: ragRenderer,
+      cellClassRules: ragCellClassRules,
       cellEditor: 'agSelectCellEditor',
       cellEditorParams: {
-      values: ['RECIBIDA', 'PAGADA', 'RECHAZADO', 'PENDIENTE'],
+        values: ['RECIBIDA', 'PAGADA', 'RECHAZADO', 'PENDIENTE'],
+        cellRenderer: ragRenderer,
       },
       headerComponent: (props) => (
         <CustomHeader displayName={props.displayName} props={props} />
       ),
-      cellClassRules: ragCellClassRules,
-      cellStyle: { color: 'white', fontSize: '10px' }, // agregar estilo al texto de la celda
+      
+      cellStyle: { color: 'white', fontSize: '10px' },// agregar estilo al texto de la celda
     },
     {field: 'date',headerName: "Fecha",headerComponent: (props) => (
       <CustomHeader displayName={props.displayName} props={props}/>
@@ -105,6 +107,7 @@ export const InvoicesToPay = (props) => {
     }
   };
 
+
   const onCellValueChanged = (event) => {
     let newValue = event.newValue
     
@@ -119,8 +122,10 @@ export const InvoicesToPay = (props) => {
       newValue = stateMappings[newValue] || newValue;
     }
     const data = { [event.colDef.field]: newValue };
-    patchInvoice(event.data.uuid, data, userToken);
-    getData(userToken);
+    patchInvoice(event.data.uuid, data, userToken).then(() => {
+      // Espera a que se complete la solicitud PATCH y luego carga los datos
+      getData(userToken);
+    });
 
   };
 
