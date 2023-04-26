@@ -33,3 +33,27 @@
   :focus {
     background: #F7FAFF;
   }
+  
+  .rag-red-outer .rag-element {
+    background-color: #BA3800;
+    border-radius: 1em;
+    padding: 0.3em 0.5em;
+  }
+  
+  .rag-green-outer .rag-element {
+    background-color: #00BA98;
+    border-radius: 1em;
+    padding: 0.3em 0.5em;
+  }
+  
+  .rag-yellow-outer .rag-element {
+    background-color: rgba(123, 123, 3, 0.434);
+    border-radius: 1em;
+    padding: 0.3em 0.5em;
+  }
+
+  .rag-orange-outer .rag-element {
+    background-color: rgb(221, 164, 59);
+    border-radius: 1em;
+    padding: 0.3em 0.5em;
+  }

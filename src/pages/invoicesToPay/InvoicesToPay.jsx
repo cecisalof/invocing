@@ -2,7 +2,7 @@ import { useLocation } from 'react-router-dom'
 import { AppBar } from "../../components/appBar/AppBar";
 import { AgGridReact } from 'ag-grid-react'; // the AG Grid React Component
 import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
-import { getInvoices, deleteInvoice } from "./services";
+import { getInvoices, deleteInvoice, patchInvoice } from "./services";
 import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
 import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
 import './style.css';
@@ -25,6 +25,17 @@ export const InvoicesToPay = (props) => {
 
   const userDataContext = useContext(Context);
 
+  const ragRenderer = (props) => {
+    return <span class="rag-element">{props.value}</span>;
+  };
+
+  const ragCellClassRules = {
+    'rag-green-outer': (props) => props.value === 'payed' || props.value === 'PAGADA',
+    'rag-yellow-outer': (props) => props.value === 'received' || props.value === 'RECIBIDA',
+    'rag-red-outer': (props) => props.value === 'rejected' || props.value === 'RECHAZADO',
+    'rag-orange-outer': (props) => props.value === 'pending' || props.value === 'PENDIENTE',
+  };
+
   const [columnDefs, setColumnDefs] = useState([
     {
       field: 'number',
@@ -36,15 +47,27 @@ export const InvoicesToPay = (props) => {
         <CustomHeader displayName={props.displayName} props={props}/>
       ),
     },
-    {field: 'total', headerName: "Importe", headerComponent: (props) => (
+    {field: 'total', headerName: "Importe", 
+    headerComponent: (props) => (
       <CustomHeader displayName={props.displayName} props={props}/>
     ),},
     {field: 'sender.name', headerName: "Proveedor", headerComponent: (props) => (
       <CustomHeader displayName={props.displayName} props={props}/>
     ),},
-    {field: 'state' ,headerName: "Estado", headerComponent: (props) => (
-      <CustomHeader displayName={props.displayName} props={props}/>
-    ),},
+    {
+      field: 'state',
+      headerName: 'Estado',
+      cellRenderer: ragRenderer,
+      cellEditor: 'agSelectCellEditor',
+      cellEditorParams: {
+      values: ['RECIBIDA', 'PAGADA', 'RECHAZADO', 'PENDIENTE'],
+      },
+      headerComponent: (props) => (
+        <CustomHeader displayName={props.displayName} props={props} />
+      ),
+      cellClassRules: ragCellClassRules,
+      cellStyle: { color: 'white', fontSize: '10px' }, // agregar estilo al texto de la celda
+    },
     {field: 'date',headerName: "Fecha",headerComponent: (props) => (
       <CustomHeader displayName={props.displayName} props={props}/>
     ),},
@@ -82,6 +105,25 @@ export const InvoicesToPay = (props) => {
     }
   };
 
+  const onCellValueChanged = (event) => {
+    let newValue = event.newValue
+    
+    const stateMappings = {
+      'PENDIENTE': 'pending',
+      'RECIBIDA': 'received',
+      'PAGADA': 'payed',
+      'RECHAZADO': 'rejected'
+    };
+    
+    if (event.colDef.field === 'state'){
+      newValue = stateMappings[newValue] || newValue;
+    }
+    const data = { [event.colDef.field]: newValue };
+    patchInvoice(event.data.uuid, data, userToken);
+    getData(userToken);
+
+  };
+
   const onGridReady = useCallback((props) => {
     // whenever grid is remounted again API object has to replaced
     const gridRef = props.api;
@@ -96,6 +138,7 @@ export const InvoicesToPay = (props) => {
       enableRowGroup: true,
       enablePivot: true,
       enableValue: true,
+      editable: true,
       sideBar: true,
       cellStyle: {color: '#999999',  fontSize: '15px'}
     };
@@ -159,6 +202,7 @@ function handleTrashClick() {
           rowSelection='multiple' // Options - allows click selection of rows
           getRowStyle={getRowStyle}
           pagination={true}
+          onCellValueChanged={onCellValueChanged}
         />
       </div>
     </>

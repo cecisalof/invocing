@@ -11,6 +11,7 @@ export default ({ displayName, props }) => {
   const onSearch = (e) => {
     if (e.key === 'Enter') {
       console.log(searchTerm);
+      searchTerm = e.target.value
       const tableData = props?.api?.rowModel?.rowsToDisplay?.map((node) => node.data);
       if (originalData === null) {
         setOriginalData([...tableData]);
