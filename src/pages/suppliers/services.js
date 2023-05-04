@@ -5,7 +5,7 @@ export const getProviders = async () => {
         const response = await axios.get( 'https://data.tramitgo.com/api/providers/', {
             headers: { 
                 'accept': 'application/json', 
-                'Authorization': 'Token ab501632ab4cde6d6b923ba427d341cbbbc69480', 
+                'Authorization': 'Token f787712d52229f4ee1744079b33a6f5c5a93e38e', 
             },
             params: {
                 limit: 500,

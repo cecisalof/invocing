@@ -1,12 +1,14 @@
 import axios from 'axios';
+import {
+    API_URL, BASE_URL
+  } from '../../axios/config';
 
 export const getInvoices = async (token) => {
     try {
-        const response = await axios.get( 'https://data.tramitgo.com/api/invoice-to-pay/', {
+        const response = await axios.get(BASE_URL + API_URL.INVOICE_TO_PAY, {
             headers: { 
                 'accept': 'application/json', 
                 'Authorization': `Token ${token}`
-                //'Authorization': 'Token ab501632ab4cde6d6b923ba427d341cbbbc69480', 
             },
             params: {
                 limit: 500,
@@ -21,7 +23,7 @@ export const getInvoices = async (token) => {
 
 export const deleteInvoice = async (uuid, token) => {
     try {
-        const response = await axios.delete( 'https://data.tramitgo.com/api/invoice-to-pay/'+uuid, {
+        const response = await axios.delete( BASE_URL + API_URL.INVOICE_TO_PAY + uuid, {
             headers: { 
                 'accept': 'application/json', 
                 'Authorization': `Token ${token}`
@@ -41,7 +43,7 @@ export const deleteInvoice = async (uuid, token) => {
   export const patchInvoice = async (uuid, data, token) => {
     console.log(token)
     try {
-        const response = await axios.patch( 'https://data.tramitgo.com/api/invoice-to-pay/'+uuid, data, {
+        const response = await axios.patch( BASE_URL + API_URL.INVOICE_TO_PAY + uuid, data, {
             headers: { 
                 'accept': 'application/json', 
                 'Authorization': `Token ${token}`
