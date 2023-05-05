@@ -1,12 +1,14 @@
 import axios from 'axios';
+import {
+    API_URL, BASE_URL
+  } from '../../axios/config';
 
-export const getInvoices = async (token) => {
+export const getExpenseTicket = async (token) => {
     try {
-        const response = await axios.get( 'https://data.tramitgo.com/api/invoice-to-pay/', {
+        const response = await axios.get(BASE_URL + API_URL.EXPENSE_TICKET, {
             headers: { 
                 'accept': 'application/json', 
                 'Authorization': `Token ${token}`
-                //'Authorization': 'Token ab501632ab4cde6d6b923ba427d341cbbbc69480', 
             },
             params: {
                 limit: 500,
@@ -16,5 +18,43 @@ export const getInvoices = async (token) => {
         return response.data;
       } catch (error) {
         return console.log('error');
+      }
+  };
+
+export const deleteExpenseTicket = async (uuid, token) => {
+    try {
+        const response = await axios.delete( BASE_URL + API_URL.EXPENSE_TICKET + uuid, {
+            headers: { 
+                'accept': 'application/json', 
+                'Authorization': `Token ${token}`
+            },
+            params: {
+                limit: 500,
+                offset: 0
+            },
+        });
+        return response.data;
+      } catch (error) {
+        return console.log(error);
+      }
+  };
+
+
+  export const patchExpenseTicket = async (uuid, data, token) => {
+    console.log(token)
+    try {
+        const response = await axios.patch( BASE_URL + API_URL.EXPENSE_TICKET + uuid, data, {
+            headers: { 
+                'accept': 'application/json', 
+                'Authorization': `Token ${token}`
+            },
+            params: {
+                limit: 500,
+                offset: 0
+            },
+        });
+        return response.data;
+      } catch (error) {
+        return console.log(error);
       }
   };
