@@ -1,7 +1,7 @@
 import { Routes, Route, Router } from 'react-router-dom'
 import { LoginPage } from './pages/Login.jsx';
 import { Home } from './pages/Home.jsx';
-import { Income } from './pages/Income.jsx';
+import { Income } from './pages/income/Income.jsx';
 import { Outcome } from './pages/Outcome.jsx';
 import { MainLayout } from './core/layout/MainLayout'
 import { Documents } from './pages/Documents.jsx';
