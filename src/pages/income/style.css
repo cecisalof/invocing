@@ -57,3 +57,13 @@
     border-radius: 1em;
     padding: 0.3em 0.5em;
   }
+
+  .root {
+    margin-left: 48px;
+    width: 75vw;
+}
+
+.download-icon {
+  width: 20px;
+  height: 20px;
+}

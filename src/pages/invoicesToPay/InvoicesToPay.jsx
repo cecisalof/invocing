@@ -10,7 +10,8 @@ import Context from '../../contexts/context';
 import { useContext } from 'react';
 import filterIcon from '../../assets/icons/Filtrar.png';
 import deleteIcon from '../../assets/icons/Papelera.png';
-import CustomHeader from './customHeader.jsx';
+import CustomHeader from '../customHeader.jsx';
+import CustomElement from '../customElement.jsx';
 
 export const InvoicesToPay = (props) => {
   const location = useLocation();
@@ -73,6 +74,11 @@ export const InvoicesToPay = (props) => {
     {field: 'date',headerName: "Fecha",headerComponent: (props) => (
       <CustomHeader displayName={props.displayName} props={props}/>
     ),},
+    {
+      field: 'file',
+      headerName: 'Factura',
+      cellRenderer: CustomElement
+    },
     {field: 'concept', headerName: 'Concepto'},
     {field: 'retention_percentage', headerName: '% Retención'}, 
     {field: 'taxes_percentage', headerName: '% Impuestos'},

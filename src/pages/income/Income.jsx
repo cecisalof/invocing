@@ -10,7 +10,9 @@ import Context from '../../contexts/context';
 import { useContext } from 'react';
 import filterIcon from '../../assets/icons/Filtrar.png';
 import deleteIcon from '../../assets/icons/Papelera.png';
-import CustomHeader from './customHeader.jsx';
+import CustomHeader from '../customHeader.jsx';
+import CustomElement from '../customElement.jsx';
+
 
 export const Income = (props) => {
   const location = useLocation();
@@ -90,6 +92,11 @@ export const Income = (props) => {
     {field: 'date',headerName: "Fecha",headerComponent: (props) => (
       <CustomHeader displayName={props.displayName} props={props}/>
     ),},
+    {
+      field: 'file',
+      headerName: 'Factura',
+      cellRenderer: CustomElement
+    },
     {field: 'concept', headerName: 'Concepto'},
     {field: 'retention_percentage', headerName: '% Retención'}, 
     {field: 'taxes_percentage', headerName: '% Impuestos'},
@@ -206,13 +213,17 @@ function handleTrashClick() {
 
 
 return (
-  <>
-    <div >
+<>
+<div className="root">
+    <div>
       <AppBar location={location}/>
     </div>
-    <button type="button" class="btn btn-primary rounded-pill px-4">Añadir Factura</button>
+    
+    <div>
+    <button type="button" class="btn btn-primary rounded-pill px-4">Añadir Venta</button>
     <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} />
     <img src={deleteIcon} alt="Delete icon" onClick={handleTrashClick} style={{ marginRight: '30px'  }} />
+    </div>
     <div className="ag-theme-alpine" style={gridStyle}>
       <AgGridReact
         onGridReady={onGridReady}
@@ -227,7 +238,8 @@ return (
         onCellValueChanged={onCellValueChanged}
       />
     </div>
-  </>
+  </div>
+    </> 
 )
 };
 export default Income;
