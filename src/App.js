@@ -9,6 +9,7 @@ import { Logout } from './pages/Logout.jsx';
 import { Vacations } from './pages/Vacations.jsx';
 import { Payroll } from './pages/Payroll.jsx';
 import { Suppliers } from './pages/suppliers/Suppliers.jsx';
+import { AddSupplier } from './pages/suppliers/AddSupplier.jsx';
 import { ExpenseTickets } from './pages/expensesTickets/ExpenseTickets.jsx';
 import { InvoicesToPay } from './pages/invoicesToPay/InvoicesToPay.jsx';
 import UserState from './contexts/UserState';
@@ -22,7 +23,7 @@ export const App = () => {
           <Route index element={<Home />}/>
           <Route path="/income" element={<Income />} />
           <Route path="/outcome" element={<Outcome />} >
-              <Route path=':suppliers' element={<Suppliers />} />
+              <Route path=':suppliers' element={<AddSupplier />} />
               <Route path=':expense-tickets' element={<ExpenseTickets />} />
               <Route path=':invoices-to-pay' element={<InvoicesToPay />} />
           </Route>

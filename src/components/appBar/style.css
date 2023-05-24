@@ -15,9 +15,10 @@
 .appBarContainer{
     display: flex;
     flex-wrap: wrap;
-    width: 100%;
+    width: 90%;
     align-items: center;
     margin-top: 1rem;
+    margin-right: 50px;
 }
 
 .tools {
