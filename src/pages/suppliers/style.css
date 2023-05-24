@@ -69,5 +69,24 @@
     border-radius: 20px; /* Bordes redondeados del panel */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra para el panel */
   }
+
+.message {
+    position: fixed;
+    top: 69%;
+    right: 300px;
+    transform: translateY(-50%);
+    padding: 10px;
+    border-radius: 20px;
+    font-weight: bold;
+  }
+.success {
+    background-color: transparent;
+    color: green;
+  }
+  
+  .error {
+    background-color: transparent;
+    color: red;
+  }
   
   

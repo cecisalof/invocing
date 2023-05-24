@@ -3,12 +3,23 @@ import { useLocation } from 'react-router-dom'
 import { AppBar } from "../../components/appBar/AppBar";
 import Context from '../../contexts/context';
 import { useContext } from 'react';
+import { postProviders} from "./services";
 import './style.css';
 
 export const AddSupplier = () => {
 const [userToken, setUserToken] = useState('');
-  const [input1, setInput1] = useState('');
-  const [input2, setInput2] = useState('');
+
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [address, setAddress] = useState('');
+  const [email, setEmail] = useState('');
+  const [account, setAccount] = useState('');
+  const [nif, setNif] = useState('');
+  const [activity, setActivity] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   const location = useLocation();
   const userDataContext = useContext(Context);
@@ -20,24 +31,67 @@ const [userToken, setUserToken] = useState('');
     }
   }, [userDataContext.userData.token]);
 
-  const handleInputChange1 = (e) => {
-    setInput1(e.target.value);
+  const handleAddName = (e) => {
+    setName(e.target.value);
+  };
+  const handleAddPhone = (e) => {
+    setPhone(e.target.value);
   };
 
-  const handleInputChange2 = (e) => {
-    setInput2(e.target.value);
+  const handleAddNIF = (e) => {
+    setNif(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleAddAdress = (e) => {
+    setAddress(e.target.value);
+  };
+  const handleAddAccount = (e) => {
+    setAccount(e.target.value);
+  };
+  const handleAddActivity = (e) => {
+    setActivity(e.target.value);
+  };
+  const handleAddEmail = (e) => {
+    setEmail(e.target.value);
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Aquí puedes realizar la lógica de añadir los datos o enviar el formulario
-    console.log('Input 1:', input1);
-    console.log('Input 2:', input2);
+    const data = {
+      activity: activity,
+      name: name,
+      nif: nif,
+      address: address,
+      email: email,
+      phone_number: phone,
+      account_number: account,
+    };
+    setIsLoading(true); // Iniciar la carga
+    setIsSuccess(false);
+    setIsError(false);
+
+
+
+      const response = await postProviders(userToken, data);
+      console.log(response)
+      if (response === undefined){
+        setIsError(true)
+      }else{
+        setIsSuccess(true)
+      }
+    setIsLoading(false);
+
 
     // Reiniciar los valores de los campos
-    setInput1('');
-    setInput2('');
+    setName('')
+    setPhone('')
+    setAccount('')
+    setActivity('')
+    setAddress('')
+    setEmail('')
+    setNif('')
+
   };
   
   return (
@@ -48,17 +102,29 @@ const [userToken, setUserToken] = useState('');
         </div>
   
         <div className="title">Nuevo Proveedor</div>
+        
+        {isSuccess && (
+        <div className="message success">
+          La operación se realizó correctamente.
+        </div>
+      )}
+      
+      {/* Mostrar mensaje de error */}
+      {isError && (
+        <div className="message error">
+          Hubo un error al realizar la operación.
+        </div>
+      )}
 
         <div className="panel">
-        <form onSubmit={handleSubmit}>
           <div className="form-row">
               <div className="input-container">
                 <label className="label" htmlFor="nombre-juridico">Nombre Proveedor</label>
                 <input
                   type="text"
                   id="nombre-juridico"
-                  value={input1}
-                  onChange={handleInputChange1}
+                  value={name}
+                  onChange={handleAddName}
                   placeholder="Nombre"
                   className="bigtextbox" 
                 />
@@ -69,8 +135,8 @@ const [userToken, setUserToken] = useState('');
                 <input
                   type="text"
                   id="actividad"
-                  value={input2}
-                  onChange={handleInputChange2}
+                  value={activity}
+                  onChange={handleAddActivity}
                   placeholder="Actividad"
                   className="midtextbox" 
                 />
@@ -84,8 +150,8 @@ const [userToken, setUserToken] = useState('');
                 <input
                   type="text"
                   id="nif"
-                  value={input1}
-                  onChange={handleInputChange1}
+                  value={nif}
+                  onChange={handleAddNIF}
                   placeholder="B-0000000"
                   className="smalltextbox" 
                 />
@@ -96,8 +162,8 @@ const [userToken, setUserToken] = useState('');
                 <input
                   type="text"
                   id="telefono"
-                  value={input2}
-                  onChange={handleInputChange2}
+                  value={phone}
+                  onChange={handleAddPhone}
                   placeholder="+34 000 000 000"
                   className="smalltextbox" 
                 />
@@ -110,8 +176,8 @@ const [userToken, setUserToken] = useState('');
                 <input
                   type="text"
                   id="Email"
-                  value={input1}
-                  onChange={handleInputChange1}
+                  value={email}
+                  onChange={handleAddEmail}
                   placeholder="ejemplo@gmail.com"
                   className="midtextbox" 
                 />
@@ -125,74 +191,35 @@ const [userToken, setUserToken] = useState('');
                 <input
                   type="text"
                   id="dirección"
-                  value={input2}
-                  onChange={handleInputChange2}
+                  value={address}
+                  onChange={handleAddAdress}
                   placeholder="Dirección fiscal"
                   className="bigtextbox" 
                 />
             </div>
             <div className="input-container">
-                <label className="label" htmlFor="CP">CP</label>
+                <label className="label" htmlFor="cuaneta bancaria">Cuenta Bancaria</label>
                 <input
                   type="text"
-                  id="CP"
-                  value={input1}
-                  onChange={handleInputChange1}
-                  placeholder="Código Postal"
+                  id="cuentabcanaria"
+                  value={account}
+                  onChange={handleAddAccount}
+                  placeholder="ES9420805801101234567891"
                   className="midtextbox" 
                 />
-            </div>
-          </div>
-
-          <div className="form-row">
-          <div className="input-container">
-                <label className="label" htmlFor="Forma de pago">Forma de Pago</label>
-                <input
-                  type="text"
-                  id="Forma de pago"
-                  value={input2}
-                  onChange={handleInputChange2}
-                  placeholder="Transferencia"
-                  className="smalltextbox" 
-                />
-              </div>
-              <div className="form-column">
-              <div className="input-container">
-                <label className="label" htmlFor="Sujeto a IVA">Sujeto a IVA</label>
-                <input
-                  type="text"
-                  id="Sujeto a IVA"
-                  value={input1}
-                  onChange={handleInputChange1}
-                  placeholder="21%"
-                  className="smalltextbox" 
-                />
-            </div>
-            </div>
-            <div className="form-column">
-              <div className="input-container">
-                <label className="label" htmlFor="Fecha">Fecha</label>
-                <input
-                  type="text"
-                  id="Fecha"
-                  value={input2}
-                  onChange={handleInputChange2}
-                  placeholder="mm/dd/yy"
-                  className="midtextbox" 
-                />
-              </div>
             </div>
           </div>
           <button
               type="button"
-              className="btn btn-primary rounded-pill px-4 my-3" // Agrega las clases de Bootstrap y estilos personalizados
+              className="btn btn-primary rounded-pill px-4 my-3" onClick={handleSubmit} // Agrega las clases de Bootstrap y estilos personalizados
               style={{ marginTop: '200px', width: '200px' }} // Estilos en línea para margen superior y ancho
             >
               Guardar
             </button>
-
-        </form>
+            
         </div>
+        
+      
       </div>
     </>
   );
