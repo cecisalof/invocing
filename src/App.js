@@ -23,7 +23,7 @@ export const App = () => {
           <Route index element={<Home />}/>
           <Route path="/income" element={<Income />} />
           <Route path="/outcome" element={<Outcome />} >
-              <Route path=':suppliers' element={<AddSupplier />} />
+              <Route path=':suppliers' element={<Suppliers />} />
               <Route path=':expense-tickets' element={<ExpenseTickets />} />
               <Route path=':invoices-to-pay' element={<InvoicesToPay />} />
           </Route>
@@ -31,6 +31,7 @@ export const App = () => {
           <Route path="/payroll" element={<Payroll />} />
           <Route path="/documents" element={<Documents />} />
           <Route path="/logout" element={<Logout />} />
+          <Route path='/add-suppliers' element={<AddSupplier />} />
         </Route>
       </Routes>
     </UserState>

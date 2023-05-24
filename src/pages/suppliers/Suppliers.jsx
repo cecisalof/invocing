@@ -36,6 +36,9 @@ export const Suppliers = () => {
     headerComponent: (props) => (
       <CustomHeader displayName={props.displayName} props={props}/>
     ),},
+    {field: 'activity', headerName: "Actividad", headerComponent: (props) => (
+      <CustomHeader displayName={props.displayName} props={props}/>
+    ),},
     {field: 'nif', headerName: "NIF", headerComponent: (props) => (
       <CustomHeader displayName={props.displayName} props={props}/>
     ),},
