@@ -13,9 +13,11 @@ import deleteIcon from '../../assets/icons/Papelera.png';
 import CustomHeader from '../customHeader.jsx';
 import CustomElement from '../customElement.jsx';
 import { getProviders } from "../suppliers/services";
+import { useNavigate } from 'react-router-dom';
 
 export const InvoicesToPay = (props) => {
   const location = useLocation();
+  const navigate = useNavigate();
 
   const [userToken, setUserToken] = useState('');
   
@@ -305,13 +307,17 @@ function handleTrashClick() {
     });
 }
 
+const handleAddInvoice = () => {
+  navigate('/add-invoices-to-pay'); // Reemplaza '/ruta-del-formulario' con la ruta de tu formulario
+};
+
 
   return (
     <>
       <div>
         <AppBar location={location}/>
       </div>
-      <button type="button" class="btn btn-primary rounded-pill px-4">Añadir Factura</button>
+      <button type="button" class="btn btn-primary rounded-pill px-4" onClick={handleAddInvoice}>Añadir Factura</button>
       <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} />
       <img src={deleteIcon} alt="Delete icon" onClick={handleTrashClick} style={{ marginRight: '30px'  }} />
       <div className="ag-theme-alpine" style={gridStyle}>

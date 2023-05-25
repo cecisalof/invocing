@@ -13,6 +13,7 @@ import { Suppliers } from './pages/suppliers/Suppliers.jsx';
 import { AddSupplier } from './pages/suppliers/AddSupplier.jsx';
 import { ExpenseTickets } from './pages/expensesTickets/ExpenseTickets.jsx';
 import { InvoicesToPay } from './pages/invoicesToPay/InvoicesToPay.jsx';
+import { AddInvoicesToPay } from './pages/invoicesToPay/AddInvoicesToPay.jsx';
 import UserState from './contexts/UserState';
 
 export const App = () => {
@@ -34,6 +35,7 @@ export const App = () => {
           <Route path="/logout" element={<Logout />} />
           <Route path='/add-suppliers' element={<AddSupplier />} />
           <Route path='/add-income' element={<AddIncome />} />
+          <Route path='/add-invoices-to-pay' element={<AddInvoicesToPay />} />
         </Route>
       </Routes>
     </UserState>
