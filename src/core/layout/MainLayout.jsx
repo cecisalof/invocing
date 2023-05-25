@@ -20,9 +20,10 @@ export const MainLayout = () => {
       <>
         <div className="mainContainer">
           <div className="">
-            <DrawerComponent />
+            <DrawerComponent user={userDataContext.userData} />
           </div>
         </div>
       </>
     );
   };
+ 

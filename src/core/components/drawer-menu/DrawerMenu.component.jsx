@@ -9,7 +9,8 @@ import logoutIcon from '../../../assets/icons/logout.png';
 import "./style.css";
 
 
-export const DrawerMenuComponent = () => {
+export const DrawerMenuComponent = ({user}) => {
+  const isAdministrator = user?.group?.includes("administrador")
   return (
     <>
      <nav className="navbar navbar-expand-lg navbar-dark shadow p-3 bg-body-tertiary rounded" style={{backgroundColor: "#005CFF"}}>
@@ -29,13 +30,13 @@ export const DrawerMenuComponent = () => {
                   <NavLink className={(navData) => (navData.isActive ? 'active' : 'nav-link')} aria-current="page" to="/">Dashboard</NavLink>
                 </div>
               </li>
-              <li className="nav-item">
+              {isAdministrator && <li className="nav-item">
                 <div className="menuItemContainer">
                   <img className="menuIcon" src={sellIcon} alt="Profile" />
                   <NavLink className={(navData) => (navData.isActive ? 'active' : 'nav-link')}  to="/income">Ventas</NavLink>
                 </div>
-              </li>
-              <li className="nav-item">
+              </li>}
+              {isAdministrator && <li className="nav-item">
                 <div className="accordion accordion-flush" id="accordionFlushExample">
                   <div className="accordion-item">
                       <h2 className="accordion-header">
@@ -60,7 +61,7 @@ export const DrawerMenuComponent = () => {
                       </div>
                   </div>
                 </div>
-              </li>
+              </li>}
               <li className="nav-item">
                 <div className="menuItemContainer">
                   <img className="menuIcon" src={calendarIcon} alt="Profile" />

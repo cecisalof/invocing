@@ -1,11 +1,11 @@
 import { DrawerMenuComponent } from '../drawer-menu/DrawerMenu.component';
 import "../../layout/style.css"
 
-export const DrawerComponent = () => {
+export const DrawerComponent = ({user}) => {
   return (
     <div className="">
       <div className="rootContainer">
-        <DrawerMenuComponent />
+        <DrawerMenuComponent user={user}/>
       </div>
     </div>
   );
