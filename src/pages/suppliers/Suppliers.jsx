@@ -8,6 +8,7 @@ import { useContext } from 'react';
 import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
 import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
 import './style.css';
+import { useNavigate } from 'react-router-dom';
 import filterIcon from '../../assets/icons/Filtrar.png';
 import deleteIcon from '../../assets/icons/Papelera.png';
 import CustomHeader from '../customHeader.jsx';
@@ -15,7 +16,9 @@ import CustomHeader from '../customHeader.jsx';
 export const Suppliers = () => {
   const location = useLocation();
   const [userToken, setUserToken] = useState('');
-  
+
+  const navigate = useNavigate();
+
   const gridRef = useRef(); // Optional - for accessing Grid's API
   const [rowData, setRowData] = useState(); // Set rowData to Array of Objects, one Object per Row
 
@@ -33,6 +36,9 @@ export const Suppliers = () => {
     headerComponent: (props) => (
       <CustomHeader displayName={props.displayName} props={props}/>
     ),},
+    {field: 'activity', headerName: "Actividad", headerComponent: (props) => (
+      <CustomHeader displayName={props.displayName} props={props}/>
+    ),},
     {field: 'nif', headerName: "NIF", headerComponent: (props) => (
       <CustomHeader displayName={props.displayName} props={props}/>
     ),},
@@ -47,6 +53,10 @@ export const Suppliers = () => {
       <CustomHeader displayName={props.displayName} props={props}/>
     ),},
   ]);
+
+  const handleAddProvider = () => {
+    navigate('/add-suppliers'); // Reemplaza '/ruta-del-formulario' con la ruta de tu formulario
+  };
 
   useEffect(() => {
     let token = userDataContext.userData.token;
@@ -161,7 +171,7 @@ return (
     <div>
       <AppBar location={location}/>
     </div>
-    <button type="button" class="btn btn-primary rounded-pill px-4">Añadir Proveedor</button>
+    <button type="button" class="btn btn-primary rounded-pill px-4" onClick={handleAddProvider}>Añadir Proveedor</button>
     <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} />
     <img src={deleteIcon} alt="Delete icon" onClick={handleTrashClick} style={{ marginRight: '30px'  }} />
     <div className="ag-theme-alpine" style={gridStyle}>

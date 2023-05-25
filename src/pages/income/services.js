@@ -58,3 +58,21 @@ export const deleteIncome = async (uuid, token) => {
         return console.log(error);
       }
   };
+
+  export const postIncome = async (token, data) => {
+    try {
+        const response = await axios.post(BASE_URL + API_URL.INVOICE_TO_EMIT_PDF, data, {
+            headers: { 
+                'accept': 'application/json', 
+                'Authorization': `Token ${token}`
+            },
+            params: {
+                limit: 500,
+                offset: 0
+            },
+        });
+        return response;
+      } catch (error) {
+        return console.log('error');
+      }
+  };

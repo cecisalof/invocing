@@ -2,7 +2,7 @@ import { useLocation } from 'react-router-dom'
 import { AppBar } from "../../components/appBar/AppBar";
 import { AgGridReact } from 'ag-grid-react'; // the AG Grid React Component
 import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
-import { getExpenseTicket, deleteExpenseTicket, patchExpenseTicket } from "./services";
+import { getExpenseTicket, deleteExpenseTicket, patchExpenseTicket, patchProviderExpenseTicket } from "./services";
 import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
 import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
 import './style.css';
@@ -11,6 +11,7 @@ import { useContext } from 'react';
 import filterIcon from '../../assets/icons/Filtrar.png';
 import deleteIcon from '../../assets/icons/Papelera.png';
 import CustomHeader from '../customHeader.jsx';
+import { getProviders } from "../suppliers/services";
 import CustomElement from '../customElement.jsx';
 
 export const ExpenseTickets = (props) => {
@@ -21,10 +22,21 @@ export const ExpenseTickets = (props) => {
   const gridRef = useRef(); // Optional - for accessing Grid's API
   const [rowData, setRowData] = useState(); // Set rowData to Array of Objects, one Object per Row
 
+  const [rowProviders, setrowProviders] = useState(); // Set rowData to Array of Objects, one Object per Row
+  const [providersLoaded, setProvidersLoaded] = useState(false);
+
+
  
   const gridStyle = useMemo(() => ({ height: '60vh', width: '95%', marginTop: 24, marginBottom: 32 }), []);
 
   const userDataContext = useContext(Context);
+  const providerCellRenderer = (params) => {
+    if (params.value) {
+      return params.value.name; // Mostrar el nombre del proveedor
+    }
+    return '';
+  };
+
 
   const ragRenderer = (props) => {
     return <span class="rag-element">{props.value}</span>;
@@ -52,9 +64,16 @@ export const ExpenseTickets = (props) => {
     headerComponent: (props) => (
       <CustomHeader displayName={props.displayName} props={props}/>
     ),},
-    {field: 'sender.name', headerName: "Proveedor", headerComponent: (props) => (
-      <CustomHeader displayName={props.displayName} props={props}/>
-    ),},
+    {field: 'sender.name', headerName: "Proveedor",
+        headerComponent: (props) => (
+          <CustomHeader displayName={props.displayName} props={props}/>
+        ),
+        cellEditor: 'agSelectCellEditor',
+        cellEditorParams:{
+          values: rowProviders ? rowProviders.map((provider) => provider.name) : [],
+          cellRenderer: providerCellRenderer,
+        },
+      },
     {field: 'date',headerName: "Fecha",headerComponent: (props) => (
       <CustomHeader displayName={props.displayName} props={props}/>
     ),},
@@ -97,6 +116,70 @@ export const ExpenseTickets = (props) => {
     }
   };
 
+  useEffect(() => {
+    if (userToken !== undefined) {
+      getDataProviders(userToken);
+    }
+  }, [userToken]);
+
+  const getDataProviders = async (userToken) => {
+    try {
+      const data = await getProviders(userToken);
+      setrowProviders(data || []);
+      setProvidersLoaded(true);
+    } catch (error) {
+      setrowProviders([]);
+      console.log('No hay datos para mostrar.');
+      setProvidersLoaded(true); // Si ocurre un error, también establece providersLoaded como true para continuar con la configuración de columnDefs
+    }
+  };
+
+  useEffect(() => {
+    if (providersLoaded) {
+      const updatedColumnDefs = [
+        {
+          field: 'number',
+          headerName: 'Nº Factura',
+          headerCheckboxSelection: false,
+          checkboxSelection: true,
+          showDisabledCheckboxes: true,
+          headerComponent: (props) => (
+            <CustomHeader displayName={props.displayName} props={props}/>
+          ),
+        },
+        {field: 'total', headerName: "Importe", 
+        headerComponent: (props) => (
+          <CustomHeader displayName={props.displayName} props={props}/>
+        ),},
+        {field: 'sender.name', headerName: "Proveedor",
+            headerComponent: (props) => (
+              <CustomHeader displayName={props.displayName} props={props}/>
+            ),
+            cellEditor: 'agSelectCellEditor',
+            cellEditorParams:{
+              values: rowProviders ? rowProviders.map((provider) => provider.name) : [],
+              cellRenderer: providerCellRenderer,
+            },
+          },
+        {field: 'date',headerName: "Fecha",headerComponent: (props) => (
+          <CustomHeader displayName={props.displayName} props={props}/>
+        ),},
+        {
+          field: 'file',
+          headerName: 'Factura',
+          cellRenderer: CustomElement
+        },
+        {field: 'concept', headerName: 'Concepto'},
+        {field: 'retention_percentage', headerName: '% Retención'}, 
+        {field: 'taxes_percentage', headerName: '% Impuestos'},
+        {field: 'total_pretaxes', headerName: 'Total sin Impuestos'},
+        {field: 'total_retention', headerName: 'Total Retenciones'},
+        {field: 'total_taxes', headerName: 'Total Impuestos'},
+      ];
+  
+      setColumnDefs(updatedColumnDefs);
+    }
+  }, [providersLoaded, rowProviders]);
 
   const onCellValueChanged = (event) => {
     let newValue = event.newValue
@@ -111,11 +194,26 @@ export const ExpenseTickets = (props) => {
     if (event.colDef.field === 'state'){
       newValue = stateMappings[newValue] || newValue;
     }
-    const data = { [event.colDef.field]: newValue };
-    patchExpenseTicket(event.data.uuid, data, userToken).then(() => {
-      // Espera a que se complete la solicitud PATCH y luego carga los datos
-      getData(userToken);
-    });
+    let data = { [event.colDef.field]: newValue };
+    
+    if (event.colDef.field === 'sender.name'){
+      let updateSender= null;
+      rowProviders.forEach((row) => {
+        if (row && row.name === newValue) {
+          updateSender = row.uuid
+        }
+      });
+      data = { "uuid": updateSender };
+      patchProviderExpenseTicket(event.data.uuid, data, userToken).then(() => {
+        // Espera a que se complete la solicitud PATCH y luego carga los datos
+        getData(userToken);
+      });
+    }else{
+      patchExpenseTicket(event.data.uuid, data, userToken).then(() => {
+        // Espera a que se complete la solicitud PATCH y luego carga los datos
+        getData(userToken);
+      });
+    }
 
   };
 

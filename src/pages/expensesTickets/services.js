@@ -58,3 +58,39 @@ export const deleteExpenseTicket = async (uuid, token) => {
         return console.log(error);
       }
   };
+
+  export const patchProviderExpenseTicket = async (uuid, data, token) => {
+    try {
+        const response = await axios.patch( BASE_URL + API_URL.EXPENSE_TICKET + uuid, data, {
+            headers: { 
+                'accept': 'application/json', 
+                'Authorization': `Token ${token}`
+            },
+            params: {
+                limit: 500,
+                offset: 0
+            },
+        });
+        return response.data;
+      } catch (error) {
+        return console.log(error);
+      }
+  };
+
+  export const postExpenseTicket = async (token, data) => {
+    try {
+        const response = await axios.post(BASE_URL + API_URL.PROVIDER, data, {
+            headers: { 
+                'accept': 'application/json', 
+                'Authorization': `Token ${token}`
+            },
+            params: {
+                limit: 500,
+                offset: 0
+            },
+        });
+        return response;
+      } catch (error) {
+        return console.log('error');
+      }
+  };

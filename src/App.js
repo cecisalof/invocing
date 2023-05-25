@@ -2,6 +2,7 @@ import { Routes, Route, Router } from 'react-router-dom'
 import { LoginPage } from './pages/Login.jsx';
 import { Home } from './pages/Home.jsx';
 import { Income } from './pages/income/Income.jsx';
+import { AddIncome } from './pages/income/AddIncome.jsx';
 import { Outcome } from './pages/Outcome.jsx';
 import { MainLayout } from './core/layout/MainLayout'
 import { Documents } from './pages/Documents.jsx';
@@ -9,8 +10,10 @@ import { Logout } from './pages/Logout.jsx';
 import { Vacations } from './pages/Vacations.jsx';
 import { Payroll } from './pages/Payroll.jsx';
 import { Suppliers } from './pages/suppliers/Suppliers.jsx';
+import { AddSupplier } from './pages/suppliers/AddSupplier.jsx';
 import { ExpenseTickets } from './pages/expensesTickets/ExpenseTickets.jsx';
 import { InvoicesToPay } from './pages/invoicesToPay/InvoicesToPay.jsx';
+import { AddInvoicesToPay } from './pages/invoicesToPay/AddInvoicesToPay.jsx';
 import UserState from './contexts/UserState';
 
 export const App = () => {
@@ -30,6 +33,9 @@ export const App = () => {
           <Route path="/payroll" element={<Payroll />} />
           <Route path="/documents" element={<Documents />} />
           <Route path="/logout" element={<Logout />} />
+          <Route path='/add-suppliers' element={<AddSupplier />} />
+          <Route path='/add-income' element={<AddIncome />} />
+          <Route path='/add-invoices-to-pay' element={<AddInvoicesToPay />} />
         </Route>
       </Routes>
     </UserState>
