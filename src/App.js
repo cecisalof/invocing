@@ -2,6 +2,7 @@ import { Routes, Route, Router } from 'react-router-dom'
 import { LoginPage } from './pages/Login.jsx';
 import { Home } from './pages/Home.jsx';
 import { Income } from './pages/income/Income.jsx';
+import { AddIncome } from './pages/income/AddIncome.jsx';
 import { Outcome } from './pages/Outcome.jsx';
 import { MainLayout } from './core/layout/MainLayout'
 import { Documents } from './pages/Documents.jsx';
@@ -32,6 +33,7 @@ export const App = () => {
           <Route path="/documents" element={<Documents />} />
           <Route path="/logout" element={<Logout />} />
           <Route path='/add-suppliers' element={<AddSupplier />} />
+          <Route path='/add-income' element={<AddIncome />} />
         </Route>
       </Routes>
     </UserState>

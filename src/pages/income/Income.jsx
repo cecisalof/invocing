@@ -9,6 +9,7 @@ import './style.css';
 import Context from '../../contexts/context';
 import { useContext } from 'react';
 import filterIcon from '../../assets/icons/Filtrar.png';
+import { useNavigate } from 'react-router-dom';
 import deleteIcon from '../../assets/icons/Papelera.png';
 import CustomHeader from '../customHeader.jsx';
 import CustomElement from '../customElement.jsx';
@@ -16,6 +17,8 @@ import CustomElement from '../customElement.jsx';
 
 export const Income = (props) => {
   const location = useLocation();
+
+  const navigate = useNavigate();
 
   const [userToken, setUserToken] = useState('');
   
@@ -211,6 +214,10 @@ function handleTrashClick() {
     });
 }
 
+const handleAddIncome = () => {
+  navigate('/add-income'); // Reemplaza '/ruta-del-formulario' con la ruta de tu formulario
+};
+
 
 return (
 <>
@@ -220,7 +227,7 @@ return (
     </div>
     
     <div>
-    <button type="button" class="btn btn-primary rounded-pill px-4">Añadir Venta</button>
+    <button type="button" class="btn btn-primary rounded-pill px-4" onClick={handleAddIncome}>Añadir Venta</button>
     <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} />
     <img src={deleteIcon} alt="Delete icon" onClick={handleTrashClick} style={{ marginRight: '30px'  }} />
     </div>

@@ -6,5 +6,6 @@ export const API_URL = {
     EXPENSE_TICKET: 'expenses/',
     PROVIDER: 'providers/',
     PATCH_PROVIDER: 'patch-invoice/',
-    PATCH_EXPENSES: 'patch-expenses/'
+    PATCH_EXPENSES: 'patch-expenses/',
+    INVOICE_TO_EMIT_PDF: 'invoice-to-emit-pdf/'
   };
