@@ -24,7 +24,7 @@ export const Suppliers = () => {
 
   const userDataContext = useContext(Context);
  
-  const gridStyle = useMemo(() => ({ height: '60vh', width: '95%', marginTop: 24, marginBottom: 32 }), []);
+  const gridStyle = useMemo(() => ({ height: '70vh', width: '95%', marginTop: 24, marginBottom: 32 }), []);
 
   // Each Column Definition results in one Column.
   const [columnDefs, setColumnDefs] = useState([

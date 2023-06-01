@@ -26,7 +26,7 @@ export const Income = (props) => {
   const [rowData, setRowData] = useState(); // Set rowData to Array of Objects, one Object per Row
 
  
-  const gridStyle = useMemo(() => ({ height: '60vh', width: '95%', marginTop: 24, marginBottom: 32 }), []);
+  const gridStyle = useMemo(() => ({ height: '70vh', width: '95%', marginTop: 24, marginBottom: 32 }), []);
 
   const userDataContext = useContext(Context);
 
