@@ -116,11 +116,11 @@ export const Login = () => {
                   Iniciar sesión
                 </span>}
                 {isLoading && <span>
-                  Cargando... <span class="spinner-border spinner-border-sm" role="status"></span>
+                  Cargando... <span className="spinner-border spinner-border-sm" role="status"></span>
                 </span>}
               </button>
             </div>
-            <span class="small text-danger">{error}</span>
+            <span className="small text-danger">{error}</span>
             <p className="forgot-password text-right mt-2">
               ¿Has olvidado la <a href="#">contraseña?</a>
             </p>

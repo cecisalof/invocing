@@ -39,7 +39,7 @@ export const ExpenseTickets = (props) => {
 
 
   const ragRenderer = (props) => {
-    return <span class="rag-element">{props.value}</span>;
+    return <span className="rag-element">{props.value}</span>;
   };
 
   const ragCellClassRules = {
@@ -281,7 +281,7 @@ function handleTrashClick() {
       <div>
         <AppBar location={location}/>
       </div>
-      <button type="button" class="btn btn-primary rounded-pill px-4">Añadir Gasto</button>
+      <button type="button" className="btn btn-primary rounded-pill px-4">Añadir Gasto</button>
       <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} />
       <img src={deleteIcon} alt="Delete icon" onClick={handleTrashClick} style={{ marginRight: '30px'  }} />
       <div className="ag-theme-alpine" style={gridStyle}>
