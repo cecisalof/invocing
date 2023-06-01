@@ -7,5 +7,7 @@ export const API_URL = {
     PROVIDER: 'providers/',
     PATCH_PROVIDER: 'patch-invoice/',
     PATCH_EXPENSES: 'patch-expenses/',
-    INVOICE_TO_EMIT_PDF: 'invoice-to-emit-pdf/'
+    INVOICE_TO_EMIT_PDF: 'invoice-to-emit-pdf/',
+    INVOICE_TO_PAY_AUTOMATIC: 'invoice-to-pay-automatic/',
+    SCHENDULE_STATUS: 'schendule-status/'
   };

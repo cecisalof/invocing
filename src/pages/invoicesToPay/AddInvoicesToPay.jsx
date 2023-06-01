@@ -1,13 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { AppBar } from "../../components/appBar/AppBar";
-import { FaCheckCircle } from 'react-icons/fa';
+import { FaCheckCircle, FaCircleNotch } from 'react-icons/fa';
 import Context from '../../contexts/context';
 import { useContext } from 'react';
 import { getProviders } from "../suppliers/services";
+import { postInvoice, postInvoiceAutomatic, getSchenduleStatus } from "./services";
+import { ProgressBar } from 'react-bootstrap';
 
 export const AddInvoicesToPay = (props) => {
     const [userToken, setUserToken] = useState('');
+    const [progress, setProgress] = useState(0);
+    const isLoadingRef = useRef(false);
+
 
     const [provider, setProvider] = useState('');
     const [date, setDate] = useState('');
@@ -22,6 +27,7 @@ export const AddInvoicesToPay = (props) => {
     const [totalRetention, setTotalRetention] = useState('');
     const [retentionPercentage, setRetentionPercentage] = useState('');
     const [currency, setCurrency] = useState('');
+    const [files, setFiles] = useState([]);
     
   
     const [isLoading, setIsLoading] = useState(false);
@@ -109,6 +115,7 @@ export const AddInvoicesToPay = (props) => {
     event.target.classList.remove('file-drop-zone-dragging');
     
     const files = event.dataTransfer.files;
+    setFiles(files)
     console.log(files);
     setIsFileUploaded(true);
   };
@@ -131,23 +138,136 @@ export const AddInvoicesToPay = (props) => {
     }
   };
 
-  const processFiles = () => {
+  const processFiles = async () => {
     console.log("Procesando archivos automáticamente...");
+    isLoadingRef.current = true;
     setIsFileUploaded(false);
-    // Realiza las operaciones de procesamiento de archivos aquí
-  };
+    const response = await postInvoiceAutomatic(userToken, files);
+    const ids = response.data.schendules
+    console.log(ids)
+    
+
+    const checkStatus = async () => {
+      console.log("AUI DEBERIA DE SER TRUE")
+      console.log(isLoadingRef.current)
+      
+      const response = await getSchenduleStatus(userToken, ids);
+      const statusResponse = response.status
+  
+      // Verificar si todos los IDs están en el estado "DONE"
+      let allDone = true;
+      let loadedCount = 0
+      
+
+      console.log("ALLDONE SIEMPRE A DONE")
+      console.log(allDone)
+
+      statusResponse.map((item) => {
+        for (const id of ids) {
+          allDone = true;
+          const status = item[id.toString()]; // Obtener el estado del ID
+          console.log(item[id.toString()])
+          if (status === "DONE") {
+            loadedCount =  loadedCount + 1; // Incrementar el contador si el estado es "DONE"
+            console.log(loadedCount); // Imprimir el número de IDs con estado "DONE"
+            const totalCount = ids.length;
+            const percentage = Math.round((loadedCount * 100) / totalCount);
+            setProgress(percentage); // Actualiza el progreso
+          }else{
+            allDone = false;
+            const totalCount = ids.length;
+            const percentage = Math.round((loadedCount * 100) / totalCount);
+            setProgress(percentage); // Actualiza el progreso
+          }
+
+        }
+      });
+      console.log("ALLDONE?")
+      console.log(allDone)
+      if (!allDone) {
+        // Si no todos los IDs están en el estado "DONE", esperar un tiempo y volver a verificar
+        setTimeout(checkStatus, 30000); // Esperar 2 segundos (puedes ajustar el tiempo según tus necesidades)
+      } else {
+        console.log("Procesamiento completo");
+        //setTimeout(isLoadingRef.current = false, 30000)
+      }   
+      
+    };
+    // Iniciar la verificación del estado de los IDs
+    await checkStatus();
+
+
+   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    }
+
+    const data = {
+
+        is_autoprocessed: false,
+        original_json: {},
+        date: date,
+        state: state,
+        number: number,
+        concept: concept,
+        payment_type: paymentType,
+        total_pretaxes: totalPretaxes,
+        total_taxes: totalTaxes,
+        taxes_percentage: taxesPercentage,
+        total_retention: totalRetention,
+        retention_percentage: retentionPercentage,
+        total: total,
+        currency: currency,
+        sender: provider
+      
+    };
+    setIsLoading(true); // Iniciar la carga
+    setIsSuccess(false);
+    setIsError(false);
+
+      const response = await postInvoice(userToken, data);
+      if (response === undefined){
+        setIsError(true)
+      }else{
+        setIsSuccess(true)
+      }
+    setIsLoading(false);
 
 
+    // Reiniciar los valores de los campos
+
+  setProvider('');
+  setDate('');
+  setState('');
+  setNumber('');
+  setConcept('');
+  setPaymentType('');
+  setTotal('');
+  setTotalTaxes('');
+  setTotalPretaxes('');
+  setTaxesPercentage('');
+  setTotalRetention('');
+  setRetentionPercentage('');
+  setCurrency('');
+  };
 
   return (
     <div className="root">
       <div>
         <AppBar location={location}/>
       </div>
+      {isSuccess && (
+        <div className="message3 success">
+          La operación se realizó correctamente.
+        </div>
+      )}
+      
+      {/* Mostrar mensaje de error */}
+      {isError && (
+        <div className="message3 error">
+          Hubo un error al realizar la operación.
+        </div>
+      )}
       <div
         className="file-drop-zone"
         onDragOver={handleDragOver}
@@ -155,10 +275,15 @@ export const AddInvoicesToPay = (props) => {
         onDrop={handleDrop}
       >
         <div className="drop-message">
-          {isFileUploaded ? (
+          {isLoadingRef.current && progress < 100 ? (
+            <div>
+              <FaCircleNotch className="loading-icon" />
+              <span className="upload-text">Cargando facturas</span>
+            </div>
+          ) : isFileUploaded ? (
             <div className="upload-indicator">
               <FaCheckCircle className="upload-icon" />
-              Archivo subido
+              <span className="upload-text">Archivos subidos</span>
             </div>
           ) : (
             <div>
@@ -170,6 +295,16 @@ export const AddInvoicesToPay = (props) => {
           Procesar automáticamente
         </button>
       </div>
+
+      {isLoadingRef.current && (
+      <ProgressBar
+        now={progress}
+        label={progress === 0 ? "0%" : `${progress}%`}
+        animated={progress === 0}
+        variant="info"
+        className="mb-3 custom-width"
+      />
+    )}
 
       <div className="panel">
           <div className="form-row">
@@ -184,7 +319,7 @@ export const AddInvoicesToPay = (props) => {
             >
                 <option value="">Selecciona un proveedor</option>
                 {providersLoaded && rowProviders.map(option => (
-                <option key={option.name} value={option.name}>{option.name}</option>
+                <option key={option.name} value={option.uuid}>{option.name}</option>
                 ))}
             </select>
             </div>
@@ -224,7 +359,7 @@ export const AddInvoicesToPay = (props) => {
                   id="Fecha"
                   value={date}
                   onChange={handleAddDate}
-                  placeholder="dd/mm/yyyy"
+                  placeholder="yyyy-mm-dd"
                   className="midtextbox" 
                 />
               </div>
@@ -272,14 +407,19 @@ export const AddInvoicesToPay = (props) => {
           <div className="form-row">
               <div className="input-container">
                 <label className="label" htmlFor="invoice_amount">Estado</label>
-                <input
-                  type="text"
-                  id="invoice_amount"
-                  value={state}
-                  onChange={handleAddState}
-                  placeholder=""
-                  className="smalltextbox" 
-                />
+                <select
+              id="invoice_amount"
+              value={state}
+              onChange={handleAddState}
+              className="smalltextbox"
+            >
+              <option value="">Selecciona un estado</option>
+              <option value="pending">PENDIENTE</option>
+              <option value="received">RECIBIDA</option>
+              <option value="payed">PAGADA</option>
+              <option value="rejected">RECHAZADO</option>
+            </select>
+
             </div>
             <div className="input-container">
                 <label className="label" htmlFor="taxes_percentage">Total de Impuestos</label>
@@ -308,14 +448,21 @@ export const AddInvoicesToPay = (props) => {
           <div className="form-row">
               <div className="input-container">
                 <label className="label" htmlFor="invoice_amount">Tipo de Pago </label>
-                <input
+                <select
                   type="text"
                   id="invoice_amount"
                   value={paymentType}
                   onChange={handleAddPaymentType}
                   placeholder=""
-                  className="smalltextbox" 
-                />
+                  className="smalltextbox"
+                  >
+              <option value="">Selecciona un tipo de pago</option>
+              <option value="direct_debit">Domiciliación</option>
+              <option value="cheque">Cheque</option>
+              <option value="transfer">Transferencia</option>
+              <option value="cash">Efectivo</option>
+              <option value="card">Tarjeta</option>
+            </select>
             </div>
             <div className="input-container">
                 <label className="label" htmlFor="taxes_percentage">Porcentaje de Retenciones</label>
@@ -324,7 +471,7 @@ export const AddInvoicesToPay = (props) => {
                   id="taxes_percentage"
                   value={retentionPercentage}
                   onChange={handleAddRetentionPercentage}
-                  placeholder="21"
+                  placeholder=""
                   className="smalltextbox" 
                 />
             </div>
