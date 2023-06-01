@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import './style.css'
-import settingsIcon from '../../assets/icons/Ajustes.png';
-import notificationIcon from '../../assets/icons/Notificacion.png';
-import SearchIcon from '../../assets/icons/Buscar.png';
+// import settingsIcon from '../../assets/icons/Ajustes.png';
+// import notificationIcon from '../../assets/icons/Notificacion.png';
+// import SearchIcon from '../../assets/icons/Buscar.png';
 import Avatar from '../../assets/icons/avatar.png';
 import Context from '../../contexts/context';
 import { useContext } from 'react';
@@ -23,21 +23,21 @@ export const AppBar = (props)  => {
 
   }, [props]);
 
-  function handleSettingsClick() {
-    console.log('Botón de ajustes clickeado');
+  // function handleSettingsClick() {
+  //   console.log('Botón de ajustes clickeado');
     
 
-  }
+  // }
 
-  function handleNotificationClick() {
-    console.log('Botón de notificaciones clickeado');
-  }
+  // function handleNotificationClick() {
+  //   console.log('Botón de notificaciones clickeado');
+  // }
 
-  function handleSubmit(event) {
-    event.preventDefault();
-    console.log('Search');
-    // Aquí puedes agregar la lógica para manejar la búsqueda
-  }
+  // function handleSubmit(event) {
+  //   event.preventDefault();
+  //   console.log('Search');
+  //   // Aquí puedes agregar la lógica para manejar la búsqueda
+  // }
 
   return (
     <>
@@ -48,15 +48,15 @@ export const AppBar = (props)  => {
               <h1 className="title" style={{ color: '#000000' }}>Hola</h1>
             )
           }
-          <form className="d-flex searchBar" role="search" onSubmit={handleSubmit}>
+          {/* <form className="d-flex searchBar" role="search" onSubmit={handleSubmit}>
             <img src={SearchIcon} alt="Search icon" style={{ marginRight: '10px' } } />
             <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-          </form>
+          </form> */}
 
-          <div className='tools'>
+          {/* <div className='tools'>
           <img src={notificationIcon} alt="Notificatoin icon" onClick={handleNotificationClick} style={{ marginRight: '30px',  marginLeft: '50px'  }} />
           <img src={settingsIcon} alt="Setting icon" onClick={handleSettingsClick} />
-          </div>
+          </div> */}
 
           <div className="circle">
           {userPhoto[0] !== null ? ( 
