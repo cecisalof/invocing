@@ -13,9 +13,11 @@ import deleteIcon from '../../assets/icons/Papelera.png';
 import CustomHeader from '../customHeader.jsx';
 import { getProviders } from "../suppliers/services";
 import CustomElement from '../customElement.jsx';
+import { useNavigate } from 'react-router-dom';
 
 export const ExpenseTickets = (props) => {
   const location = useLocation();
+  const navigate = useNavigate();
 
   const [userToken, setUserToken] = useState('');
   
@@ -274,14 +276,16 @@ function handleTrashClick() {
       console.log(error);
     });
 }
-
+const handleAddExpenses = () => {
+  navigate('/add-expenses'); // Reemplaza '/ruta-del-formulario' con la ruta de tu formulario
+};
 
   return (
     <>
       <div>
         <AppBar location={location}/>
       </div>
-      <button type="button" class="btn btn-primary rounded-pill px-4">Añadir Gasto</button>
+      <button type="button" class="btn btn-primary rounded-pill px-4" onClick={handleAddExpenses}>Añadir Gasto</button>
       <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} />
       <img src={deleteIcon} alt="Delete icon" onClick={handleTrashClick} style={{ marginRight: '30px'  }} />
       <div className="ag-theme-alpine" style={gridStyle}>

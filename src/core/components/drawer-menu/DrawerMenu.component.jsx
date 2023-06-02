@@ -10,7 +10,7 @@ import "./style.css";
 
 
 export const DrawerMenuComponent = ({user}) => {
-  const isAdministrator = user?.group?.includes("administrador")
+  const isAdministrator = user?.groups?.includes("administrador")
   return (
     <>
      <nav className="navbar navbar-expand-lg navbar-dark shadow p-3 bg-body-tertiary rounded" style={{backgroundColor: "#005CFF"}}>

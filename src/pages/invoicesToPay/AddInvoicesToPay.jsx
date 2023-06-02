@@ -28,6 +28,7 @@ export const AddInvoicesToPay = (props) => {
     const [retentionPercentage, setRetentionPercentage] = useState('');
     const [currency, setCurrency] = useState('');
     const [files, setFiles] = useState([]);
+    const [file, setManualFile] = useState('');
     
   
     const [isLoading, setIsLoading] = useState(false);
@@ -148,8 +149,6 @@ export const AddInvoicesToPay = (props) => {
     
 
     const checkStatus = async () => {
-      console.log("AUI DEBERIA DE SER TRUE")
-      console.log(isLoadingRef.current)
       
       const response = await getSchenduleStatus(userToken, ids);
       const statusResponse = response.status
@@ -159,14 +158,10 @@ export const AddInvoicesToPay = (props) => {
       let loadedCount = 0
       
 
-      console.log("ALLDONE SIEMPRE A DONE")
-      console.log(allDone)
-
       statusResponse.map((item) => {
         for (const id of ids) {
           allDone = true;
           const status = item[id.toString()]; // Obtener el estado del ID
-          console.log(item[id.toString()])
           if (status === "DONE") {
             loadedCount =  loadedCount + 1; // Incrementar el contador si el estado es "DONE"
             console.log(loadedCount); // Imprimir el número de IDs con estado "DONE"
@@ -182,8 +177,6 @@ export const AddInvoicesToPay = (props) => {
 
         }
       });
-      console.log("ALLDONE?")
-      console.log(allDone)
       if (!allDone) {
         // Si no todos los IDs están en el estado "DONE", esperar un tiempo y volver a verificar
         setTimeout(checkStatus, 30000); // Esperar 2 segundos (puedes ajustar el tiempo según tus necesidades)
@@ -199,28 +192,33 @@ export const AddInvoicesToPay = (props) => {
 
    };
 
+   const handleFileChange = (event) => {
+    const file = event.target.files;
+    setManualFile(file);
+    console.log(file);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const data = {
+    const data = new FormData();
+    data.append('file', file[0]); // Agregar el archivo al objeto FormData
 
-        is_autoprocessed: false,
-        original_json: {},
-        date: date,
-        state: state,
-        number: number,
-        concept: concept,
-        payment_type: paymentType,
-        total_pretaxes: totalPretaxes,
-        total_taxes: totalTaxes,
-        taxes_percentage: taxesPercentage,
-        total_retention: totalRetention,
-        retention_percentage: retentionPercentage,
-        total: total,
-        currency: currency,
-        sender: provider
-      
-    };
+    data.append('is_autoprocessed', false);
+    data.append('original_json', JSON.stringify({}));
+    data.append('date', date);
+    data.append('state', state);
+    data.append('number', number);
+    data.append('concept', concept);
+    data.append('payment_type', paymentType);
+    data.append('total_pretaxes', totalPretaxes);
+    data.append('total_taxes', totalTaxes);
+    data.append('taxes_percentage', taxesPercentage);
+    data.append('total_retention', totalRetention);
+    data.append('retention_percentage', retentionPercentage);
+    data.append('total', total);
+    data.append('currency', currency);
+    data.append('sender', provider);
     setIsLoading(true); // Iniciar la carga
     setIsSuccess(false);
     setIsError(false);
@@ -307,6 +305,10 @@ export const AddInvoicesToPay = (props) => {
     )}
 
       <div className="panel">
+      <div className="input-container">
+          <label className="label" htmlFor="file">Archivo</label>
+          <input type="file" id="file" onChange={handleFileChange} />
+        </div>
           <div className="form-row">
           <div className="input-container">
             <label className="label" htmlFor="nombre-juridico">Proveedor</label>
