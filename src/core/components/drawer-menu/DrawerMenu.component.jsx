@@ -15,10 +15,13 @@ export const DrawerMenuComponent = ({user}) => {
     <>
      <nav className="navbar navbar-expand-lg navbar-dark shadow p-3 bg-body-tertiary rounded" style={{backgroundColor: "#005CFF"}}>
         <div className="container-fluid">
-          <NavLink to="/" className='navbar-brand'>
-            <div className='navbarlogo'>
-              <img src="logo.png" className="img-fluid" alt="Logo" />
-            </div></NavLink>
+          <div className="nav-container">
+            <NavLink to="/" className='navbar-brand'>
+              <div className='navbarlogo'>
+                <img src="logo.png" className="img-fluid" alt="Logo" />
+              </div>
+            </NavLink>
+          </div>
           <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>
           </button>
