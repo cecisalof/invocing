@@ -6,6 +6,8 @@ import { useContext } from 'react';
 import { postProviders} from "./services";
 import './style.css';
 import '../general-style.css'
+import { Alert } from '@mui/material';
+import AlertTitle from '@mui/material/AlertTitle';
 
 export const AddSupplier = () => {
 const [userToken, setUserToken] = useState('');
@@ -100,19 +102,17 @@ const [userToken, setUserToken] = useState('');
         </div>
   
         <div className="title">Nuevo Proveedor</div>
-        
         {isSuccess && (
-        <div className="message success">
-          La operación se realizó correctamente.
-        </div>
-      )}
-      
-      {/* Mostrar mensaje de error */}
-      {isError && (
-        <div className="message error">
+          <Alert severity="success" className="custom-alert">
+            <AlertTitle>Success</AlertTitle>
+            La operación se realizó correctamente.
+          </Alert>
+        )}
+        {isError && (
+        <Alert severity="error" className="custom-alert">
+          <AlertTitle>Error</AlertTitle>
           Hubo un error al realizar la operación.
-        </div>
-      )}
+        </Alert>)}
 
         <div className="panel">
           <div className="form-row">
