@@ -13,17 +13,20 @@ import { useNavigate } from 'react-router-dom';
 import deleteIcon from '../../assets/icons/Papelera.png';
 // import CustomHeader from '../customHeader.jsx';
 import CustomElement from '../customElement.jsx';
+import { AG_GRID_LOCALE_ES } from '../../assets/locale/es.js';
 import 'ag-grid-enterprise';
 
 
 export const Income = () => {
   const location = useLocation();
+  // AG-GRID translation file
+  const localeText = AG_GRID_LOCALE_ES;
 
   const navigate = useNavigate();
 
   const [userToken, setUserToken] = useState('');
 
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(true); // toolPanel visible state
 
   const gridRef = useRef(); // Optional - for accessing Grid's API
   const [rowData, setRowData] = useState(); // Set rowData to Array of Objects, one Object per Row
@@ -320,6 +323,7 @@ export const Income = () => {
             getRowStyle={getRowStyle}
             pagination={true}
             sideBar={sideBar}
+            localeText={localeText}
             onCellValueChanged={onCellValueChanged}
           />
         </div>
