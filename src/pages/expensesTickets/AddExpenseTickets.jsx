@@ -269,14 +269,14 @@ export const AddExpenseTickets = (props) => {
       />
     )}
 
-    {isError && (
-      <Alert severity="success" className="custom-alert">
+    {isSuccess && (
+      <Alert onClose={() => {setIsSuccess(false)}} severity="success" className="custom-alert">
         <AlertTitle>Success</AlertTitle>
         La operación se realizó correctamente.
       </Alert>
     )}
-      {isSuccess && (
-      <Alert severity="error" className="custom-alert">
+      {isError && (
+      <Alert  severity="error" className="custom-alert" onClose={() => {setIsError(false)}}>
         <AlertTitle>Error</AlertTitle>
         Hubo un error al realizar la operación.
       </Alert>)}

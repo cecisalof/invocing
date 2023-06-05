@@ -115,13 +115,13 @@ const [userToken, setUserToken] = useState('');
         <div className="title">Nueva Factura a Emitir</div>
         
         {isSuccess && (
-      <Alert severity="success" className="custom-alert">
+      <Alert onClose={() => {setIsSuccess(false)}} severity="success" className="custom-alert">
         <AlertTitle>Success</AlertTitle>
         La operación se realizó correctamente.
       </Alert>
     )}
       {isError && (
-      <Alert severity="error" className="custom-alert">
+      <Alert  severity="error" className="custom-alert" onClose={() => {setIsError(false)}}>
         <AlertTitle>Error</AlertTitle>
         Hubo un error al realizar la operación.
       </Alert>)}
