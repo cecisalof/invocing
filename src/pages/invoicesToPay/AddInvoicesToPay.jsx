@@ -9,6 +9,9 @@ import { postInvoice, postInvoiceAutomatic, getSchenduleStatus } from "./service
 import { ProgressBar } from 'react-bootstrap';
 import './style.css';
 import '../general-style.css'
+import { Alert } from '@mui/material';
+import AlertTitle from '@mui/material/AlertTitle';
+import dragDrop from '../../assets/icons/drag-and-drop-96.png';
 
 export const AddInvoicesToPay = (props) => {
     const [userToken, setUserToken] = useState('');
@@ -251,18 +254,9 @@ export const AddInvoicesToPay = (props) => {
       <div>
         <AppBar location={location}/>
       </div>
-      {isSuccess && (
-        <div className="message3 success">
-          La operación se realizó correctamente.
-        </div>
-      )}
       
-      {/* Mostrar mensaje de error */}
-      {isError && (
-        <div className="message3 error">
-          Hubo un error al realizar la operación.
-        </div>
-      )}
+          
+     
       <div
         className="file-drop-zone"
         onDragOver={handleDragOver}
@@ -282,7 +276,7 @@ export const AddInvoicesToPay = (props) => {
             </div>
           ) : (
             <div>
-              Arrastra y suelta los archivos aquí
+              <img src={dragDrop} alt="dragDrop"/>
             </div>
           )}
         </div>
@@ -290,6 +284,19 @@ export const AddInvoicesToPay = (props) => {
           Procesar automáticamente
         </button>
       </div>
+
+      {isSuccess && (
+      <Alert onClose={() => {setIsSuccess(false)}} severity="success" className="custom-alert">
+        <AlertTitle>Success</AlertTitle>
+        La operación se realizó correctamente.
+      </Alert>
+    )}
+      {isError && (
+      <Alert  severity="error" className="custom-alert" onClose={() => {setIsError(false)}}>
+        <AlertTitle>Error</AlertTitle>
+        Hubo un error al realizar la operación.
+      </Alert>)}
+
 
       {isLoadingRef.current && (
       <ProgressBar

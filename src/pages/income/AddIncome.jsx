@@ -6,6 +6,8 @@ import { useContext } from 'react';
 import { postIncome} from "./services";
 import './style.css';
 import '../general-style.css'
+import { Alert } from '@mui/material';
+import AlertTitle from '@mui/material/AlertTitle';
 
 export const AddIncome = () => {
 const [userToken, setUserToken] = useState('');
@@ -113,17 +115,16 @@ const [userToken, setUserToken] = useState('');
         <div className="title">Nueva Factura a Emitir</div>
         
         {isSuccess && (
-        <div className="message success">
-          La operación se realizó correctamente.
-        </div>
-      )}
-      
-      {/* Mostrar mensaje de error */}
+      <Alert onClose={() => {setIsSuccess(false)}} severity="success" className="custom-alert">
+        <AlertTitle>Success</AlertTitle>
+        La operación se realizó correctamente.
+      </Alert>
+    )}
       {isError && (
-        <div className="message1 error">
-          Hubo un error al realizar la operación.
-        </div>
-      )}
+      <Alert  severity="error" className="custom-alert" onClose={() => {setIsError(false)}}>
+        <AlertTitle>Error</AlertTitle>
+        Hubo un error al realizar la operación.
+      </Alert>)}
 
         <div className="panel">
           <div className="form-row">
