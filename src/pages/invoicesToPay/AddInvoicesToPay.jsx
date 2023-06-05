@@ -7,6 +7,8 @@ import { useContext } from 'react';
 import { getProviders } from "../suppliers/services";
 import { postInvoice, postInvoiceAutomatic, getSchenduleStatus } from "./services";
 import { ProgressBar } from 'react-bootstrap';
+import './style.css';
+import '../general-style.css'
 
 export const AddInvoicesToPay = (props) => {
     const [userToken, setUserToken] = useState('');
@@ -30,8 +32,6 @@ export const AddInvoicesToPay = (props) => {
     const [files, setFiles] = useState([]);
     const [file, setManualFile] = useState('');
     
-  
-    const [isLoading, setIsLoading] = useState(false);
 
     const [rowProviders, setrowProviders] = useState(); // Set rowData to Array of Objects, one Object per Row
     const [providersLoaded, setProvidersLoaded] = useState(false);
@@ -179,7 +179,7 @@ export const AddInvoicesToPay = (props) => {
       });
       if (!allDone) {
         // Si no todos los IDs están en el estado "DONE", esperar un tiempo y volver a verificar
-        setTimeout(checkStatus, 30000); // Esperar 2 segundos (puedes ajustar el tiempo según tus necesidades)
+        setTimeout(checkStatus, 10000); // Esperar 2 segundos (puedes ajustar el tiempo según tus necesidades)
       } else {
         console.log("Procesamiento completo");
         //setTimeout(isLoadingRef.current = false, 30000)
@@ -219,7 +219,6 @@ export const AddInvoicesToPay = (props) => {
     data.append('total', total);
     data.append('currency', currency);
     data.append('sender', provider);
-    setIsLoading(true); // Iniciar la carga
     setIsSuccess(false);
     setIsError(false);
 
@@ -229,8 +228,6 @@ export const AddInvoicesToPay = (props) => {
       }else{
         setIsSuccess(true)
       }
-    setIsLoading(false);
-
 
     // Reiniciar los valores de los campos
 

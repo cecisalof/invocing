@@ -5,6 +5,7 @@ import Context from '../../contexts/context';
 import { useContext } from 'react';
 import { postProviders} from "./services";
 import './style.css';
+import '../general-style.css'
 
 export const AddSupplier = () => {
 const [userToken, setUserToken] = useState('');
@@ -16,7 +17,6 @@ const [userToken, setUserToken] = useState('');
   const [account, setAccount] = useState('');
   const [nif, setNif] = useState('');
   const [activity, setActivity] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
 
   const [isSuccess, setIsSuccess] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -67,7 +67,6 @@ const [userToken, setUserToken] = useState('');
       phone_number: phone,
       account_number: account,
     };
-    setIsLoading(true); // Iniciar la carga
     setIsSuccess(false);
     setIsError(false);
 
@@ -80,7 +79,6 @@ const [userToken, setUserToken] = useState('');
       }else{
         setIsSuccess(true)
       }
-    setIsLoading(false);
 
 
     // Reiniciar los valores de los campos

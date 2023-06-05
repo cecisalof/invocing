@@ -1,4 +1,4 @@
-import { Routes, Route, Router } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import { LoginPage } from './pages/Login.jsx';
 import { Home } from './pages/Home.jsx';
 import { Income } from './pages/income/Income.jsx';
