@@ -9,6 +9,7 @@ import { postInvoice, postInvoiceAutomatic, getSchenduleStatus } from "./service
 import { ProgressBar } from 'react-bootstrap';
 import './style.css';
 import '../general-style.css'
+import dragDrop from '../../assets/icons/drag-and-drop-96.png';
 
 export const AddInvoicesToPay = (props) => {
     const [userToken, setUserToken] = useState('');
@@ -282,7 +283,7 @@ export const AddInvoicesToPay = (props) => {
             </div>
           ) : (
             <div>
-              Arrastra y suelta los archivos aquí
+              <img src={dragDrop} alt="dragDrop"/>
             </div>
           )}
         </div>
