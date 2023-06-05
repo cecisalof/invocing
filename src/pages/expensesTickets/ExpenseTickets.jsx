@@ -6,6 +6,7 @@ import { getExpenseTicket, deleteExpenseTicket, patchExpenseTicket, patchProvide
 import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
 import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
 import './style.css';
+import '../general-style.css'
 import Context from '../../contexts/context';
 import { useContext } from 'react';
 import filterIcon from '../../assets/icons/Filtrar.png';
@@ -39,17 +40,6 @@ export const ExpenseTickets = (props) => {
     return '';
   };
 
-
-  const ragRenderer = (props) => {
-    return <span class="rag-element">{props.value}</span>;
-  };
-
-  const ragCellClassRules = {
-    'rag-green-outer': (props) => props.value === 'payed' || props.value === 'PAGADA',
-    'rag-yellow-outer': (props) => props.value === 'received' || props.value === 'RECIBIDA',
-    'rag-red-outer': (props) => props.value === 'rejected' || props.value === 'RECHAZADO',
-    'rag-orange-outer': (props) => props.value === 'pending' || props.value === 'PENDIENTE',
-  };
 
   const [columnDefs, setColumnDefs] = useState([
     {

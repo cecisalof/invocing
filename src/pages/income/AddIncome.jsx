@@ -5,6 +5,7 @@ import Context from '../../contexts/context';
 import { useContext } from 'react';
 import { postIncome} from "./services";
 import './style.css';
+import '../general-style.css'
 
 export const AddIncome = () => {
 const [userToken, setUserToken] = useState('');
@@ -18,8 +19,6 @@ const [userToken, setUserToken] = useState('');
   const [invoiceAmount, setInvoiceAmount] = useState('');
   const [currency, setCurrency] = useState('');
   const [taxesPercentage, setTaxesPercentage] = useState('');
-
-  const [isLoading, setIsLoading] = useState(false);
 
   const [isSuccess, setIsSuccess] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -78,7 +77,6 @@ const [userToken, setUserToken] = useState('');
       invoice_amount: invoiceAmount,
       currency: currency
     };
-    setIsLoading(true); // Iniciar la carga
     setIsSuccess(false);
     setIsError(false);
 
@@ -89,7 +87,6 @@ const [userToken, setUserToken] = useState('');
         setIsSuccess(true)
         window.open(response.data.file, '_blank');
       }
-    setIsLoading(false);
 
 
     // Reiniciar los valores de los campos
@@ -115,11 +112,11 @@ const [userToken, setUserToken] = useState('');
   
         <div className="title">Nueva Factura a Emitir</div>
         
-        {/* {isSuccess && (
+        {isSuccess && (
         <div className="message success">
           La operación se realizó correctamente.
         </div>
-      )} */}
+      )}
       
       {/* Mostrar mensaje de error */}
       {isError && (

@@ -7,6 +7,8 @@ import { useContext } from 'react';
 import { postExpenseTicket, postExpenseTicketAutomatic, getSchenduleStatus } from "./services";
 import { getProviders } from "../suppliers/services";
 import { ProgressBar } from 'react-bootstrap';
+import './style.css';
+import '../general-style.css'
 
 export const AddExpenseTickets = (props) => {
     const [userToken, setUserToken] = useState('');
@@ -25,8 +27,6 @@ export const AddExpenseTickets = (props) => {
     const [files, setFiles] = useState([]);
     const [file, setManualFile] = useState('');
     
-  
-    const [isLoading, setIsLoading] = useState(false);
 
     const [rowProviders, setrowProviders] = useState(); // Set rowData to Array of Objects, one Object per Row
     const [providersLoaded, setProvidersLoaded] = useState(false);
@@ -200,7 +200,6 @@ export const AddExpenseTickets = (props) => {
     formData.append('total', total);
     formData.append('currency', currency);
 
-    setIsLoading(true); // Iniciar la carga
     setIsSuccess(false);
     setIsError(false);
 
@@ -210,7 +209,6 @@ export const AddExpenseTickets = (props) => {
       }else{
         setIsSuccess(true)
       }
-    setIsLoading(false);
 
 
     // Reiniciar los valores de los campos

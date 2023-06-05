@@ -1,4 +1,5 @@
 import React, { useState} from 'react';
+import './general-style.css'
 
 export default ({ displayName, props }) => {
 

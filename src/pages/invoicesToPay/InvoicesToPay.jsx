@@ -6,6 +6,7 @@ import { getInvoices, deleteInvoice, patchInvoice, patchProviderInvoice } from "
 import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
 import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
 import './style.css';
+import '../general-style.css'
 import Context from '../../contexts/context';
 import { useContext } from 'react';
 import filterIcon from '../../assets/icons/Filtrar.png';

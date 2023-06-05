@@ -7,6 +7,8 @@ import { useContext } from 'react';
 import { getProviders } from "../suppliers/services";
 import { postInvoice, postInvoiceAutomatic, getSchenduleStatus } from "./services";
 import { ProgressBar } from 'react-bootstrap';
+import './style.css';
+import '../general-style.css'
 
 export const AddInvoicesToPay = (props) => {
     const [userToken, setUserToken] = useState('');
@@ -30,8 +32,6 @@ export const AddInvoicesToPay = (props) => {
     const [files, setFiles] = useState([]);
     const [file, setManualFile] = useState('');
     
-  
-    const [isLoading, setIsLoading] = useState(false);
 
     const [rowProviders, setrowProviders] = useState(); // Set rowData to Array of Objects, one Object per Row
     const [providersLoaded, setProvidersLoaded] = useState(false);
@@ -219,7 +219,6 @@ export const AddInvoicesToPay = (props) => {
     data.append('total', total);
     data.append('currency', currency);
     data.append('sender', provider);
-    setIsLoading(true); // Iniciar la carga
     setIsSuccess(false);
     setIsError(false);
 
@@ -229,8 +228,6 @@ export const AddInvoicesToPay = (props) => {
       }else{
         setIsSuccess(true)
       }
-    setIsLoading(false);
-
 
     // Reiniciar los valores de los campos
 
