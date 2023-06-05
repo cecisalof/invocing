@@ -126,8 +126,12 @@
     width: 1000px;
     content: "0%";
   }
+  .upload-icon {
+    color: green;
+    margin-right: 5px;
+  }
   .upload-text {
-    margin-left: 8px; /* Ajusta el valor según el espacio deseado */
+    font-weight: bold;
   }
 
   .file-drop-zone {
@@ -139,15 +143,22 @@
     background-color: #f9f9f9;
     margin-bottom: 30px;
     width: 1000px;
+    transition: background-color 0.3s;
+  }
+  
+  .file-drop-zone:hover {
+    background-color: #eaf1ff;
   }
   
   .file-drop-zone-dragging {
-    border-color: blue;
+    border-color: #005CFF;
     background-color: #e6f7ff;
   }
   
+  
   .drop-message {
     margin-bottom: 10px;
+    color: #333;
   }
 
   .download-icon {
@@ -156,24 +167,30 @@
   }
   
   .process-button {
-    padding: 10px 20px;
     background-color: #005CFF;
     color: white;
+    padding: 10px 20px;
     border: none;
+    border-radius: 5px;
+    font-size: 16px;
     cursor: pointer;
-    border-radius: 20px
+    transition: background-color 0.3s;
   }
   
   .process-button:hover {
-    background-color: #005CFF;
+    background-color: #0046b8;
   }
-  @keyframes spin {
-    to {
-      transform: rotate(360deg);
-    }
+ @keyframes spin {
+  0% {
+    transform: rotate(0deg);
   }
+  100% {
+    transform: rotate(360deg);
+  }
+}
   
   .loading-icon {
-    animation: spin 1s linear infinite;
+    animation: spin 1s infinite linear;
+    margin-right: 5px;
   }
   

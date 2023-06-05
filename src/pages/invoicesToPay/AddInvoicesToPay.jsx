@@ -179,7 +179,7 @@ export const AddInvoicesToPay = (props) => {
       });
       if (!allDone) {
         // Si no todos los IDs están en el estado "DONE", esperar un tiempo y volver a verificar
-        setTimeout(checkStatus, 30000); // Esperar 2 segundos (puedes ajustar el tiempo según tus necesidades)
+        setTimeout(checkStatus, 10000); // Esperar 2 segundos (puedes ajustar el tiempo según tus necesidades)
       } else {
         console.log("Procesamiento completo");
         //setTimeout(isLoadingRef.current = false, 30000)
