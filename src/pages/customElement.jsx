@@ -1,5 +1,7 @@
 import React from 'react';
 import downloadIcon from '../assets/icons/Descarga.png';
+import './general-style.css'
+
 
 export default ({ data }) => {
   return (

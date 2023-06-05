@@ -4,6 +4,7 @@ export const API_URL = {
     INVOICE_TO_PAY: 'invoice-to-pay/',
     INVOICE_TO_EMIT: 'invoice-to-emit/',
     EXPENSE_TICKET: 'expenses/',
+    EXPENSE_TICKET_AUTOMATIC: 'expenses-automatic/',
     PROVIDER: 'providers/',
     PATCH_PROVIDER: 'patch-invoice/',
     PATCH_EXPENSES: 'patch-expenses/',

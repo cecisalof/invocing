@@ -6,6 +6,7 @@ import { getExpenseTicket, deleteExpenseTicket, patchExpenseTicket, patchProvide
 import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
 import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
 import './style.css';
+import '../general-style.css'
 import Context from '../../contexts/context';
 import { useContext } from 'react';
 import filterIcon from '../../assets/icons/Filtrar.png';
@@ -13,9 +14,11 @@ import deleteIcon from '../../assets/icons/Papelera.png';
 import CustomHeader from '../customHeader.jsx';
 import { getProviders } from "../suppliers/services";
 import CustomElement from '../customElement.jsx';
+import { useNavigate } from 'react-router-dom';
 
 export const ExpenseTickets = (props) => {
   const location = useLocation();
+  const navigate = useNavigate();
 
   const [userToken, setUserToken] = useState('');
   
@@ -38,16 +41,16 @@ export const ExpenseTickets = (props) => {
   };
 
 
-  const ragRenderer = (props) => {
-    return <span className="rag-element">{props.value}</span>;
-  };
+  // const ragRenderer = (props) => {
+  //   return <span className="rag-element">{props.value}</span>;
+  // };
 
-  const ragCellClassRules = {
-    'rag-green-outer': (props) => props.value === 'payed' || props.value === 'PAGADA',
-    'rag-yellow-outer': (props) => props.value === 'received' || props.value === 'RECIBIDA',
-    'rag-red-outer': (props) => props.value === 'rejected' || props.value === 'RECHAZADO',
-    'rag-orange-outer': (props) => props.value === 'pending' || props.value === 'PENDIENTE',
-  };
+  // const ragCellClassRules = {
+  //   'rag-green-outer': (props) => props.value === 'payed' || props.value === 'PAGADA',
+  //   'rag-yellow-outer': (props) => props.value === 'received' || props.value === 'RECIBIDA',
+  //   'rag-red-outer': (props) => props.value === 'rejected' || props.value === 'RECHAZADO',
+  //   'rag-orange-outer': (props) => props.value === 'pending' || props.value === 'PENDIENTE',
+  // };
 
   const [columnDefs, setColumnDefs] = useState([
     {
@@ -274,7 +277,6 @@ function handleTrashClick() {
       console.log(error);
     });
 }
-
 
   return (
     <>

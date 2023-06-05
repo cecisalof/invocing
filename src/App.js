@@ -1,4 +1,4 @@
-import { Routes, Route, Router } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import { LoginPage } from './pages/Login.jsx';
 import { Home } from './pages/Home.jsx';
 import { Income } from './pages/income/Income.jsx';
@@ -12,6 +12,7 @@ import { Payroll } from './pages/Payroll.jsx';
 import { Suppliers } from './pages/suppliers/Suppliers.jsx';
 import { AddSupplier } from './pages/suppliers/AddSupplier.jsx';
 import { ExpenseTickets } from './pages/expensesTickets/ExpenseTickets.jsx';
+import { AddExpenseTickets } from './pages/expensesTickets/AddExpenseTickets.jsx';
 import { InvoicesToPay } from './pages/invoicesToPay/InvoicesToPay.jsx';
 import { AddInvoicesToPay } from './pages/invoicesToPay/AddInvoicesToPay.jsx';
 import UserState from './contexts/UserState';
@@ -36,6 +37,7 @@ export const App = () => {
           <Route path='/add-suppliers' element={<AddSupplier />} />
           <Route path='/add-income' element={<AddIncome />} />
           <Route path='/add-invoices-to-pay' element={<AddInvoicesToPay />} />
+          <Route path='/add-expenses' element={<AddExpenseTickets />} />
         </Route>
       </Routes>
     </UserState>
