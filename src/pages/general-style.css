@@ -20,6 +20,31 @@
 }
 .ag-root-wrapper { border-radius: 20px }
 
+
+/* ------------Floating filter styles-------------------- */
+
+.ag-header-row.ag-header-row-column-filter{
+    height: 50px !important;
+    top: 80px !important;
+}
+
+.ag-theme-alpine input[class^=ag-]:not([type]), .ag-theme-alpine input[class^=ag-][type=text], .ag-theme-alpine input[class^=ag-][type=number], .ag-theme-alpine input[class^=ag-][type=tel], .ag-theme-alpine input[class^=ag-][type=date], .ag-theme-alpine input[class^=ag-][type=datetime-local], .ag-theme-alpine textarea[class^=ag-], .ag-theme-alpine-dark input[class^=ag-]:not([type]), .ag-theme-alpine-dark input[class^=ag-][type=text], .ag-theme-alpine-dark input[class^=ag-][type=number], .ag-theme-alpine-dark input[class^=ag-][type=tel], .ag-theme-alpine-dark input[class^=ag-][type=date], .ag-theme-alpine-dark input[class^=ag-][type=datetime-local], .ag-theme-alpine-dark textarea[class^=ag-] {
+  border-radius: 100px;
+  background: #F7FAFF;
+}
+
+
+.ag-theme-alpine .ag-ltr input[class^=ag-]:not([type]), .ag-theme-alpine .ag-ltr input[class^=ag-][type=text], .ag-theme-alpine .ag-ltr input[class^=ag-][type=number], .ag-theme-alpine .ag-ltr input[class^=ag-][type=tel], .ag-theme-alpine .ag-ltr input[class^=ag-][type=date], .ag-theme-alpine .ag-ltr input[class^=ag-][type=datetime-local], .ag-theme-alpine .ag-ltr textarea[class^=ag-], .ag-theme-alpine-dark .ag-ltr input[class^=ag-]:not([type]), .ag-theme-alpine-dark .ag-ltr input[class^=ag-][type=text], .ag-theme-alpine-dark .ag-ltr input[class^=ag-][type=number], .ag-theme-alpine-dark .ag-ltr input[class^=ag-][type=tel], .ag-theme-alpine-dark .ag-ltr input[class^=ag-][type=date], .ag-theme-alpine-dark .ag-ltr input[class^=ag-][type=datetime-local], .ag-theme-alpine-dark .ag-ltr textarea[class^=ag-] {
+  margin: 4px;
+}
+
+.ag-header.ag-pivot-off {
+  height: 135px !important;
+  min-height: 135px !important;
+}
+
+/*--------------------------------*/
+
 .custom-header {
     display: flex;
     align-items: center;
