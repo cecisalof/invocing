@@ -23,6 +23,8 @@ export const Income = () => {
 
   const [userToken, setUserToken] = useState('');
 
+  const [visible, setVisible] = useState(false);
+
   const gridRef = useRef(); // Optional - for accessing Grid's API
   const [rowData, setRowData] = useState(); // Set rowData to Array of Objects, one Object per Row
 
@@ -263,7 +265,8 @@ export const Income = () => {
   }
   
   function handleFilterClick() {
-    setSideBarVisible(true)
+    setVisible((current) => !current);
+    setSideBarVisible(visible);
     openToolPanel('filters')
   }
 
