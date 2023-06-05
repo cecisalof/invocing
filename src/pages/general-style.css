@@ -43,6 +43,35 @@
   min-height: 135px !important;
 }
 
+/*---------filter btn-----------------------*/
+
+.icon-btn{
+  border-radius: 24px;
+}
+
+.icon-btn:hover  {
+  background: rgba(0, 92, 255, 0.08);
+  border-radius: 24px;
+}
+
+.btn:focus-visible{
+  box-shadow: none;
+  border-radius: 24px;
+}
+
+/*---------tool panel-----------------------*/
+.ag-filter-toolpanel-search {
+  height: 80px !important;
+  background-color: white !important;
+}
+
+.ag-group-container.ag-group-container-vertical.ag-filter-toolpanel-group-container, .ag-filter{
+  background: white !important;
+}
+.ag-picker-field-wrapper{
+  border-radius: 100px;
+}
+
 /*--------------------------------*/
 
 .custom-header {

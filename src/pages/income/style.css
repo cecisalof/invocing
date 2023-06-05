@@ -7,11 +7,6 @@
     margin: 24px;
 }
 
-.icon-btn:hover  {
-  background: rgba(0, 92, 255, 0.08);
-  border: #005CFF 1px solid;
-  border-radius: 24px;
-}
 .ag-theme-alpine {
     /* disable all borders */
     --ag-borders: none;
