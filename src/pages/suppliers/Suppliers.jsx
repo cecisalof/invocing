@@ -25,13 +25,13 @@ export const Suppliers = () => {
 
   const userDataContext = useContext(Context);
  
-  const gridStyle = useMemo(() => ({ height: '70vh', width: '95%', marginTop: 24, marginBottom: 32 }), []);
+  const gridStyle = useMemo(() => ({ height: '70vh', width: '95%', marginTop: 24, marginBottom: 32, fontFamily: 'Nunito' }), []);
 
   // Each Column Definition results in one Column.
   const [columnDefs, setColumnDefs] = useState([
     {field: 'name', filter: true,
     headerCheckboxSelection: false,
-    headerName: "Nombre Jurídico",
+    headerName: "Nombre jurídico",
     checkboxSelection: true,
     showDisabledCheckboxes: true,
     headerComponent: (props) => (
@@ -149,10 +149,10 @@ const onCellValueChanged = (event) => {
   let newValue = event.newValue
   
   const stateMappings = {
-    'PENDIENTE': 'pending',
-    'RECIBIDA': 'received',
-    'PAGADA': 'payed',
-    'RECHAZADO': 'rejected'
+    'Pendiente': 'pending',
+    'Recibida': 'received',
+    'Pagada': 'payed',
+    'Rechazado': 'rejected'
   };
   
   if (event.colDef.field === 'state'){
@@ -172,7 +172,7 @@ return (
     <div>
       <AppBar location={location}/>
     </div>
-    <button type="button" class="btn btn-primary rounded-pill px-4" onClick={handleAddProvider}>Añadir Proveedor</button>
+    <button type="button" class="btn btn-primary rounded-pill px-4" onClick={handleAddProvider}>Añadir proveedor</button>
     <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} />
     <img src={deleteIcon} alt="Delete icon" onClick={handleTrashClick} style={{ marginRight: '30px'  }} />
     <div className="ag-theme-alpine" style={gridStyle}>

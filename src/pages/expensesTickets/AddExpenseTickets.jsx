@@ -11,7 +11,6 @@ import './style.css';
 import '../general-style.css'
 import dragDrop from '../../assets/icons/drag-and-drop-96.png';
 import { Alert } from '@mui/material';
-import AlertTitle from '@mui/material/AlertTitle';
 
 export const AddExpenseTickets = (props) => {
     const [userToken, setUserToken] = useState('');
@@ -271,19 +270,16 @@ export const AddExpenseTickets = (props) => {
 
     {isSuccess && (
       <Alert onClose={() => {setIsSuccess(false)}} severity="success" className="custom-alert">
-        <AlertTitle>Success</AlertTitle>
         La operación se realizó correctamente.
       </Alert>
     )}
       {isError && (
       <Alert  severity="error" className="custom-alert" onClose={() => {setIsError(false)}}>
-        <AlertTitle>Error</AlertTitle>
         Hubo un error al realizar la operación.
       </Alert>)}
 
       <div className="panel">
       <div className="input-container">
-          <label className="label" htmlFor="file">Archivo</label>
           <input type="file" id="file" onChange={handleFileChange} />
         </div>
       <div className="form-row">
@@ -296,7 +292,6 @@ export const AddExpenseTickets = (props) => {
                 className="bigtextbox" // Agrega las clases CSS para mantener el mismo estilo
                 disabled={!providersLoaded} // Deshabilita el select mientras se cargan las opciones
             >
-                <option value="">Selecciona un proveedor</option>
                 {providersLoaded && rowProviders.map(option => (
                 <option key={option.name} value={option.uuid}>{option.name}</option>
                 ))}
@@ -305,13 +300,12 @@ export const AddExpenseTickets = (props) => {
 
             <div className="form-column">
               <div className="input-container">
-                <label className="label" htmlFor="address">Numero de Factura</label>
+                <label className="label" htmlFor="address">Numero de factura</label>
                 <input
                   type="text"
                   id="address"
                   value={number}
                   onChange={handleAddNumber}
-                  placeholder="0000000"
                   className="midtextbox" 
                 />
               </div>
@@ -355,18 +349,16 @@ export const AddExpenseTickets = (props) => {
                   id="invoice_amount"
                   value={total}
                   onChange={handleAddTotal}
-                  placeholder="xx €"
                   className="smalltextbox" 
                 />
             </div>
             <div className="input-container">
-                <label className="label" htmlFor="taxes_percentage">Porcentaje de Impuestos</label>
+                <label className="label" htmlFor="taxes_percentage">Porcentaje de impuestos</label>
                 <input
                   type="text"
                   id="taxes_percentage"
                   value={taxesPercentage}
                   onChange={handleAddTaxes}
-                  placeholder="21"
                   className="smalltextbox" 
                 />
             </div>
@@ -385,7 +377,7 @@ export const AddExpenseTickets = (props) => {
 
           <div className="form-row">
             <div className="input-container">
-                <label className="label" htmlFor="taxes_percentage">Total de Impuestos</label>
+                <label className="label" htmlFor="taxes_percentage">Total de impuestos</label>
                 <input
                   type="text"
                   id="taxes_percentage"
@@ -396,7 +388,7 @@ export const AddExpenseTickets = (props) => {
                 />
             </div>
             <div className="input-container">
-                <label className="label" htmlFor="currecy">Total sin Impuestos</label>
+                <label className="label" htmlFor="currecy">Total sin impuestos</label>
                 <input
                   type="text"
                   id="curreny"

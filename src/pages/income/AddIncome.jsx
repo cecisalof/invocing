@@ -7,7 +7,6 @@ import { postIncome} from "./services";
 import './style.css';
 import '../general-style.css'
 import { Alert } from '@mui/material';
-import AlertTitle from '@mui/material/AlertTitle';
 
 export const AddIncome = () => {
 const [userToken, setUserToken] = useState('');
@@ -112,24 +111,22 @@ const [userToken, setUserToken] = useState('');
           <AppBar location={location}/>
         </div>
   
-        <div className="title">Nueva Factura a Emitir</div>
+        <div className="title">Nueva factura a emitir</div>
         
         {isSuccess && (
       <Alert onClose={() => {setIsSuccess(false)}} severity="success" className="custom-alert">
-        <AlertTitle>Success</AlertTitle>
         La operación se realizó correctamente.
       </Alert>
     )}
       {isError && (
       <Alert  severity="error" className="custom-alert" onClose={() => {setIsError(false)}}>
-        <AlertTitle>Error</AlertTitle>
         Hubo un error al realizar la operación.
       </Alert>)}
 
         <div className="panel">
           <div className="form-row">
               <div className="input-container">
-                <label className="label" htmlFor="nombre-juridico">Nombre Cliente</label>
+                <label className="label" htmlFor="nombre-juridico">Nombre cliente</label>
                 <input
                   type="text"
                   id="nombre-juridico"
@@ -185,24 +182,22 @@ const [userToken, setUserToken] = useState('');
 
           <div className="form-row">
               <div className="input-container">
-                <label className="label" htmlFor="invoice_amount">Importe Factura</label>
+                <label className="label" htmlFor="invoice_amount">Importe factura</label>
                 <input
                   type="text"
                   id="invoice_amount"
                   value={invoiceAmount}
                   onChange={handleAddInvoice}
-                  placeholder="xx €"
                   className="smalltextbox" 
                 />
             </div>
             <div className="input-container">
-                <label className="label" htmlFor="taxes_percentage">Porcentaje de Impuestos</label>
+                <label className="label" htmlFor="taxes_percentage">Porcentaje de impuestos</label>
                 <input
                   type="text"
                   id="taxes_percentage"
                   value={taxesPercentage}
                   onChange={handleAddTaxes}
-                  placeholder="21"
                   className="smalltextbox" 
                 />
             </div>
@@ -221,13 +216,12 @@ const [userToken, setUserToken] = useState('');
 
           <div className="form-row">
           <div className="input-container">
-                <label className="label" htmlFor="number">Numero de Factura</label>
+                <label className="label" htmlFor="number">Numero de factura</label>
                 <input
                   type="text"
                   id="number"
                   value={number}
                   onChange={handleAddNumber}
-                  placeholder="000000000"
                   className="bigtextbox"
                 />
               </div>
@@ -239,7 +233,6 @@ const [userToken, setUserToken] = useState('');
                   id="concept"
                   value={concept}
                   onChange={handleAddConcept}
-                  placeholder="Concepto"
                   className="midtextbox" 
                 />
               </div>

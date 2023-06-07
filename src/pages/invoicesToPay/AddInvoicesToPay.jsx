@@ -10,7 +10,6 @@ import { ProgressBar } from 'react-bootstrap';
 import './style.css';
 import '../general-style.css'
 import { Alert } from '@mui/material';
-import AlertTitle from '@mui/material/AlertTitle';
 import dragDrop from '../../assets/icons/drag-and-drop-96.png';
 
 export const AddInvoicesToPay = (props) => {
@@ -287,13 +286,11 @@ export const AddInvoicesToPay = (props) => {
 
       {isSuccess && (
       <Alert onClose={() => {setIsSuccess(false)}} severity="success" className="custom-alert">
-        <AlertTitle>Success</AlertTitle>
         La operación se realizó correctamente.
       </Alert>
     )}
       {isError && (
       <Alert  severity="error" className="custom-alert" onClose={() => {setIsError(false)}}>
-        <AlertTitle>Error</AlertTitle>
         Hubo un error al realizar la operación.
       </Alert>)}
 
@@ -310,7 +307,6 @@ export const AddInvoicesToPay = (props) => {
 
       <div className="panel">
       <div className="input-container">
-          <label className="label" htmlFor="file">Archivo</label>
           <input type="file" id="file" onChange={handleFileChange} />
         </div>
           <div className="form-row">
@@ -323,7 +319,7 @@ export const AddInvoicesToPay = (props) => {
                 className="bigtextbox" // Agrega las clases CSS para mantener el mismo estilo
                 disabled={!providersLoaded} // Deshabilita el select mientras se cargan las opciones
             >
-                <option value="">Selecciona un proveedor</option>
+                
                 {providersLoaded && rowProviders.map(option => (
                 <option key={option.name} value={option.uuid}>{option.name}</option>
                 ))}
@@ -332,13 +328,12 @@ export const AddInvoicesToPay = (props) => {
 
             <div className="form-column">
               <div className="input-container">
-                <label className="label" htmlFor="address">Numero de Factura</label>
+                <label className="label" htmlFor="address">Numero de factura</label>
                 <input
                   type="text"
                   id="address"
                   value={number}
                   onChange={handleAddNumber}
-                  placeholder="0000000"
                   className="midtextbox" 
                 />
               </div>
@@ -382,7 +377,6 @@ export const AddInvoicesToPay = (props) => {
                   id="invoice_amount"
                   value={total}
                   onChange={handleAddTotal}
-                  placeholder="xx €"
                   className="smalltextbox" 
                 />
             </div>
@@ -393,7 +387,6 @@ export const AddInvoicesToPay = (props) => {
                   id="taxes_percentage"
                   value={taxesPercentage}
                   onChange={handleAddTaxes}
-                  placeholder="21"
                   className="smalltextbox" 
                 />
             </div>
@@ -419,16 +412,15 @@ export const AddInvoicesToPay = (props) => {
               onChange={handleAddState}
               className="smalltextbox"
             >
-              <option value="">Selecciona un estado</option>
-              <option value="pending">PENDIENTE</option>
-              <option value="received">RECIBIDA</option>
-              <option value="payed">PAGADA</option>
-              <option value="rejected">RECHAZADO</option>
+              <option value="pending">Pendiente</option>
+              <option value="received">Recibida</option>
+              <option value="payed">Pagada</option>
+              <option value="rejected">Rechazado</option>
             </select>
 
             </div>
             <div className="input-container">
-                <label className="label" htmlFor="taxes_percentage">Total de Impuestos</label>
+                <label className="label" htmlFor="taxes_percentage">Total de impuestos</label>
                 <input
                   type="text"
                   id="taxes_percentage"
@@ -439,7 +431,7 @@ export const AddInvoicesToPay = (props) => {
                 />
             </div>
             <div className="input-container">
-                <label className="label" htmlFor="currecy">Total sin Impuestos</label>
+                <label className="label" htmlFor="currecy">Total sin impuestos</label>
                 <input
                   type="text"
                   id="curreny"
@@ -453,7 +445,7 @@ export const AddInvoicesToPay = (props) => {
 
           <div className="form-row">
               <div className="input-container">
-                <label className="label" htmlFor="invoice_amount">Tipo de Pago </label>
+                <label className="label" htmlFor="invoice_amount">Tipo de pago </label>
                 <select
                   type="text"
                   id="invoice_amount"
@@ -462,7 +454,6 @@ export const AddInvoicesToPay = (props) => {
                   placeholder=""
                   className="smalltextbox"
                   >
-              <option value="">Selecciona un tipo de pago</option>
               <option value="direct_debit">Domiciliación</option>
               <option value="cheque">Cheque</option>
               <option value="transfer">Transferencia</option>
@@ -471,7 +462,7 @@ export const AddInvoicesToPay = (props) => {
             </select>
             </div>
             <div className="input-container">
-                <label className="label" htmlFor="taxes_percentage">Porcentaje de Retenciones</label>
+                <label className="label" htmlFor="taxes_percentage">Porcentaje de retenciones</label>
                 <input
                   type="text"
                   id="taxes_percentage"
@@ -482,7 +473,7 @@ export const AddInvoicesToPay = (props) => {
                 />
             </div>
             <div className="input-container">
-                <label className="label" htmlFor="currecy">Total Retenciones</label>
+                <label className="label" htmlFor="currecy">Total retenciones</label>
                 <input
                   type="text"
                   id="curreny"
