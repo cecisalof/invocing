@@ -137,8 +137,10 @@
   }
 
   .custom-width {
-    width: 1000px;
-    content: "0%";
+    width: 1358px;
+  }
+  .custom-progress .progress-bar {
+    background-color: #639cfe; /* Color personalizado */
   }
   .upload-icon {
     color: green;
@@ -149,14 +151,14 @@
   }
 
   .file-drop-zone {
-    border: 2px solid #005CFF;
+    border: 'none';
     border-radius: 20px;
     padding: 20px;
     text-align: center;
     font-size: 18px;
-    background-color: #f9f9f9;
+    background-color: #eaf1ff;
     margin-bottom: 30px;
-    width: 1000px;
+    width: 1358px;
     transition: background-color 0.3s;
     font-family: 'Nunito';
   }
