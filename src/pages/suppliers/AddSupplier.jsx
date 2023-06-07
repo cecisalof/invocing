@@ -7,7 +7,6 @@ import { postProviders} from "./services";
 import './style.css';
 import '../general-style.css'
 import { Alert } from '@mui/material';
-import AlertTitle from '@mui/material/AlertTitle';
 
 export const AddSupplier = () => {
 const [userToken, setUserToken] = useState('');
@@ -101,23 +100,21 @@ const [userToken, setUserToken] = useState('');
           <AppBar location={location}/>
         </div>
   
-        <div className="title">Nuevo Proveedor</div>
+        <div className="title">Nuevo proveedor</div>
         {isSuccess && (
       <Alert onClose={() => {setIsSuccess(false)}} severity="success" className="custom-alert">
-        <AlertTitle>Success</AlertTitle>
         La operación se realizó correctamente.
       </Alert>
     )}
       {isError && (
       <Alert  severity="error" className="custom-alert" onClose={() => {setIsError(false)}}>
-        <AlertTitle>Error</AlertTitle>
         Hubo un error al realizar la operación.
       </Alert>)}
 
         <div className="panel">
           <div className="form-row">
               <div className="input-container">
-                <label className="label" htmlFor="nombre-juridico">Nombre Proveedor</label>
+                <label className="label" htmlFor="nombre-juridico">Nombre proveedor</label>
                 <input
                   type="text"
                   id="nombre-juridico"
@@ -196,7 +193,7 @@ const [userToken, setUserToken] = useState('');
                 />
             </div>
             <div className="input-container">
-                <label className="label" htmlFor="cuaneta bancaria">Cuenta Bancaria</label>
+                <label className="label" htmlFor="cuaneta bancaria">Cuenta bancaria</label>
                 <input
                   type="text"
                   id="cuentabcanaria"

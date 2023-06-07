@@ -30,7 +30,7 @@ export const ExpenseTickets = (props) => {
 
 
  
-  const gridStyle = useMemo(() => ({ height: '70vh', width: '95%', marginTop: 24, marginBottom: 32 }), []);
+  const gridStyle = useMemo(() => ({ height: '70vh', width: '95%', marginTop: 24, marginBottom: 32, fontFamily: 'Nunito' }), []);
 
   const userDataContext = useContext(Context);
   const providerCellRenderer = (params) => {
@@ -69,17 +69,18 @@ export const ExpenseTickets = (props) => {
     {field: 'date',headerName: "Fecha",headerComponent: (props) => (
       <CustomHeader displayName={props.displayName} props={props}/>
     ),},
-    {
-      field: 'file',
-      headerName: 'Factura',
-      cellRenderer: CustomElement
-    },
+    
     {field: 'concept', headerName: 'Concepto'},
     {field: 'retention_percentage', headerName: '% Retención'}, 
     {field: 'taxes_percentage', headerName: '% Impuestos'},
-    {field: 'total_pretaxes', headerName: 'Total sin Impuestos'},
-    {field: 'total_retention', headerName: 'Total Retenciones'},
-    {field: 'total_taxes', headerName: 'Total Impuestos'},
+    {field: 'total_pretaxes', headerName: 'Total sin impuestos'},
+    {field: 'total_retention', headerName: 'Total retenciones'},
+    {field: 'total_taxes', headerName: 'Total impuestos'},
+    {
+      field: 'file',
+      headerName: 'Descargar',
+      cellRenderer: CustomElement
+    },
   ]);
 
   useEffect(() => {
@@ -156,17 +157,18 @@ export const ExpenseTickets = (props) => {
         {field: 'date',headerName: "Fecha",headerComponent: (props) => (
           <CustomHeader displayName={props.displayName} props={props}/>
         ),},
-        {
-          field: 'file',
-          headerName: 'Factura',
-          cellRenderer: CustomElement
-        },
+        
         {field: 'concept', headerName: 'Concepto'},
         {field: 'retention_percentage', headerName: '% Retención'}, 
         {field: 'taxes_percentage', headerName: '% Impuestos'},
-        {field: 'total_pretaxes', headerName: 'Total sin Impuestos'},
-        {field: 'total_retention', headerName: 'Total Retenciones'},
-        {field: 'total_taxes', headerName: 'Total Impuestos'},
+        {field: 'total_pretaxes', headerName: 'Total sin impuestos'},
+        {field: 'total_retention', headerName: 'Total retenciones'},
+        {field: 'total_taxes', headerName: 'Total impuestos'},
+        {
+          field: 'file',
+          headerName: 'Descargar',
+          cellRenderer: CustomElement
+        },
       ];
   
       setColumnDefs(updatedColumnDefs);
@@ -177,10 +179,10 @@ export const ExpenseTickets = (props) => {
     let newValue = event.newValue
     
     const stateMappings = {
-      'PENDIENTE': 'pending',
-      'RECIBIDA': 'received',
-      'PAGADA': 'payed',
-      'RECHAZADO': 'rejected'
+      'Pendiente': 'pending',
+      'Recibida': 'received',
+      'Pagada': 'payed',
+      'Rechazado': 'rejected'
     };
     
     if (event.colDef.field === 'state'){
@@ -275,7 +277,7 @@ const handleAddExpenses = () => {
       <div>
         <AppBar location={location}/>
       </div>
-      <button type="button" class="btn btn-primary rounded-pill px-4" onClick={handleAddExpenses}>Añadir Gasto</button>
+      <button type="button" class="btn btn-primary rounded-pill px-4" onClick={handleAddExpenses}>Añadir gasto</button>
       <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} />
       <img src={deleteIcon} alt="Delete icon" onClick={handleTrashClick} style={{ marginRight: '30px'  }} />
       <div className="ag-theme-alpine" style={gridStyle}>

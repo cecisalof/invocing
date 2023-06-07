@@ -27,7 +27,7 @@ export const InvoicesToPay = (props) => {
   const [rowProviders, setrowProviders] = useState(); // Set rowData to Array of Objects, one Object per Row
   const [providersLoaded, setProvidersLoaded] = useState(false);
 
-  const gridStyle = useMemo(() => ({ height: '70vh', width: '95%', marginTop: 24, marginBottom: 32 }), []);
+  const gridStyle = useMemo(() => ({ height: '70vh', width: '95%', marginTop: 24, marginBottom: 32, fontFamily: 'Nunito' }), []);
 
   const userDataContext = useContext(Context);
 
@@ -36,10 +36,10 @@ export const InvoicesToPay = (props) => {
   };
 
   const ragCellClassRules = {
-    'rag-green-outer': (props) => props.value === 'payed' || props.value === 'PAGADA',
-    'rag-yellow-outer': (props) => props.value === 'received' || props.value === 'RECIBIDA',
-    'rag-red-outer': (props) => props.value === 'rejected' || props.value === 'RECHAZADO',
-    'rag-orange-outer': (props) => props.value === 'pending' || props.value === 'PENDIENTE',
+    'rag-green-outer': (props) => props.value === 'payed' || props.value === 'Pagada',
+    'rag-yellow-outer': (props) => props.value === 'received' || props.value === 'Recibida',
+    'rag-red-outer': (props) => props.value === 'rejected' || props.value === 'Rechazado',
+    'rag-orange-outer': (props) => props.value === 'pending' || props.value === 'Pendiente',
   };
   const providerCellRenderer = (params) => {
     if (params.value) {
@@ -80,7 +80,7 @@ export const InvoicesToPay = (props) => {
       cellClassRules: ragCellClassRules,
       cellEditor: 'agSelectCellEditor',
       cellEditorParams: {
-        values: ['RECIBIDA', 'PAGADA', 'RECHAZADO', 'PENDIENTE'],
+        values: ['Recibida', 'Pagada', 'Rechazado', 'Pendiente'],
         cellRenderer: ragRenderer,
       },
       headerComponent: (props) => (
@@ -92,17 +92,18 @@ export const InvoicesToPay = (props) => {
     {field: 'date',headerName: "Fecha",headerComponent: (props) => (
       <CustomHeader displayName={props.displayName} props={props}/>
     ),},
-    {
-      field: 'file',
-      headerName: 'Factura',
-      cellRenderer: CustomElement
-    },
+   
     {field: 'concept', headerName: 'Concepto'},
     {field: 'retention_percentage', headerName: '% Retención'}, 
     {field: 'taxes_percentage', headerName: '% Impuestos'},
-    {field: 'total_pretaxes', headerName: 'Total sin Impuestos'},
-    {field: 'total_retention', headerName: 'Total Retenciones'},
-    {field: 'total_taxes', headerName: 'Total Impuestos'},
+    {field: 'total_pretaxes', headerName: 'Total sin impuestos'},
+    {field: 'total_retention', headerName: 'Total retenciones'},
+    {field: 'total_taxes', headerName: 'Total impuestos'},
+    {
+      field: 'file',
+      headerName: 'Descargar',
+      cellRenderer: CustomElement
+    },
   ]);
 
   useEffect(() => {
@@ -170,7 +171,7 @@ export const InvoicesToPay = (props) => {
           cellClassRules: ragCellClassRules,
           cellEditor: 'agSelectCellEditor',
           cellEditorParams: {
-            values: ['RECIBIDA', 'PAGADA', 'RECHAZADO', 'PENDIENTE'],
+            values: ['Recibida', 'Pagada', 'Rechazado', 'Pendiente'],
             cellRenderer: ragRenderer,
           },
           headerComponent: (props) => (
@@ -179,20 +180,35 @@ export const InvoicesToPay = (props) => {
           
           cellStyle: { color: 'white', fontSize: '10px' },// agregar estilo al texto de la celda
         },
+
+        {
+          field: 'payment_type',
+          headerName: 'Tipo de pago',
+          cellEditor: 'agSelectCellEditor',
+          cellEditorParams: {
+            values: ['Domiciliación', 'Cheque', 'Transferencia', 'Efectivo', 'Tarjeta'],
+          },
+          headerComponent: (props) => (
+            <CustomHeader displayName={props.displayName} props={props} />
+          ),
+          
+        },
+
         {field: 'date',headerName: "Fecha",headerComponent: (props) => (
           <CustomHeader displayName={props.displayName} props={props}/>
         ),},
-        {
-          field: 'file',
-          headerName: 'Factura',
-          cellRenderer: CustomElement
-        },
+        
         {field: 'concept', headerName: 'Concepto'},
         {field: 'retention_percentage', headerName: '% Retención'}, 
         {field: 'taxes_percentage', headerName: '% Impuestos'},
-        {field: 'total_pretaxes', headerName: 'Total sin Impuestos'},
-        {field: 'total_retention', headerName: 'Total Retenciones'},
-        {field: 'total_taxes', headerName: 'Total Impuestos'},
+        {field: 'total_pretaxes', headerName: 'Total sin impuestos'},
+        {field: 'total_retention', headerName: 'Total retenciones'},
+        {field: 'total_taxes', headerName: 'Total impuestos'},
+        {
+          field: 'file',
+          headerName: 'Descargar',
+          cellRenderer: CustomElement
+        },
       ];
   
       setColumnDefs(updatedColumnDefs);
@@ -217,12 +233,24 @@ export const InvoicesToPay = (props) => {
     let newValue = event.newValue
     
     const stateMappings = {
-      'PENDIENTE': 'pending',
-      'RECIBIDA': 'received',
-      'PAGADA': 'payed',
-      'RECHAZADO': 'rejected'
+      'Pendiente': 'pending',
+      'Recibida': 'received',
+      'Pagada': 'payed',
+      'Rechazado': 'rejected'
     };
+
+    const paymentMapping = {
+      'Domiciliación': 'direct_debit',
+      'Cheque': 'cheque',
+      'Transferencia': 'transfer',
+      'Efectivo': 'cash',
+      'Tarjeta': 'card'
+    }
     
+    if (event.colDef.field === 'payment_type'){
+      newValue = paymentMapping[newValue] || newValue;
+    }
+
     if (event.colDef.field === 'state'){
       newValue = stateMappings[newValue] || newValue;
     }
@@ -318,7 +346,7 @@ const handleAddInvoice = () => {
       <div>
         <AppBar location={location}/>
       </div>
-      <button type="button" class="btn btn-primary rounded-pill px-4" onClick={handleAddInvoice}>Añadir Factura</button>
+      <button type="button" class="btn btn-primary rounded-pill px-4" onClick={handleAddInvoice}>Añadir factura</button>
       <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} />
       <img src={deleteIcon} alt="Delete icon" onClick={handleTrashClick} style={{ marginRight: '30px'  }} />
       <div className="ag-theme-alpine" style={gridStyle}>

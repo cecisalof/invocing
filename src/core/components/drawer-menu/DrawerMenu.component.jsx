@@ -48,7 +48,7 @@ export const DrawerMenuComponent = ({user}) => {
                       <div id="flush-collapseOne" className="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
                         <div className="menuItemContainer">
                           {/* <img className="menuIcon" src={cashIcon} alt="Profile" /> */}
-                          <NavLink className={(navData) => (navData.isActive ? 'active' : 'nav-link')} to="/outcome/suppliers">Proovedores</NavLink>
+                          <NavLink className={(navData) => (navData.isActive ? 'active' : 'nav-link')} to="/outcome/suppliers">Proveedores</NavLink>
                         </div>
                         <div className="menuItemContainer">
                           {/* <img className="menuIcon" src={cashIcon} alt="Cash" /> */}
