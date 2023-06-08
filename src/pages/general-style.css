@@ -139,6 +139,10 @@
   .custom-width {
     width: 1358px;
   }
+
+  .custom-width-progess {
+    width: 1300px;
+  }
   .custom-progress .progress-bar {
     background-color: #639cfe; /* Color personalizado */
   }

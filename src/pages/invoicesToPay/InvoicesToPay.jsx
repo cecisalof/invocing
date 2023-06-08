@@ -17,21 +17,21 @@ import { getProviders } from "../suppliers/services";
 import { useNavigate } from 'react-router-dom';
 import { FaCheckCircle, FaCircleNotch } from 'react-icons/fa';
 import dragDrop from '../../assets/icons/drag-and-drop-96.png';
+import close from '../../assets/icons/close.png';
 import { ProgressBar } from 'react-bootstrap';
+
 
 export const InvoicesToPay = (props) => {
   const location = useLocation();
   const navigate = useNavigate();
 
   const [userToken, setUserToken] = useState('');
-  const [progress, setProgress] = useState(0);
-  const isLoadingRef = useRef(false);
+
   
   const gridRef = useRef(); // Optional - for accessing Grid's API
   const [rowData, setRowData] = useState(); // Set rowData to Array of Objects, one Object per Row
   const [rowProviders, setrowProviders] = useState(); // Set rowData to Array of Objects, one Object per Row
   const [providersLoaded, setProvidersLoaded] = useState(false);
-  const [files, setFiles] = useState([]);
   const [isFileUploaded, setIsFileUploaded] = useState(false);
 
   const gridStyle = useMemo(() => ({ height: '70vh', width: '95%', marginTop: 24, marginBottom: 32, fontFamily: 'Nunito' }), []);
@@ -364,16 +364,16 @@ const handleDrop = (event) => {
   event.target.classList.remove('file-drop-zone-dragging');
   
   const files = event.dataTransfer.files;
-  setFiles(files)
-  console.log(files);
+  userDataContext.updateFiles(files)
   setIsFileUploaded(true);
+  
 };
 
 const processFiles = async () => {
   console.log("Procesando archivos automáticamente...");
-  isLoadingRef.current = true;
+  userDataContext.toggleLoading()
   setIsFileUploaded(false);
-  const response = await postInvoiceAutomatic(userToken, files);
+  const response = await postInvoiceAutomatic(userToken, userDataContext.files);
   const ids = response.data.schendules
   console.log(ids)
   
@@ -390,19 +390,18 @@ const processFiles = async () => {
 
     statusResponse.map((item) => {
       for (const id of ids) {
-        allDone = true;
         const status = item[id.toString()]; // Obtener el estado del ID
         if (status === "DONE") {
           loadedCount =  loadedCount + 1; // Incrementar el contador si el estado es "DONE"
           console.log(loadedCount); // Imprimir el número de IDs con estado "DONE"
           const totalCount = ids.length;
           const percentage = Math.round((loadedCount * 100) / totalCount);
-          setProgress(percentage); // Actualiza el progreso
+          userDataContext.updateProgress(percentage)
         }else{
           allDone = false;
           const totalCount = ids.length;
           const percentage = Math.round((loadedCount * 100) / totalCount);
-          setProgress(percentage); // Actualiza el progreso
+          userDataContext.updateProgress(percentage)
         }
 
       }
@@ -413,8 +412,6 @@ const processFiles = async () => {
     } else {
       console.log("Procesamiento completo");
       getData(userToken);
-
-      //setTimeout(isLoadingRef.current = false, 30000)
     }   
     
   };
@@ -424,8 +421,11 @@ const processFiles = async () => {
 
  };
 
-
-
+   function handleCloseClick() {
+    userDataContext.updateProgress(0)
+    userDataContext.updateFiles([])
+    userDataContext.toggleLoading()
+  }
 
   return (
     <>
@@ -439,7 +439,7 @@ const processFiles = async () => {
         onDrop={handleDrop}
       >
         <div className="drop-message">
-          {isLoadingRef.current && progress < 100 ? (
+          {userDataContext.isLoadingRef && userDataContext.progress < 100 ? (
             <div>
               <FaCircleNotch className="loading-icon" />
               <span className="upload-text">Cargando </span>
@@ -456,22 +456,24 @@ const processFiles = async () => {
           )}
           
         </div>
-      {(!isLoadingRef.current || progress >= 100) && (
+      {(!userDataContext.isLoadingRef || userDataContext.progress >= 100) && (
         <button className="process-button" onClick={processFiles}>
           Procesar automáticamente
         </button>
       )}
       </div>
-
-      {isLoadingRef.current && (
-      <ProgressBar
-        now={progress}
-        label={progress === 0 ? "0%" : `${progress}%`}
-        animated={progress === 0}
-        variant="custom-color"
-        className="mb-3 custom-width custom-progress"
-      />
-    )}
+  {userDataContext.isLoadingRef && (
+  <div style={{display: 'flex', justifyContent: 'space-between'}}>
+    
+  <ProgressBar
+    now={userDataContext.progress}
+    label={userDataContext.progress === 0 ? "0%" : `${userDataContext.progress}%`}
+    animated={userDataContext.progress === 0}
+    variant="custom-color"
+    className="mb-3 custom-width-progess custom-progress"
+  />
+  <img src={close} alt="Close icon" onClick={handleCloseClick} style={{ marginRight: '100px', width: '20 px', height: '20px'}} />
+  </div>)}
 
       <button type="button" class="btn btn-primary rounded-pill px-4" onClick={handleAddInvoice}>Añadir factura</button>
       <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} />

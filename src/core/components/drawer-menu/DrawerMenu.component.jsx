@@ -6,11 +6,26 @@ import calendarIcon from '../../../assets/icons/calendar.png';
 import payrollIcon from '../../../assets/icons/payroll.png';
 import documentsIcon from '../../../assets/icons/documents.png';
 import logoutIcon from '../../../assets/icons/logout.png';
+import Context from '../../../contexts/context';
+import { useContext } from 'react';
 import "./style.css";
+import close from '../../../assets/icons/close.png';
+import { ProgressBar } from 'react-bootstrap';
 
 
 export const DrawerMenuComponent = ({user}) => {
   const isAdministrator = user?.groups?.includes("administrador")
+  const userDataContext = useContext(Context);
+  function handleCloseClick() {
+    userDataContext.updateProgress(0)
+    userDataContext.updateFiles([])
+    userDataContext.toggleLoading()
+  }
+  function handleCloseClickEx() {
+    userDataContext.updateProgressEx(0)
+    userDataContext.updateFilesEx([])
+    userDataContext.toggleLoadingEx()
+  }
   return (
     <>
      <nav className="navbar navbar-expand-lg navbar-dark shadow p-3 bg-body-tertiary rounded" style={{backgroundColor: "#005CFF"}}>
@@ -80,6 +95,35 @@ export const DrawerMenuComponent = ({user}) => {
                 <NavLink className={(navData) => (navData.isActive ? 'active' : 'nav-link')} to="/documents">Documentos</NavLink>
                 </div>
               </li>
+
+              {userDataContext.isLoadingRef && (<label style={{ fontFamily: 'Nunito', color: '#639cfe'}} >Progreso facturas</label>)}
+              {userDataContext.isLoadingRef && (
+
+                <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                  
+                <ProgressBar
+                  now={userDataContext.progress}
+                  label={userDataContext.progress === 0 ? "0%" : `${userDataContext.progress}%`}
+                  animated={userDataContext.progress === 0}
+                  variant="custom-color"
+                  className="mb-3 custom-width-progess-menu custom-progress"
+                />
+                <img src={close} alt="Close icon" onClick={handleCloseClick} style={{ marginRight: '100px', width: '20 px', height: '20px'}} />
+                </div>)}
+
+                {userDataContext.isLoadingRefEx && (<label style={{fontFamily: 'Nunito', color: '#639cfe'}} >Progreso tickets de gastos</label>)}
+                {userDataContext.isLoadingRefEx && (
+                  <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                    
+                  <ProgressBar
+                    now={userDataContext.progressEx}
+                    label={userDataContext.progressEx === 0 ? "0%" : `${userDataContext.progressEx}%`}
+                    animated={userDataContext.progressEx === 0}
+                    variant="custom-color"
+                    className="mb-3 custom-width-progess-menu custom-progress"
+                  />
+                  <img src={close} alt="Close icon" onClick={handleCloseClickEx} style={{ marginRight: '100px', width: '20 px', height: '20px'}} />
+                  </div>)}
               <div className="">
                 <li className="nav-item">
                   <div className="menuItemContainer logout">

@@ -17,6 +17,7 @@ import CustomElement from '../customElement.jsx';
 import { useNavigate } from 'react-router-dom';
 import { FaCheckCircle, FaCircleNotch } from 'react-icons/fa';
 import dragDrop from '../../assets/icons/drag-and-drop-96.png';
+import close from '../../assets/icons/close.png';
 import { ProgressBar } from 'react-bootstrap';
 
 
@@ -25,9 +26,6 @@ export const ExpenseTickets = (props) => {
   const navigate = useNavigate();
 
   const [userToken, setUserToken] = useState('');
-  const [progress, setProgress] = useState(0);
-  const isLoadingRef = useRef(false);
-  const [files, setFiles] = useState([]);
   const [isFileUploaded, setIsFileUploaded] = useState(false);
   
   const gridRef = useRef(); // Optional - for accessing Grid's API
@@ -298,16 +296,21 @@ const handleDrop = (event) => {
   event.target.classList.remove('file-drop-zone-dragging');
   
   const files = event.dataTransfer.files;
-  setFiles(files)
-  console.log(files);
+  userDataContext.updateFilesEx(files)
   setIsFileUploaded(true);
 };
 
+function handleCloseClick() {
+  userDataContext.updateProgressEx(0)
+  userDataContext.updateFilesEx([])
+  userDataContext.toggleLoadingEx()
+}
+
 const processFiles = async () => {
   console.log("Procesando archivos automáticamente...");
-  isLoadingRef.current = true;
+  userDataContext.toggleLoadingEx()
   setIsFileUploaded(false);
-  const response = await postExpenseTicketAutomatic(userToken, files);
+  const response = await postExpenseTicketAutomatic(userToken, userDataContext.filesEx);
   const ids = response.data.schendules
   console.log(ids)
   
@@ -324,19 +327,19 @@ const processFiles = async () => {
 
     statusResponse.map((item) => {
       for (const id of ids) {
-        allDone = true;
         const status = item[id.toString()]; // Obtener el estado del ID
         if (status === "DONE") {
           loadedCount =  loadedCount + 1; // Incrementar el contador si el estado es "DONE"
           console.log(loadedCount); // Imprimir el número de IDs con estado "DONE"
           const totalCount = ids.length;
           const percentage = Math.round((loadedCount * 100) / totalCount);
-          setProgress(percentage); // Actualiza el progreso
+          console.log(percentage)
+          userDataContext.updateProgressEx(percentage)
         }else{
           allDone = false;
           const totalCount = ids.length;
           const percentage = Math.round((loadedCount * 100) / totalCount);
-          setProgress(percentage); // Actualiza el progreso
+          userDataContext.updateProgressEx(percentage)
         }
 
       }
@@ -345,10 +348,9 @@ const processFiles = async () => {
       // Si no todos los IDs están en el estado "DONE", esperar un tiempo y volver a verificar
       setTimeout(checkStatus, 10000); // Esperar 2 segundos (puedes ajustar el tiempo según tus necesidades)
     } else {
+      console.log(userDataContext.progressEx)
       console.log("Procesamiento completo");
       getData(userToken);
-
-      //setTimeout(isLoadingRef.current = false, 30000)
     }   
     
   };
@@ -372,7 +374,7 @@ const processFiles = async () => {
         onDrop={handleDrop}
       >
         <div className="drop-message">
-          {isLoadingRef.current && progress < 100 ? (
+          {userDataContext.isLoadingRefEx && userDataContext.progressEx < 100 ? (
             <div>
               <FaCircleNotch className="loading-icon" />
               <span className="upload-text">Cargando </span>
@@ -389,22 +391,25 @@ const processFiles = async () => {
           )}
           
         </div>
-      {(!isLoadingRef.current || progress >= 100) && (
+      {(!userDataContext.isLoadingRefEx || userDataContext.progressEx >= 100) && (
         <button className="process-button" onClick={processFiles}>
           Procesar automáticamente
         </button>
       )}
       </div>
 
-      {isLoadingRef.current && (
-      <ProgressBar
-        now={progress}
-        label={progress === 0 ? "0%" : `${progress}%`}
-        animated={progress === 0}
-        variant="custom-color"
-        className="mb-3 custom-width custom-progress"
-      />
-    )}
+      {userDataContext.isLoadingRefEx && (
+        <div style={{display: 'flex', justifyContent: 'space-between'}}>
+          
+        <ProgressBar
+          now={userDataContext.progressEx}
+          label={userDataContext.progressEx === 0 ? "0%" : `${userDataContext.progressEx}%`}
+          animated={userDataContext.progressEx === 0}
+          variant="custom-color"
+          className="mb-3 custom-width-progess custom-progress"
+        />
+        <img src={close} alt="Close icon" onClick={handleCloseClick} style={{ marginRight: '100px', width: '20 px', height: '20px'}} />
+        </div>)}
 
       <button type="button" class="btn btn-primary rounded-pill px-4" onClick={handleAddExpenses}>Añadir gasto</button>
       <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} />
