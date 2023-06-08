@@ -309,7 +309,7 @@ export const Income = () => {
         <div>
           <button type="button" className="btn btn-primary rounded-pill px-4" onClick={handleAddIncome} style={{ marginRight: '30px' }}>Añadir Venta</button>
           <button type="button" className="btn btn-link icon-btn" onClick={handleFilterClick}><img src={filterIcon} alt="Filter icon" /></button>
-          <img src={deleteIcon} alt="Delete icon" onClick={handleTrashClick} style={{ marginRight: '30px' }} />
+          <img src={deleteIcon} alt="Delete icon" className="btn btn-link icon-btn" onClick={handleTrashClick} style={{ marginRight: '30px' }} />
         </div>
         <div className="ag-theme-alpine" style={gridStyle}>
           <AgGridReact
