@@ -219,3 +219,11 @@
     /* Agrega cualquier otro estilo personalizado que desees */
   
 }
+
+.ag-header-cell-resize::after {
+  background-color: white;
+}
+
+.ag-paging-panel {
+  border-top-color: white;
+}
