@@ -12,6 +12,11 @@ export default class UserState extends React.Component{
     filesEx: [],
     progressEx: 0,
     isLoadingRefEx: false,
+    isSuccess: false,
+    isError: false,
+    isSuccessEx: false,
+    isErrorEx: false,
+
   }
 
   updateFiles = (newFiles) => {
@@ -29,6 +34,34 @@ export default class UserState extends React.Component{
       isLoadingRef: !prevState.isLoadingRef,
     }));
     window.localStorage.setItem('isLoadingRef', JSON.stringify(this.state.isLoadingRef));
+  };
+
+  toggleSuccess = () => {
+    this.setState((prevState) => ({
+      isSuccess: !prevState.isSuccess,
+    }));
+    window.localStorage.setItem('isSuccess', JSON.stringify(this.state.isSuccess));
+  };
+
+  toggleError = () => {
+    this.setState((prevState) => ({
+      isError: !prevState.isError,
+    }));
+    window.localStorage.setItem('isError', JSON.stringify(this.state.isError));
+  };
+
+  toggleSuccessEx = () => {
+    this.setState((prevState) => ({
+      isSuccessEx: !prevState.isSuccessEx,
+    }));
+    window.localStorage.setItem('isSuccessEx', JSON.stringify(this.state.isSuccessEx));
+  };
+
+  toggleErrorEx = () => {
+    this.setState((prevState) => ({
+      isErrorEx: !prevState.isErrorEx,
+    }));
+    window.localStorage.setItem('isErrorEx', JSON.stringify(this.state.isErrorEx));
   };
 
   updateFilesEx = (newFilesEx) => {
@@ -87,6 +120,10 @@ export default class UserState extends React.Component{
           filesEx: this.state.filesEx,
           progressEx: this.state.progressEx,
           isLoadingRefEx: this.state.isLoadingRefEx,
+          isSuccess: this.state.isSuccess,
+          isError: this.state.isError,
+          isSuccessEx: this.state.isSuccessEx,
+          isErrorEx: this.state.isErrorEx,
           removeUser: this.removeUser,
           updateUserData: this.updateUserData,
           updateFiles: this.updateFiles,
@@ -95,6 +132,11 @@ export default class UserState extends React.Component{
           updateFilesEx: this.updateFilesEx,
           updateProgressEx: this.updateProgressEx,
           toggleLoadingEx: this.toggleLoadingEx,
+          toggleError: this.toggleError,
+          toggleErrorEx: this.toggleErrorEx,
+          toggleSuccess:this.toggleSuccess,
+          toggleSuccessEx: this.toggleSuccessEx,
+
         }}
       >
         {this.props.children}

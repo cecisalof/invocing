@@ -16,7 +16,7 @@ import CustomElement from '../customElement.jsx';
 import { getProviders } from "../suppliers/services";
 import { useNavigate } from 'react-router-dom';
 import { FaCheckCircle, FaCircleNotch } from 'react-icons/fa';
-import dragDrop from '../../assets/icons/drag-and-drop-96.png';
+import dragDrop from '../../assets/icons/drag-and-drop.png';
 import close from '../../assets/icons/close.png';
 import { ProgressBar } from 'react-bootstrap';
 

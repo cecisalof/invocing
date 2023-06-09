@@ -8,6 +8,10 @@ export default React.createContext({
   filesEx: [],
   progressEx: 0,
   isLoadingRefEx: false,
+  isSuccess: false,
+  isError: false,
+  isSuccessEx: false,
+  isErrorEx: false,
   removeUser: () => {},
   updateUserData: (newUserData) => {},
   updateFiles: (newFiles) => [],
@@ -16,4 +20,9 @@ export default React.createContext({
   updateFilesEx: (newFilesEx) => [],
   updateProgressEx: (newProgressEx) => 0,
   toggleLoadingEx: () => false,
+  toggleError: () => false,
+  toggleErrorEx: () => false,
+  toggleSuccess:() => false,
+  toggleSuccessEx: () => false,
+
 });

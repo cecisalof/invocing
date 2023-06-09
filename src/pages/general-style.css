@@ -46,7 +46,7 @@
   }
   
   .rag-red-outer .rag-element {
-    background-color: #BA3800;
+    background-color: #000000;
     border-radius: 1em;
     padding: 0.4em 0.7em;
   }
@@ -58,13 +58,13 @@
   }
   
   .rag-yellow-outer .rag-element {
-    background-color: rgba(123, 123, 3, 0.434);
+    background-color: #FFBC11;
     border-radius: 1em;
     padding: 0.4em 0.7em;
   }
 
   .rag-orange-outer .rag-element {
-    background-color: rgb(221, 164, 59);
+    background-color: #BA3800;
     border-radius: 1em;
     padding: 0.4em 0.7em;
   }
@@ -144,14 +144,19 @@
     width: 1300px;
   }
   .custom-progress .progress-bar {
-    background-color: #639cfe; /* Color personalizado */
+    background-color: #005CFF; /* Color personalizado */
   }
   .upload-icon {
     color: green;
     margin-right: 5px;
   }
   .upload-text {
-    font-weight: bold;
+    font-family: 'Nunito';
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 25px;
+    margin-top: 20px;
+    display: flex;
   }
 
   .file-drop-zone {
@@ -191,10 +196,10 @@
   .process-button {
     background-color: #005CFF;
     color: white;
-    padding: 10px 20px;
+    padding: 5px 15px;
     border: none;
     border-radius: 20px;
-    font-size: 16px;
+    font-size: 15px;
     cursor: pointer;
     transition: background-color 0.3s;
     font-family: 'Nunito';
