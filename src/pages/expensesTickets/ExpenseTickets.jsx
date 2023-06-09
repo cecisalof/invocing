@@ -2,7 +2,7 @@ import { useLocation } from 'react-router-dom'
 import { AppBar } from "../../components/appBar/AppBar";
 import { AgGridReact } from 'ag-grid-react'; // the AG Grid React Component
 import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
-import { getExpenseTicket, deleteExpenseTicket, patchExpenseTicket, patchProviderExpenseTicket } from "./services";
+import { getExpenseTicket, deleteExpenseTicket, patchExpenseTicket, patchProviderExpenseTicket, postExpenseTicketAutomatic, getSchenduleStatus } from "./services";
 import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
 import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
 import './style.css';
@@ -15,12 +15,18 @@ import CustomHeader from '../customHeader.jsx';
 import { getProviders } from "../suppliers/services";
 import CustomElement from '../customElement.jsx';
 import { useNavigate } from 'react-router-dom';
+import { FaCheckCircle, FaCircleNotch } from 'react-icons/fa';
+import dragDrop from '../../assets/icons/drag-and-drop.png';
+import close from '../../assets/icons/close.png';
+import { ProgressBar } from 'react-bootstrap';
+
 
 export const ExpenseTickets = (props) => {
   const location = useLocation();
   const navigate = useNavigate();
 
   const [userToken, setUserToken] = useState('');
+  const [isFileUploaded, setIsFileUploaded] = useState(false);
   
   const gridRef = useRef(); // Optional - for accessing Grid's API
   const [rowData, setRowData] = useState(); // Set rowData to Array of Objects, one Object per Row
@@ -272,11 +278,139 @@ const handleAddExpenses = () => {
   navigate('/add-expenses'); // Reemplaza '/ruta-del-formulario' con la ruta de tu formulario
 };
 
+const handleDragOver = (event) => {
+  event.preventDefault();
+  event.stopPropagation();
+  event.target.classList.add('file-drop-zone-dragging');
+};
+
+const handleDragLeave = (event) => {
+  event.preventDefault();
+  event.stopPropagation();
+  event.target.classList.remove('file-drop-zone-dragging');
+};
+
+const handleDrop = (event) => {
+  event.preventDefault();
+  event.stopPropagation();
+  event.target.classList.remove('file-drop-zone-dragging');
+  
+  const files = event.dataTransfer.files;
+  userDataContext.updateFilesEx(files)
+  setIsFileUploaded(true);
+};
+
+function handleCloseClick() {
+  userDataContext.updateProgressEx(0)
+  userDataContext.updateFilesEx([])
+  userDataContext.toggleLoadingEx()
+}
+
+const processFiles = async () => {
+  console.log("Procesando archivos automáticamente...");
+  userDataContext.toggleLoadingEx()
+  setIsFileUploaded(false);
+  const response = await postExpenseTicketAutomatic(userToken, userDataContext.filesEx);
+  const ids = response.data.schendules
+  console.log(ids)
+  
+
+  const checkStatus = async () => {
+    
+    const response = await getSchenduleStatus(userToken, ids);
+    const statusResponse = response.status
+
+    // Verificar si todos los IDs están en el estado "DONE"
+    let allDone = true;
+    let loadedCount = 0
+    
+
+    statusResponse.map((item) => {
+      for (const id of ids) {
+        const status = item[id.toString()]; // Obtener el estado del ID
+        if (status === "DONE") {
+          loadedCount =  loadedCount + 1; // Incrementar el contador si el estado es "DONE"
+          console.log(loadedCount); // Imprimir el número de IDs con estado "DONE"
+          const totalCount = ids.length;
+          const percentage = Math.round((loadedCount * 100) / totalCount);
+          console.log(percentage)
+          userDataContext.updateProgressEx(percentage)
+        }else{
+          allDone = false;
+          const totalCount = ids.length;
+          const percentage = Math.round((loadedCount * 100) / totalCount);
+          userDataContext.updateProgressEx(percentage)
+        }
+
+      }
+    });
+    if (!allDone) {
+      // Si no todos los IDs están en el estado "DONE", esperar un tiempo y volver a verificar
+      setTimeout(checkStatus, 10000); // Esperar 2 segundos (puedes ajustar el tiempo según tus necesidades)
+    } else {
+      console.log(userDataContext.progressEx)
+      console.log("Procesamiento completo");
+      getData(userToken);
+    }   
+    
+  };
+  // Iniciar la verificación del estado de los IDs
+  await checkStatus();
+
+
+ };
+
+
   return (
     <>
       <div>
         <AppBar location={location}/>
       </div>
+
+      <div
+        className="file-drop-zone"
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+      >
+        <div className="drop-message">
+          {userDataContext.isLoadingRefEx && userDataContext.progressEx < 100 ? (
+            <div>
+              <FaCircleNotch className="loading-icon" />
+              <span className="upload-text">Cargando </span>
+            </div>
+          ) : isFileUploaded ? (
+            <div className="upload-indicator">
+              <FaCheckCircle className="upload-icon" />
+              <span className="upload-text">Archivos subidos</span>
+            </div>
+          ) : (
+            <div>
+              <img src={dragDrop} alt="dragDrop"/>
+            </div>
+          )}
+          
+        </div>
+      {(!userDataContext.isLoadingRefEx || userDataContext.progressEx >= 100) && (
+        <button className="process-button" onClick={processFiles}>
+          Procesar automáticamente
+        </button>
+      )}
+      </div>
+
+      {userDataContext.isLoadingRefEx && (
+        <div style={{display: 'flex', justifyContent: 'space-between'}}>
+          
+        <ProgressBar
+          now={userDataContext.progressEx}
+          label={userDataContext.progressEx === 0 ? "0%" : `${userDataContext.progressEx}%`}
+          animated={userDataContext.progressEx === 0}
+          variant="custom-color"
+          className="mb-3 custom-width-progess custom-progress"
+        />
+        <img src={close} alt="Close icon" onClick={handleCloseClick} style={{ marginRight: '100px', width: '20 px', height: '20px'}} />
+        </div>)}
+
       <button type="button" class="btn btn-primary rounded-pill px-4" onClick={handleAddExpenses}>Añadir gasto</button>
       <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} />
       <img src={deleteIcon} alt="Delete icon" onClick={handleTrashClick} style={{ marginRight: '30px'  }} />

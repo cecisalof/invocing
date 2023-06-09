@@ -11,6 +11,7 @@ import "./style.css";
 
 export const DrawerMenuComponent = ({user}) => {
   const isAdministrator = user?.groups?.includes("administrador")
+
   return (
     <>
      <nav className="navbar navbar-expand-lg navbar-dark shadow p-3 bg-body-tertiary rounded" style={{backgroundColor: "#005CFF"}}>
@@ -80,6 +81,8 @@ export const DrawerMenuComponent = ({user}) => {
                 <NavLink className={(navData) => (navData.isActive ? 'active' : 'nav-link')} to="/documents">Documentos</NavLink>
                 </div>
               </li>
+
+              
               <div className="">
                 <li className="nav-item">
                   <div className="menuItemContainer logout">
