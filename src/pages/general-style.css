@@ -126,6 +126,23 @@
     color: #005CFF;
     margin-top: 20px;
   }
+  .dashboard-titles{
+    font-family: 'Nunito';
+    font-weight: 500;
+    font-size: 19px;
+    line-height: 25px;
+    color: #005CFF;
+    margin-top: 20px;
+  }
+
+  .dashboard-text{
+    font-family: 'Nunito';
+    font-weight: 100;
+    font-size: 15px;
+    line-height: 20px;
+    color: #999999;
+    margin-top: 10px;
+  }
   
   .panel {
     width: 1000px;
