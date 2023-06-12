@@ -44,9 +44,22 @@
     color: #005CFF !important;
     font-family: 'Nunito';
     font-style: normal;
-    font-weight: 500;
+    font-weight: 400;
     font-size: 19px;
     line-height: 26px;
+  }
+
+  .sub-nav-link {
+    color: #005CFF !important;
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 26px;
+    margin-left: 60px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-decoration: none;
   }
 
   .nav-item {
@@ -75,20 +88,45 @@
     display: flex;
     justify-content: left;
     align-items: center;
+    
   }
 
   .menuIcon {
     max-width: 48px;
     max-height: 48px;
+    margin-right: 30px;
+    margin-left: 35px;
+
   }
 
   .active {
     font-size: 25px;
     text-decoration: none;
   }
-  .custom-width-progess-menu {
-    width: 200px;
+  .subactive{
+    background-color: rgba(0, 92, 255, 0.03);
+    text-decoration: underline;
+    margin-left: 60px;
+    margin-top: 10px;
+    margin-bottom: 10px;
   }
-  .custom-progress .progress-bar {
-    background-color: #639cfe; /* Color personalizado */
+
+
+  .rotate-up {
+    transform: rotate(180deg);
   }
+  
+  .rotate-down {
+    transform: rotate(0deg);
+  }
+  
+  .rotate-up,
+  .rotate-down {
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .arrow{
+    margin-left: 20px;
+  }
+  
+  
