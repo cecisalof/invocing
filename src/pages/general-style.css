@@ -142,9 +142,14 @@
 
   .custom-width-progess {
     width: 1300px;
+    background-color: #005CFF;
   }
   .custom-progress .progress-bar {
     background-color: #005CFF; /* Color personalizado */
+  }
+  .upload-indicator {
+    display: flex;
+    align-items: center;
   }
   .upload-icon {
     color: green;
@@ -156,7 +161,6 @@
     font-size: 18px;
     line-height: 25px;
     margin-top: 20px;
-    display: flex;
   }
 
   .file-drop-zone {
