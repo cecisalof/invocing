@@ -6,10 +6,9 @@ import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
 import '../general-style.css'
 import { postInvoiceAutomatic, getSchenduleStatus } from "../invoicesToPay/services";
 import { postExpenseTicketAutomatic } from "../expensesTickets/services";
-import { getInvoicesMonth} from "./services";
+import { getInvoicesMonth, getInvoicesStates, getInvoicesEmitMonth, getInvoicesEmitStates} from "./services";
 import Context from '../../contexts/context';
 import { useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
 import cashIconBlue from '../../assets/icons/Cash.png';
 import { FaCheckCircle, FaCircleNotch } from 'react-icons/fa';
 import dragDrop from '../../assets/icons/drag-and-drop.png';
@@ -21,23 +20,13 @@ export const Dashboard = (props) => {
 
   const [isFileUploaded, setIsFileUploaded] = useState(false);
   const [invoiceCount, setInvoiceCount] = useState(0);
-  const [isLoadingData, setIsLoadingData] = useState(true);
+  const [invoiceStates, setInvoiceStates] = useState({});
+  const [invoiceEmitCount, setInvoiceEmitCount] = useState(0);
+  const [invoiceEmitStates, setInvoiceEmitStates] = useState({});
   
-
   const [userToken, setUserToken] = useState('');
 
   const userDataContext = useContext(Context);
-
-  const ragRenderer = (props) => {
-    return <span class="rag-element">{props.value}</span>;
-  };
-
-  const ragCellClassRules = {
-    'rag-green-outer': (props) => props.value === 'payed' || props.value === 'Pagada',
-    'rag-yellow-outer': (props) => props.value === 'received' || props.value === 'Recibida',
-    'rag-red-outer': (props) => props.value === 'rejected' || props.value === 'Rechazado',
-    'rag-orange-outer': (props) => props.value === 'pending' || props.value === 'Pendiente',
-  };
 
   const getCountInvoice = async (userToken) => {
     try {
@@ -49,7 +38,47 @@ export const Dashboard = (props) => {
     } catch (error) {
     setInvoiceCount();
       console.log('No hay datos para mostrar.');
-      setIsLoadingData(true); // Si ocurre un error, también establece providersLoaded como true para continuar con la configuración de columnDefs
+    }
+  };
+
+  const getCountInvoiceEmit = async (userToken) => {
+    try {
+      const data = await getInvoicesEmitMonth(userToken);
+      if (data !== undefined) {
+        setInvoiceEmitCount(data.count);
+      }
+
+    } catch (error) {
+      setInvoiceEmitCount(0);
+      console.log('No hay datos para mostrar.');
+    }
+  };
+
+  const getCountStates = async (userToken) => {
+    try {
+      const data = await getInvoicesStates(userToken);
+      if (data !== undefined) {
+        setInvoiceStates(data);
+      }
+
+    } catch (error) {
+      setInvoiceStates({});
+      console.log('No hay datos para mostrar.');
+      
+    }
+  };
+
+  const getCountStatesEmit = async (userToken) => {
+    try {
+      const data = await getInvoicesEmitStates(userToken);
+      if (data !== undefined) {
+        setInvoiceEmitStates(data);
+      }
+
+    } catch (error) {
+      setInvoiceEmitStates({});
+      console.log('No hay datos para mostrar.');
+      
     }
   };
 
@@ -58,20 +87,57 @@ export const Dashboard = (props) => {
     const fetchData = async () => {
       if (userToken !== undefined) {
         try {
-          const response = await getCountInvoice(userToken);
-          console.log("AQUIII");
-          console.log(response);
+          await getCountInvoice(userToken);
         } catch (error) {
           console.log('Error al obtener el dato de invoiceCount:', error);
-        } finally {
-          setIsLoadingData(false);
-        }
+        } 
       }
     };
   
     fetchData();
   }, [userToken]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (userToken !== undefined) {
+        try {
+          await getCountInvoiceEmit(userToken);
+        } catch (error) {
+          console.log('Error al obtener el dato de invoiceCount:', error);
+        } 
+      }
+    };
   
+    fetchData();
+  }, [userToken]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (userToken !== undefined) {
+        try {
+          await getCountStates(userToken);
+        } catch (error) {
+          console.log('Error al obtener el dato de invoiceStates:', error);
+        } 
+      }
+    };
+  
+    fetchData();
+  }, [userToken]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (userToken !== undefined) {
+        try {
+          await getCountStatesEmit(userToken);
+        } catch (error) {
+          console.log('Error al obtener el dato de invoiceStates:', error);
+        } 
+      }
+    };
+  
+    fetchData();
+  }, [userToken]);
 
 
   useEffect(() => {
@@ -257,8 +323,7 @@ return (
         </button>
       )}
       </div>
-    
-    <div className="title">Resumen de facturas</div>
+
     <div  style={{ display: 'flex' }}>   
         <div className="panel" style={{width: '300px', marginRight: '50px'}}>
         <div>
@@ -268,13 +333,94 @@ return (
             <div className="dashboard-text" style={{marginLeft:'20px'}}> SUBIDAS ESTE MES</div>
 
         </div>
-        <div className="panel" style={{width: '300px', marginRight: '50px'}}>
+      <div className="panel" style={{width: '300px', marginRight: '50px'}}>
         <div>
             <img src={cashIconBlue} style={{width: '32px', height: '32px'}} alt="cashIconBlue" />
         </div>
+        <div  style={{ display: 'flex' }}>
+          <div className='states pending'>
+            PENDIENTE
+          </div>
+          <div className='count-states'>
+              {`${invoiceStates.Pendiente}`}
+          </div>
+        </div>
+        <div  style={{ display: 'flex' }}>
+        <div className='states payed'>
+          PAGADA
+        </div>
+        <div className='count-states'>
+              {`${invoiceStates.Pagada}`}
+          </div>
+        </div>
+        <div  style={{ display: 'flex' }}>
+        <div className='states received'>
+          RECIBIDA
+        </div>
+        <div className='count-states'>
+              {`${invoiceStates.Recibida}`}
+          </div>
+        </div>
+        <div  style={{ display: 'flex' }}>
+        <div className='states reject'>
+          RECHAZADA
+        </div>
+        <div className='count-states'>
+              {`${invoiceStates.Rechazado}`}
+          </div>
+        </div>
+
+      </div>
+  </div>
+
+    <div  style={{ display: 'flex' }}>   
+        <div className="panel" style={{width: '300px', marginRight: '50px'}}>
+        <div>
+            <img src={dragDrop} style={{width: '32px', height: '32px'}} alt="dragDrop" />
+        </div>
+            <div className="dashboard-titles" style={{marginLeft:'20px'}}> {`${invoiceEmitCount} Ventas `}</div>
+            <div className="dashboard-text" style={{marginLeft:'20px'}}> SUBIDAS ESTE MES</div>
 
         </div>
-    </div>
+      <div className="panel" style={{width: '300px', marginRight: '50px'}}>
+        <div>
+            <img src={cashIconBlue} style={{width: '32px', height: '32px'}} alt="cashIconBlue" />
+        </div>
+        <div  style={{ display: 'flex' }}>
+          <div className='states pending'>
+            PENDIENTE
+          </div>
+          <div className='count-states'>
+              {`${invoiceEmitStates.Pendiente}`}
+          </div>
+        </div>
+        <div  style={{ display: 'flex' }}>
+        <div className='states payed'>
+          PAGADA
+        </div>
+        <div className='count-states'>
+              {`${invoiceEmitStates.Pagada}`}
+          </div>
+        </div>
+        <div  style={{ display: 'flex' }}>
+        <div className='states received'>
+          RECIBIDA
+        </div>
+        <div className='count-states'>
+              {`${invoiceEmitStates.Recibida}`}
+          </div>
+        </div>
+        <div  style={{ display: 'flex' }}>
+        <div className='states reject'>
+          RECHAZADA
+        </div>
+        <div className='count-states'>
+              {`${invoiceEmitStates.Rechazado}`}
+          </div>
+        </div>
+
+      </div>
+  </div>
 
 
     
