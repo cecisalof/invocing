@@ -15,6 +15,7 @@ import { ExpenseTickets } from './pages/expensesTickets/ExpenseTickets.jsx';
 import { AddExpenseTickets } from './pages/expensesTickets/AddExpenseTickets.jsx';
 import { InvoicesToPay } from './pages/invoicesToPay/InvoicesToPay.jsx';
 import { AddInvoicesToPay } from './pages/invoicesToPay/AddInvoicesToPay.jsx';
+import { Dashboard } from './pages/dashboard/Dashboard.jsx';
 import UserState from './contexts/UserState';
 
 export const App = () => {
@@ -23,7 +24,7 @@ export const App = () => {
       <Routes>
         <Route path="login" element={<LoginPage />} />
         <Route path="/" element={<MainLayout/>} >
-          <Route index element={<Home />}/>
+          <Route index element={<Dashboard />}/>
           <Route path="/income" element={<Income />} />
           <Route path="/outcome" element={<Outcome />} >
               <Route path=':suppliers' element={<Suppliers />} />

@@ -126,6 +126,23 @@
     color: #005CFF;
     margin-top: 20px;
   }
+  .dashboard-titles{
+    font-family: 'Nunito';
+    font-weight: 500;
+    font-size: 19px;
+    line-height: 25px;
+    color: #005CFF;
+    margin-top: 20px;
+  }
+
+  .dashboard-text{
+    font-family: 'Nunito';
+    font-weight: 100;
+    font-size: 15px;
+    line-height: 20px;
+    color: #999999;
+    margin-top: 10px;
+  }
   
   .panel {
     width: 1000px;
@@ -142,9 +159,14 @@
 
   .custom-width-progess {
     width: 1300px;
+    background-color: #005CFF;
   }
   .custom-progress .progress-bar {
     background-color: #005CFF; /* Color personalizado */
+  }
+  .upload-indicator {
+    display: flex;
+    align-items: center;
   }
   .upload-icon {
     color: green;
@@ -156,7 +178,6 @@
     font-size: 18px;
     line-height: 25px;
     margin-top: 20px;
-    display: flex;
   }
 
   .file-drop-zone {
@@ -204,7 +225,48 @@
     transition: background-color 0.3s;
     font-family: 'Nunito';
   }
-  
+
+  .states{
+  margin: 5px;
+  width: 70px;
+  height: 20px;
+  border-radius: 100px;
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 10px;
+  line-height: 11px;
+  text-align: center;
+  color: #FFFFFF;
+  padding-bottom: 10px;
+  padding-top: 5px;
+  }
+
+  .pending{
+    background: #BA3800;
+  }
+
+  .reject{
+    background: #000000;
+  }
+
+  .payed{
+    background: #00BA98;
+  }
+  .received{
+    background: #FFBC11;
+  }
+
+  .count-states{
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 19px;
+    line-height: 26px;
+    color: #005CFF;
+    margin-left: 50px;
+  }
+
   .process-button:hover {
     background-color: #0046b8;
   }
