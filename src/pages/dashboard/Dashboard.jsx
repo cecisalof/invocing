@@ -418,7 +418,7 @@ return (
         <div style={{ flexBasis: '50%', marginRight: '50px' }}>
           <img src={cashIconBlue} style={{width: '32px', height: '32px'}} alt="dragDrop" />
             
-          <div className="dashboard-titles" > {`${invoiceEmitCount} Facturas `}</div>
+          <div className="dashboard-titles" > {`${invoiceEmitCount} Ventas `}</div>
           <div className="dashboard-text"> SUBIDAS ESTE MES</div>
         </div>
             <div style={{ flexBasis: '50%' }}>
