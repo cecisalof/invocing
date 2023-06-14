@@ -12,6 +12,7 @@ import { useContext } from 'react';
 import cashIconBlue from '../../assets/icons/Cash.png';
 import { FaCheckCircle, FaCircleNotch } from 'react-icons/fa';
 import dragDrop from '../../assets/icons/drag-and-drop.png';
+import cashYellow from '../../assets/icons/cashYellow.png';
 
 
 export const Dashboard = (props) => {
@@ -19,6 +20,7 @@ export const Dashboard = (props) => {
 
 
   const [isFileUploaded, setIsFileUploaded] = useState(false);
+  const [isFileUploadedEx, setIsFileUploadedEx] = useState(false);
   const [invoiceCount, setInvoiceCount] = useState(0);
   const [invoiceStates, setInvoiceStates] = useState({});
   const [invoiceEmitCount, setInvoiceEmitCount] = useState(0);
@@ -168,6 +170,16 @@ export const Dashboard = (props) => {
     userDataContext.updateFiles(files)
     setIsFileUploaded(true);
   };
+
+  const handleDropEx = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    event.target.classList.remove('file-drop-zone-dragging');
+    
+    const files = event.dataTransfer.files;
+    userDataContext.updateFiles(files)
+    setIsFileUploadedEx(true);
+  };
   
   
   const processFiles = async () => {
@@ -226,7 +238,7 @@ export const Dashboard = (props) => {
    const processFilesEx = async () => {
     console.log("Procesando archivos automáticamente...");
     userDataContext.toggleLoadingEx()
-    setIsFileUploaded(false);
+    setIsFileUploadedEx(false);
     const response = await postExpenseTicketAutomatic(userToken, userDataContext.filesEx);
     const ids = response.data.schendules
     console.log(ids)
@@ -286,15 +298,16 @@ return (
     <div>
       <AppBar location={location}/>
     </div>
+    <div  style={{ display: 'flex' }}>
     <div
-        className="file-drop-zone"
-        style={{width: '500px', paddingTop:'50px', paddingBottom: '50px'}}
+        className="file-drop-zone" 
+        style={{width: '500px', paddingTop:'50px', paddingBottom: '50px', marginRight: '30px'}}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
         <div className="drop-message">
-          {((userDataContext.isLoadingRef && userDataContext.progress < 100) || (userDataContext.isLoadingRefEx && userDataContext.progressEx < 100))? (
+          {(userDataContext.isLoadingRef && userDataContext.progress < 100) ? (
             <div>
               <FaCircleNotch className="loading-icon" />
               <span className="upload-text">Cargando </span>
@@ -311,57 +324,83 @@ return (
           )}
           
         </div>
-      {((!userDataContext.isLoadingRef || userDataContext.progress >= 100) && (!userDataContext.isLoadingRefEx || userDataContext.progressEx >= 100))&& (
+      {(!userDataContext.isLoadingRef || userDataContext.progress >= 100) && (
         <button className="process-button" onClick={processFiles}>
           Procesar facturas automáticamente
         </button>
       )}
+      </div>
 
-        {((!userDataContext.isLoadingRef || userDataContext.progress >= 100) && (!userDataContext.isLoadingRefEx || userDataContext.progressEx >= 100)) && (
-        <button className="process-button" style= {{marginTop: '20px'}}onClick={processFilesEx}>
+      <div
+        className="file-drop-zone"
+        style={{width: '500px', paddingTop:'50px', paddingBottom: '50px', backgroundColor: 'rgba(255, 188, 17, 0.1)'}}
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDropEx}
+      >
+        <div className="drop-message">
+          {(userDataContext.isLoadingRefEx && userDataContext.progressEx < 100) ? (
+            <div>
+              <FaCircleNotch className="loading-icon" />
+              <span className="upload-text">Cargando </span>
+            </div>
+          ) : isFileUploadedEx ? (
+            <div className="upload-indicator">
+              <FaCheckCircle className="upload-icon" />
+              <span className="upload-text">Archivos subidos</span>
+            </div>
+          ) : (
+            <div>
+              <img src={cashYellow} alt="dragDrop"/>
+            </div>
+          )}
+          
+        </div>
+      {(!userDataContext.isLoadingRefEx || userDataContext.progressEx >= 100) && (
+        <button className="process-button-yellow" onClick={processFilesEx} >
           Procesar gastos automáticamente
         </button>
       )}
       </div>
+      </div>
 
     <div  style={{ display: 'flex' }}>   
-        <div className="panel" style={{width: '300px', marginRight: '50px'}}>
-        <div>
-            <img src={dragDrop} style={{width: '32px', height: '32px'}} alt="dragDrop" />
+        <div className="panel" style={{width: '500px', marginRight: '30px',  display: 'flex' }}>
+        <div style={{ flexBasis: '50%', marginRight: '50px' }}>
+          <img src={dragDrop} style={{width: '32px', height: '32px'}} alt="dragDrop" />
+            
+          <div className="dashboard-titles" > {`${invoiceCount} Facturas `}</div>
+          <div className="dashboard-text"> SUBIDAS ESTE MES</div>
         </div>
-            <div className="dashboard-titles" style={{marginLeft:'20px'}}> {`${invoiceCount} Facturas `}</div>
-            <div className="dashboard-text" style={{marginLeft:'20px'}}> SUBIDAS ESTE MES</div>
+            <div style={{ flexBasis: '50%' }}>
+            <div style={{ display: 'flex'}}>
+              <div className='states pending' style={{marginTop: '20px'}}>
+                  PENDIENTE
+                </div>
+                <div className='count-states' style={{marginTop: '20px'}}>
+                    {`${invoiceStates.Pendiente}`}
+                </div>
+           </div>
 
-        </div>
-      <div className="panel" style={{width: '300px', marginRight: '50px'}}>
-        <div>
-            <img src={cashIconBlue} style={{width: '32px', height: '32px'}} alt="cashIconBlue" />
-        </div>
-        <div  style={{ display: 'flex' }}>
-          <div className='states pending'>
-            PENDIENTE
-          </div>
-          <div className='count-states'>
-              {`${invoiceStates.Pendiente}`}
-          </div>
-        </div>
-        <div  style={{ display: 'flex' }}>
-        <div className='states payed'>
-          PAGADA
-        </div>
-        <div className='count-states'>
-              {`${invoiceStates.Pagada}`}
-          </div>
-        </div>
-        <div  style={{ display: 'flex' }}>
-        <div className='states received'>
-          RECIBIDA
-        </div>
-        <div className='count-states'>
-              {`${invoiceStates.Recibida}`}
-          </div>
-        </div>
-        <div  style={{ display: 'flex' }}>
+           <div  style={{ display: 'flex'}}>
+            <div className='states payed'>
+              PAGADA
+            </div>
+            <div className='count-states'>
+                  {`${invoiceStates.Pagada}`}
+              </div>
+            </div>
+
+            <div  style={{ display: 'flex' }}>
+              <div className='states received'>
+                RECIBIDA
+              </div>
+              <div className='count-states'>
+                    {`${invoiceStates.Recibida}`}
+                </div>
+              </div>
+
+              <div  style={{ display: 'flex'}}>
         <div className='states reject'>
           RECHAZADA
         </div>
@@ -370,11 +409,60 @@ return (
           </div>
         </div>
 
+          </div>
+       
       </div>
-  </div>
 
-    <div  style={{ display: 'flex' }}>   
-        <div className="panel" style={{width: '300px', marginRight: '50px'}}>
+
+      <div className="panel" style={{width: '500px', marginRight: '50px',  display: 'flex' }}>
+        <div style={{ flexBasis: '50%', marginRight: '50px' }}>
+          <img src={cashIconBlue} style={{width: '32px', height: '32px'}} alt="dragDrop" />
+            
+          <div className="dashboard-titles" > {`${invoiceEmitCount} Facturas `}</div>
+          <div className="dashboard-text"> SUBIDAS ESTE MES</div>
+        </div>
+            <div style={{ flexBasis: '50%' }}>
+            <div style={{ display: 'flex'}}>
+              <div className='states pending' style={{marginTop: '20px'}}>
+                  PENDIENTE
+                </div>
+                <div className='count-states' style={{marginTop: '20px'}}>
+                    {`${invoiceEmitStates.Pendiente}`}
+                </div>
+           </div>
+
+           <div  style={{ display: 'flex'}}>
+            <div className='states payed'>
+              PAGADA
+            </div>
+            <div className='count-states'>
+                  {`${invoiceEmitStates.Pagada}`}
+              </div>
+            </div>
+
+            <div  style={{ display: 'flex' }}>
+              <div className='states received'>
+                RECIBIDA
+              </div>
+              <div className='count-states'>
+                    {`${invoiceEmitStates.Recibida}`}
+                </div>
+              </div>
+
+              <div  style={{ display: 'flex'}}>
+        <div className='states reject'>
+          RECHAZADA
+        </div>
+        <div className='count-states'>
+              {`${invoiceEmitStates.Rechazado}`}
+          </div>
+        </div>
+
+          </div>
+       
+      </div>
+  
+        {/* <div className="panel" style={{width: '300px', marginRight: '50px'}}>
         <div>
             <img src={dragDrop} style={{width: '32px', height: '32px'}} alt="dragDrop" />
         </div>
@@ -419,7 +507,7 @@ return (
           </div>
         </div>
 
-      </div>
+      </div> */}
   </div>
 
 

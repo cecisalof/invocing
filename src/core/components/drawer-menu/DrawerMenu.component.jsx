@@ -112,7 +112,7 @@ export const DrawerMenuComponent = ({user}) => {
                       paddingLeft: '5px',
                       paddingRight: '135px',
                       paddingBottom: '15px',
-                      paddingTop: '15px',
+                      paddingTop: '10px',
                       cursor: 'pointer',
                       marginRight: '20px' }}
                       data-bs-target="#flush-collapseOne"
@@ -141,7 +141,7 @@ export const DrawerMenuComponent = ({user}) => {
                       paddingLeft: '5px',
                       paddingRight: '170px',
                       paddingBottom: '15px',
-                      paddingTop: '15px',
+                      paddingTop: '10px',
                       cursor: 'pointer',
                       marginRight: '20px' }}
                       data-bs-target="#flush-collapseOne"
@@ -173,7 +173,7 @@ export const DrawerMenuComponent = ({user}) => {
                       paddingLeft: '5px',
                       paddingRight: '105px',
                       paddingBottom: '15px',
-                      paddingTop: '15px',
+                      paddingTop: '10px',
                       cursor: 'pointer',
                       marginRight: '20px' }}
                       data-bs-toggle="collapse"
@@ -220,7 +220,7 @@ export const DrawerMenuComponent = ({user}) => {
                       paddingLeft: '5px',
                       paddingRight: '135px',
                       paddingBottom: '15px',
-                      paddingTop: '15px',
+                      paddingTop: '10px',
                       cursor: 'pointer',
                       marginRight: '20px' }}
                       data-bs-target="#flush-collapseOne"
@@ -250,7 +250,7 @@ export const DrawerMenuComponent = ({user}) => {
                       paddingLeft: '5px',
                       paddingRight: '155px',
                       paddingBottom: '15px',
-                      paddingTop: '15px',
+                      paddingTop: '10px',
                       cursor: 'pointer',
                       marginRight: '20px' }}
                       data-bs-target="#flush-collapseOne"
@@ -281,7 +281,7 @@ export const DrawerMenuComponent = ({user}) => {
                       paddingLeft: '5px',
                       paddingRight: '120px',
                       paddingBottom: '15px',
-                      paddingTop: '15px',
+                      paddingTop: '10px',
                       cursor: 'pointer',
                       marginRight: '20px' }}
                       data-bs-target="#flush-collapseOne"

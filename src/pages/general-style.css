@@ -133,6 +133,7 @@
     line-height: 25px;
     color: #005CFF;
     margin-top: 20px;
+    margin-left: 50px;
   }
 
   .dashboard-text{
@@ -142,10 +143,10 @@
     line-height: 20px;
     color: #999999;
     margin-top: 10px;
+    margin-left: 50px;
   }
   
   .panel {
-    width: 1000px;
     background-color: #ffffff; /* Color de fondo blanco */
     padding: 20px; /* Espacio interno para separar los elementos del panel */
     border-radius: 20px; /* Bordes redondeados del panel */
@@ -216,6 +217,18 @@
   
   .process-button {
     background-color: #005CFF;
+    color: white;
+    padding: 5px 15px;
+    border: none;
+    border-radius: 20px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-family: 'Nunito';
+  }
+
+  .process-button-yellow {
+    background-color: #FFBC11;
     color: white;
     padding: 5px 15px;
     border: none;
