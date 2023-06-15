@@ -6,7 +6,7 @@ import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
 import '../general-style.css'
 import { postInvoiceAutomatic, getSchenduleStatus } from "../invoicesToPay/services";
 import { postExpenseTicketAutomatic } from "../expensesTickets/services";
-import { getInvoicesMonth, getInvoicesStates, getInvoicesEmitMonth, getInvoicesEmitStates} from "./services";
+import { getInvoicesMonth, getInvoicesStates, getInvoicesEmitMonth, getInvoicesEmitStates, getInvoicesEmitTotals} from "./services";
 import Context from '../../contexts/context';
 import { useContext } from 'react';
 import cashIconBlue from '../../assets/icons/Cash.png';
@@ -25,6 +25,7 @@ export const Dashboard = (props) => {
   const [invoiceStates, setInvoiceStates] = useState({});
   const [invoiceEmitCount, setInvoiceEmitCount] = useState(0);
   const [invoiceEmitStates, setInvoiceEmitStates] = useState({});
+  const [totals, setTotals] = useState({});
   
   const [userToken, setUserToken] = useState('');
 
@@ -83,6 +84,35 @@ export const Dashboard = (props) => {
       
     }
   };
+
+  const getTotalsEmit = async (userToken) => {
+    try {
+      const data = await getInvoicesEmitTotals(userToken);
+      if (data !== undefined) {
+        console.log(data)
+        setTotals(data);
+      }
+
+    } catch (error) {
+      setTotals({});
+      console.log('No hay datos para mostrar.');
+      
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (userToken !== undefined) {
+        try {
+          await getTotalsEmit(userToken);
+        } catch (error) {
+          console.log('Error al obtener el dato de invoiceCount:', error);
+        } 
+      }
+    };
+  
+    fetchData();
+  }, [userToken]);
 
 
   useEffect(() => {
@@ -364,7 +394,29 @@ return (
       </div>
       </div>
 
-    <div  style={{ display: 'flex' }}>   
+     <div  style={{ display: 'flex', marginBottom: '30px' }}>
+    <div className="panel" style={{width: '500px', marginRight: '30px',  display: 'flex' }}>
+    <div style={{ flexBasis: '50%', marginRight: '50px' }}>
+      <img src={cashIconBlue} style={{width: '32px', height: '32px'}} alt="dragDrop" />
+      <div className="dashboard-titles" > Total gastos</div>
+      <div className="dashboard-titles" > Total IVA</div>
+      <div className="dashboard-titles" > Total ret. IRPF</div>
+    </div>
+
+    <div style={{ flexBasis: '50%', marginRight: '50px' }}>
+      <div className="dashboard-titles" style={{marginTop: '50px'}} > {`${totals.total_amount}  €`}</div>
+      <div className="dashboard-titles" >  {`${totals.total_taxes}  €`}</div>
+      <div className="dashboard-titles" >  {`${totals.total_retention}  €`}</div>
+    </div>
+      
+      
+    </div>
+
+    
+
+  </div>
+
+    <div  style={{ display: 'flex', marginBottom: '30px' }}>   
         <div className="panel" style={{width: '500px', marginRight: '30px',  display: 'flex' }}>
         <div style={{ flexBasis: '50%', marginRight: '50px' }}>
           <img src={dragDrop} style={{width: '32px', height: '32px'}} alt="dragDrop" />
@@ -418,7 +470,7 @@ return (
         <div style={{ flexBasis: '50%', marginRight: '50px' }}>
           <img src={cashIconBlue} style={{width: '32px', height: '32px'}} alt="dragDrop" />
             
-          <div className="dashboard-titles" > {`${invoiceEmitCount} Ventas `}</div>
+          <div className="dashboard-titles" > {`${invoiceEmitCount} Tickets `}</div>
           <div className="dashboard-text"> SUBIDAS ESTE MES</div>
         </div>
             <div style={{ flexBasis: '50%' }}>
@@ -449,11 +501,11 @@ return (
                 </div>
               </div>
 
-              <div  style={{ display: 'flex'}}>
+      <div  style={{ display: 'flex'}}>
         <div className='states reject'>
           RECHAZADA
         </div>
-        <div className='count-states'>
+      <div className='count-states'>
               {`${invoiceEmitStates.Rechazado}`}
           </div>
         </div>
@@ -461,58 +513,8 @@ return (
           </div>
        
       </div>
-  
-        {/* <div className="panel" style={{width: '300px', marginRight: '50px'}}>
-        <div>
-            <img src={dragDrop} style={{width: '32px', height: '32px'}} alt="dragDrop" />
-        </div>
-            <div className="dashboard-titles" style={{marginLeft:'20px'}}> {`${invoiceEmitCount} Ventas `}</div>
-            <div className="dashboard-text" style={{marginLeft:'20px'}}> SUBIDAS ESTE MES</div>
 
-        </div>
-      <div className="panel" style={{width: '300px', marginRight: '50px'}}>
-        <div>
-            <img src={cashIconBlue} style={{width: '32px', height: '32px'}} alt="cashIconBlue" />
-        </div>
-        <div  style={{ display: 'flex' }}>
-          <div className='states pending'>
-            PENDIENTE
-          </div>
-          <div className='count-states'>
-              {`${invoiceEmitStates.Pendiente}`}
-          </div>
-        </div>
-        <div  style={{ display: 'flex' }}>
-        <div className='states payed'>
-          PAGADA
-        </div>
-        <div className='count-states'>
-              {`${invoiceEmitStates.Pagada}`}
-          </div>
-        </div>
-        <div  style={{ display: 'flex' }}>
-        <div className='states received'>
-          RECIBIDA
-        </div>
-        <div className='count-states'>
-              {`${invoiceEmitStates.Recibida}`}
-          </div>
-        </div>
-        <div  style={{ display: 'flex' }}>
-        <div className='states reject'>
-          RECHAZADA
-        </div>
-        <div className='count-states'>
-              {`${invoiceEmitStates.Rechazado}`}
-          </div>
-        </div>
-
-      </div> */}
   </div>
-
-
-    
-    
 
   </div>
     </> 
