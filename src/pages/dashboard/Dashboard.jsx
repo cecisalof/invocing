@@ -328,6 +328,9 @@ return (
     <div>
       <AppBar location={location}/>
     </div>
+    <div className='filters'>
+          Fechas
+        </div>
     <div  style={{ display: 'flex' }}>
     <div
         className="file-drop-zone" 
@@ -408,8 +411,6 @@ return (
       <div className="dashboard-titles" >  {`${totals.total_taxes}  €`}</div>
       <div className="dashboard-titles" >  {`${totals.total_retention}  €`}</div>
     </div>
-      
-      
     </div>
 
     

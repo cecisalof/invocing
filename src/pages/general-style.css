@@ -239,6 +239,28 @@
     font-family: 'Nunito';
   }
 
+  .filters{
+    margin: 5px;
+    width: 70px;
+    height: 20px;
+    border-radius: 100px;
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 11px;
+    text-align: center;
+    color: #005CFF;
+    padding-bottom: 20px;
+    padding-top: 10px;
+    padding-left: 20px;
+    padding-right: 70px;
+    background: transparent;
+    border: 2px solid #005CFF;
+    margin-bottom: 30px;
+
+  }
+
   .states{
   margin: 5px;
   width: 70px;
