@@ -15,6 +15,6 @@ export const API_URL = {
     INVOICE_TO_EMIT_STATES: 'invoice-to-emit-state-count/',
     INVOICE_TO_PAY_TOTALS: 'invoice-to-pay-totals/',
     INVOICE_TO_EMIT_TOTALS: 'invoice-to-emit-totals/',
-    INVOICE_TO_PAY_MONTH: 'invoice-to-pay-month/',
-    INVOICE_TO_EMIT_MONTH: 'invoice-to-emit-month/',
+    INVOICE_TO_PAY_COUNT: 'invoice-to-pay-count/',
+    INVOICE_TO_EMIT_COUNT: 'invoice-to-emit-count/',
   };

@@ -5,10 +5,14 @@ import {
 
 
 
-export const getInvoicesStates = async (token) => {
+export const getInvoicesStates = async (token, filters=null) => {
     try {
+
+        let url = BASE_URL + API_URL.INVOICE_TO_PAY_STATES
+        if (filters){
+            url = url + filters}
         
-        const response = await axios.get(BASE_URL + API_URL.INVOICE_TO_PAY_STATES, {
+        const response = await axios.get(url, {
             headers: { 
                 'accept': 'application/json', 
                 'Authorization': `Token ${token}`
@@ -24,9 +28,12 @@ export const getInvoicesStates = async (token) => {
       }
   };
 
-export const getInvoicesMonth = async (token) => {
+export const getInvoicesCount = async (token, filters=null) => {
     try {
-        const response = await axios.get(BASE_URL + API_URL.INVOICE_TO_PAY_MONTH, {
+        let url = BASE_URL + API_URL.INVOICE_TO_PAY_COUNT
+        if (filters){
+            url = url + filters}
+        const response = await axios.get(url, {
             headers: { 
                 'accept': 'application/json', 
                 'Authorization': `Token ${token}`
@@ -60,9 +67,12 @@ export const getInvoicesTotals = async (token) => {
       }
   };
 
-  export const getInvoicesEmitStates = async (token) => {
+  export const getInvoicesEmitStates = async (token, filters=null) => {
     try {
-        const response = await axios.get(BASE_URL + API_URL.INVOICE_TO_EMIT_STATES, {
+        let url = BASE_URL + API_URL.INVOICE_TO_EMIT_STATES
+        if (filters){
+            url = url + filters}
+        const response = await axios.get(url, {
             headers: { 
                 'accept': 'application/json', 
                 'Authorization': `Token ${token}`
@@ -78,9 +88,12 @@ export const getInvoicesTotals = async (token) => {
       }
   };
 
-export const getInvoicesEmitMonth = async (token) => {
+export const getInvoicesEmitCount = async (token, filters=null) => {
     try {
-        const response = await axios.get(BASE_URL + API_URL.INVOICE_TO_EMIT_MONTH, {
+        let url = BASE_URL + API_URL.INVOICE_TO_EMIT_COUNT
+        if (filters){
+            url = url + filters}
+        const response = await axios.get(url, {
             headers: { 
                 'accept': 'application/json', 
                 'Authorization': `Token ${token}`
@@ -96,9 +109,13 @@ export const getInvoicesEmitMonth = async (token) => {
       }
   };
 
-export const getInvoicesEmitTotals = async (token) => {
+export const getInvoicesEmitTotals = async (token, filters=null) => {
     try {
-        const response = await axios.get(BASE_URL + API_URL.INVOICE_TO_EMIT_TOTALS, {
+        let url =  BASE_URL + API_URL.INVOICE_TO_EMIT_TOTALS
+        if (filters){
+            url = url + filters}
+        console.log(url)
+        const response = await axios.get(url, {
             headers: { 
                 'accept': 'application/json', 
                 'Authorization': `Token ${token}`
