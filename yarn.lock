@@ -2715,6 +2715,18 @@ adjust-sourcemap-loader@^4.0.0:
     loader-utils "^2.0.0"
     regex-parser "^2.2.11"
 
+ag-charts-community@^8.0.0:
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/ag-charts-community/-/ag-charts-community-8.0.0.tgz#30e1a67a0f926b6fea71927b6924eee08868eaa7"
+  integrity sha512-0qJ/0J3brBDar4wkoFZU+R9WzPIjkDKonQuj2oi6BCIgEFCWsansgZ53ekS2rz7cD50wcI9FfdwbRw1R1a7okg==
+
+ag-charts-react@^8.0.0:
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/ag-charts-react/-/ag-charts-react-8.0.0.tgz#f8bbd2a6ca8b8d6e3c49633f856adcf22a1cf8e0"
+  integrity sha512-3l7rtOqpANv3o2E2pAiAhxFNEAIbBHzwtQOQ6alAZxen6I+Bc7U2jZ5OZ0dfx0Zv339gGroV+dlySfqTtWS2BA==
+  dependencies:
+    prop-types "^15.6.2"
+
 ag-grid-community@^29.2.0:
   version "29.2.0"
   resolved "https://registry.npmjs.org/ag-grid-community/-/ag-grid-community-29.2.0.tgz"
