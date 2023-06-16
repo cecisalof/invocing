@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
 import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
 import '../general-style.css'
+import './calendar.css'
 import { postInvoiceAutomatic, getSchenduleStatus } from "../invoicesToPay/services";
 import { postExpenseTicketAutomatic } from "../expensesTickets/services";
 import { getInvoicesCount, getInvoicesStates, getInvoicesEmitCount, getInvoicesEmitStates, getInvoicesEmitTotals} from "./services";
@@ -326,7 +327,9 @@ export const Dashboard = (props) => {
   
   
    const handleButtonClick = () => {
+    setSelectedRange([new Date(), new Date()]);
     setShowCalendar(!showCalendar);
+    
   };
 
   const handleSelect = (date) => {
@@ -384,6 +387,26 @@ export const Dashboard = (props) => {
     
   };
 
+  const Click = () => {
+    // Acciones a realizar cuando se hace clic en el botón dentro del calendario
+    // Puedes implementar la lógica que desees aquí
+    console.log('¡Se hizo clic en el botón del calendario!');
+  };
+
+  const tileContent = ({ date }) => {
+    if (selectedRange && selectedRange.length === 2) {
+      const [start, end] = selectedRange;
+      if (date >= start && date <= end) {
+        return (
+          <button onClick={Click}>
+            Botón dentro del calendario
+          </button>
+        );
+      }
+    }
+    return null;
+  };
+
   
 
 return (
@@ -400,9 +423,9 @@ return (
           Mostrar
     </button>
     {showCalendar && (
-        <div className='calendar-overlay'>
+        <div >
           <Calendar 
-          selectRange
+          selectRange={true}
           value={selectedRange}
           onChange={handleSelect}/>
         </div>

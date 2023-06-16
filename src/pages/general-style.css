@@ -348,10 +348,6 @@
   border-top-color: white;
 }
 
-.calendar-button-container {
-  position: relative;
-  z-index: 1;
-}
 .totals{
   font-family: 'Nunito';
     font-weight: 300;
@@ -361,8 +357,5 @@
     margin-top: 20px;
     margin-left: 50px;
 }
-.calendar-overlay {
-  position: absolute;
-  z-index: 2;
-  background-color: #005CFF;
-}
+
+
