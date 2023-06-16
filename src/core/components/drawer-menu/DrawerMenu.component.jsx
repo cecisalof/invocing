@@ -157,8 +157,6 @@ export const DrawerMenuComponent = ({ user }) => {
                     Ventas
 
                   </button>
-                  {/* <img className="menuIcon" src={sellIcon} alt="Profile" />
-                  <NavLink className={(navData) => (navData.isActive ? 'active' : 'nav-link')}  to="/income">Ventas</NavLink> */}
                 </div>
               </li>}
               {isAdministrator && <li className="nav-item">
@@ -196,24 +194,20 @@ export const DrawerMenuComponent = ({ user }) => {
                     </h2>
                     <div id="flush-collapseOne" className="accordion-collapse collapse" data-bs-parent="#accordionFlushExample" style={{ background: 'rgba(0, 92, 255, 0.03)' }}>
                       <div className="menuItemContainer">
-                        {/* <img className="menuIcon" src={cashIcon} alt="Profile" /> */}
                         <NavLink className={(navData) => (navData.isActive ? 'subactive' : 'sub-nav-link')} to="/outcome/suppliers">Proveedores</NavLink>
                       </div>
                       <div className="menuItemContainer">
-                        {/* <img className="menuIcon" src={cashIcon} alt="Cash" /> */}
                         <NavLink className={(navData) => (navData.isActive ? 'subactive' : 'sub-nav-link')} to="/outcome/invoices-to-pay">Facturas</NavLink>
                       </div>
                       <div className="menuItemContainer">
-                        {/* <img className="menuIcon" src={cashIcon} alt="Profile" /> */}
                         <NavLink className={(navData) => (navData.isActive ? 'subactive' : 'sub-nav-link')} to="/outcome/expense-tickets">Tickets de gastos</NavLink>
                       </div>
                     </div>
                   </div>
                 </div>
               </li>}
-              <li className="nav-item">
+              {/* <li className="nav-item">
                 <div className="menuItemContainer">
-
                   <button
                     className={`accordion-button collapsed ${holidaysCollapsed ? 'collapsed-icon' : ''}`}
                     type="button"
@@ -240,11 +234,9 @@ export const DrawerMenuComponent = ({ user }) => {
                     Vacaciones
 
                   </button>
-                  {/* <img className="menuIcon" src={calendarIcon} alt="Profile" />
-                  <NavLink className={(navData) => (navData.isActive ? 'active' : 'nav-link')} to="/vacations">Vacaciones</NavLink> */}
                 </div>
-              </li>
-              <li className="nav-item">
+              </li> */}
+              {/* <li className="nav-item">
                 <div className="menuItemContainer">
                   <button
                     className={`accordion-button collapsed ${payrollCollapsed ? 'collapsed-icon' : ''}`}
@@ -272,12 +264,9 @@ export const DrawerMenuComponent = ({ user }) => {
                     Nóminas
 
                   </button>
-
-                  {/* <img className="menuIcon" src={payrollIcon} alt="Profile" />
-                  <NavLink className={(navData) => (navData.isActive ? 'active' : 'nav-link')} to="/payroll">Nóminas</NavLink> */}
                 </div>
-              </li>
-              <li className="nav-item">
+              </li> */}
+              {/* <li className="nav-item">
                 <div className="menuItemContainer">
                   <button
                     className={`accordion-button collapsed ${documentsCollapsed ? 'collapsed-icon' : ''}`}
@@ -305,10 +294,8 @@ export const DrawerMenuComponent = ({ user }) => {
                     Documentos
 
                   </button>
-                  {/* <img className="menuIcon" src={documentsIcon} alt="Profile" />
-                <NavLink className={(navData) => (navData.isActive ? 'active' : 'nav-link')} to="/documents">Documentos</NavLink> */}
                 </div>
-              </li>
+              </li> */}
 
 
               <div className="">
