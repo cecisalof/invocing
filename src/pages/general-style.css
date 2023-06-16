@@ -175,7 +175,6 @@ body {
     background-color: #005CFF; /* Color personalizado */
   }
   .upload-indicator {
-    display: flex;
     align-items: center;
   }
   .upload-icon {
