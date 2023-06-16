@@ -350,6 +350,20 @@ export const Dashboard = (props) => {
   const options = {
       autoSize: true,
       data: chartData(income),
+      theme: {
+        overrides: {
+          column: {
+            series: {
+              highlightStyle: {
+                item: {
+                  fill: '#FFBC11',
+                  strokeWidth: 0,
+                },
+              },
+            },
+          },
+        },
+      },
       series: [
         {
           type: 'column',
