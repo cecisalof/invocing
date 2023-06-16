@@ -1,18 +1,21 @@
 import { useLocation } from 'react-router-dom'
 import { AppBar } from "../../components/appBar/AppBar";
-import React, { useState, useRef, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
 import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
 import '../general-style.css'
 import { postInvoiceAutomatic, getSchenduleStatus } from "../invoicesToPay/services";
 import { postExpenseTicketAutomatic } from "../expensesTickets/services";
-import { getInvoicesMonth, getInvoicesStates, getInvoicesEmitMonth, getInvoicesEmitStates, getInvoicesEmitTotals} from "./services";
+import { getInvoicesCount, getInvoicesStates, getInvoicesEmitCount, getInvoicesEmitStates, getInvoicesEmitTotals} from "./services";
 import Context from '../../contexts/context';
 import { useContext } from 'react';
 import cashIconBlue from '../../assets/icons/Cash.png';
 import { FaCheckCircle, FaCircleNotch } from 'react-icons/fa';
 import dragDrop from '../../assets/icons/drag-and-drop.png';
 import cashYellow from '../../assets/icons/cashYellow.png';
+import sellIcon from '../../assets/icons/sellout.png';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
 
 
 export const Dashboard = (props) => {
@@ -21,45 +24,47 @@ export const Dashboard = (props) => {
 
   const [isFileUploaded, setIsFileUploaded] = useState(false);
   const [isFileUploadedEx, setIsFileUploadedEx] = useState(false);
-  const [invoiceCount, setInvoiceCount] = useState(0);
+  const [invoiceCount, setInvoiceCount] = useState({});
   const [invoiceStates, setInvoiceStates] = useState({});
-  const [invoiceEmitCount, setInvoiceEmitCount] = useState(0);
+  const [invoiceEmitCount, setInvoiceEmitCount] = useState({});
   const [invoiceEmitStates, setInvoiceEmitStates] = useState({});
   const [totals, setTotals] = useState({});
+  const [showCalendar, setShowCalendar] = useState(false);
+  const [selectedRange, setSelectedRange] = useState([new Date(), new Date()]);
   
   const [userToken, setUserToken] = useState('');
 
   const userDataContext = useContext(Context);
 
-  const getCountInvoice = async (userToken) => {
+  const getCountInvoice = async (userToken, filters=null) => {
     try {
-      const data = await getInvoicesMonth(userToken);
+      const data = await getInvoicesCount(userToken, filters);
       if (data !== undefined) {
-        setInvoiceCount(data.count);
+        setInvoiceCount(data);
       }
 
     } catch (error) {
-    setInvoiceCount();
+    setInvoiceCount({});
       console.log('No hay datos para mostrar.');
     }
   };
 
-  const getCountInvoiceEmit = async (userToken) => {
+  const getCountInvoiceEmit = async (userToken, filters=null) => {
     try {
-      const data = await getInvoicesEmitMonth(userToken);
+      const data = await getInvoicesEmitCount(userToken, filters);
       if (data !== undefined) {
-        setInvoiceEmitCount(data.count);
+        setInvoiceEmitCount(data);
       }
 
     } catch (error) {
-      setInvoiceEmitCount(0);
+      setInvoiceEmitCount({});
       console.log('No hay datos para mostrar.');
     }
   };
 
-  const getCountStates = async (userToken) => {
+  const getCountStates = async (userToken, filters=null) => {
     try {
-      const data = await getInvoicesStates(userToken);
+      const data = await getInvoicesStates(userToken, filters);
       if (data !== undefined) {
         setInvoiceStates(data);
       }
@@ -71,9 +76,9 @@ export const Dashboard = (props) => {
     }
   };
 
-  const getCountStatesEmit = async (userToken) => {
+  const getCountStatesEmit = async (userToken, filters = null) => {
     try {
-      const data = await getInvoicesEmitStates(userToken);
+      const data = await getInvoicesEmitStates(userToken, filters);
       if (data !== undefined) {
         setInvoiceEmitStates(data);
       }
@@ -85,9 +90,9 @@ export const Dashboard = (props) => {
     }
   };
 
-  const getTotalsEmit = async (userToken) => {
+  const getTotalsEmit = async (userToken, filters=null) => {
     try {
-      const data = await getInvoicesEmitTotals(userToken);
+      const data = await getInvoicesEmitTotals(userToken, filters);
       if (data !== undefined) {
         console.log(data)
         setTotals(data);
@@ -320,7 +325,66 @@ export const Dashboard = (props) => {
   
   
   
+   const handleButtonClick = () => {
+    setShowCalendar(!showCalendar);
+  };
 
+  const handleSelect = (date) => {
+    if (selectedRange.length === 2) {
+      setSelectedRange([date, date]);
+    } else if (selectedRange.length === 1) {
+      const [startDate] = selectedRange;
+      if (date < startDate) {
+        setSelectedRange([date, startDate]);
+      } else {
+        setSelectedRange([startDate, date]);
+      }
+    }
+  };
+  const handleButtonViewClick = async () => {
+
+    if (selectedRange || selectedRange.length === 2) {
+      // Verificar si selectedRange es nulo o no tiene dos fechas
+      const date = selectedRange[0]
+      const startDate = date[0]
+      const endDate = date[1]
+      console.log(startDate)
+      console.log(endDate)
+
+      const startYear = startDate.getFullYear(); // Obtener el año (ejemplo: 2023)
+      const startMonth = ('0' + (startDate.getMonth() + 1)).slice(-2); // Obtener el mes, agregando 1 al índice base 0 y asegurándose de tener dos dígitos (ejemplo: 06)
+      const startDay = ('0' + startDate.getDate()).slice(-2); // Obtener el día y asegurarse de tener dos dígitos (ejemplo: 05)
+      const formattedStartDate= `${startYear}-${startMonth}-${startDay}`; // Formatear la fecha en formato yyyy-mm-dd
+      console.log(formattedStartDate); // Output: yyyy-mm-dd
+
+      const endYear = endDate.getFullYear(); // Obtener el año (ejemplo: 2023)
+      const endMonth = ('0' + (endDate.getMonth() + 1)).slice(-2); // Obtener el mes, agregando 1 al índice base 0 y asegurándose de tener dos dígitos (ejemplo: 06)
+      const endDay = ('0' + endDate.getDate()).slice(-2); // Obtener el día y asegurarse de tener dos dígitos (ejemplo: 05)
+      const formattedEndDate= `${endYear}-${endMonth}-${endDay}`; // Formatear la fecha en formato yyyy-mm-dd
+      console.log(formattedEndDate); // Output: yyyy-mm-dd
+
+      const filters = "?start_date=" + formattedStartDate + "&end_date=" + formattedEndDate;
+      console.log(filters)
+
+      if (userToken !== undefined) {
+        try {
+          await getTotalsEmit(userToken, filters);
+          await getCountStatesEmit(userToken, filters);
+          await getCountStates(userToken, filters);
+          await getCountInvoice(userToken, filters);
+          await getCountInvoiceEmit(userToken,filters);
+        } catch (error) {
+          console.log('Error al obtener el dato de invoiceCount:', error);
+        } 
+      }
+
+      setSelectedRange([new Date(), new Date()]);
+      
+    }
+    
+  };
+
+  
 
 return (
 <>
@@ -328,13 +392,26 @@ return (
     <div>
       <AppBar location={location}/>
     </div>
-    <div className='filters'>
+    <div>
+    <button className='filters' onClick={handleButtonClick}>
           Fechas
+    </button>
+    <button className='filters' onClick={handleButtonViewClick}>
+          Mostrar
+    </button>
+    {showCalendar && (
+        <div className='calendar-overlay'>
+          <Calendar 
+          selectRange
+          value={selectedRange}
+          onChange={handleSelect}/>
         </div>
+      )}
+    </div>
     <div  style={{ display: 'flex' }}>
     <div
         className="file-drop-zone" 
-        style={{width: '500px', paddingTop:'50px', paddingBottom: '50px', marginRight: '30px'}}
+        style={{width: '600px', paddingTop:'50px', paddingBottom: '50px', marginRight: '30px'}}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
@@ -366,7 +443,7 @@ return (
 
       <div
         className="file-drop-zone"
-        style={{width: '500px', paddingTop:'50px', paddingBottom: '50px', backgroundColor: 'rgba(255, 188, 17, 0.1)'}}
+        style={{width: '600px', paddingTop:'50px', paddingBottom: '50px', backgroundColor: 'rgba(255, 188, 17, 0.1)'}}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDropEx}
@@ -398,7 +475,7 @@ return (
       </div>
 
      <div  style={{ display: 'flex', marginBottom: '30px' }}>
-    <div className="panel" style={{width: '500px', marginRight: '30px',  display: 'flex' }}>
+    <div className="panel" style={{width: '600px', marginRight: '30px',  display: 'flex' }}>
     <div style={{ flexBasis: '50%', marginRight: '50px' }}>
       <img src={cashIconBlue} style={{width: '32px', height: '32px'}} alt="dragDrop" />
       <div className="dashboard-titles" > Total gastos</div>
@@ -407,9 +484,9 @@ return (
     </div>
 
     <div style={{ flexBasis: '50%', marginRight: '50px' }}>
-      <div className="dashboard-titles" style={{marginTop: '50px'}} > {`${totals.total_amount}  €`}</div>
-      <div className="dashboard-titles" >  {`${totals.total_taxes}  €`}</div>
-      <div className="dashboard-titles" >  {`${totals.total_retention}  €`}</div>
+      <div className="totals" style={{marginTop: '50px'}} > {`${totals.total_amount}  €`}</div>
+      <div className="totals" >  {`${totals.total_taxes}  €`}</div>
+      <div className="totals" >  {`${totals.total_retention}  €`}</div>
     </div>
     </div>
 
@@ -418,12 +495,13 @@ return (
   </div>
 
     <div  style={{ display: 'flex', marginBottom: '30px' }}>   
-        <div className="panel" style={{width: '500px', marginRight: '30px',  display: 'flex' }}>
+        <div className="panel" style={{width: '600px', marginRight: '30px',  display: 'flex' }}>
         <div style={{ flexBasis: '50%', marginRight: '50px' }}>
-          <img src={dragDrop} style={{width: '32px', height: '32px'}} alt="dragDrop" />
+          <img src={cashIconBlue} style={{width: '32px', height: '32px'}} alt="dragDrop" />
             
-          <div className="dashboard-titles" > {`${invoiceCount} Facturas `}</div>
-          <div className="dashboard-text"> SUBIDAS ESTE MES</div>
+          <div className="dashboard-titles" > {`${invoiceCount.count} Facturas `}</div>
+          <div className="dashboard-text">SUBIDAS DURANTE</div>
+          <div className="dashboard-subtext"> {`${invoiceCount.text}`}</div>
         </div>
             <div style={{ flexBasis: '50%' }}>
             <div style={{ display: 'flex'}}>
@@ -467,12 +545,13 @@ return (
       </div>
 
 
-      <div className="panel" style={{width: '500px', marginRight: '50px',  display: 'flex' }}>
+      <div className="panel" style={{width: '600px', marginRight: '50px',  display: 'flex' }}>
         <div style={{ flexBasis: '50%', marginRight: '50px' }}>
-          <img src={cashIconBlue} style={{width: '32px', height: '32px'}} alt="dragDrop" />
+          <img src={sellIcon} style={{width: '32px', height: '32px'}} alt="dragDrop" />
             
-          <div className="dashboard-titles" > {`${invoiceEmitCount} Tickets `}</div>
-          <div className="dashboard-text"> SUBIDAS ESTE MES</div>
+          <div className="dashboard-titles" > {`${invoiceEmitCount.count} Ventas `}</div>
+          <div className="dashboard-text">SUBIDAS DURANTE</div>
+          <div className="dashboard-subtext">{`${invoiceEmitCount.text}`}</div>
         </div>
             <div style={{ flexBasis: '50%' }}>
             <div style={{ display: 'flex'}}>
