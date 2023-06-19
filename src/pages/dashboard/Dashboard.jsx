@@ -107,9 +107,9 @@ export const Dashboard = (props) => {
     }
   };
 
-  const getData = async (userToken) => {
+  const getData = async (userToken, filters=null) => {
     try {
-      const data = await getIncome(userToken);
+      const data = await getIncome(userToken, filters);
       setIncome(data || []);
     } catch (error) {
       setIncome([]);
@@ -390,6 +390,7 @@ export const Dashboard = (props) => {
         await getCountStates(userToken, filters);
         await getCountInvoice(userToken, filters);
         await getCountInvoiceEmit(userToken, filters);
+        await getData(userToken, filters);
       } catch (error) {
         console.log('Error al obtener el dato de invoiceCount:', error);
       }
@@ -404,6 +405,7 @@ export const Dashboard = (props) => {
         await getCountStates(userToken, filters);
         await getCountInvoice(userToken, filters);
         await getCountInvoiceEmit(userToken, filters);
+        await getData(userToken, filters);
       } catch (error) {
         console.log('Error al obtener el dato de invoiceCount:', error);
       }
@@ -419,6 +421,7 @@ export const Dashboard = (props) => {
         await getCountStates(userToken, filters);
         await getCountInvoice(userToken, filters);
         await getCountInvoiceEmit(userToken, filters);
+        await getData(userToken, filters);
       } catch (error) {
         console.log('Error al obtener el dato de invoiceCount:', error);
       }
@@ -434,6 +437,7 @@ export const Dashboard = (props) => {
         await getCountStates(userToken, filters);
         await getCountInvoice(userToken, filters);
         await getCountInvoiceEmit(userToken, filters);
+        await getData(userToken, filters);
       } catch (error) {
         console.log('Error al obtener el dato de invoiceCount:', error);
       }
@@ -485,6 +489,7 @@ export const Dashboard = (props) => {
           await getCountStates(userToken, filters);
           await getCountInvoice(userToken, filters);
           await getCountInvoiceEmit(userToken, filters);
+          await getData(userToken, filters);
         } catch (error) {
           console.log('Error al obtener el dato de invoiceCount:', error);
         }
