@@ -381,6 +381,79 @@ export const Dashboard = (props) => {
       }
     }
   };
+  const handleAnualClick = async () => {
+    const filters = "?year=1";
+    if (userToken !== undefined) {
+      try {
+        await getTotalsEmit(userToken, filters);
+        await getCountStatesEmit(userToken, filters);
+        await getCountStates(userToken, filters);
+        await getCountInvoice(userToken, filters);
+        await getCountInvoiceEmit(userToken, filters);
+      } catch (error) {
+        console.log('Error al obtener el dato de invoiceCount:', error);
+      }
+    }
+  };
+  const handle1TrimClick = async () => {
+    const filters = "?quarter=1";
+    if (userToken !== undefined) {
+      try {
+        await getTotalsEmit(userToken, filters);
+        await getCountStatesEmit(userToken, filters);
+        await getCountStates(userToken, filters);
+        await getCountInvoice(userToken, filters);
+        await getCountInvoiceEmit(userToken, filters);
+      } catch (error) {
+        console.log('Error al obtener el dato de invoiceCount:', error);
+      }
+    }
+  };
+
+  const handle2TrimClick = async () => {
+    const filters = "?quarter=2";
+    if (userToken !== undefined) {
+      try {
+        await getTotalsEmit(userToken, filters);
+        await getCountStatesEmit(userToken, filters);
+        await getCountStates(userToken, filters);
+        await getCountInvoice(userToken, filters);
+        await getCountInvoiceEmit(userToken, filters);
+      } catch (error) {
+        console.log('Error al obtener el dato de invoiceCount:', error);
+      }
+    }
+  };
+
+  const handle3TrimClick = async () => {
+    const filters = "?quarter=3";
+    if (userToken !== undefined) {
+      try {
+        await getTotalsEmit(userToken, filters);
+        await getCountStatesEmit(userToken, filters);
+        await getCountStates(userToken, filters);
+        await getCountInvoice(userToken, filters);
+        await getCountInvoiceEmit(userToken, filters);
+      } catch (error) {
+        console.log('Error al obtener el dato de invoiceCount:', error);
+      }
+    }
+  };
+
+  const handle4TrimClick = async () => {
+    const filters = "?quarter=4";
+    if (userToken !== undefined) {
+      try {
+        await getTotalsEmit(userToken, filters);
+        await getCountStatesEmit(userToken, filters);
+        await getCountStates(userToken, filters);
+        await getCountInvoice(userToken, filters);
+        await getCountInvoiceEmit(userToken, filters);
+      } catch (error) {
+        console.log('Error al obtener el dato de invoiceCount:', error);
+      }
+    }
+  };
   const handleButtonViewClick = async () => {
 
     if (selectedRange || selectedRange.length === 2) {
@@ -404,7 +477,6 @@ export const Dashboard = (props) => {
       console.log(formattedEndDate); // Output: yyyy-mm-dd
 
       const filters = "?start_date=" + formattedStartDate + "&end_date=" + formattedEndDate;
-      console.log(filters)
 
       if (userToken !== undefined) {
         try {
@@ -489,6 +561,21 @@ export const Dashboard = (props) => {
             </button>
             <button className='filters' onClick={handleButtonViewClick}>
               Mostrar
+            </button>
+            <button className='filters' onClick={handleAnualClick}>
+              Anual
+            </button>
+            <button className='filters' onClick={handle1TrimClick}>
+              1erTrimestre
+            </button>
+            <button className='filters' onClick={handle2TrimClick}>
+              2ºTrimestre
+            </button>
+            <button className='filters' onClick={handle3TrimClick}>
+              3erTrimestre
+            </button>
+            <button className='filters' onClick={handle4TrimClick}>
+              4ºTrimestre
             </button>
             {showCalendar && (
               
