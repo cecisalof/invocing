@@ -178,7 +178,6 @@
     background-color: #005CFF; /* Color personalizado */
   }
   .upload-indicator {
-    display: flex;
     align-items: center;
   }
   .upload-icon {
@@ -204,6 +203,9 @@
     width: 1358px;
     transition: background-color 0.3s;
     font-family: 'Nunito';
+  }
+  .eye-icon {
+    text-align: left;
   }
   
   .file-drop-zone:hover {

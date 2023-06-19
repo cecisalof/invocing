@@ -407,11 +407,13 @@ export const Dashboard = (props) => {
             Mostrar
           </button>
           {showCalendar && (
+            
             <div className='calendar-overlay'>
               <Calendar
                 selectRange
                 value={selectedRange}
                 onChange={handleSelect} />
+                
             </div>
           )}
         </div>
