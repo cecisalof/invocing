@@ -3,9 +3,13 @@ import {
     API_URL, BASE_URL
   } from '../../axios/config';
 
-export const getIncome = async (token) => {
+export const getIncome = async (token, filters=null) => {
     try {
-        const response = await axios.get(BASE_URL + API_URL.INVOICE_TO_EMIT, {
+        let url = BASE_URL + API_URL.INVOICE_TO_EMIT
+        if (filters){
+            url = url + filters
+        }
+        const response = await axios.get(url, {
             headers: { 
                 'accept': 'application/json', 
                 'Authorization': `Token ${token}`
