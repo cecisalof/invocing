@@ -412,8 +412,8 @@ const processFiles = async () => {
         </div>)}
 
       <button type="button" class="btn btn-primary rounded-pill px-4" onClick={handleAddExpenses}>Añadir gasto</button>
-      <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} />
-      <img src={deleteIcon} alt="Delete icon" onClick={handleTrashClick} style={{ marginRight: '30px'  }} />
+      {/* <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} /> */}
+      <img src={deleteIcon} alt="Delete icon" onClick={handleTrashClick} style={{ marginLeft: '30px'  }} />
       <div className="ag-theme-alpine" style={gridStyle}>
         <AgGridReact
           onGridReady={onGridReady}

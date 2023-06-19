@@ -1,5 +1,5 @@
 import { Link, Outlet, NavLink } from "react-router-dom";
-import React, { useState} from 'react';
+import React, { useState } from 'react';
 import profileIcon from '../../../assets/icons/profile.png';
 import profileWhiteIcon from '../../../assets/icons/profileWhite.png';
 import sellIcon from '../../../assets/icons/sellout.png';
@@ -18,7 +18,7 @@ import "./style.css";
 import { useNavigate } from 'react-router-dom';
 
 
-export const DrawerMenuComponent = ({user}) => {
+export const DrawerMenuComponent = ({ user }) => {
   const navigate = useNavigate();
   const isAdministrator = user?.groups?.includes("administrador")
   const [gastosCollapsed, setGastosCollapsed] = useState(true);
@@ -37,7 +37,7 @@ export const DrawerMenuComponent = ({user}) => {
     setDocumentsCollapsed(true)
     navigate('/')
   };
-  const handleClickGastos = () =>{
+  const handleClickGastos = () => {
     setSellInCollapsed(true);
     setGastosCollapsed(!gastosCollapsed)
     setProfilesCollapsed(true)
@@ -45,7 +45,7 @@ export const DrawerMenuComponent = ({user}) => {
     setPayrollCollapsed(true)
     setDocumentsCollapsed(true)
   }
-  const handleClickSellin = () =>{
+  const handleClickSellin = () => {
     setSellInCollapsed(false);
     setGastosCollapsed(true)
     setProfilesCollapsed(true)
@@ -55,7 +55,7 @@ export const DrawerMenuComponent = ({user}) => {
     navigate('/income')
   }
 
-  const handleClickHolidays= () =>{
+  const handleClickHolidays = () => {
     setSellInCollapsed(true);
     setGastosCollapsed(true)
     setProfilesCollapsed(true)
@@ -64,7 +64,7 @@ export const DrawerMenuComponent = ({user}) => {
     navigate('/vacations')
   }
 
-  const handleClickPayroll= () =>{
+  const handleClickPayroll = () => {
     setSellInCollapsed(true);
     setGastosCollapsed(true)
     setProfilesCollapsed(true)
@@ -74,7 +74,7 @@ export const DrawerMenuComponent = ({user}) => {
     navigate('/payroll')
   }
 
-  const handleClickDocuments= () =>{
+  const handleClickDocuments = () => {
     setSellInCollapsed(true);
     setGastosCollapsed(true)
     setProfilesCollapsed(true)
@@ -87,7 +87,7 @@ export const DrawerMenuComponent = ({user}) => {
 
   return (
     <>
-     <nav className="navbar navbar-expand-lg navbar-dark shadow p-3 bg-body-tertiary rounded" style={{backgroundColor: "#005CFF"}}>
+      <nav className="navbar navbar-expand-lg navbar-dark shadow p-3 bg-body-tertiary rounded" style={{ backgroundColor: "#005CFF" }}>
         <div className="container-fluid">
           <NavLink to="/" onClick={handleClickDashboard} className='navbar-brand'>
             <div className='navbarlogo'>
@@ -100,205 +100,204 @@ export const DrawerMenuComponent = ({user}) => {
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item">
                 <div className="menuItemContainer">
-                <button
-                      className={`accordion-button collapsed ${profileCollapsed ? 'collapsed-icon' : ''}`}
-                      type="button"
-                      
-                      style={{ backgroundColor: profileCollapsed ? 'transparent' : '#005CFF', color: profileCollapsed ? '#005CFF' : '#ffffff', fontFamily: 'Nunito',
+                  <button
+                    className={`accordion-button collapsed ${profileCollapsed ? 'collapsed-icon' : ''}`}
+                    type="button"
+
+                    style={{
+                      backgroundColor: profileCollapsed ? 'transparent' : '#005CFF', color: profileCollapsed ? '#005CFF' : '#ffffff', fontFamily: 'Nunito',
                       fontStyle: 'normal',
                       fontWeight: '500',
                       fontSize: '19px',
-                      lineHeight: '26px',border: 'none',
+                      lineHeight: '26px', border: 'none',
                       paddingLeft: '5px',
                       paddingRight: '135px',
                       paddingBottom: '15px',
                       paddingTop: '10px',
                       cursor: 'pointer',
-                      marginRight: '20px' }}
-                      data-bs-target="#flush-collapseOne"
-                      aria-expanded={!profileCollapsed}
-                      aria-controls="flush-collapseOne"
-                      onClick={handleClickDashboard}
-                    >
-                      <img className="menuIcon" src={profileCollapsed ?  profileIcon: profileWhiteIcon} alt="Profile" />
-                      Dashboard
+                      marginRight: '20px'
+                    }}
+                    data-bs-target="#flush-collapseOne"
+                    aria-expanded={!profileCollapsed}
+                    aria-controls="flush-collapseOne"
+                    onClick={handleClickDashboard}
+                  >
+                    <img className="menuIcon" src={profileCollapsed ? profileIcon : profileWhiteIcon} alt="Profile" />
+                    Dashboard
 
-                    </button>
-                  
+                  </button>
+
                 </div>
               </li>
               {isAdministrator && <li className="nav-item">
                 <div className="menuItemContainer">
-                <button
-                      className={`accordion-button collapsed ${sellInCollapsed ? 'collapsed-icon' : ''}`}
-                      type="button"
-                      
-                      style={{ backgroundColor: sellInCollapsed ? 'transparent' : '#005CFF', color: sellInCollapsed ? '#005CFF' : '#ffffff', fontFamily: 'Nunito',
+                  <button
+                    className={`accordion-button collapsed ${sellInCollapsed ? 'collapsed-icon' : ''}`}
+                    type="button"
+
+                    style={{
+                      backgroundColor: sellInCollapsed ? 'transparent' : '#005CFF', color: sellInCollapsed ? '#005CFF' : '#ffffff', fontFamily: 'Nunito',
                       fontStyle: 'normal',
                       fontWeight: '500',
                       fontSize: '19px',
-                      lineHeight: '26px',border: 'none',
+                      lineHeight: '26px', border: 'none',
                       paddingLeft: '5px',
                       paddingRight: '170px',
                       paddingBottom: '15px',
                       paddingTop: '10px',
                       cursor: 'pointer',
-                      marginRight: '20px' }}
-                      data-bs-target="#flush-collapseOne"
-                      aria-expanded={!sellInCollapsed}
-                      aria-controls="flush-collapseOne"
-                      onClick={handleClickSellin}
-                    >
-                      <img className="menuIcon" src={sellInCollapsed ?  sellIcon: sellWhitecon} alt="Profile" />
-                      Ventas
+                      marginRight: '20px'
+                    }}
+                    data-bs-target="#flush-collapseOne"
+                    aria-expanded={!sellInCollapsed}
+                    aria-controls="flush-collapseOne"
+                    onClick={handleClickSellin}
+                  >
+                    <img className="menuIcon" src={sellInCollapsed ? sellIcon : sellWhitecon} alt="Profile" />
+                    Ventas
 
-                    </button>
-                  {/* <img className="menuIcon" src={sellIcon} alt="Profile" />
-                  <NavLink className={(navData) => (navData.isActive ? 'active' : 'nav-link')}  to="/income">Ventas</NavLink> */}
+                  </button>
                 </div>
               </li>}
               {isAdministrator && <li className="nav-item">
-                <div>
+                <div> 
                   <div className="accordion-item">
-                      <h2 className="accordion-header">
-                        <button
-                      className={`accordion-button collapsed ${gastosCollapsed ? 'collapsed-icon' : ''}`}
-                      type="button"
-                      
-                      style={{ backgroundColor: gastosCollapsed ? 'transparent' : '#005CFF', color: gastosCollapsed ? '#005CFF' : '#ffffff', fontFamily: 'Nunito',
-                      fontStyle: 'normal',
-                      fontWeight: '500',
-                      fontSize: '19px',
-                      lineHeight: '26px',border: 'none',
-                      paddingLeft: '5px',
-                      paddingRight: '105px',
-                      paddingBottom: '15px',
-                      paddingTop: '10px',
-                      cursor: 'pointer',
-                      marginRight: '20px' }}
-                      data-bs-toggle="collapse"
-                      data-bs-target="#flush-collapseOne"
-                      aria-expanded={!gastosCollapsed}
-                      aria-controls="flush-collapseOne"
-                      onClick={handleClickGastos}
-                    >
-                      <img className="menuIcon" src={gastosCollapsed ?  cashIconBlue: cashIcon} alt="Profile" />
-                      Gastos
-                      
-                      <img className={`arrow ${gastosCollapsed ? 'rotate-down' : 'rotate-up'}`} src={arrow} alt="Arrow" />
-                    </button>
-                      </h2>
-                      <div id="flush-collapseOne" className="accordion-collapse collapse" data-bs-parent="#accordionFlushExample" style={{background: 'rgba(0, 92, 255, 0.03)'}}>
-                        <div className="menuItemContainer">
-                          {/* <img className="menuIcon" src={cashIcon} alt="Profile" /> */}
-                          <NavLink className={(navData) => (navData.isActive ? 'subactive' : 'sub-nav-link')} to="/outcome/suppliers">Proveedores</NavLink>
-                        </div>
-                        <div className="menuItemContainer">
-                          {/* <img className="menuIcon" src={cashIcon} alt="Cash" /> */}
-                          <NavLink className={(navData) => (navData.isActive ? 'subactive' : 'sub-nav-link')}  to="/outcome/invoices-to-pay">Facturas</NavLink>
-                        </div>
-                        <div className="menuItemContainer">
-                          {/* <img className="menuIcon" src={cashIcon} alt="Profile" /> */}
-                          <NavLink className={(navData) => (navData.isActive ? 'subactive' : 'sub-nav-link')} to="/outcome/expense-tickets">Tickets de gastos</NavLink>
-                        </div>
+                    <h2 className="accordion-header">
+                      <button
+                        className={`accordion-button collapsed ${gastosCollapsed ? 'collapsed-icon' : ''}`}
+                        type="button"
+
+                        style={{
+                          backgroundColor: gastosCollapsed ? 'transparent' : '#005CFF', color: gastosCollapsed ? '#005CFF' : '#ffffff', fontFamily: 'Nunito',
+                          fontStyle: 'normal',
+                          fontWeight: '500',
+                          fontSize: '19px',
+                          lineHeight: '26px', border: 'none',
+                          paddingLeft: '5px',
+                          paddingRight: '105px',
+                          paddingBottom: '15px',
+                          paddingTop: '10px',
+                          cursor: 'pointer',
+                          marginRight: '20px'
+                        }}
+                        data-bs-toggle="collapse"
+                        data-bs-target="#flush-collapseOne"
+                        aria-expanded={!gastosCollapsed}
+                        aria-controls="flush-collapseOne"
+                        onClick={handleClickGastos}
+                      >
+                        <img className="menuIcon" src={gastosCollapsed ? cashIconBlue : cashIcon} alt="Profile" />
+                        Gastos
+
+                        <img className={`arrow ${gastosCollapsed ? 'rotate-down' : 'rotate-up'}`} src={arrow} alt="Arrow" />
+                      </button>
+                    </h2>
+                    <div id="flush-collapseOne" className="accordion-collapse collapse" data-bs-parent="#accordionFlushExample" style={{ background: 'rgba(0, 92, 255, 0.03)' }}>
+                      <div className="menuItemContainer">
+                        <NavLink className={(navData) => (navData.isActive ? 'subactive' : 'sub-nav-link')} to="/outcome/suppliers">Proveedores</NavLink>
                       </div>
+                      <div className="menuItemContainer">
+                        <NavLink className={(navData) => (navData.isActive ? 'subactive' : 'sub-nav-link')} to="/outcome/invoices-to-pay">Facturas</NavLink>
+                      </div>
+                      <div className="menuItemContainer">
+                        <NavLink className={(navData) => (navData.isActive ? 'subactive' : 'sub-nav-link')} to="/outcome/expense-tickets">Tickets de gastos</NavLink>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </li>}
-              <li className="nav-item">
+              {/* <li className="nav-item">
                 <div className="menuItemContainer">
+                  <button
+                    className={`accordion-button collapsed ${holidaysCollapsed ? 'collapsed-icon' : ''}`}
+                    type="button"
 
-                <button
-                      className={`accordion-button collapsed ${holidaysCollapsed ? 'collapsed-icon' : ''}`}
-                      type="button"
-                      
-                      style={{ backgroundColor: holidaysCollapsed ? 'transparent' : '#005CFF', color: holidaysCollapsed ? '#005CFF' : '#ffffff', fontFamily: 'Nunito',
+                    style={{
+                      backgroundColor: holidaysCollapsed ? 'transparent' : '#005CFF', color: holidaysCollapsed ? '#005CFF' : '#ffffff', fontFamily: 'Nunito',
                       fontStyle: 'normal',
                       fontWeight: '500',
                       fontSize: '19px',
-                      lineHeight: '26px',border: 'none',
+                      lineHeight: '26px', border: 'none',
                       paddingLeft: '5px',
                       paddingRight: '135px',
                       paddingBottom: '15px',
                       paddingTop: '10px',
                       cursor: 'pointer',
-                      marginRight: '20px' }}
-                      data-bs-target="#flush-collapseOne"
-                      aria-expanded={!holidaysCollapsed}
-                      aria-controls="flush-collapseOne"
-                      onClick={handleClickHolidays}
-                    >
-                      <img className="menuIcon" src={holidaysCollapsed ?  calendarIcon: calendarWhiteIcon} alt="Profile" />
-                      Vacaciones
+                      marginRight: '20px'
+                    }}
+                    data-bs-target="#flush-collapseOne"
+                    aria-expanded={!holidaysCollapsed}
+                    aria-controls="flush-collapseOne"
+                    onClick={handleClickHolidays}
+                  >
+                    <img className="menuIcon" src={holidaysCollapsed ? calendarIcon : calendarWhiteIcon} alt="Profile" />
+                    Vacaciones
 
-                    </button>
-                  {/* <img className="menuIcon" src={calendarIcon} alt="Profile" />
-                  <NavLink className={(navData) => (navData.isActive ? 'active' : 'nav-link')} to="/vacations">Vacaciones</NavLink> */}
+                  </button>
                 </div>
-              </li>
-              <li className="nav-item">
+              </li> */}
+              {/* <li className="nav-item">
                 <div className="menuItemContainer">
-                <button
-                      className={`accordion-button collapsed ${payrollCollapsed ? 'collapsed-icon' : ''}`}
-                      type="button"
-                      
-                      style={{ backgroundColor: payrollCollapsed ? 'transparent' : '#005CFF', color: payrollCollapsed ? '#005CFF' : '#ffffff', fontFamily: 'Nunito',
+                  <button
+                    className={`accordion-button collapsed ${payrollCollapsed ? 'collapsed-icon' : ''}`}
+                    type="button"
+
+                    style={{
+                      backgroundColor: payrollCollapsed ? 'transparent' : '#005CFF', color: payrollCollapsed ? '#005CFF' : '#ffffff', fontFamily: 'Nunito',
                       fontStyle: 'normal',
                       fontWeight: '500',
                       fontSize: '19px',
-                      lineHeight: '26px',border: 'none',
+                      lineHeight: '26px', border: 'none',
                       paddingLeft: '5px',
                       paddingRight: '155px',
                       paddingBottom: '15px',
                       paddingTop: '10px',
                       cursor: 'pointer',
-                      marginRight: '20px' }}
-                      data-bs-target="#flush-collapseOne"
-                      aria-expanded={!payrollCollapsed}
-                      aria-controls="flush-collapseOne"
-                      onClick={handleClickPayroll}
-                    >
-                      <img className="menuIcon" src={payrollCollapsed ?  payrollIcon: payrollWhiteIcon} alt="Profile" />
-                      Nóminas
+                      marginRight: '20px'
+                    }}
+                    data-bs-target="#flush-collapseOne"
+                    aria-expanded={!payrollCollapsed}
+                    aria-controls="flush-collapseOne"
+                    onClick={handleClickPayroll}
+                  >
+                    <img className="menuIcon" src={payrollCollapsed ? payrollIcon : payrollWhiteIcon} alt="Profile" />
+                    Nóminas
 
-                    </button>
-
-                  {/* <img className="menuIcon" src={payrollIcon} alt="Profile" />
-                  <NavLink className={(navData) => (navData.isActive ? 'active' : 'nav-link')} to="/payroll">Nóminas</NavLink> */}
+                  </button>
                 </div>
-              </li>
-              <li className="nav-item">
+              </li> */}
+              {/* <li className="nav-item">
                 <div className="menuItemContainer">
-                <button
-                      className={`accordion-button collapsed ${documentsCollapsed ? 'collapsed-icon' : ''}`}
-                      type="button"
-                      
-                      style={{ backgroundColor: documentsCollapsed ? 'transparent' : '#005CFF', color: documentsCollapsed ? '#005CFF' : '#ffffff', fontFamily: 'Nunito',
+                  <button
+                    className={`accordion-button collapsed ${documentsCollapsed ? 'collapsed-icon' : ''}`}
+                    type="button"
+
+                    style={{
+                      backgroundColor: documentsCollapsed ? 'transparent' : '#005CFF', color: documentsCollapsed ? '#005CFF' : '#ffffff', fontFamily: 'Nunito',
                       fontStyle: 'normal',
                       fontWeight: '500',
                       fontSize: '19px',
-                      lineHeight: '26px',border: 'none',
+                      lineHeight: '26px', border: 'none',
                       paddingLeft: '5px',
                       paddingRight: '120px',
                       paddingBottom: '15px',
                       paddingTop: '10px',
                       cursor: 'pointer',
-                      marginRight: '20px' }}
-                      data-bs-target="#flush-collapseOne"
-                      aria-expanded={!documentsCollapsed}
-                      aria-controls="flush-collapseOne"
-                      onClick={handleClickDocuments}
-                    >
-                      <img className="menuIcon" src={documentsCollapsed ?  documentsIcon: documentsWhiteIcon} alt="Profile" />
-                      Documentos
+                      marginRight: '20px'
+                    }}
+                    data-bs-target="#flush-collapseOne"
+                    aria-expanded={!documentsCollapsed}
+                    aria-controls="flush-collapseOne"
+                    onClick={handleClickDocuments}
+                  >
+                    <img className="menuIcon" src={documentsCollapsed ? documentsIcon : documentsWhiteIcon} alt="Profile" />
+                    Documentos
 
-                    </button>
-                  {/* <img className="menuIcon" src={documentsIcon} alt="Profile" />
-                <NavLink className={(navData) => (navData.isActive ? 'active' : 'nav-link')} to="/documents">Documentos</NavLink> */}
+                  </button>
                 </div>
-              </li>
+              </li> */}
 
-              
+
               <div className="">
                 <li className="nav-item">
                   <div className="menuItemContainer logout">
@@ -310,8 +309,8 @@ export const DrawerMenuComponent = ({user}) => {
             </ul>
           </div>
         </div>
-    </nav>
-    <Outlet/>
+      </nav>
+      <Outlet />
     </>
   );
 };
