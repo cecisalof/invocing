@@ -17,6 +17,8 @@ import cashYellow from '../../assets/icons/cashYellow.png';
 import sellIcon from '../../assets/icons/sellout.png';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
+import { getIncome } from "./../income/services";
+import { AgChartsReact } from 'ag-charts-react';
 
 
 export const Dashboard = (props) => {
@@ -33,6 +35,7 @@ export const Dashboard = (props) => {
   const [showCalendar, setShowCalendar] = useState(false);
   const [selectedRange, setSelectedRange] = useState([new Date(), new Date()]);
 
+  const [income, setIncome] = useState([]);
   const [userToken, setUserToken] = useState('');
 
   const userDataContext = useContext(Context);
@@ -49,6 +52,7 @@ export const Dashboard = (props) => {
       console.log('No hay datos para mostrar.');
     }
   };
+
 
   const getCountInvoiceEmit = async (userToken, filters = null) => {
     try {
@@ -73,7 +77,6 @@ export const Dashboard = (props) => {
     } catch (error) {
       setInvoiceStates({});
       console.log('No hay datos para mostrar.');
-
     }
   };
 
@@ -87,7 +90,6 @@ export const Dashboard = (props) => {
     } catch (error) {
       setInvoiceEmitStates({});
       console.log('No hay datos para mostrar.');
-
     }
   };
 
@@ -95,7 +97,6 @@ export const Dashboard = (props) => {
     try {
       const data = await getInvoicesEmitTotals(userToken, filters);
       if (data !== undefined) {
-        console.log(data)
         setTotals(data);
       }
 
@@ -103,6 +104,16 @@ export const Dashboard = (props) => {
       setTotals({});
       console.log('No hay datos para mostrar.');
 
+    }
+  };
+
+  const getData = async (userToken) => {
+    try {
+      const data = await getIncome(userToken);
+      setIncome(data || []);
+    } catch (error) {
+      setIncome([]);
+      console.log('No hay datos para mostrar.');
     }
   };
 
@@ -177,6 +188,20 @@ export const Dashboard = (props) => {
     fetchData();
   }, [userToken]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      if (userToken !== undefined) {
+        try {
+          await getData(userToken);
+        } catch (error) {
+          console.log('Error al obtener el dato de invoiceStates:', error);
+        }
+      }
+    };
+
+    fetchData();
+  }, [userToken]);
+
 
   useEffect(() => {
     let token = userDataContext.userData.token;
@@ -217,15 +242,13 @@ export const Dashboard = (props) => {
     setIsFileUploadedEx(true);
   };
 
-
   const processFiles = async () => {
     console.log("Procesando archivos automáticamente...");
     userDataContext.toggleLoading()
     setIsFileUploaded(false);
     const response = await postInvoiceAutomatic(userToken, userDataContext.files);
-    const ids = response.data.schendules
+    const ids = response.data.schendules;
     console.log(ids)
-
 
     const checkStatus = async () => {
 
@@ -242,10 +265,8 @@ export const Dashboard = (props) => {
           const status = item[id.toString()]; // Obtener el estado del ID
           if (status === "DONE") {
             loadedCount = loadedCount + 1; // Incrementar el contador si el estado es "DONE"
-            console.log(loadedCount); // Imprimir el número de IDs con estado "DONE"
             const totalCount = ids.length;
             const percentage = Math.round((loadedCount * 100) / totalCount);
-            console.log(percentage)
             userDataContext.updateProgress(percentage)
           } else {
             allDone = false;
@@ -260,7 +281,7 @@ export const Dashboard = (props) => {
         // Si no todos los IDs están en el estado "DONE", esperar un tiempo y volver a verificar
         setTimeout(checkStatus, 10000); // Esperar 2 segundos (puedes ajustar el tiempo según tus necesidades)
       } else {
-        console.log(userDataContext.progress)
+        // console.log(userDataContext.progress)
         console.log("Procesamiento completo");
       }
 
@@ -320,6 +341,7 @@ export const Dashboard = (props) => {
     };
     // Iniciar la verificación del estado de los IDs
     await checkStatus();
+
   
   
    };
@@ -329,9 +351,21 @@ export const Dashboard = (props) => {
    const handleButtonClick = () => {
     setSelectedRange([new Date(), new Date()]);
     setShowCalendar(!showCalendar);
-
-
   };
+
+
+  const chartData = (income) => {
+    let dataForChart = [];
+    income.forEach(element => {
+    dataForChart.push(new Object ({
+        date: element.date,
+        total: parseInt(element.total)
+      }))
+    });
+    return dataForChart;
+  }
+
+
 
 
 
@@ -390,220 +424,279 @@ export const Dashboard = (props) => {
 
   };
 
+  const options = {
+      autoSize: true,
+      data: chartData(income),
+      theme: {
+        overrides: {
+          column: {
+            series: {
+              highlightStyle: {
+                item: {
+                  fill: '#FFBC11',
+                  strokeWidth: 0,
+                },
+              },
+            },
+          },
+        },
+      },
+      series: [
+        {
+          type: 'column',
+          xKey: 'date',
+          yKey: 'total',
+          fill: '#005CFF',
+          strokeWidth: 0,
+          tooltip: {
+            renderer: ({ yValue, xValue }) => {
+              return { title: xValue, content: yValue + ' €' };
+            },
+          },
+        },
+      ],
+      axes: [
+        {
+          type: 'category',
+          position: 'bottom',
+          title: {
+            text: 'Fecha',
+            fontSize: 14,
+            fontFamily: 'Nunito'
+          },
+        },
+        {
+          type: 'number',
+          position: 'left',
+          title: {
+            text: 'Total ventas',
+            fontSize: 14,
+            fontFamily: 'Nunito'
+          },
+        },
+      ],
+    };
 
-
-
-  return (
-    <>
-      <div className="root">
-        <div>
-          <AppBar location={location} />
-        </div>
-        <div>
-          <button className='filters' onClick={handleButtonClick}>
-            Fechas
-          </button>
-          <button className='filters' onClick={handleButtonViewClick}>
-            Mostrar
-          </button>
-          {showCalendar && (
+    return (
+      <>
+        <div className="root">
+          <div>
+            <AppBar location={location} />
+          </div>
+          <div>
+            <button className='filters' onClick={handleButtonClick}>
+              Fechas
+            </button>
+            <button className='filters' onClick={handleButtonViewClick}>
+              Mostrar
+            </button>
+            {showCalendar && (
+              
+              <div className='calendar-overlay'>
+                <Calendar
+                  selectRange
+                  value={selectedRange}
+                  onChange={handleSelect} />
+                  
+              </div>
+            )}
+          </div>
+          <div style={{ display: 'flex' }}>
+            <div
+              className="file-drop-zone"
+              style={{ width: '40vw', paddingTop: '50px', paddingBottom: '50px', marginRight: '30px' }}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+            >
+              <div className="drop-message">
+                {(userDataContext.isLoadingRef && userDataContext.progress < 100) ? (
+                  <div>
+                    <FaCircleNotch className="loading-icon" />
+                    <span className="upload-text">Cargando </span>
+                  </div>
+                ) : isFileUploaded ? (
+                  <div className="upload-indicator">
+                    <FaCheckCircle className="upload-icon" />
+                    <span className="upload-text">Archivos subidos</span>
+                  </div>
+                ) : (
+                  <div>
+                    <img src={dragDrop} alt="dragDrop" />
+                  </div>
+                )}
+  
+              </div>
+              {(!userDataContext.isLoadingRef || userDataContext.progress >= 100) && (
+                <button className="process-button" onClick={processFiles}>
+                  Procesar facturas automáticamente
+                </button>
+              )}
+            </div>
+  
+            <div
+              className="file-drop-zone"
+              style={{ width: '40vw', paddingTop: '50px', paddingBottom: '50px', backgroundColor: 'rgba(255, 188, 17, 0.1)' }}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDropEx}
+            >
+              <div className="drop-message">
+                {(userDataContext.isLoadingRefEx && userDataContext.progressEx < 100) ? (
+                  <div>
+                    <FaCircleNotch className="loading-icon" />
+                    <span className="upload-text">Cargando </span>
+                  </div>
+                ) : isFileUploadedEx ? (
+                  <div className="upload-indicator">
+                    <FaCheckCircle className="upload-icon" />
+                    <span className="upload-text">Archivos subidos</span>
+                  </div>
+                ) : (
+                  <div>
+                    <img src={cashYellow} alt="dragDrop" />
+                  </div>
+                )}
+  
+              </div>
+              {(!userDataContext.isLoadingRefEx || userDataContext.progressEx >= 100) && (
+                <button className="process-button-yellow" onClick={processFilesEx} >
+                  Procesar gastos automáticamente
+                </button>
+              )}
+            </div>
+          </div>
+  
+          <div style={{ display: 'flex', marginBottom: '30px' }}>
+            <div className="panel" style={{ width: '40vw', marginRight: '30px', display: 'flex' }}>
+              <div style={{ flexBasis: '50%', marginRight: '50px' }}>
+                <img src={cashIconBlue} style={{ width: '32px', height: '32px' }} alt="dragDrop" />
+                <div className="dashboard-titles" > Total gastos</div>
+                <div className="dashboard-titles" > Total IVA</div>
+                <div className="dashboard-titles" > Total ret. IRPF</div>
+              </div>
+  
+              <div style={{ flexBasis: '50%', marginRight: '50px' }}>
+                <div className="totals" style={{ marginTop: '50px' }} > {`${totals.total_amount}  €`}</div>
+                <div className="totals" >  {`${totals.total_taxes}  €`}</div>
+                <div className="totals" >  {`${totals.total_retention}  €`}</div>
+              </div>
+            </div>
+            <div style={{ display: 'flex' }}>
+            {/* Sales Chart */}
+            <div
+              style={{ width: '40vw', paddingBottom: '30px', marginRight: '30px' }}
+            >
+                <AgChartsReact options={options} />
+            </div>
             
-            <div className='calendar-overlay'>
-              <Calendar
-                selectRange
-                value={selectedRange}
-                onChange={handleSelect} />
-                
+          </div>
+  
+  
+  
+          </div>
+  
+          <div style={{ display: 'flex', marginBottom: '30px' }}>
+            <div className="panel" style={{ width: '40vw', marginRight: '30px', display: 'flex' }}>
+              <div style={{ flexBasis: '50%', marginRight: '50px' }}>
+                <img src={cashIconBlue} style={{ width: '32px', height: '32px' }} alt="dragDrop" />
+  
+                <div className="dashboard-titles" > {`${invoiceCount.count} Facturas `}</div>
+                <div className="dashboard-text">SUBIDAS DURANTE</div>
+                <div className="dashboard-subtext"> {`${invoiceCount.text}`}</div>
+              </div>
+              <div style={{ flexBasis: '50%' }}>
+                <div style={{ display: 'flex' }}>
+                  <div className='states pending' style={{ marginTop: '20px' }}>
+                    PENDIENTE
+                  </div>
+                  <div className='count-states' style={{ marginTop: '20px' }}>
+                    {`${invoiceStates.Pendiente}`}
+                  </div>
+                </div>
+  
+                <div style={{ display: 'flex' }}>
+                  <div className='states payed'>
+                    PAGADA
+                  </div>
+                  <div className='count-states'>
+                    {`${invoiceStates.Pagada}`}
+                  </div>
+                </div>
+  
+                <div style={{ display: 'flex' }}>
+                  <div className='states received'>
+                    RECIBIDA
+                  </div>
+                  <div className='count-states'>
+                    {`${invoiceStates.Recibida}`}
+                  </div>
+                </div>
+  
+                <div style={{ display: 'flex' }}>
+                  <div className='states reject'>
+                    RECHAZADA
+                  </div>
+                  <div className='count-states'>
+                    {`${invoiceStates.Rechazado}`}
+                  </div>
+                </div>
+  
+              </div>
+  
             </div>
-          )}
+  
+  
+            <div className="panel" style={{ width: '40vw', marginRight: '50px', display: 'flex' }}>
+              <div style={{ flexBasis: '50%', marginRight: '50px' }}>
+                <img src={sellIcon} style={{ width: '32px', height: '32px' }} alt="dragDrop" />
+  
+                <div className="dashboard-titles" > {`${invoiceEmitCount.count} Ventas `}</div>
+                <div className="dashboard-text">SUBIDAS DURANTE</div>
+                <div className="dashboard-subtext">{`${invoiceEmitCount.text}`}</div>
+              </div>
+              <div style={{ flexBasis: '50%' }}>
+                <div style={{ display: 'flex' }}>
+                  <div className='states pending' style={{ marginTop: '20px' }}>
+                    PENDIENTE
+                  </div>
+                  <div className='count-states' style={{ marginTop: '20px' }}>
+                    {`${invoiceEmitStates.Pendiente}`}
+                  </div>
+                </div>
+  
+                <div style={{ display: 'flex' }}>
+                  <div className='states payed'>
+                    PAGADA
+                  </div>
+                  <div className='count-states'>
+                    {`${invoiceEmitStates.Pagada}`}
+                  </div>
+                </div>
+  
+                <div style={{ display: 'flex' }}>
+                  <div className='states received'>
+                    RECIBIDA
+                  </div>
+                  <div className='count-states'>
+                    {`${invoiceEmitStates.Recibida}`}
+                  </div>
+                </div>
+  
+                <div style={{ display: 'flex' }}>
+                  <div className='states reject'>
+                    RECHAZADA
+                  </div>
+                  <div className='count-states'>
+                    {`${invoiceEmitStates.Rechazado}`}
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+          </div>
         </div>
-        <div style={{ display: 'flex' }}>
-          <div
-            className="file-drop-zone"
-            style={{ width: '600px', paddingTop: '50px', paddingBottom: '50px', marginRight: '30px' }}
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
-          >
-            <div className="drop-message">
-              {(userDataContext.isLoadingRef && userDataContext.progress < 100) ? (
-                <div>
-                  <FaCircleNotch className="loading-icon" />
-                  <span className="upload-text">Cargando </span>
-                </div>
-              ) : isFileUploaded ? (
-                <div className="upload-indicator">
-                  <FaCheckCircle className="upload-icon" />
-                  <span className="upload-text">Archivos subidos</span>
-                </div>
-              ) : (
-                <div>
-                  <img src={dragDrop} alt="dragDrop" />
-                </div>
-              )}
-
-            </div>
-            {(!userDataContext.isLoadingRef || userDataContext.progress >= 100) && (
-              <button className="process-button" onClick={processFiles}>
-                Procesar facturas automáticamente
-              </button>
-            )}
-          </div>
-
-          <div
-            className="file-drop-zone"
-            style={{ width: '600px', paddingTop: '50px', paddingBottom: '50px', backgroundColor: 'rgba(255, 188, 17, 0.1)' }}
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDropEx}
-          >
-            <div className="drop-message">
-              {(userDataContext.isLoadingRefEx && userDataContext.progressEx < 100) ? (
-                <div>
-                  <FaCircleNotch className="loading-icon" />
-                  <span className="upload-text">Cargando </span>
-                </div>
-              ) : isFileUploadedEx ? (
-                <div className="upload-indicator">
-                  <FaCheckCircle className="upload-icon" />
-                  <span className="upload-text">Archivos subidos</span>
-                </div>
-              ) : (
-                <div>
-                  <img src={cashYellow} alt="dragDrop" />
-                </div>
-              )}
-
-            </div>
-            {(!userDataContext.isLoadingRefEx || userDataContext.progressEx >= 100) && (
-              <button className="process-button-yellow" onClick={processFilesEx} >
-                Procesar gastos automáticamente
-              </button>
-            )}
-          </div>
-        </div>
-
-        <div style={{ display: 'flex', marginBottom: '30px' }}>
-          <div className="panel" style={{ width: '600px', marginRight: '30px', display: 'flex' }}>
-            <div style={{ flexBasis: '50%', marginRight: '50px' }}>
-              <img src={cashIconBlue} style={{ width: '32px', height: '32px' }} alt="dragDrop" />
-              <div className="dashboard-titles" > Total gastos</div>
-              <div className="dashboard-titles" > Total IVA</div>
-              <div className="dashboard-titles" > Total ret. IRPF</div>
-            </div>
-
-            <div style={{ flexBasis: '50%', marginRight: '50px' }}>
-              <div className="totals" style={{ marginTop: '50px' }} > {`${totals.total_amount}  €`}</div>
-              <div className="totals" >  {`${totals.total_taxes}  €`}</div>
-              <div className="totals" >  {`${totals.total_retention}  €`}</div>
-            </div>
-          </div>
-
-
-
-        </div>
-
-        <div style={{ display: 'flex', marginBottom: '30px' }}>
-          <div className="panel" style={{ width: '600px', marginRight: '30px', display: 'flex' }}>
-            <div style={{ flexBasis: '50%', marginRight: '50px' }}>
-              <img src={cashIconBlue} style={{ width: '32px', height: '32px' }} alt="dragDrop" />
-
-              <div className="dashboard-titles" > {`${invoiceCount.count} Facturas `}</div>
-              <div className="dashboard-text">SUBIDAS DURANTE</div>
-              <div className="dashboard-subtext"> {`${invoiceCount.text}`}</div>
-            </div>
-            <div style={{ flexBasis: '50%' }}>
-              <div style={{ display: 'flex' }}>
-                <div className='states pending' style={{ marginTop: '20px' }}>
-                  PENDIENTE
-                </div>
-                <div className='count-states' style={{ marginTop: '20px' }}>
-                  {`${invoiceStates.Pendiente}`}
-                </div>
-              </div>
-
-              <div style={{ display: 'flex' }}>
-                <div className='states payed'>
-                  PAGADA
-                </div>
-                <div className='count-states'>
-                  {`${invoiceStates.Pagada}`}
-                </div>
-              </div>
-
-              <div style={{ display: 'flex' }}>
-                <div className='states received'>
-                  RECIBIDA
-                </div>
-                <div className='count-states'>
-                  {`${invoiceStates.Recibida}`}
-                </div>
-              </div>
-
-              <div style={{ display: 'flex' }}>
-                <div className='states reject'>
-                  RECHAZADA
-                </div>
-                <div className='count-states'>
-                  {`${invoiceStates.Rechazado}`}
-                </div>
-              </div>
-
-            </div>
-
-          </div>
-
-
-          <div className="panel" style={{ width: '600px', marginRight: '50px', display: 'flex' }}>
-            <div style={{ flexBasis: '50%', marginRight: '50px' }}>
-              <img src={sellIcon} style={{ width: '32px', height: '32px' }} alt="dragDrop" />
-
-              <div className="dashboard-titles" > {`${invoiceEmitCount.count} Ventas `}</div>
-              <div className="dashboard-text">SUBIDAS DURANTE</div>
-              <div className="dashboard-subtext">{`${invoiceEmitCount.text}`}</div>
-            </div>
-            <div style={{ flexBasis: '50%' }}>
-              <div style={{ display: 'flex' }}>
-                <div className='states pending' style={{ marginTop: '20px' }}>
-                  PENDIENTE
-                </div>
-                <div className='count-states' style={{ marginTop: '20px' }}>
-                  {`${invoiceEmitStates.Pendiente}`}
-                </div>
-              </div>
-
-              <div style={{ display: 'flex' }}>
-                <div className='states payed'>
-                  PAGADA
-                </div>
-                <div className='count-states'>
-                  {`${invoiceEmitStates.Pagada}`}
-                </div>
-              </div>
-
-              <div style={{ display: 'flex' }}>
-                <div className='states received'>
-                  RECIBIDA
-                </div>
-                <div className='count-states'>
-                  {`${invoiceEmitStates.Recibida}`}
-                </div>
-              </div>
-
-              <div style={{ display: 'flex' }}>
-                <div className='states reject'>
-                  RECHAZADA
-                </div>
-                <div className='count-states'>
-                  {`${invoiceEmitStates.Rechazado}`}
-                </div>
-              </div>
-            </div>
-          </div>
-          
-        </div>
-      </div>
-    </>
-  )
-};
-export default Dashboard;
+      </>
+    )
+  };
+  export default Dashboard;
