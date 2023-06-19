@@ -134,9 +134,7 @@ export const Income = (props) => {
   // Get data
   const getData = async (userToken) => {
     try {
-      console.log(userToken)
       const data = await getIncome(userToken);
-      console.log(data)
       setRowData(data || []);
     } catch (error) {
       setRowData([]);
@@ -210,19 +208,13 @@ export const Income = (props) => {
 }
 function handleFilterClick() {
   console.log('Botón de filtro clickeado');
-  
-
 }
 
 function handleTrashClick() {
-  console.log('Botón de basura clickeado');
   const selectedNodes = gridRef.current.api.getSelectedNodes();
   const selectedData = selectedNodes.map((node) => node.data);
-  console.log(selectedData);
-  
   // Crear una Promesa que se resuelva cuando se hayan eliminado todas las facturas
   const deletePromises = selectedData.map((obj) => {
-    console.log(obj.uuid);
     return deleteIncome(obj.uuid, userToken);
   });
   

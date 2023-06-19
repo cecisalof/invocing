@@ -9,7 +9,6 @@ import './style.css';
 import '../general-style.css'
 import Context from '../../contexts/context';
 import { useContext } from 'react';
-import filterIcon from '../../assets/icons/Filtrar.png';
 import deleteIcon from '../../assets/icons/Papelera.png';
 import CustomHeader from '../customHeader.jsx';
 import { getProviders } from "../suppliers/services";
@@ -18,6 +17,7 @@ import { useNavigate } from 'react-router-dom';
 import { FaCheckCircle, FaCircleNotch } from 'react-icons/fa';
 import dragDrop from '../../assets/icons/drag-and-drop.png';
 import close from '../../assets/icons/close.png';
+import eye from '../../assets/icons/Eye.png';
 import { ProgressBar } from 'react-bootstrap';
 
 
@@ -33,6 +33,7 @@ export const ExpenseTickets = (props) => {
 
   const [rowProviders, setrowProviders] = useState(); // Set rowData to Array of Objects, one Object per Row
   const [providersLoaded, setProvidersLoaded] = useState(false);
+  const [viewFiles, setViewFiles] = useState(false);
 
 
  
@@ -357,8 +358,15 @@ const processFiles = async () => {
   // Iniciar la verificación del estado de los IDs
   await checkStatus();
 
+  
+
 
  };
+
+ function handleViewClick() {
+  setViewFiles(!viewFiles)
+  console.log(userDataContext.filesEx)
+};
 
 
   return (
@@ -372,7 +380,26 @@ const processFiles = async () => {
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
+        
       >
+        <div className="eye-icon">
+        <img src={eye} alt="Eye" onClick={handleViewClick} />
+
+        {viewFiles && (
+        <div style={{ position: 'absolute', zIndex: 9999 }}>
+          <label >Archivos</label>
+          <ul>
+          {Array.from(userDataContext.filesEx).map((file, index) => (
+            <li key={index}  style={{ fontSize: '10px', fontFamily: 'Nunito' }}> {file.name}</li>
+          ))}
+        </ul>
+          
+        </div>
+        
+          )}
+
+        </div>
+
         <div className="drop-message">
           {userDataContext.isLoadingRefEx && userDataContext.progressEx < 100 ? (
             <div>
