@@ -355,15 +355,23 @@ export const Dashboard = (props) => {
 
 
   const chartData = (income) => {
-    let dataForChart = [];
-    income.forEach(element => {
-    dataForChart.push(new Object ({
-        date: element.date,
-        total: parseInt(element.total)
-      }))
+    const groupedData = {};
+  
+    income.forEach((element) => {
+      const month = element.month;
+      const total = parseInt(element.total);
+  
+      if (!groupedData[month]) {
+        groupedData[month] = {
+          month,
+          total: 0,
+        };
+      }
+      groupedData[month].total += total;
     });
-    return dataForChart;
-  }
+  
+    return Object.values(groupedData);
+  };
 
 
 
@@ -502,58 +510,58 @@ export const Dashboard = (props) => {
   };
 
   const options = {
-      autoSize: true,
-      data: chartData(income),
-      theme: {
-        overrides: {
-          column: {
-            series: {
-              highlightStyle: {
-                item: {
-                  fill: '#FFBC11',
-                  strokeWidth: 0,
-                },
+    autoSize: true,
+    data: chartData(income),
+    theme: {
+      overrides: {
+        column: {
+          series: {
+            highlightStyle: {
+              item: {
+                fill: '#FFBC11',
+                strokeWidth: 0,
               },
             },
           },
         },
       },
-      series: [
-        {
-          type: 'column',
-          xKey: 'date',
-          yKey: 'total',
-          fill: '#005CFF',
-          strokeWidth: 0,
-          tooltip: {
-            renderer: ({ yValue, xValue }) => {
-              return { title: xValue, content: yValue + ' €' };
-            },
+    },
+    series: [
+      {
+        type: 'column',
+        xKey: 'month',
+        yKey: 'total',
+        fill: '#005CFF',
+        strokeWidth: 0,
+        tooltip: {
+          renderer: ({ yValue, xValue }) => {
+            return { title: xValue, content: yValue + ' €' };
           },
         },
-      ],
-      axes: [
-        {
-          type: 'category',
-          position: 'bottom',
-          title: {
-            text: 'Fecha',
-            fontSize: 14,
-            fontFamily: 'Nunito'
-          },
+      },
+    ],
+    axes: [
+      {
+        type: 'category',
+        position: 'bottom',
+        title: {
+          text: 'Meses', // Cambiar el título a 'Month'
+          fontSize: 14,
+          fontFamily: 'Nunito',
         },
-        {
-          type: 'number',
-          position: 'left',
-          title: {
-            text: 'Total ventas',
-            fontSize: 14,
-            fontFamily: 'Nunito'
-          },
+      },
+      {
+        type: 'number',
+        position: 'left',
+        title: {
+          text: 'Total ventas',
+          fontSize: 14,
+          fontFamily: 'Nunito',
         },
-      ],
-    };
-
+      },
+    ],
+  };
+  
     return (
       <>
         <div className="root">
