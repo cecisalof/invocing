@@ -2,16 +2,16 @@ import { Link, Outlet, NavLink } from "react-router-dom";
 import React, { useState } from 'react';
 import profileIcon from '../../../assets/icons/profile.png';
 import profileWhiteIcon from '../../../assets/icons/profileWhite.png';
-import sellIcon from '../../../assets/icons/sellout.png';
-import sellWhitecon from '../../../assets/icons/selloutWhite.png';
+// import sellIcon from '../../../assets/icons/sellout.png';
+// import sellWhitecon from '../../../assets/icons/selloutWhite.png';
 import cashIcon from '../../../assets/icons/cash.svg';
 import cashIconBlue from '../../../assets/icons/Cash.png';
-import calendarIcon from '../../../assets/icons/calendar.png';
-import calendarWhiteIcon from '../../../assets/icons/calendarWhite.png';
-import payrollIcon from '../../../assets/icons/payroll.png';
-import payrollWhiteIcon from '../../../assets/icons/payrollWhite.png';
-import documentsIcon from '../../../assets/icons/documents.png';
-import documentsWhiteIcon from '../../../assets/icons/documentsWhite.png';
+// import calendarIcon from '../../../assets/icons/calendar.png';
+// import calendarWhiteIcon from '../../../assets/icons/calendarWhite.png';
+// import payrollIcon from '../../../assets/icons/payroll.png';
+// import payrollWhiteIcon from '../../../assets/icons/payrollWhite.png';
+// import documentsIcon from '../../../assets/icons/documents.png';
+// import documentsWhiteIcon from '../../../assets/icons/documentsWhite.png';
 import logoutIcon from '../../../assets/icons/logout.png';
 import arrow from '../../../assets/icons/Arrow.png';
 import "./style.css";
@@ -55,34 +55,34 @@ export const DrawerMenuComponent = ({ user }) => {
     navigate('/income')
   }
 
-  const handleClickHolidays = () => {
-    setSellInCollapsed(true);
-    setGastosCollapsed(true)
-    setProfilesCollapsed(true)
-    setHolidaysCollapsed(false)
-    setPayrollCollapsed(true)
-    navigate('/vacations')
-  }
+  // const handleClickHolidays = () => {
+  //   setSellInCollapsed(true);
+  //   setGastosCollapsed(true)
+  //   setProfilesCollapsed(true)
+  //   setHolidaysCollapsed(false)
+  //   setPayrollCollapsed(true)
+  //   navigate('/vacations')
+  // }
 
-  const handleClickPayroll = () => {
-    setSellInCollapsed(true);
-    setGastosCollapsed(true)
-    setProfilesCollapsed(true)
-    setHolidaysCollapsed(true)
-    setPayrollCollapsed(false)
-    setDocumentsCollapsed(true)
-    navigate('/payroll')
-  }
+  // const handleClickPayroll = () => {
+  //   setSellInCollapsed(true);
+  //   setGastosCollapsed(true)
+  //   setProfilesCollapsed(true)
+  //   setHolidaysCollapsed(true)
+  //   setPayrollCollapsed(false)
+  //   setDocumentsCollapsed(true)
+  //   navigate('/payroll')
+  // }
 
-  const handleClickDocuments = () => {
-    setSellInCollapsed(true);
-    setGastosCollapsed(true)
-    setProfilesCollapsed(true)
-    setHolidaysCollapsed(true)
-    setPayrollCollapsed(true)
-    setDocumentsCollapsed(false)
-    navigate('/documents')
-  }
+  // const handleClickDocuments = () => {
+  //   setSellInCollapsed(true);
+  //   setGastosCollapsed(true)
+  //   setProfilesCollapsed(true)
+  //   setHolidaysCollapsed(true)
+  //   setPayrollCollapsed(true)
+  //   setDocumentsCollapsed(false)
+  //   navigate('/documents')
+  // }
 
 
   return (
@@ -129,7 +129,7 @@ export const DrawerMenuComponent = ({ user }) => {
 
                 </div>
               </li>
-              {isAdministrator && <li className="nav-item">
+              {/* {isAdministrator && <li className="nav-item">
                 <div className="menuItemContainer">
                   <button
                     className={`accordion-button collapsed ${sellInCollapsed ? 'collapsed-icon' : ''}`}
@@ -158,7 +158,7 @@ export const DrawerMenuComponent = ({ user }) => {
 
                   </button>
                 </div>
-              </li>}
+              </li>} */}
               {isAdministrator && <li className="nav-item">
                 <div> 
                   <div className="accordion-item">
