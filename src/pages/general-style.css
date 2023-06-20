@@ -161,8 +161,8 @@ body {
     padding: 50px; /* Espacio interno para separar los elementos del panel */
     border-radius: 20px; /* Bordes redondeados del panel */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra para el panel */
-    display: flex;
-    height: 300px;
+    height: auto;
+    display: inline-block;
   }
 
   .custom-width {
