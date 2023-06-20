@@ -1,6 +1,5 @@
 import { Routes, Route } from 'react-router-dom'
 import { LoginPage } from './pages/Login.jsx';
-import { Home } from './pages/Home.jsx';
 import { Income } from './pages/income/Income.jsx';
 import { AddIncome } from './pages/income/AddIncome.jsx';
 import { Outcome } from './pages/Outcome.jsx';
