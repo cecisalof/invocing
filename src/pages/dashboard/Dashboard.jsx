@@ -682,22 +682,7 @@ export const Dashboard = (props) => {
                 <div className="totals" >  {`${totals.total_retention}  €`}</div>
               </div>
             </div>
-            <div style={{ display: 'flex' }}>
-            {/* Sales Chart */}
-            <div
-              style={{ width: '40vw', paddingBottom: '30px', marginRight: '30px' }}
-            >
-                <AgChartsReact options={options} />
-            </div>
-            
-          </div>
-  
-  
-  
-          </div>
-  
-          <div style={{ display: 'flex', marginBottom: '30px' }}>
-            <div className="panel" style={{ width: '40vw', marginRight: '30px', display: 'flex' }}>
+            <div className="panel" style={{ width: '40vw', display: 'flex' }}>
               <div style={{ flexBasis: '50%', marginRight: '50px' }}>
                 <img src={cashIconBlue} style={{ width: '32px', height: '32px' }} alt="dragDrop" />
   
@@ -745,9 +730,66 @@ export const Dashboard = (props) => {
               </div>
   
             </div>
+            {/* <div style={{ display: 'flex' }}> */}
+            {/* Sales Chart */}
+            {/* <div
+              style={{ width: '40vw', paddingBottom: '30px', marginRight: '30px' }}
+            >
+                <AgChartsReact options={options} />
+            </div> */}
+            
+            {/* </div> */}
+          </div>
+          {/* <div style={{ display: 'flex', marginBottom: '30px' }}> */}
+            {/* <div className="panel" style={{ width: '40vw', display: 'flex' }}>
+              <div style={{ flexBasis: '50%', marginRight: '50px' }}>
+                <img src={cashIconBlue} style={{ width: '32px', height: '32px' }} alt="dragDrop" />
   
+                <div className="dashboard-titles" > {`${invoiceCount.count} Facturas `}</div>
+                <div className="dashboard-text">SUBIDAS DURANTE</div>
+                <div className="dashboard-subtext"> {`${invoiceCount.text}`}</div>
+              </div>
+              <div style={{ flexBasis: '50%' }}>
+                <div style={{ display: 'flex' }}>
+                  <div className='states pending' style={{ marginTop: '20px' }}>
+                    PENDIENTE
+                  </div>
+                  <div className='count-states' style={{ marginTop: '20px' }}>
+                    {`${invoiceStates.Pendiente}`}
+                  </div>
+                </div>
   
-            <div className="panel" style={{ width: '40vw', marginRight: '50px', display: 'flex' }}>
+                <div style={{ display: 'flex' }}>
+                  <div className='states payed'>
+                    PAGADA
+                  </div>
+                  <div className='count-states'>
+                    {`${invoiceStates.Pagada}`}
+                  </div>
+                </div>
+  
+                <div style={{ display: 'flex' }}>
+                  <div className='states received'>
+                    RECIBIDA
+                  </div>
+                  <div className='count-states'>
+                    {`${invoiceStates.Recibida}`}
+                  </div>
+                </div>
+  
+                <div style={{ display: 'flex' }}>
+                  <div className='states reject'>
+                    RECHAZADA
+                  </div>
+                  <div className='count-states'>
+                    {`${invoiceStates.Rechazado}`}
+                  </div>
+                </div>
+  
+              </div>
+  
+            </div> */}
+            {/* <div className="panel" style={{ width: '40vw', marginRight: '50px', display: 'flex' }}>
               <div style={{ flexBasis: '50%', marginRight: '50px' }}>
                 <img src={sellIcon} style={{ width: '32px', height: '32px' }} alt="dragDrop" />
   
@@ -792,9 +834,8 @@ export const Dashboard = (props) => {
                   </div>
                 </div>
               </div>
-            </div>
-            
-          </div>
+            </div> */}     
+          {/* </div> */}
         </div>
       </>
     )
