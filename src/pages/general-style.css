@@ -161,8 +161,7 @@ body {
     padding: 50px; /* Espacio interno para separar los elementos del panel */
     border-radius: 20px; /* Bordes redondeados del panel */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra para el panel */
-    display: flex;
-    height: 300px;
+    
   }
 
   .custom-width {
@@ -171,7 +170,7 @@ body {
 
   .custom-width-progess {
     width: 1300px;
-    background-color: #005CFF;
+    background-color: #e7eaee;
   }
   .custom-progress .progress-bar {
     background-color: #005CFF; /* Color personalizado */
@@ -249,19 +248,17 @@ body {
 
   .filters{
     margin: 5px;
-    width: 150px;
+    width: 106px;
     height: 20px;
     border-radius: 100px;
     font-style: normal;
     font-weight: 500;
-    font-size: 15px;
+    font-size: 13px;
     line-height: 11px;
     text-align: center;
     color: #005CFF;
     padding-bottom: 20px;
     padding-top: 10px;
-    padding-left: 20px;
-    padding-right: 70px;
     background: transparent;
     border: 2px solid #005CFF;
     margin-bottom: 30px;

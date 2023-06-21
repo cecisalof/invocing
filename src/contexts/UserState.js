@@ -9,9 +9,11 @@ export default class UserState extends React.Component{
     files: [],
     progress: 0,
     isLoadingRef: false,
+    processBotton: false,
     filesEx: [],
     progressEx: 0,
     isLoadingRefEx: false,
+    processBottonEx: false,
     isSuccess: false,
     isError: false,
     isSuccessEx: false,
@@ -35,6 +37,22 @@ export default class UserState extends React.Component{
     }));
     window.localStorage.setItem('isLoadingRef', JSON.stringify(this.state.isLoadingRef));
   };
+
+
+  toggleProcessBotton = () => {
+    this.setState((prevState) => ({
+      processBotton: !prevState.processBotton,
+    }));
+    window.localStorage.setItem('processBotton', JSON.stringify(this.state.processBotton));
+  };
+
+  toggleProcessBottonEx = () => {
+    this.setState((prevState) => ({
+      processBottonEx: !prevState.processBottonEx,
+    }));
+    window.localStorage.setItem('processBottonEx', JSON.stringify(this.state.processBottonEx));
+  };
+
 
   toggleSuccess = () => {
     this.setState((prevState) => ({
@@ -117,9 +135,11 @@ export default class UserState extends React.Component{
           files: this.state.files,
           progress: this.state.progress,
           isLoadingRef: this.state.isLoadingRef,
+          processBotton: this.state.processBotton,
           filesEx: this.state.filesEx,
           progressEx: this.state.progressEx,
           isLoadingRefEx: this.state.isLoadingRefEx,
+          processBottonEx: this.state.processBottonEx,
           isSuccess: this.state.isSuccess,
           isError: this.state.isError,
           isSuccessEx: this.state.isSuccessEx,
@@ -136,6 +156,8 @@ export default class UserState extends React.Component{
           toggleErrorEx: this.toggleErrorEx,
           toggleSuccess:this.toggleSuccess,
           toggleSuccessEx: this.toggleSuccessEx,
+          toggleProcessBotton: this.toggleProcessBotton,
+          toggleProcessBottonEx: this.toggleProcessBottonEx,
 
         }}
       >

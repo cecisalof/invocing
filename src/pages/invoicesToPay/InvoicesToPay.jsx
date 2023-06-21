@@ -365,7 +365,17 @@ const handleDrop = (event) => {
   
   const files = event.dataTransfer.files;
   userDataContext.updateFiles(files)
-  setIsFileUploaded(true);
+  if (files.length > 10){
+    setIsFileUploaded(true);
+    userDataContext.toggleProcessBotton()
+  }
+  else{
+    if (userDataContext.processBotton){
+      userDataContext.toggleProcessBotton()
+    }
+    processFiles()
+    
+  }
   
 };
 
@@ -456,7 +466,7 @@ const processFiles = async () => {
           )}
           
         </div>
-      {(!userDataContext.isLoadingRef || userDataContext.progress >= 100) && (
+      {userDataContext.processBotton && (
         <button className="process-button" onClick={processFiles}>
           Procesar automáticamente
         </button>

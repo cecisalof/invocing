@@ -298,7 +298,18 @@ const handleDrop = (event) => {
   
   const files = event.dataTransfer.files;
   userDataContext.updateFilesEx(files)
-  setIsFileUploaded(true);
+
+  if (files.length > 10){
+    setIsFileUploaded(true);
+    userDataContext.toggleProcessBottonEx()
+  }
+  else{
+    if (userDataContext.processBottonEx){
+      userDataContext.toggleProcessBottonEx()
+    }
+    processFiles()
+    
+  }
 };
 
 function handleCloseClick() {
@@ -358,9 +369,6 @@ const processFiles = async () => {
   // Iniciar la verificación del estado de los IDs
   await checkStatus();
 
-  
-
-
  };
 
  function handleViewClick() {
@@ -418,7 +426,7 @@ const processFiles = async () => {
           )}
           
         </div>
-      {(!userDataContext.isLoadingRefEx || userDataContext.progressEx >= 100) && (
+      {userDataContext.processBottonEx && (
         <button className="process-button" onClick={processFiles}>
           Procesar automáticamente
         </button>
