@@ -374,7 +374,7 @@ const processFiles = async () => {
  function handleViewClick() {
   setViewFiles(!viewFiles)
   console.log(userDataContext.filesEx)
-};
+}
 
 
   return (
@@ -446,7 +446,7 @@ const processFiles = async () => {
         <img src={close} alt="Close icon" onClick={handleCloseClick} style={{ marginRight: '100px', width: '20 px', height: '20px'}} />
         </div>)}
 
-      <button type="button" class="btn btn-primary rounded-pill px-4" onClick={handleAddExpenses}>Añadir gasto</button>
+      <button type="button" className="btn btn-primary rounded-pill px-4" onClick={handleAddExpenses}>Añadir gasto</button>
       {/* <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} /> */}
       <img src={deleteIcon} alt="Delete icon" onClick={handleTrashClick} style={{ marginLeft: '30px'  }} />
       <div className="ag-theme-alpine" style={gridStyle}>
