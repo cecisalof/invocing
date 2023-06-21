@@ -9,14 +9,15 @@ import './style.css';
 import '../general-style.css'
 import Context from '../../contexts/context';
 import { useContext } from 'react';
-import filterIcon from '../../assets/icons/Filtrar.png';
+//import filterIcon from '../../assets/icons/Filtrar.png';
 import { useNavigate } from 'react-router-dom';
 import deleteIcon from '../../assets/icons/Papelera.png';
 import CustomHeader from '../customHeader.jsx';
 import CustomElement from '../customElement.jsx';
+import PropTypes from 'prop-types';
 
 
-export const Income = (props) => {
+export const Income = () => {
   const location = useLocation();
 
   const navigate = useNavigate();
@@ -42,7 +43,7 @@ export const Income = (props) => {
     'rag-orange-outer': (props) => props.value === 'pending' || props.value === 'Pendiente',
   };
 
-  const [columnDefs, setColumnDefs] = useState([
+  const [columnDefs] = useState([
     {
       field: 'number',
       headerName: 'Nº Factura',
@@ -206,9 +207,9 @@ export const Income = (props) => {
         return { background: '#ffffff'};
     }
 }
-function handleFilterClick() {
-  console.log('Botón de filtro clickeado');
-}
+// function handleFilterClick() {
+//   console.log('Botón de filtro clickeado');
+// }
 
 function handleTrashClick() {
   const selectedNodes = gridRef.current.api.getSelectedNodes();
@@ -262,5 +263,11 @@ return (
   </div>
     </> 
 )
+};
+Income.propTypes = {
+  value: PropTypes.object.isRequired,
+  displayName: PropTypes.object.isRequired,
+  api: PropTypes.object.isRequired,
+  node: PropTypes.object.isRequired,
 };
 export default Income;

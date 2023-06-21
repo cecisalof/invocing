@@ -1,5 +1,6 @@
 import { DrawerMenuComponent } from '../drawer-menu/DrawerMenu.component';
 import "../../layout/style.css"
+import PropTypes from 'prop-types';
 
 export const DrawerComponent = ({user}) => {
   return (
@@ -9,4 +10,7 @@ export const DrawerComponent = ({user}) => {
       </div>
     </div>
   );
+};
+DrawerComponent.propTypes = {
+  user: PropTypes.object.isRequired,
 };

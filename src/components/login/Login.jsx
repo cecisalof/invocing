@@ -20,7 +20,7 @@ export const Login = () => {
       }
     }, [userDataContext])
     
-    const isValidEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
+    const isValidEmail = /^[\w-.]+@([\w-]+.)+[\w-]{2,4}$/g;
 
     const validateEmail = () => {
       if (!email || !email.match(isValidEmail)){

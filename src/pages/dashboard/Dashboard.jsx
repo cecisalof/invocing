@@ -7,21 +7,21 @@ import '../general-style.css'
 import './calendar.css'
 import { postInvoiceAutomatic, getSchenduleStatus } from "../invoicesToPay/services";
 import { postExpenseTicketAutomatic } from "../expensesTickets/services";
-import { getInvoicesCount, getInvoicesStates, getInvoicesEmitCount, getInvoicesEmitStates, getInvoicesEmitTotals } from "./services";
+import { getInvoicesCount, getInvoicesStates, getInvoicesTotals } from "./services";
 import Context from '../../contexts/context';
 import { useContext } from 'react';
 import cashIconBlue from '../../assets/icons/Cash.png';
 import { FaCheckCircle, FaCircleNotch } from 'react-icons/fa';
 import dragDrop from '../../assets/icons/drag-and-drop.png';
 import cashYellow from '../../assets/icons/cashYellow.png';
-import sellIcon from '../../assets/icons/sellout.png';
+//import sellIcon from '../../assets/icons/sellout.png';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import { getIncome } from "./../income/services";
-import { AgChartsReact } from 'ag-charts-react';
+//import { getIncome } from "./../income/services";
+//import { AgChartsReact } from 'ag-charts-react';
 
 
-export const Dashboard = (props) => {
+export const Dashboard = () => {
   const location = useLocation();
 
 
@@ -29,13 +29,13 @@ export const Dashboard = (props) => {
   const [isFileUploadedEx, setIsFileUploadedEx] = useState(false);
   const [invoiceCount, setInvoiceCount] = useState({});
   const [invoiceStates, setInvoiceStates] = useState({});
-  const [invoiceEmitCount, setInvoiceEmitCount] = useState({});
-  const [invoiceEmitStates, setInvoiceEmitStates] = useState({});
+  //const [invoiceEmitCount, setInvoiceEmitCount] = useState({});
+  //const [invoiceEmitStates, setInvoiceEmitStates] = useState({});
   const [totals, setTotals] = useState({});
   const [showCalendar, setShowCalendar] = useState(false);
   const [selectedRange, setSelectedRange] = useState([new Date(), new Date()]);
 
-  const [income, setIncome] = useState([]);
+  //const [income, setIncome] = useState([]);
   const [userToken, setUserToken] = useState('');
 
   const userDataContext = useContext(Context);
@@ -54,18 +54,18 @@ export const Dashboard = (props) => {
   };
 
 
-  const getCountInvoiceEmit = async (userToken, filters = null) => {
-    try {
-      const data = await getInvoicesEmitCount(userToken, filters);
-      if (data !== undefined) {
-        setInvoiceEmitCount(data);
-      }
+  // const getCountInvoiceEmit = async (userToken, filters = null) => {
+  //   try {
+  //     const data = await getInvoicesEmitCount(userToken, filters);
+  //     if (data !== undefined) {
+  //       setInvoiceEmitCount(data);
+  //     }
 
-    } catch (error) {
-      setInvoiceEmitCount({});
-      console.log('No hay datos para mostrar.');
-    }
-  };
+  //   } catch (error) {
+  //     setInvoiceEmitCount({});
+  //     console.log('No hay datos para mostrar.');
+  //   }
+  // };
 
   const getCountStates = async (userToken, filters = null) => {
     try {
@@ -80,22 +80,22 @@ export const Dashboard = (props) => {
     }
   };
 
-  const getCountStatesEmit = async (userToken, filters = null) => {
-    try {
-      const data = await getInvoicesEmitStates(userToken, filters);
-      if (data !== undefined) {
-        setInvoiceEmitStates(data);
-      }
+  // const getCountStatesEmit = async (userToken, filters = null) => {
+  //   try {
+  //     const data = await getInvoicesEmitStates(userToken, filters);
+  //     if (data !== undefined) {
+  //       setInvoiceEmitStates(data);
+  //     }
 
-    } catch (error) {
-      setInvoiceEmitStates({});
-      console.log('No hay datos para mostrar.');
-    }
-  };
+  //   } catch (error) {
+  //     setInvoiceEmitStates({});
+  //     console.log('No hay datos para mostrar.');
+  //   }
+  // };
 
-  const getTotalsEmit = async (userToken, filters = null) => {
+  const getTotals = async (userToken, filters = null) => {
     try {
-      const data = await getInvoicesEmitTotals(userToken, filters);
+      const data = await getInvoicesTotals(userToken, filters);
       if (data !== undefined) {
         setTotals(data);
       }
@@ -107,21 +107,21 @@ export const Dashboard = (props) => {
     }
   };
 
-  const getData = async (userToken, filters=null) => {
-    try {
-      const data = await getIncome(userToken, filters);
-      setIncome(data || []);
-    } catch (error) {
-      setIncome([]);
-      console.log('No hay datos para mostrar.');
-    }
-  };
+  // const getData = async (userToken, filters=null) => {
+  //   try {
+  //     const data = await getIncome(userToken, filters);
+  //     setIncome(data || []);
+  //   } catch (error) {
+  //     setIncome([]);
+  //     console.log('No hay datos para mostrar.');
+  //   }
+  // };
 
   useEffect(() => {
     const fetchData = async () => {
       if (userToken !== undefined) {
         try {
-          await getTotalsEmit(userToken);
+          await getTotals(userToken);
         } catch (error) {
           console.log('Error al obtener el dato de invoiceCount:', error);
         }
@@ -146,19 +146,19 @@ export const Dashboard = (props) => {
     fetchData();
   }, [userToken]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (userToken !== undefined) {
-        try {
-          await getCountInvoiceEmit(userToken);
-        } catch (error) {
-          console.log('Error al obtener el dato de invoiceCount:', error);
-        }
-      }
-    };
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     if (userToken !== undefined) {
+  //       try {
+  //         await getCountInvoiceEmit(userToken);
+  //       } catch (error) {
+  //         console.log('Error al obtener el dato de invoiceCount:', error);
+  //       }
+  //     }
+  //   };
 
-    fetchData();
-  }, [userToken]);
+  //   fetchData();
+  // }, [userToken]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -174,33 +174,33 @@ export const Dashboard = (props) => {
     fetchData();
   }, [userToken]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (userToken !== undefined) {
-        try {
-          await getCountStatesEmit(userToken);
-        } catch (error) {
-          console.log('Error al obtener el dato de invoiceStates:', error);
-        }
-      }
-    };
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     if (userToken !== undefined) {
+  //       try {
+  //         await getCountStatesEmit(userToken);
+  //       } catch (error) {
+  //         console.log('Error al obtener el dato de invoiceStates:', error);
+  //       }
+  //     }
+  //   };
 
-    fetchData();
-  }, [userToken]);
+  //   fetchData();
+  // }, [userToken]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (userToken !== undefined) {
-        try {
-          await getData(userToken);
-        } catch (error) {
-          console.log('Error al obtener el dato de invoiceStates:', error);
-        }
-      }
-    };
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     if (userToken !== undefined) {
+  //       try {
+  //         await getData(userToken);
+  //       } catch (error) {
+  //         console.log('Error al obtener el dato de invoiceStates:', error);
+  //       }
+  //     }
+  //   };
 
-    fetchData();
-  }, [userToken]);
+  //   fetchData();
+  // }, [userToken]);
 
 
   useEffect(() => {
@@ -370,24 +370,24 @@ export const Dashboard = (props) => {
   };
 
 
-  const chartData = (income) => {
-    const groupedData = {};
+  // const chartData = (income) => {
+  //   const groupedData = {};
   
-    income.forEach((element) => {
-      const month = element.month;
-      const total = parseInt(element.total);
+  //   income.forEach((element) => {
+  //     const month = element.month;
+  //     const total = parseInt(element.total);
   
-      if (!groupedData[month]) {
-        groupedData[month] = {
-          month,
-          total: 0,
-        };
-      }
-      groupedData[month].total += total;
-    });
+  //     if (!groupedData[month]) {
+  //       groupedData[month] = {
+  //         month,
+  //         total: 0,
+  //       };
+  //     }
+  //     groupedData[month].total += total;
+  //   });
   
-    return Object.values(groupedData);
-  };
+  //   return Object.values(groupedData);
+  // };
 
 
 
@@ -411,12 +411,12 @@ export const Dashboard = (props) => {
     const filters = "?year=1";
     if (userToken !== undefined) {
       try {
-        await getTotalsEmit(userToken, filters);
-        await getCountStatesEmit(userToken, filters);
+        await getTotals(userToken, filters);
+        //await getCountStatesEmit(userToken, filters);
         await getCountStates(userToken, filters);
         await getCountInvoice(userToken, filters);
-        await getCountInvoiceEmit(userToken, filters);
-        await getData(userToken, filters);
+        //await getCountInvoiceEmit(userToken, filters);
+        //await getData(userToken, filters);
       } catch (error) {
         console.log('Error al obtener el dato de invoiceCount:', error);
       }
@@ -426,12 +426,12 @@ export const Dashboard = (props) => {
     const filters = "?quarter=1";
     if (userToken !== undefined) {
       try {
-        await getTotalsEmit(userToken, filters);
-        await getCountStatesEmit(userToken, filters);
+        await getTotals(userToken, filters);
+        //await getCountStatesEmit(userToken, filters);
         await getCountStates(userToken, filters);
         await getCountInvoice(userToken, filters);
-        await getCountInvoiceEmit(userToken, filters);
-        await getData(userToken, filters);
+        //await getCountInvoiceEmit(userToken, filters);
+        //await getData(userToken, filters);
       } catch (error) {
         console.log('Error al obtener el dato de invoiceCount:', error);
       }
@@ -442,12 +442,12 @@ export const Dashboard = (props) => {
     const filters = "?quarter=2";
     if (userToken !== undefined) {
       try {
-        await getTotalsEmit(userToken, filters);
-        await getCountStatesEmit(userToken, filters);
+        await getTotals(userToken, filters);
+        //await getCountStatesEmit(userToken, filters);
         await getCountStates(userToken, filters);
         await getCountInvoice(userToken, filters);
-        await getCountInvoiceEmit(userToken, filters);
-        await getData(userToken, filters);
+        //await getCountInvoiceEmit(userToken, filters);
+        //await getData(userToken, filters);
       } catch (error) {
         console.log('Error al obtener el dato de invoiceCount:', error);
       }
@@ -458,12 +458,12 @@ export const Dashboard = (props) => {
     const filters = "?quarter=3";
     if (userToken !== undefined) {
       try {
-        await getTotalsEmit(userToken, filters);
-        await getCountStatesEmit(userToken, filters);
+        await getTotals(userToken, filters);
+        //await getCountStatesEmit(userToken, filters);
         await getCountStates(userToken, filters);
         await getCountInvoice(userToken, filters);
-        await getCountInvoiceEmit(userToken, filters);
-        await getData(userToken, filters);
+        //await getCountInvoiceEmit(userToken, filters);
+        //await getData(userToken, filters);
       } catch (error) {
         console.log('Error al obtener el dato de invoiceCount:', error);
       }
@@ -474,11 +474,11 @@ export const Dashboard = (props) => {
     const filters = "?quarter=4";
     if (userToken !== undefined) {
       try {
-        await getTotalsEmit(userToken, filters);
-        await getCountStatesEmit(userToken, filters);
+        await getTotals(userToken, filters);
+        //await getCountStatesEmit(userToken, filters);
         await getCountStates(userToken, filters);
         await getCountInvoice(userToken, filters);
-        await getCountInvoiceEmit(userToken, filters);
+        //await getCountInvoiceEmit(userToken, filters);
       } catch (error) {
         console.log('Error al obtener el dato de invoiceCount:', error);
       }
@@ -508,12 +508,12 @@ export const Dashboard = (props) => {
 
       if (userToken !== undefined) {
         try {
-          await getTotalsEmit(userToken, filters);
-          await getCountStatesEmit(userToken, filters);
+          await getTotals(userToken, filters);
+          //await getCountStatesEmit(userToken, filters);
           await getCountStates(userToken, filters);
           await getCountInvoice(userToken, filters);
-          await getCountInvoiceEmit(userToken, filters);
-          await getData(userToken, filters);
+          //await getCountInvoiceEmit(userToken, filters);
+          //await getData(userToken, filters);
         } catch (error) {
           console.log('Error al obtener el dato de invoiceCount:', error);
         }
@@ -525,58 +525,58 @@ export const Dashboard = (props) => {
 
   };
 
-  const options = {
-    autoSize: true,
-    data: chartData(income),
-    theme: {
-      overrides: {
-        column: {
-          series: {
-            highlightStyle: {
-              item: {
-                fill: '#FFBC11',
-                strokeWidth: 0,
-              },
-            },
-          },
-        },
-      },
-    },
-    series: [
-      {
-        type: 'column',
-        xKey: 'month',
-        yKey: 'total',
-        fill: '#005CFF',
-        strokeWidth: 0,
-        tooltip: {
-          renderer: ({ yValue, xValue }) => {
-            return { title: xValue, content: yValue + ' €' };
-          },
-        },
-      },
-    ],
-    axes: [
-      {
-        type: 'category',
-        position: 'bottom',
-        title: {
-          text: 'Meses', // Cambiar el título a 'Month'
-          fontSize: 14,
-          fontFamily: 'Nunito',
-        },
-      },
-      {
-        type: 'number',
-        position: 'left',
-        title: {
-          text: 'Total ventas',
-          fontSize: 14,
-          fontFamily: 'Nunito',
-        },
-      },
-    ],
-  };
+  // const options = {
+  //   autoSize: true,
+  //   data: chartData(income),
+  //   theme: {
+  //     overrides: {
+  //       column: {
+  //         series: {
+  //           highlightStyle: {
+  //             item: {
+  //               fill: '#FFBC11',
+  //               strokeWidth: 0,
+  //             },
+  //           },
+  //         },
+  //       },
+  //     },
+  //   },
+  //   series: [
+  //     {
+  //       type: 'column',
+  //       xKey: 'month',
+  //       yKey: 'total',
+  //       fill: '#005CFF',
+  //       strokeWidth: 0,
+  //       tooltip: {
+  //         renderer: ({ yValue, xValue }) => {
+  //           return { title: xValue, content: yValue + ' €' };
+  //         },
+  //       },
+  //     },
+  //   ],
+  //   axes: [
+  //     {
+  //       type: 'category',
+  //       position: 'bottom',
+  //       title: {
+  //         text: 'Meses', // Cambiar el título a 'Month'
+  //         fontSize: 14,
+  //         fontFamily: 'Nunito',
+  //       },
+  //     },
+  //     {
+  //       type: 'number',
+  //       position: 'left',
+  //       title: {
+  //         text: 'Total ventas',
+  //         fontSize: 14,
+  //         fontFamily: 'Nunito',
+  //       },
+  //     },
+  //   ],
+  // };
   
     return (
       <>

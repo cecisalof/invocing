@@ -9,7 +9,7 @@ import './style.css';
 import '../general-style.css'
 import Context from '../../contexts/context';
 import { useContext } from 'react';
-import filterIcon from '../../assets/icons/Filtrar.png';
+//import filterIcon from '../../assets/icons/Filtrar.png';
 import deleteIcon from '../../assets/icons/Papelera.png';
 import CustomHeader from '../customHeader.jsx';
 import CustomElement from '../customElement.jsx';
@@ -19,9 +19,10 @@ import { FaCheckCircle, FaCircleNotch } from 'react-icons/fa';
 import dragDrop from '../../assets/icons/drag-and-drop.png';
 import close from '../../assets/icons/close.png';
 import { ProgressBar } from 'react-bootstrap';
+import PropTypes from 'prop-types';
 
 
-export const InvoicesToPay = (props) => {
+export const InvoicesToPay = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -315,11 +316,11 @@ export const InvoicesToPay = (props) => {
         return { background: '#ffffff' };
     }
 }
-function handleFilterClick() {
-  console.log('Botón de filtro clickeado');
+// function handleFilterClick() {
+//   console.log('Botón de filtro clickeado');
   
 
-}
+// }
 
 function handleTrashClick() {
   console.log('Botón de basura clickeado');
@@ -504,5 +505,11 @@ const processFiles = async () => {
       </div>
     </>
   )
+};
+InvoicesToPay.propTypes = {
+  value: PropTypes.object.isRequired,
+  displayName: PropTypes.object.isRequired,
+  api: PropTypes.object.isRequired,
+  node: PropTypes.object.isRequired,
 };
 export default InvoicesToPay;

@@ -19,9 +19,10 @@ import dragDrop from '../../assets/icons/drag-and-drop.png';
 import close from '../../assets/icons/close.png';
 import eye from '../../assets/icons/Eye.png';
 import { ProgressBar } from 'react-bootstrap';
+import PropTypes from 'prop-types';
 
 
-export const ExpenseTickets = (props) => {
+export const ExpenseTickets = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -248,11 +249,10 @@ export const ExpenseTickets = (props) => {
         return { background: '#ffffff' };
     }
 }
-function handleFilterClick() {
-  console.log('Botón de filtro clickeado');
-  
+// function handleFilterClick() {
+//   console.log('Botón de filtro clickeado');
 
-}
+// }
 
 function handleTrashClick() {
   console.log('Botón de basura clickeado');
@@ -465,5 +465,11 @@ const processFiles = async () => {
       </div>
     </>
   )
+};
+
+ExpenseTickets.propTypes = {
+  displayName: PropTypes.object.isRequired,
+  api: PropTypes.object.isRequired,
+  node: PropTypes.object.isRequired,
 };
 export default ExpenseTickets;
