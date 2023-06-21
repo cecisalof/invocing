@@ -131,7 +131,7 @@ export const DrawerMenuComponent = ({ user }) => {
               </li>
               {isAdministrator && <li className="nav-item">
                 <div className="menuItemContainer">
-                  <button
+                  {/* <button
                     className={`accordion-button collapsed ${sellInCollapsed ? 'collapsed-icon' : ''}`}
                     type="button"
 
@@ -156,7 +156,7 @@ export const DrawerMenuComponent = ({ user }) => {
                     <img className="menuIcon" src={sellInCollapsed ? sellIcon : sellWhitecon} alt="Profile" />
                     Ventas
 
-                  </button>
+                  </button> */}
                 </div>
               </li>}
               {isAdministrator && <li className="nav-item">

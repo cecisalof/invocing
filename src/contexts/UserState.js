@@ -1,5 +1,6 @@
 import React from 'react';
 import Context from './context';
+import PropTypes from 'prop-types';
 
 export default class UserState extends React.Component{
   
@@ -166,3 +167,6 @@ export default class UserState extends React.Component{
     );
  }
 }
+UserState.propTypes = {
+  children: PropTypes.node.isRequired,
+};

@@ -1,9 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import downloadIcon from '../assets/icons/Descarga.png';
-import './general-style.css'
+import './general-style.css';
 
-
-export default ({ data }) => {
+const CustomElement = ({ data }) => {
   return (
     <div className="custom-element">
       <a href={data.file} target="_blank" rel="noopener noreferrer" download>
@@ -12,3 +12,11 @@ export default ({ data }) => {
     </div>
   );
 };
+
+CustomElement.propTypes = {
+  data: PropTypes.shape({
+    file: PropTypes.string.isRequired,
+  }).isRequired,
+};
+
+export default CustomElement;
