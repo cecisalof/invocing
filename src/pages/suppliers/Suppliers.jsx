@@ -10,9 +10,10 @@ import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
 import './style.css';
 import '../general-style.css'
 import { useNavigate } from 'react-router-dom';
-import filterIcon from '../../assets/icons/Filtrar.png';
+//import filterIcon from '../../assets/icons/Filtrar.png';
 import deleteIcon from '../../assets/icons/Papelera.png';
 import CustomHeader from '../customHeader.jsx';
+import PropTypes from 'prop-types';
 
 export const Suppliers = () => {
   const location = useLocation();
@@ -28,7 +29,7 @@ export const Suppliers = () => {
   const gridStyle = useMemo(() => ({ height: '70vh', width: '95%', marginTop: 24, marginBottom: 32, fontFamily: 'Nunito' }), []);
 
   // Each Column Definition results in one Column.
-  const [columnDefs, setColumnDefs] = useState([
+  const [columnDefs] = useState([
     {field: 'name', filter: true,
     headerCheckboxSelection: false,
     headerName: "Nombre jurídico",
@@ -117,11 +118,11 @@ export const Suppliers = () => {
         return { background: '#ffffff' };
     }
 }
-function handleFilterClick() {
-  console.log('Botón de filtro clickeado');
+// function handleFilterClick() {
+//   console.log('Botón de filtro clickeado');
   
 
-}
+// }
 
 function handleTrashClick() {
   console.log('Botón de basura clickeado');
@@ -192,3 +193,9 @@ return (
   </>
 )
 }
+Suppliers.propTypes = {
+  value: PropTypes.object.isRequired,
+  displayName: PropTypes.object.isRequired,
+  api: PropTypes.object.isRequired,
+  node: PropTypes.object.isRequired,
+};

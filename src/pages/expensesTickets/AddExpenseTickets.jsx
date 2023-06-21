@@ -9,7 +9,7 @@ import './style.css';
 import '../general-style.css'
 import { Alert } from '@mui/material';
 
-export const AddExpenseTickets = (props) => {
+export const AddExpenseTickets = () => {
     const [userToken, setUserToken] = useState('');
 
     const [provider, setProvider] = useState('');
