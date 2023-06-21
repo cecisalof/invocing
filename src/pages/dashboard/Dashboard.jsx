@@ -229,7 +229,17 @@ export const Dashboard = (props) => {
 
     const files = event.dataTransfer.files;
     userDataContext.updateFiles(files)
-    setIsFileUploaded(true);
+    if (files.length > 10){
+      setIsFileUploaded(true);
+      userDataContext.toggleProcessBotton()
+    }
+    else{
+      if (userDataContext.processBotton){
+        userDataContext.toggleProcessBotton()
+      }
+      processFiles()
+      
+    }
   };
 
   const handleDropEx = (event) => {
@@ -239,7 +249,17 @@ export const Dashboard = (props) => {
 
     const files = event.dataTransfer.files;
     userDataContext.updateFiles(files)
-    setIsFileUploadedEx(true);
+    if (files.length > 10){
+      setIsFileUploaded(true);
+      userDataContext.toggleProcessBottonEx()
+    }
+    else{
+      if (userDataContext.processBottonEx){
+        userDataContext.toggleProcessBottonEx()
+      }
+      processFilesEx()
+      
+    }
   };
 
   const processFiles = async () => {
@@ -248,7 +268,6 @@ export const Dashboard = (props) => {
     setIsFileUploaded(false);
     const response = await postInvoiceAutomatic(userToken, userDataContext.files);
     const ids = response.data.schendules;
-    console.log(ids)
 
     const checkStatus = async () => {
 
@@ -316,10 +335,8 @@ export const Dashboard = (props) => {
           const status = item[id.toString()]; // Obtener el estado del ID
           if (status === "DONE") {
             loadedCount = loadedCount + 1; // Incrementar el contador si el estado es "DONE"
-            console.log(loadedCount); // Imprimir el número de IDs con estado "DONE"
             const totalCount = ids.length;
             const percentage = Math.round((loadedCount * 100) / totalCount);
-            console.log(percentage)
             userDataContext.updateProgressEx(percentage)
           } else {
             allDone = false;
@@ -334,7 +351,6 @@ export const Dashboard = (props) => {
         // Si no todos los IDs están en el estado "DONE", esperar un tiempo y volver a verificar
         setTimeout(checkStatus, 10000); // Esperar 2 segundos (puedes ajustar el tiempo según tus necesidades)
       } else {
-        console.log(userDataContext.progressEx)
         console.log("Procesamiento completo");
       }
 
@@ -375,17 +391,19 @@ export const Dashboard = (props) => {
 
 
 
-
-
   const handleSelect = (date) => {
     if (selectedRange.length === 2) {
       setSelectedRange([date, date]);
+      console.log("1")
+      selectRange([date, date])
     } else if (selectedRange.length === 1) {
       const [startDate] = selectedRange;
       if (date < startDate) {
         setSelectedRange([date, startDate]);
       } else {
         setSelectedRange([startDate, date]);
+        
+        
       }
     }
   };
@@ -466,27 +484,25 @@ export const Dashboard = (props) => {
       }
     }
   };
-  const handleButtonViewClick = async () => {
 
-    if (selectedRange || selectedRange.length === 2) {
+
+  const selectRange = async (dateParam) => {
+
+    //if (selectedRange || selectedRange.length === 2) {
       // Verificar si selectedRange es nulo o no tiene dos fechas
-      const date = selectedRange[0]
-      const startDate = date[0]
-      const endDate = date[1]
+      const startDate = dateParam[0][0]
+      const endDate =  dateParam[0][1]
       console.log(startDate)
       console.log(endDate)
-
       const startYear = startDate.getFullYear(); // Obtener el año (ejemplo: 2023)
       const startMonth = ('0' + (startDate.getMonth() + 1)).slice(-2); // Obtener el mes, agregando 1 al índice base 0 y asegurándose de tener dos dígitos (ejemplo: 06)
       const startDay = ('0' + startDate.getDate()).slice(-2); // Obtener el día y asegurarse de tener dos dígitos (ejemplo: 05)
       const formattedStartDate = `${startYear}-${startMonth}-${startDay}`; // Formatear la fecha en formato yyyy-mm-dd
-      console.log(formattedStartDate); // Output: yyyy-mm-dd
 
       const endYear = endDate.getFullYear(); // Obtener el año (ejemplo: 2023)
       const endMonth = ('0' + (endDate.getMonth() + 1)).slice(-2); // Obtener el mes, agregando 1 al índice base 0 y asegurándose de tener dos dígitos (ejemplo: 06)
       const endDay = ('0' + endDate.getDate()).slice(-2); // Obtener el día y asegurarse de tener dos dígitos (ejemplo: 05)
       const formattedEndDate = `${endYear}-${endMonth}-${endDay}`; // Formatear la fecha en formato yyyy-mm-dd
-      console.log(formattedEndDate); // Output: yyyy-mm-dd
 
       const filters = "?start_date=" + formattedStartDate + "&end_date=" + formattedEndDate;
 
@@ -505,7 +521,7 @@ export const Dashboard = (props) => {
 
       setSelectedRange([new Date(), new Date()]);
 
-    }
+    //}
 
   };
 
@@ -572,9 +588,6 @@ export const Dashboard = (props) => {
             <button className='filters' onClick={handleButtonClick}>
               Fechas
             </button>
-            <button className='filters' onClick={handleButtonViewClick}>
-              Mostrar
-            </button>
             <button className='filters' onClick={handleAnualClick}>
               Anual
             </button>
@@ -627,7 +640,7 @@ export const Dashboard = (props) => {
                 )}
   
               </div>
-              {(!userDataContext.isLoadingRef || userDataContext.progress >= 100) && (
+              {userDataContext.processBotton && (
                 <button className="process-button" onClick={processFiles}>
                   Procesar facturas automáticamente
                 </button>
@@ -659,7 +672,7 @@ export const Dashboard = (props) => {
                 )}
   
               </div>
-              {(!userDataContext.isLoadingRefEx || userDataContext.progressEx >= 100) && (
+              {userDataContext.processBottonEx && (
                 <button className="process-button-yellow" onClick={processFilesEx} >
                   Procesar gastos automáticamente
                 </button>
@@ -687,7 +700,55 @@ export const Dashboard = (props) => {
             <div
               style={{ width: '40vw', paddingBottom: '30px', marginRight: '30px' }}
             >
-                <AgChartsReact options={options} />
+              <div className="panel" style={{ width: '40vw', marginRight: '30px', display: 'flex' }}>
+              <div style={{ flexBasis: '50%', marginRight: '50px' }}>
+                <img src={cashIconBlue} style={{ width: '32px', height: '32px' }} alt="dragDrop" />
+  
+                <div className="dashboard-titles" > {`${invoiceCount.count} Facturas `}</div>
+                <div className="dashboard-text">SUBIDAS DURANTE</div>
+                <div className="dashboard-subtext"> {`${invoiceCount.text}`}</div>
+              </div>
+              <div style={{ flexBasis: '50%' }}>
+                <div style={{ display: 'flex' }}>
+                  <div className='states pending' style={{ marginTop: '20px' }}>
+                    PENDIENTE
+                  </div>
+                  <div className='count-states' style={{ marginTop: '20px' }}>
+                    {`${invoiceStates.Pendiente}`}
+                  </div>
+                </div>
+  
+                <div style={{ display: 'flex' }}>
+                  <div className='states payed'>
+                    PAGADA
+                  </div>
+                  <div className='count-states'>
+                    {`${invoiceStates.Pagada}`}
+                  </div>
+                </div>
+  
+                <div style={{ display: 'flex' }}>
+                  <div className='states received'>
+                    RECIBIDA
+                  </div>
+                  <div className='count-states'>
+                    {`${invoiceStates.Recibida}`}
+                  </div>
+                </div>
+  
+                <div style={{ display: 'flex' }}>
+                  <div className='states reject'>
+                    RECHAZADA
+                  </div>
+                  <div className='count-states'>
+                    {`${invoiceStates.Rechazado}`}
+                  </div>
+                </div>
+  
+              </div>
+  
+            </div>
+                {/* <AgChartsReact options={options} /> */}
             </div>
             
           </div>
@@ -696,7 +757,7 @@ export const Dashboard = (props) => {
   
           </div>
   
-          <div style={{ display: 'flex', marginBottom: '30px' }}>
+          {/* <div style={{ display: 'flex', marginBottom: '30px' }}>
             <div className="panel" style={{ width: '40vw', marginRight: '30px', display: 'flex' }}>
               <div style={{ flexBasis: '50%', marginRight: '50px' }}>
                 <img src={cashIconBlue} style={{ width: '32px', height: '32px' }} alt="dragDrop" />
@@ -794,7 +855,7 @@ export const Dashboard = (props) => {
               </div>
             </div>
             
-          </div>
+          </div> */}
         </div>
       </>
     )

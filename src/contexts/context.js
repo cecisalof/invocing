@@ -8,6 +8,8 @@ export default React.createContext({
   filesEx: [],
   progressEx: 0,
   isLoadingRefEx: false,
+  processBotton: false,
+  processBottonEx: false,
   isSuccess: false,
   isError: false,
   isSuccessEx: false,
@@ -24,5 +26,6 @@ export default React.createContext({
   toggleErrorEx: () => false,
   toggleSuccess:() => false,
   toggleSuccessEx: () => false,
-
+  toggleProcessBotton: () => false,
+  toggleProcessBottonEx: () => false,
 });
