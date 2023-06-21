@@ -12,10 +12,10 @@ const router = createBrowserRouter([
     path: "/",
     element: <Login />,
   },
-  {
-    path: "/main",
-    element: <MainLayout />,
-  },
+  // {
+  //   path: "/main",
+  //   element: <MainLayout />,
+  // },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
