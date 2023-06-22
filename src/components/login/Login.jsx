@@ -59,7 +59,7 @@ export const Login = () => {
    const getToken = async () => {
     try{
       setIsLoading(true)
-      const response = await axios.post('https://data.tramitgo.com/api/login',
+      const response = await axios.post('http://127.0.0.1:8000/api/login',
         {
           email: email.toLowerCase().trim(),
           password: password
