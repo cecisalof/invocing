@@ -1,6 +1,16 @@
 .root {
-    margin-left: 48px;
+    /* margin-left: 48px;
     width: 75vw;
+    background-color: white; */
+    left: 18em;
+    position: relative;
     background-color: white;
-    
+    padding: 2rem;
+    width: 80vw;
+}
+
+@media (min-width: 1441px) {
+    .root {
+        left: 26em;
+    }
 }
