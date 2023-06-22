@@ -89,12 +89,13 @@ export const DrawerMenuComponent = ({ user }) => {
 
   return (
     <>
-      <nav className="navbar navbar-expand-lg navbar-dark shadow p-3 bg-body-tertiary rounded" style={{ backgroundColor: "#005CFF" }}>
+      <nav className="navbar navbar-expand-lg shadow p-3 bg-body-tertiary" style={{ backgroundColor: "#005CFF" }}>
         <div className="container-fluid">
           <NavLink to="/" onClick={handleClickDashboard} className='navbar-brand'>
             <div className='navbarlogo'>
               <img src={logo} className="img-fluid" alt="Logo" />
-            </div ></NavLink>
+            </div >
+          </NavLink>
           <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>
           </button>
@@ -162,7 +163,7 @@ export const DrawerMenuComponent = ({ user }) => {
                 </div>
               </li>}
               {isAdministrator && <li className="nav-item">
-                <div> 
+                <div>
                   <div className="accordion-item">
                     <h2 className="accordion-header">
                       <button
