@@ -32,3 +32,13 @@
   .forgot-password {
     font-size: 12px;
   }
+
+  .eye-password-icon span{
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    cursor: pointer;
+  }
+
+  .eye-password-icon span:hover{
+    opacity: 0.8;
+  }

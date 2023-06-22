@@ -5,11 +5,12 @@ import './style.css';
 import Context from '../../contexts/context';
 import logo from '../../assets/icons/logotramitgo.svg'
 import { useContext } from 'react';
-
+import eye from '../../assets/icons/Eye.png';
 
 export const Login = () => {
     const [email, setEmail] = useState("");
     const [error, setError] = useState("");
+    const [passwordVisible, setPasswordVisible] = useState(false);
     const [password, setPassword] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const userDataContext = useContext(Context);
@@ -85,8 +86,8 @@ export const Login = () => {
             <div className='d-flex justify-content-center align-items-center mb-3 w-auto'>
               <a href="https://tramitgo.com"><img src={logo} className="img-fluid" alt="Logo" /></a>
             </div>
-            <div className="form-group mt-3">
-              <label>Email</label>
+            <label className="mt-3 mb-1">Email</label>
+            <div className="form-group">
               <input
                 disabled={isLoading}
                 type="email"
@@ -96,17 +97,21 @@ export const Login = () => {
                 onChange={handleEmailChange}
               />
             </div>
-            <div className="form-group mt-3">
-              <label>Contraseña</label>
+            <label className="mt-3 mb-1">Contraseña</label>
+            <div className="input-group mb-3">
               <input
                 disabled={isLoading}
-                type="password"
-                className="form-control mt-1"
+                type={passwordVisible ? "text" : "password"}
+                className="form-control"
                 placeholder="Contraseña"
                 value={password}
                 onChange={handlePasswordChange}
               />
+              <div className="input-group-append eye-password-icon">
+                <span className="input-group-text bg-white"> <img src={eye} alt="Eye" onClick={()=>{setPasswordVisible(!passwordVisible)}} /></span>
+              </div>
             </div>
+          
             <div className="d-grid gap-2 mt-3">
               <button 
                 type="submit" 
