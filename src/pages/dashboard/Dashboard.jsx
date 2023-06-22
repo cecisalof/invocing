@@ -97,6 +97,7 @@ export const Dashboard = () => {
     try {
       const data = await getInvoicesTotals(userToken, filters);
       if (data !== undefined) {
+        console.log(data)
         setTotals(data);
       }
 
