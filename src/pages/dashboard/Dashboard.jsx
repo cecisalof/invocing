@@ -617,7 +617,7 @@ export const Dashboard = () => {
           <div style={{ display: 'flex' }}>
             <div
               className="file-drop-zone"
-              style={{ width: '40vw', paddingTop: '50px', paddingBottom: '50px', marginRight: '30px' }}
+              style={{ paddingTop: '50px', paddingBottom: '50px', marginRight: '30px' }}
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}
@@ -640,6 +640,11 @@ export const Dashboard = () => {
                 )}
   
               </div>
+              {!userDataContext.processBotton && (
+                <span className="text-drop color-drop-blue">
+                  Procesar facturas automáticamente
+                </span>
+              )}
               {userDataContext.processBotton && (
                 <button className="process-button" onClick={processFiles}>
                   Procesar facturas automáticamente
@@ -649,7 +654,7 @@ export const Dashboard = () => {
   
             <div
               className="file-drop-zone"
-              style={{ width: '40vw', paddingTop: '50px', paddingBottom: '50px', backgroundColor: 'rgba(255, 188, 17, 0.1)' }}
+              style={{paddingTop: '50px', paddingBottom: '50px', backgroundColor: 'rgba(255, 188, 17, 0.1)' }}
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
               onDrop={handleDropEx}
@@ -672,6 +677,11 @@ export const Dashboard = () => {
                 )}
   
               </div>
+              {!userDataContext.processBottonEx && (
+                <span className="text-drop color-drop-yellow">
+                  Procesar gasto automáticamente
+                </span>
+              )}
               {userDataContext.processBottonEx && (
                 <button className="process-button-yellow" onClick={processFilesEx} >
                   Procesar gastos automáticamente
@@ -700,7 +710,7 @@ export const Dashboard = () => {
             <div
               style={{ width: '40vw', paddingBottom: '30px', marginRight: '30px' }}
             >
-              <div className="panel" style={{ width: '40vw', marginRight: '30px', display: 'flex' }}>
+              <div className="panel" style={{ width: '40vw', marginRight: '30px', display: 'flex', marginLeft: '60px' }}>
               <div style={{ flexBasis: '50%', marginRight: '50px' }}>
                 <img src={cashIconBlue} style={{ width: '32px', height: '32px' }} alt="dragDrop" />
   

@@ -2,11 +2,13 @@
     .rootContainer {
         display: flex;
         align-items: baseline;
+        background-color: white;
     }
 
     .mainContainer{
         display: flex;
         flex: 1;
+        background-color: white;
     }
     
 }

@@ -12,6 +12,7 @@ import cashIconBlue from '../../../assets/icons/Cash.png';
 // import payrollWhiteIcon from '../../../assets/icons/payrollWhite.png';
 // import documentsIcon from '../../../assets/icons/documents.png';
 // import documentsWhiteIcon from '../../../assets/icons/documentsWhite.png';
+import logo from '../../../assets/icons/logotramitgo.png'
 import logoutIcon from '../../../assets/icons/logout.png';
 import arrow from '../../../assets/icons/Arrow.png';
 import "./style.css";
@@ -92,7 +93,7 @@ export const DrawerMenuComponent = ({ user }) => {
         <div className="container-fluid">
           <NavLink to="/" onClick={handleClickDashboard} className='navbar-brand'>
             <div className='navbarlogo'>
-              <img src="logo.png" className="img-fluid" alt="Logo" />
+              <img src={logo} className="img-fluid" alt="Logo" />
             </div ></NavLink>
           <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>

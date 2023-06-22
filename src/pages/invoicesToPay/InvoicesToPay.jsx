@@ -400,17 +400,16 @@ const processFiles = async () => {
     
 
     statusResponse.map((item) => {
+      const totalCount = ids.length;
       for (const id of ids) {
         const status = item[id.toString()]; // Obtener el estado del ID
         if (status === "DONE") {
           loadedCount =  loadedCount + 1; // Incrementar el contador si el estado es "DONE"
-          console.log(loadedCount); // Imprimir el número de IDs con estado "DONE"
-          const totalCount = ids.length;
+          
           const percentage = Math.round((loadedCount * 100) / totalCount);
           userDataContext.updateProgress(percentage)
         }else{
           allDone = false;
-          const totalCount = ids.length;
           const percentage = Math.round((loadedCount * 100) / totalCount);
           userDataContext.updateProgress(percentage)
         }
