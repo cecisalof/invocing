@@ -13,8 +13,6 @@ body {
 .text-drop{
   font-weight: 400;
   font-size: 17px;
-  line-height: 48px;
-  margin: 20px;
 }
 
 .color-drop-blue{
@@ -142,12 +140,15 @@ body {
   }
 
   .dashboard-titles{
-    font-weight: 500;
+    font-weight: 700;
     font-size: 19px;
     line-height: 25px;
     color: #005CFF;
     margin-top: 20px;
-    margin-left: 50px;
+    margin-bottom: 20px;
+    margin-left: 45px;
+    border-bottom: 1px solid #999999;
+    width: 100%;
   }
 
   .dashboard-text{
@@ -156,7 +157,7 @@ body {
     line-height: 20px;
     color: #999999;
     margin-top: 2px;
-    margin-left: 50px;
+    margin-left: 45px;
     letter-spacing: 3px;
   }
 
@@ -167,14 +168,26 @@ body {
     line-height: 20px;
     color: #005CFF;
     margin-top: 2px;
-    margin-left: 50px;
+    /* margin-left: 50px; */
     letter-spacing: 3px;
+  }
+
+  .dashboard-titles-invoices {
+    font-weight: 700;
+    font-size: 19px;
+    line-height: 25px;
+    color: #005CFF;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: 45px;
+    /* border-bottom: 1px solid #999999; */
+    width: 100%;
   }
   
   .panel {
     background-color: transparent; /* Color de fondo blanco */
-    padding: 50px; /* Espacio interno para separar los elementos del panel */
-    width: 650px;
+    padding: 2em; /* Espacio interno para separar los elementos del panel */
+    width: 40vw;
     
   }
 
@@ -206,14 +219,34 @@ body {
   .file-drop-zone {
     border: 'none';
     border-radius: 20px;
-    padding: 20px;
+    margin: 1rem;
+    padding: 2.5em;
     text-align: center;
     font-size: 18px;
     background-color: #eaf1ff;
-    margin-bottom: 30px;
-    width: 650px;
+    width: 40vw;
     transition: background-color 0.3s;
   }
+ /* Dashboard cards */
+  .card {
+    border: none;
+    border-radius: 20px;
+    margin: 1rem;
+    padding: 0.5rem;
+    text-align: left;
+    font-size: 18px;
+    width: 40vw;
+  }
+
+  .card-img {
+    width: 10%;
+    display: flex;
+  }
+
+  .card-container{
+    margin-top: 1.5rem;
+  }
+
   .eye-icon {
     text-align: left;
   }
@@ -222,7 +255,7 @@ body {
     background-color: #eaf1ff;
   }
   
-  .file-drop-zone-dragging {
+  .-dragging {
     border-color: #005CFF;
     background-color: #e6f7ff;
   }
@@ -279,19 +312,14 @@ body {
 
   }
 
-  .states{
-  margin: 5px;
-  width: 70px;
-  height: 20px;
-  border-radius: 100px;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 10px;
-  line-height: 11px;
-  text-align: center;
-  color: #FFFFFF;
-  padding-bottom: 10px;
-  padding-top: 5px;
+  .states {
+    margin: 6px;
+    border-radius: 100px;
+    font-size: 10px;
+    line-height: 11px;
+    text-align: center;
+    color: #FFFFFF;
+    padding: 5px 0;
   }
 
   .pending{
@@ -309,13 +337,14 @@ body {
     background: #FFBC11;
   }
 
-  .count-states{
-    font-style: normal;
+  .count-states {
+    text-align: center;
     font-weight: 700;
     font-size: 19px;
     line-height: 26px;
     color: #005CFF;
-    margin-left: 50px;
+    margin-left: 45px;
+    margin-bottom: 0;
   }
 
   .process-button:hover {
@@ -356,7 +385,9 @@ body {
     line-height: 25px;
     color: #999999;
     margin-top: 20px;
-    margin-left: 50px;
+    border-bottom: 1px solid #999999;
+    width: 100%;
+    text-align: right;
 }
 
 .ag-chart-wrapper {
