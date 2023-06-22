@@ -12,7 +12,7 @@ import cashIconBlue from '../../../assets/icons/Cash.png';
 // import payrollWhiteIcon from '../../../assets/icons/payrollWhite.png';
 // import documentsIcon from '../../../assets/icons/documents.png';
 // import documentsWhiteIcon from '../../../assets/icons/documentsWhite.png';
-import logo from '../../../assets/icons/logotramitgo.png'
+import logo from '../../../assets/icons/logotramitgo.svg'
 import logoutIcon from '../../../assets/icons/logout.png';
 import arrow from '../../../assets/icons/Arrow.png';
 import "./style.css";
