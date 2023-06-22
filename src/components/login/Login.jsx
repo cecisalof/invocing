@@ -3,7 +3,9 @@ import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import './style.css';
 import Context from '../../contexts/context';
-import { useContext } from 'react'; 
+import logo from '../../assets/icons/logotramitgo.png'
+import { useContext } from 'react';
+
 
 export const Login = () => {
     const [email, setEmail] = useState("cecilia@codepremium.es");
@@ -57,7 +59,7 @@ export const Login = () => {
    const getToken = async () => {
     try{
       setIsLoading(true)
-      const response = await axios.post('https://data.tramitgo.com/api/login',
+      const response = await axios.post('http://127.0.0.1:8000/api/login',
         {
           email: email.toLowerCase().trim(),
           password: password
@@ -81,7 +83,7 @@ export const Login = () => {
         <form className="Auth-form py-4 rounded">
           <div className="Auth-form-content py-2 px-5">
             <div className='d-flex justify-content-center align-items-center mb-3 w-auto'>
-              <img src="logo.png" className="img-fluid" alt="Logo" />
+              <img src={logo} className="img-fluid" alt="Logo" />
             </div>
             <h3 className="Auth-form-title mb-3 text-center">Inicio de Sesión</h3>
             <div className="form-group mt-3">
