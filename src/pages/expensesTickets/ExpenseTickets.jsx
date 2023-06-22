@@ -17,7 +17,7 @@ import { useNavigate } from 'react-router-dom';
 import { FaCheckCircle, FaCircleNotch } from 'react-icons/fa';
 import dragDrop from '../../assets/icons/drag-and-drop.png';
 import close from '../../assets/icons/close.png';
-import eye from '../../assets/icons/Eye.png';
+//import eye from '../../assets/icons/Eye.png';
 import { ProgressBar } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 
@@ -34,7 +34,7 @@ export const ExpenseTickets = () => {
 
   const [rowProviders, setrowProviders] = useState(); // Set rowData to Array of Objects, one Object per Row
   const [providersLoaded, setProvidersLoaded] = useState(false);
-  const [viewFiles, setViewFiles] = useState(false);
+  // const [viewFiles, setViewFiles] = useState(false);
 
 
  
@@ -371,10 +371,10 @@ const processFiles = async () => {
 
  };
 
- function handleViewClick() {
-  setViewFiles(!viewFiles)
-  console.log(userDataContext.filesEx)
-}
+//  function handleViewClick() {
+//   setViewFiles(!viewFiles)
+//   console.log(userDataContext.filesEx)
+// }
 
 
   return (
@@ -384,13 +384,13 @@ const processFiles = async () => {
       </div>
 
       <div
-        className="file-drop-zone"
+        className="file-drop-zone" style={{width: '1325px'}}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
         
       >
-        <div className="eye-icon">
+        {/* <div className="eye-icon">
         <img src={eye} alt="Eye" onClick={handleViewClick} />
 
         {viewFiles && (
@@ -406,7 +406,7 @@ const processFiles = async () => {
         
           )}
 
-        </div>
+        </div> */}
 
         <div className="drop-message">
           {userDataContext.isLoadingRefEx && userDataContext.progressEx < 100 ? (

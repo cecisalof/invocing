@@ -458,7 +458,7 @@ const processFiles = async (files) => {
         <AppBar location={location}/>
       </div>
       <div
-        className="file-drop-zone"
+        className="file-drop-zone" style={{width: '1325px'}}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
