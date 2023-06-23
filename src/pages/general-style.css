@@ -317,10 +317,6 @@ body {
   transition: background-color 0.3s;
 }
 
-.buttons-container {
-  margin-left: 0.6rem;
-}
-
 .filters {
   margin: 5px;
   width: 98px;

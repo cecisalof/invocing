@@ -585,7 +585,7 @@ export const Dashboard = () => {
           <div>
             <AppBar location={location} />
           </div>
-          <div className='buttons-container'>
+          <div className='mx-2'>
             <button className='filters' onClick={handleButtonClick}>
               Fechas
             </button>
