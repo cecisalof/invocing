@@ -443,7 +443,7 @@ const processFiles = async () => {
         <AppBar location={location}/>
       </div>
       <div
-        className="file-drop-zone"
+        className="file-drop-zone-full"
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
