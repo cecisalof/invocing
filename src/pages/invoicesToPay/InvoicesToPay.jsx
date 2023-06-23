@@ -36,7 +36,7 @@ export const InvoicesToPay = () => {
   const [isFileUploaded, setIsFileUploaded] = useState(false);
   const [updatePercentage, setUpdatePercentage] = useState(false);
 
-  const gridStyle = useMemo(() => ({ height: '70vh', width: '95%', marginTop: 24, marginBottom: 32, fontFamily: 'Nunito' }), []);
+  const gridStyle = useMemo(() => ({ height: '70vh', width: '75vw', marginTop: 24, marginBottom: 32, fontFamily: 'Nunito' }), []);
 
   const userDataContext = useContext(Context);
 

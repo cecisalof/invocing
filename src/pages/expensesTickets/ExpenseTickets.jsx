@@ -38,7 +38,7 @@ export const ExpenseTickets = () => {
 
 
  
-  const gridStyle = useMemo(() => ({ height: '70vh', width: '95%', marginTop: 24, marginBottom: 32, fontFamily: 'Nunito' }), []);
+  const gridStyle = useMemo(() => ({ height: '70vh', width: '75.5vw', marginTop: 24, marginBottom: 32, fontFamily: 'Nunito' }), []);
 
   const userDataContext = useContext(Context);
   const providerCellRenderer = (params) => {
