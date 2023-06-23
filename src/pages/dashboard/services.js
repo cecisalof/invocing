@@ -49,9 +49,12 @@ export const getInvoicesCount = async (token, filters=null) => {
       }
   };
 
-export const getInvoicesTotals = async (token) => {
+export const getInvoicesTotals = async (token, filters=null) => {
+    let url = BASE_URL + API_URL.INVOICE_TO_PAY_TOTALS
+        if (filters){
+            url = url + filters}
     try {
-        const response = await axios.get(BASE_URL + API_URL.INVOICE_TO_PAY_TOTALS, {
+        const response = await axios.get(url, {
             headers: { 
                 'accept': 'application/json', 
                 'Authorization': `Token ${token}`

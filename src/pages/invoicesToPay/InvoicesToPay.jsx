@@ -34,6 +34,7 @@ export const InvoicesToPay = () => {
   const [rowProviders, setrowProviders] = useState(); // Set rowData to Array of Objects, one Object per Row
   const [providersLoaded, setProvidersLoaded] = useState(false);
   const [isFileUploaded, setIsFileUploaded] = useState(false);
+  const [updatePercentage, setUpdatePercentage] = useState(false);
 
   const gridStyle = useMemo(() => ({ height: '70vh', width: '95%', marginTop: 24, marginBottom: 32, fontFamily: 'Nunito' }), []);
 
@@ -42,6 +43,18 @@ export const InvoicesToPay = () => {
   const ragRenderer = (props) => {
     return <span className="rag-element">{props.value}</span>;
   };
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      if (userDataContext.progress < 100 && updatePercentage) {
+        userDataContext.updateProgress(userDataContext.progress + 2);
+      }
+    }, 10000); // 1 second interval
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [userDataContext]);
 
   const ragCellClassRules = {
     'rag-green-outer': (props) => props.value === 'payed' || props.value === 'Pagada',
@@ -227,7 +240,6 @@ export const InvoicesToPay = () => {
   // Get data
   const getData = async (userToken) => {
     try {
-      console.log(userToken)
       const data = await getInvoices(userToken);
       console.log(data)
       setRowData(data || []);
@@ -374,62 +386,65 @@ const handleDrop = (event) => {
     if (userDataContext.processBotton){
       userDataContext.toggleProcessBotton()
     }
-    processFiles()
+    setUpdatePercentage(true)
+    processFiles(files)
     
   }
   
 };
 
-const processFiles = async () => {
+const processFiles = async (files) => {
   console.log("Procesando archivos automáticamente...");
-  userDataContext.toggleLoading()
+  userDataContext.toggleLoading();
   setIsFileUploaded(false);
-  const response = await postInvoiceAutomatic(userToken, userDataContext.files);
-  const ids = response.data.schendules
-  console.log(ids)
+  console.log(files);
+  const response = await postInvoiceAutomatic(userToken, files);
+  const ids = response.data.schendules;
+  console.log(ids);
   
 
   const checkStatus = async () => {
-    
     const response = await getSchenduleStatus(userToken, ids);
-    const statusResponse = response.status
+    const statusResponse = response.status;
 
-    // Verificar si todos los IDs están en el estado "DONE"
     let allDone = true;
-    let loadedCount = 0
-    
+    let loadedCount = 0;
 
     statusResponse.map((item) => {
       const totalCount = ids.length;
       for (const id of ids) {
         const status = item[id.toString()]; // Obtener el estado del ID
+        console.log(status);
         if (status === "DONE") {
-          loadedCount =  loadedCount + 1; // Incrementar el contador si el estado es "DONE"
-          
-          const percentage = Math.round((loadedCount * 100) / totalCount);
-          userDataContext.updateProgress(percentage)
-        }else{
-          allDone = false;
-          const percentage = Math.round((loadedCount * 100) / totalCount);
-          userDataContext.updateProgress(percentage)
-        }
+          loadedCount = loadedCount + 1; // Incrementar el contador si el estado es "DONE"
 
+          const percentage = Math.round((loadedCount * 100) / totalCount);
+          userDataContext.updateProgress(percentage);
+        } else {
+          allDone = false;
+        }
       }
     });
+
+
+
     if (!allDone) {
-      // Si no todos los IDs están en el estado "DONE", esperar un tiempo y volver a verificar
-      setTimeout(checkStatus, 10000); // Esperar 2 segundos (puedes ajustar el tiempo según tus necesidades)
+      setTimeout(checkStatus, 10000); // Esperar 10 segundos y volver a verificar
     } else {
       console.log("Procesamiento completo");
+      setUpdatePercentage(false)
       getData(userToken);
-    }   
-    
+    }
   };
-  // Iniciar la verificación del estado de los IDs
+
   await checkStatus();
 
+};
 
- };
+
+
+
+
 
    function handleCloseClick() {
     userDataContext.updateProgress(0)

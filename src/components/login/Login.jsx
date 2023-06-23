@@ -3,14 +3,15 @@ import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import './style.css';
 import Context from '../../contexts/context';
-import logo from '../../assets/icons/logotramitgo.png'
+import logo from '../../assets/icons/logotramitgo.svg'
 import { useContext } from 'react';
-
+import eye from '../../assets/icons/Eye.png';
 
 export const Login = () => {
-    const [email, setEmail] = useState("cecilia@codepremium.es");
+    const [email, setEmail] = useState("");
     const [error, setError] = useState("");
-    const [password, setPassword] = useState("Y4098842A");
+    const [passwordVisible, setPasswordVisible] = useState(false);
+    const [password, setPassword] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const userDataContext = useContext(Context);
     const navigate = useNavigate();
@@ -40,7 +41,7 @@ export const Login = () => {
       setPassword(event.target.value);
     }
 
-   const handleClick = () => {
+   const handleSubmit = () => {
     setError('');
     if (email == ""){ 
       setError("Introduce tu email de acceso");
@@ -80,14 +81,13 @@ export const Login = () => {
 
   return (
       <div className="Auth-form-container d-flex justify-content-center align-items-center">
-        <form className="Auth-form py-4 rounded">
+        <form className="Auth-form py-4 rounded" onSubmit={handleSubmit}>
           <div className="Auth-form-content py-2 px-5">
             <div className='d-flex justify-content-center align-items-center mb-3 w-auto'>
-              <img src={logo} className="img-fluid" alt="Logo" />
+              <a href="https://tramitgo.com"><img src={logo} className="img-fluid" alt="Logo" /></a>
             </div>
-            <h3 className="Auth-form-title mb-3 text-center">Inicio de Sesión</h3>
-            <div className="form-group mt-3">
-              <label>Email</label>
+            <label className="mt-3 mb-1">Email</label>
+            <div className="form-group">
               <input
                 disabled={isLoading}
                 type="email"
@@ -97,23 +97,27 @@ export const Login = () => {
                 onChange={handleEmailChange}
               />
             </div>
-            <div className="form-group mt-3">
-              <label>Contraseña</label>
+            <label className="mt-3 mb-1">Contraseña</label>
+            <div className="input-group mb-3">
               <input
                 disabled={isLoading}
-                type="password"
-                className="form-control mt-1"
+                type={passwordVisible ? "text" : "password"}
+                className="form-control"
                 placeholder="Contraseña"
                 value={password}
                 onChange={handlePasswordChange}
               />
+              <div className="input-group-append eye-password-icon">
+                <span className="input-group-text bg-white"> <img src={eye} alt="Eye" onClick={()=>{setPasswordVisible(!passwordVisible)}} /></span>
+              </div>
             </div>
+          
             <div className="d-grid gap-2 mt-3">
               <button 
-                type="button" 
+                type="submit" 
                 className="btn btn-primary"
                 disabled={isLoading}
-                onClick={handleClick}>
+                onClick={handleSubmit}>
                 {!isLoading && <span>
                   Iniciar sesión
                 </span>}
@@ -124,7 +128,7 @@ export const Login = () => {
             </div>
             <span className="small text-danger">{error}</span>
             <p className="forgot-password text-right mt-2">
-              ¿Has olvidado la <a href="#">contraseña?</a>
+              ¿Has olvidado la <a href="mailto:hola@codepremmium.es?subject=Cambio de contraseña" rel="noreferrer" target="_blank">contraseña?</a>
             </p>
           </div>
         </form>
