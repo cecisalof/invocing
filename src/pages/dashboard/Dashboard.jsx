@@ -585,7 +585,7 @@ export const Dashboard = () => {
           <div>
             <AppBar location={location} />
           </div>
-          <div>
+          <div className='mx-2'>
             <button className='filters' onClick={handleButtonClick}>
               Fechas
             </button>
@@ -618,11 +618,11 @@ export const Dashboard = () => {
           <div style={{ display: 'flex' }}>
             <div
               className="file-drop-zone"
-              style={{ paddingTop: '50px', paddingBottom: '50px', marginRight: '30px' }}
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}
             >
+              {/* Blue card */}
               <div className="drop-message">
                 {(userDataContext.isLoadingRef && userDataContext.progress < 100) ? (
                   <div>
@@ -642,20 +642,22 @@ export const Dashboard = () => {
   
               </div>
               {!userDataContext.processBotton && (
-                <span className="text-drop color-drop-blue">
-                  Procesar facturas automáticamente
-                </span>
+                <div>
+                  <span className="text-drop color-drop-blue">
+                    Procesar facturas automáticamente
+                  </span>
+                </div>
               )}
               {userDataContext.processBotton && (
                 <button className="process-button" onClick={processFiles}>
                   Procesar facturas automáticamente
                 </button>
               )}
-            </div>
-  
-            <div
+              </div>
+              {/* Yellow card */}
+              <div
               className="file-drop-zone"
-              style={{paddingTop: '50px', paddingBottom: '50px', backgroundColor: 'rgba(255, 188, 17, 0.1)' }}
+              style={{backgroundColor: 'rgba(255, 188, 17, 0.1)' }}
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
               onDrop={handleDropEx}
@@ -690,28 +692,88 @@ export const Dashboard = () => {
               )}
             </div>
           </div>
-  
-          <div style={{ display: 'flex', marginBottom: '30px' }}>
-            <div className="panel" style={{ width: '40vw', marginRight: '30px', display: 'flex' }}>
-              <div style={{ flexBasis: '50%', marginRight: '50px' }}>
-                <img src={cashIconBlue} style={{ width: '32px', height: '32px' }} alt="dragDrop" />
-                <div className="dashboard-titles" > Total gastos</div>
-                <div className="dashboard-titles" > Total IVA</div>
-                <div className="dashboard-titles" > Total ret. IRPF</div>
-              </div>
-  
-              <div style={{ flexBasis: '50%', marginRight: '50px' }}>
-                <div className="totals" style={{ marginTop: '50px' }} > {`${totals.total_amount}  €`}</div>
-                <div className="totals" >  {`${totals.total_taxes}  €`}</div>
-                <div className="totals" >  {`${totals.total_retention}  €`}</div>
+          <div style={{ display: 'flex' }}>
+            <div
+              className="card"
+            >
+              {/* Total sales card */}
+              <div className="container text-left">
+                <img src={cashIconBlue} alt="dragDrop" className='card-img' />
+                <div className="row align-items-left">
+                  <div className="col">
+                    <div className="card-container">
+                      <div className="dashboard-titles">Total gastos</div>
+                      <div className="dashboard-titles">Total IVA</div>
+                      <div className="dashboard-titles">Total ret. IRPF</div>
+                    </div>
+                  </div>
+                  <div className="col">
+                  <div className="card-container">
+                    <div className="totals" > {`${totals.total_amount}  €`}</div>
+                    <div className="totals" >  {`${totals.total_taxes}  €`}</div>
+                    <div className="totals" >  {`${totals.total_retention}  €`}</div>
+                  </div>
+                  </div>
+                </div>
               </div>
             </div>
+              {/* Invoice card */}
+              <div
+              className="card"
+            >
+              <div className="container text-left">
+                <img src={dragDrop} alt="dragDrop" className='card-img' />
+                <div className="row align-items-center">
+                  <div className="col-6">
+                    <div className='card-container'>  
+                      <div className="dashboard-titles-invoices" > {`${invoiceCount.count} Facturas `}</div>
+                      <div className="dashboard-text">SUBIDAS {`${invoiceCount.text}`}</div>
+                    </div>
+                  </div>
+                  <div className="col">
+                    <div className='card-container'>
+                      <div>
+                        <p className='states pending'>PENDIENTE</p>
+                      </div>
+                      <div>
+                        <p className='states payed'>PAGADA</p>
+                      </div>
+                      <div>
+                        <p className='states received '>RECIBIDA</p>
+                      </div>
+                      <div>
+                        <p className='states reject'>RECHAZADA</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col">
+                    <div className="card-container">
+                      <div>
+                        <p className='count-states'>{`${invoiceStates.Pendiente}`}</p>
+                      </div>
+                      <div>
+                        <p className='count-states'>{`${invoiceStates.Pagada}`}</p>
+                      </div>
+                      <div>
+                        <p className='count-states'>{`${invoiceStates.Recibida}`}</p>
+                      </div>
+                      <div>
+                        <p className='count-states'>{`${invoiceStates.Rechazado}`}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+          <div style={{ display: 'flex', marginBottom: '30px' }}>
             <div style={{ display: 'flex' }}>
             {/* Sales Chart */}
             <div
               style={{ width: '40vw', paddingBottom: '30px', marginRight: '30px' }}
             >
-              <div className="panel" style={{ width: '40vw', marginRight: '30px', display: 'flex', marginLeft: '60px' }}>
+              {/* <div className="panel" style={{ width: '40vw', marginRight: '30px', display: 'flex', marginLeft: '60px' }}>
               <div style={{ flexBasis: '50%', marginRight: '50px' }}>
                 <img src={cashIconBlue} style={{ width: '32px', height: '32px' }} alt="dragDrop" />
   
@@ -758,7 +820,7 @@ export const Dashboard = () => {
   
               </div>
   
-            </div>
+            </div> */}
                 {/* <AgChartsReact options={options} /> */}
             </div>
             
