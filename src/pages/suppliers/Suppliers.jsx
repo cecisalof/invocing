@@ -26,7 +26,7 @@ export const Suppliers = () => {
 
   const userDataContext = useContext(Context);
  
-  const gridStyle = useMemo(() => ({ height: '70vh', width: '95%', marginTop: 24, marginBottom: 32, fontFamily: 'Nunito' }), []);
+  const gridStyle = useMemo(() => ({ height: '70vh', width: '75vw', marginTop: 24, marginBottom: 32, fontFamily: 'Nunito' }), []);
 
   // Each Column Definition results in one Column.
   const [columnDefs] = useState([
@@ -173,10 +173,12 @@ return (
     <div>
       <AppBar location={location}/>
     </div>
-    <button type="button" className="btn btn-primary rounded-pill px-4" onClick={handleAddProvider}>Añadir proveedor</button>
-    {/* <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} /> */}
-    <img src={deleteIcon} alt="Delete icon" onClick={handleTrashClick} style={{ marginLeft: '30px'  }} />
-    <div className="ag-theme-alpine" style={gridStyle}>
+    <div className='mx-1'>
+      <button type="button" className="btn btn-primary rounded-pill px-4 mx-2" onClick={handleAddProvider}>Añadir proveedor</button>
+      {/* <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} /> */}
+      <img src={deleteIcon} alt="Delete icon" onClick={handleTrashClick} style={{ marginLeft: '30px'  }} />
+    </div>
+    <div className="ag-theme-alpine mx-3" style={gridStyle}>
       <AgGridReact
         onGridReady={onGridReady}
         ref={gridRef} // Ref for accessing Grid's API

@@ -2,26 +2,24 @@ body {
   font-family: 'Nunito';
 }
 
-.title{
-    color: #005CFF;
-    font-weight: 400;
-    font-size: 20px;
-    line-height: 48px;
-    margin: 20px;
+.title {
+  color: #005CFF;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 48px;
+  margin: 1rem;
 }
 
-.text-drop{
+.text-drop {
   font-weight: 400;
   font-size: 17px;
-  line-height: 48px;
-  margin: 20px;
 }
 
-.color-drop-blue{
+.color-drop-blue {
   color: #005CFF;
 }
 
-.color-drop-yellow{
+.color-drop-yellow {
   color: #FFBC11;
 }
 
@@ -36,7 +34,7 @@ body {
 
 .ag-theme-alpine .ag-cell {
   border: none;
-} 
+}
 
 .ag-theme-alpine .ag-row {
   border-bottom: none;
@@ -44,301 +42,359 @@ body {
 
 .ag-theme-alpine ::-webkit-scrollbar {
   width: 12px;
-  background-color: #f5f5f5; /* Cambia el color de fondo a tu elección */
+  background-color: #f5f5f5;
+  /* Cambia el color de fondo a tu elección */
 }
 
 .ag-theme-alpine ::-webkit-scrollbar-thumb {
-  background-color: #005CFF; /* Cambia el color del scroll a tu elección */
+  background-color: #005CFF;
+  /* Cambia el color del scroll a tu elección */
   border-radius: 20px;
 }
 
 .ag-theme-alpine ::-webkit-scrollbar-thumb:hover {
-  background-color: #005CFF; /* Cambia el color del scroll en hover a tu elección */
+  background-color: #005CFF;
+  /* Cambia el color del scroll en hover a tu elección */
 }
 
-.ag-root-wrapper { border-radius: 20px }
+.ag-root-wrapper {
+  border-radius: 20px
+}
 
-  :focus {
-    background: #F7FAFF;
-  }
-  
-  .rag-red-outer .rag-element {
-    background-color: #000000;
-    border-radius: 1em;
-    padding: 0.4em 0.7em;
-  }
-  
-  .rag-green-outer .rag-element {
-    background-color: #00BA98;
-    border-radius: 1em;
-    padding: 0.4em 0.7em;
-  }
-  
-  .rag-yellow-outer .rag-element {
-    background-color: #FFBC11;
-    border-radius: 1em;
-    padding: 0.4em 0.7em;
-  }
+:focus {
+  background: #F7FAFF;
+}
 
-  .rag-orange-outer .rag-element {
-    background-color: #BA3800;
-    border-radius: 1em;
-    padding: 0.4em 0.7em;
-  }
+.rag-red-outer .rag-element {
+  background-color: #000000;
+  border-radius: 1em;
+  padding: 0.4em 0.7em;
+}
+
+.rag-green-outer .rag-element {
+  background-color: #00BA98;
+  border-radius: 1em;
+  padding: 0.4em 0.7em;
+}
+
+.rag-yellow-outer .rag-element {
+  background-color: #FFBC11;
+  border-radius: 1em;
+  padding: 0.4em 0.7em;
+}
+
+.rag-orange-outer .rag-element {
+  background-color: #BA3800;
+  border-radius: 1em;
+  padding: 0.4em 0.7em;
+}
 
 
-  .bigtextbox {
-    box-sizing: border-box;
-    width: 540px;
-    height: 40px;
-    border: 1px solid #D9D9D9;
-    border-radius: 100px;
-    padding: 10px;
-    margin-top: 10px;
-    margin-right: 20px;
-  }
+.bigtextbox {
+  box-sizing: border-box;
+  width: 540px;
+  height: 40px;
+  border: 1px solid #D9D9D9;
+  border-radius: 100px;
+  padding: 10px;
+  margin-top: 10px;
+  margin-right: 20px;
+}
 
-  .midtextbox {
-    box-sizing: border-box;
-    width: 361px;
-    height: 40px;
-    border: 1px solid #D9D9D9;
-    border-radius: 100px;
-    padding: 10px;
-    margin-top: 10px;
-    margin-right: 20px;
-  }
-  
-    .smalltextbox{
-    box-sizing: border-box;
-    width: 261px;
-    height: 40px;
-    border: 1px solid #D9D9D9;
-    border-radius: 100px;
-    padding: 10px;
-    margin-top: 10px;
-    margin-right: 20px;
-  }
-  
-  .form-row {
-    display: flex;
-  }
-  
-  .form-column {
-    margin-right: 0px;
-  }
-  
-  .input-container {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .label{
-    font-weight: 400;
-    font-size: 18px;
-    line-height: 25px;
-    color: #005CFF;
-    margin-top: 20px;
-  }
+.midtextbox {
+  box-sizing: border-box;
+  width: 361px;
+  height: 40px;
+  border: 1px solid #D9D9D9;
+  border-radius: 100px;
+  padding: 10px;
+  margin-top: 10px;
+  margin-right: 20px;
+}
 
-  .dashboard-titles{
-    font-weight: 500;
-    font-size: 19px;
-    line-height: 25px;
-    color: #005CFF;
-    margin-top: 20px;
-    margin-left: 50px;
-  }
+.smalltextbox {
+  box-sizing: border-box;
+  width: 261px;
+  height: 40px;
+  border: 1px solid #D9D9D9;
+  border-radius: 100px;
+  padding: 10px;
+  margin-top: 10px;
+  margin-right: 20px;
+}
 
-  .dashboard-text{
-    font-weight: 100;
-    font-size: 15px;
-    line-height: 20px;
-    color: #999999;
-    margin-top: 2px;
-    margin-left: 50px;
-    letter-spacing: 3px;
-  }
+.form-row {
+  display: flex;
+}
 
-  .dashboard-subtext{
-    font-family: 'Nunito';
-    font-weight: 100;
-    font-size: 9px;
-    line-height: 20px;
-    color: #005CFF;
-    margin-top: 2px;
-    margin-left: 50px;
-    letter-spacing: 3px;
-  }
-  
-  .panel {
-    background-color: transparent; /* Color de fondo blanco */
-    padding: 50px; /* Espacio interno para separar los elementos del panel */
-    width: 650px;
-    
-  }
+.form-column {
+  margin-right: 0px;
+}
 
-  .custom-width {
-    width: 1358px;
-  }
+.input-container {
+  display: flex;
+  flex-direction: column;
+}
 
-  .custom-width-progess {
-    width: 1300px;
-    background-color: #e7eaee;
-  }
-  .custom-progress .progress-bar {
-    background-color: #005CFF; /* Color personalizado */
-  }
-  .upload-indicator {
-    align-items: center;
-  }
-  .upload-icon {
-    color: green;
-    margin-right: 5px;
-  }
-  .upload-text {
-    font-weight: 400;
-    font-size: 18px;
-    line-height: 25px;
-    margin-top: 20px;
-  }
+.label {
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 25px;
+  color: #005CFF;
+  margin-top: 20px;
+}
 
-  .file-drop-zone {
-    border: 'none';
-    border-radius: 20px;
-    padding: 20px;
-    text-align: center;
-    font-size: 18px;
-    background-color: #eaf1ff;
-    margin-bottom: 30px;
-    width: 650px;
-    transition: background-color 0.3s;
-  }
-  .eye-icon {
-    text-align: left;
-  }
-  
-  .file-drop-zone:hover {
-    background-color: #eaf1ff;
-  }
-  
-  .file-drop-zone-dragging {
-    border-color: #005CFF;
-    background-color: #e6f7ff;
-  }
-  
-  
-  .drop-message {
-    margin-bottom: 10px;
-    color: #333;
-  }
+.dashboard-titles {
+  font-weight: 700;
+  font-size: 19px;
+  line-height: 25px;
+  color: #005CFF;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-left: 45px;
+  border-bottom: 1px solid #999999;
+  width: 100%;
+}
 
-  .download-icon {
-    width: 20px;
-    height: 20px;
-  }
-  
-  .process-button {
-    background-color: #005CFF;
-    color: white;
-    padding: 5px 15px;
-    border: none;
-    border-radius: 20px;
-    font-size: 15px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
+.dashboard-text {
+  font-weight: 100;
+  font-size: 15px;
+  line-height: 20px;
+  color: #999999;
+  margin-top: 2px;
+  margin-left: 45px;
+  letter-spacing: 3px;
+}
 
-  .process-button-yellow {
-    background-color: #FFBC11;
-    color: white;
-    padding: 5px 15px;
-    border: none;
-    border-radius: 20px;
-    font-size: 15px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
+.dashboard-subtext {
+  font-family: 'Nunito';
+  font-weight: 100;
+  font-size: 9px;
+  line-height: 20px;
+  color: #005CFF;
+  margin-top: 2px;
+  /* margin-left: 50px; */
+  letter-spacing: 3px;
+}
 
-  .filters{
-    margin: 5px;
-    width: 98px;
-    height: 20px;
-    border-radius: 100px;
-    font-style: normal;
-    font-weight: 500;
-    font-size: 13px;
-    line-height: 11px;
-    text-align: center;
-    color: #005CFF;
-    padding-bottom: 20px;
-    padding-top: 10px;
-    background: transparent;
-    border: 2px solid #005CFF;
-    margin-bottom: 30px;
+.dashboard-titles-invoices {
+  font-weight: 700;
+  font-size: 19px;
+  line-height: 25px;
+  color: #005CFF;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-left: 45px;
+  /* border-bottom: 1px solid #999999; */
+  width: 100%;
+}
 
-  }
+.panel {
+  background-color: transparent;
+  /* Color de fondo blanco */
+  padding: 2em;
+  /* Espacio interno para separar los elementos del panel */
+  width: 40vw;
 
-  .states{
+}
+
+.custom-width {
+  width: 1358px;
+}
+
+.custom-width-progess {
+  width: 1300px;
+  background-color: #e7eaee;
+}
+
+.custom-progress .progress-bar {
+  background-color: #005CFF;
+  /* Color personalizado */
+}
+
+.upload-indicator {
+  align-items: center;
+}
+
+.upload-icon {
+  color: green;
+  margin-right: 5px;
+}
+
+.upload-text {
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 25px;
+  margin-top: 20px;
+}
+
+.file-drop-zone {
+  border: 'none';
+  border-radius: 20px;
+  margin: 1rem;
+  padding: 2.5em;
+  text-align: center;
+  font-size: 18px;
+  background-color: #eaf1ff;
+  width: 40vw;
+  transition: background-color 0.3s;
+}
+
+.file-drop-zone-full {
+  border: 'none';
+  border-radius: 20px;
+  margin: 1rem;
+  padding: 2.5em;
+  text-align: center;
+  font-size: 18px;
+  background-color: #eaf1ff;
+  transition: background-color 0.3s;
+}
+
+/* Dashboard cards */
+.card {
+  border: none;
+  border-radius: 20px;
+  margin: 1rem;
+  padding: 0.5rem;
+  text-align: left;
+  font-size: 18px;
+  width: 40vw;
+}
+
+.card-img {
+  width: 10%;
+  display: flex;
+}
+
+.card-container {
+  margin-top: 1.5rem;
+}
+
+.eye-icon {
+  text-align: left;
+}
+
+.file-drop-zone:hover {
+  background-color: #eaf1ff;
+}
+
+.-dragging {
+  border-color: #005CFF;
+  background-color: #e6f7ff;
+}
+
+
+.drop-message {
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.download-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.process-button {
+  background-color: #005CFF;
+  color: white;
+  padding: 5px 15px;
+  border: none;
+  border-radius: 20px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.process-button-yellow {
+  background-color: #FFBC11;
+  color: white;
+  padding: 5px 15px;
+  border: none;
+  border-radius: 20px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.filters {
   margin: 5px;
-  width: 70px;
+  width: 98px;
   height: 20px;
   border-radius: 100px;
   font-style: normal;
   font-weight: 500;
+  font-size: 13px;
+  line-height: 11px;
+  text-align: center;
+  color: #005CFF;
+  padding-bottom: 20px;
+  padding-top: 10px;
+  background: transparent;
+  border: 2px solid #005CFF;
+  margin-bottom: 30px;
+
+}
+
+.states {
+  margin: 6px;
+  border-radius: 100px;
   font-size: 10px;
   line-height: 11px;
   text-align: center;
   color: #FFFFFF;
-  padding-bottom: 10px;
-  padding-top: 5px;
-  }
+  padding: 5px 0;
+}
 
-  .pending{
-    background: #BA3800;
-  }
+.pending {
+  background: #BA3800;
+}
 
-  .reject{
-    background: #000000;
-  }
+.reject {
+  background: #000000;
+}
 
-  .payed{
-    background: #00BA98;
-  }
-  .received{
-    background: #FFBC11;
-  }
+.payed {
+  background: #00BA98;
+}
 
-  .count-states{
-    font-style: normal;
-    font-weight: 700;
-    font-size: 19px;
-    line-height: 26px;
-    color: #005CFF;
-    margin-left: 50px;
-  }
+.received {
+  background: #FFBC11;
+}
 
-  .process-button:hover {
-    background-color: #0046b8;
-  }
- @keyframes spin {
+.count-states {
+  text-align: center;
+  font-weight: 700;
+  font-size: 19px;
+  line-height: 26px;
+  color: #005CFF;
+  margin-left: 45px;
+  margin-bottom: 0;
+}
+
+.process-button:hover {
+  background-color: #0046b8;
+}
+
+@keyframes spin {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
 }
-  
-  .loading-icon {
-    animation: spin 1s infinite linear;
-    margin-right: 5px;
-  }
 
-.custom-alert{
-    background-color: #f0f0f0;
-    width: 1000px;
-    margin-bottom: 30px;
+.loading-icon {
+  animation: spin 1s infinite linear;
+  margin-right: 5px;
+}
+
+.custom-alert {
+  background-color: #f0f0f0;
+  width: 1000px;
+  margin-bottom: 30px;
 }
 
 .ag-header-cell-resize::after {
@@ -349,18 +405,19 @@ body {
   border-top-color: white;
 }
 
-.totals{
+.totals {
   font-family: 'Nunito';
-    font-weight: 300;
-    font-size: 19px;
-    line-height: 25px;
-    color: #999999;
-    margin-top: 20px;
-    margin-left: 50px;
+  font-weight: 300;
+  font-size: 19px;
+  line-height: 25px;
+  color: #999999;
+  margin-top: 20px;
+  border-bottom: 1px solid #999999;
+  width: 100%;
+  text-align: right;
 }
 
 .ag-chart-wrapper {
   border-radius: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-

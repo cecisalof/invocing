@@ -38,7 +38,7 @@ export const ExpenseTickets = () => {
 
 
  
-  const gridStyle = useMemo(() => ({ height: '70vh', width: '95%', marginTop: 24, marginBottom: 32, fontFamily: 'Nunito' }), []);
+  const gridStyle = useMemo(() => ({ height: '70vh', width: '75.5vw', marginTop: 24, marginBottom: 32, fontFamily: 'Nunito' }), []);
 
   const userDataContext = useContext(Context);
   const providerCellRenderer = (params) => {
@@ -384,7 +384,7 @@ const processFiles = async () => {
       </div>
 
       <div
-        className="file-drop-zone" style={{width: '1325px'}}
+        className="file-drop-zone-full"
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
@@ -445,11 +445,12 @@ const processFiles = async () => {
         />
         <img src={close} alt="Close icon" onClick={handleCloseClick} style={{ marginRight: '100px', width: '20 px', height: '20px'}} />
         </div>)}
-
-      <button type="button" className="btn btn-primary rounded-pill px-4" onClick={handleAddExpenses}>Añadir gasto</button>
-      {/* <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} /> */}
-      <img src={deleteIcon} alt="Delete icon" onClick={handleTrashClick} style={{ marginLeft: '30px'  }} />
-      <div className="ag-theme-alpine" style={gridStyle}>
+        <div className='mx-3'>
+          <button type="button" className="btn btn-primary rounded-pill px-4" onClick={handleAddExpenses}>Añadir gasto</button>
+          {/* <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} /> */}
+          <img src={deleteIcon} alt="Delete icon" onClick={handleTrashClick} style={{ marginLeft: '30px'  }} />
+        </div>
+      <div className="ag-theme-alpine mx-3" style={gridStyle}>
         <AgGridReact
           onGridReady={onGridReady}
           ref={gridRef} // Ref for accessing Grid's API
