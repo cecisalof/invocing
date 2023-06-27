@@ -16,6 +16,7 @@ import { InvoicesToPay } from './pages/invoicesToPay/InvoicesToPay.jsx';
 import { AddInvoicesToPay } from './pages/invoicesToPay/AddInvoicesToPay.jsx';
 import { Dashboard } from './pages/dashboard/Dashboard.jsx';
 import UserState from './contexts/UserState';
+import NotFound from './NotFound.js';
 
 export const App = () => {
   return (
@@ -38,6 +39,8 @@ export const App = () => {
           <Route path='/add-income' element={<AddIncome />} />
           <Route path='/add-invoices-to-pay' element={<AddInvoicesToPay />} />
           <Route path='/add-expenses' element={<AddExpenseTickets />} />
+          {/* Ruta para la página 404 */}
+          <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
     </UserState>
