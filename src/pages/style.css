@@ -14,7 +14,7 @@
 
 .gridStyle {
     height: 70vh; 
-    width: 75.5vw; 
+    /* width: 75.5vw;  */
     margin-top: 24; 
     margin-bottom: 32, 
 }
@@ -24,10 +24,11 @@
         left: 0;
         width: 100vw;
         padding: 1rem;
+        height: 100vh;
     }
 
     .gridStyle {
-        width: 95vw;
+        /* width: 95vw; */
         margin-top: 24px;
         margin-bottom: 32px;
     }

@@ -90,37 +90,14 @@ body {
 }
 
 
-.bigtextbox {
+.inputTextbox {
   box-sizing: border-box;
-  width: 540px;
-  height: 40px;
   border: 1px solid #D9D9D9;
   border-radius: 100px;
   padding: 10px;
   margin-top: 10px;
   margin-right: 20px;
-}
-
-.midtextbox {
-  box-sizing: border-box;
-  width: 361px;
-  height: 40px;
-  border: 1px solid #D9D9D9;
-  border-radius: 100px;
-  padding: 10px;
-  margin-top: 10px;
-  margin-right: 20px;
-}
-
-.smalltextbox {
-  box-sizing: border-box;
-  width: 261px;
-  height: 40px;
-  border: 1px solid #D9D9D9;
-  border-radius: 100px;
-  padding: 10px;
-  margin-top: 10px;
-  margin-right: 20px;
+  width: 100%;
 }
 
 .form-row {
