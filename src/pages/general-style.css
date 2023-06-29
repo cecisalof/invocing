@@ -152,7 +152,7 @@ body {
   margin-top: 20px;
   margin-bottom: 20px;
   margin-left: 45px;
-  border-bottom: 1px solid #999999;
+  border-bottom: 1px solid #eaf1ff;
   width: 100%;
 }
 
@@ -263,7 +263,7 @@ body {
 }
 
 .card-img {
-  width: 10%;
+  width: 8%;
   display: flex;
 }
 
@@ -412,7 +412,7 @@ body {
   line-height: 25px;
   color: #999999;
   margin-top: 20px;
-  border-bottom: 1px solid #999999;
+  border-bottom: 1px solid #eaf1ff;
   width: 100%;
   text-align: right;
 }
