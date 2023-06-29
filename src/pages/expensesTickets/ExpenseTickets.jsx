@@ -37,9 +37,6 @@ export const ExpenseTickets = () => {
   // const [viewFiles, setViewFiles] = useState(false);
 
 
- 
-  const gridStyle = useMemo(() => ({ height: '70vh', width: '75.5vw', marginTop: 24, marginBottom: 32, fontFamily: 'Nunito' }), []);
-
   const userDataContext = useContext(Context);
   const providerCellRenderer = (params) => {
     if (params.value) {
@@ -47,7 +44,6 @@ export const ExpenseTickets = () => {
     }
     return '';
   };
-
 
   const [columnDefs, setColumnDefs] = useState([
     {
@@ -450,7 +446,7 @@ const processFiles = async () => {
           {/* <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} /> */}
           <img src={deleteIcon} alt="Delete icon" onClick={handleTrashClick} style={{ marginLeft: '30px'  }} />
         </div>
-      <div className="ag-theme-alpine mx-3" style={gridStyle}>
+      <div className="ag-theme-alpine mx-3 gridStyle">
         <AgGridReact
           onGridReady={onGridReady}
           ref={gridRef} // Ref for accessing Grid's API
@@ -460,7 +456,7 @@ const processFiles = async () => {
           animateRows={true} // Optional - set to 'true' to have rows animate when sorted
           rowSelection='multiple' // Options - allows click selection of rows
           getRowStyle={getRowStyle}
-          pagination={true}
+          pagination={false}
           onCellValueChanged={onCellValueChanged}
         />
       </div>

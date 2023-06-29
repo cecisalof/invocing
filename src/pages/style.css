@@ -1,7 +1,4 @@
 .root {
-    /* margin-left: 48px;
-    width: 75vw;
-    background-color: white; */
     left: 18em;
     position: relative;
     background-color: white;
@@ -12,5 +9,26 @@
 @media (min-width: 1441px) {
     .root {
         left: 24em;
+    }
+}
+
+.gridStyle {
+    height: 70vh; 
+    width: 75.5vw; 
+    margin-top: 24; 
+    margin-bottom: 32, 
+}
+
+@media (max-width: 991px) {
+    .root {
+        left: 0;
+        width: 100vw;
+        padding: 1rem;
+    }
+
+    .gridStyle {
+        width: 95vw;
+        margin-top: 24px;
+        margin-bottom: 32px;
     }
 }
