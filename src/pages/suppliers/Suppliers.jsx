@@ -25,8 +25,6 @@ export const Suppliers = () => {
   const [rowData, setRowData] = useState(); // Set rowData to Array of Objects, one Object per Row
 
   const userDataContext = useContext(Context);
- 
-  const gridStyle = useMemo(() => ({ height: '70vh', width: '75vw', marginTop: 24, marginBottom: 32, fontFamily: 'Nunito' }), []);
 
   // Each Column Definition results in one Column.
   const [columnDefs] = useState([
@@ -178,7 +176,7 @@ return (
       {/* <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} /> */}
       <img src={deleteIcon} alt="Delete icon" onClick={handleTrashClick} style={{ marginLeft: '30px'  }} />
     </div>
-    <div className="ag-theme-alpine mx-3" style={gridStyle}>
+    <div className="ag-theme-alpine mx-3 gridStyle">
       <AgGridReact
         onGridReady={onGridReady}
         ref={gridRef} // Ref for accessing Grid's API
@@ -188,7 +186,7 @@ return (
         animateRows={true} // Optional - set to 'true' to have rows animate when sorted
         rowSelection='multiple' // Options - allows click selection of rows
         getRowStyle={getRowStyle}
-        pagination={true}
+        pagination={false}
         onCellValueChanged={onCellValueChanged}
       />
     </div>

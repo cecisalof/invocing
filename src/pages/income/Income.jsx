@@ -27,9 +27,6 @@ export const Income = () => {
   const gridRef = useRef(); // Optional - for accessing Grid's API
   const [rowData, setRowData] = useState(); // Set rowData to Array of Objects, one Object per Row
 
- 
-  const gridStyle = useMemo(() => ({ height: '70vh', width: '95%', marginTop: 24, marginBottom: 32, fontFamily: 'Nunito' }), []);
-
   const userDataContext = useContext(Context);
 
   const ragRenderer = (props) => {
@@ -246,7 +243,7 @@ return (
     {/* <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} /> */}
     <img src={deleteIcon} alt="Delete icon" onClick={handleTrashClick} style={{ marginLeft: '30px'  }} />
     </div>
-    <div className="ag-theme-alpine" style={gridStyle}>
+    <div className="ag-theme-alpine gridStyle">
       <AgGridReact
         onGridReady={onGridReady}
         ref={gridRef} // Ref for accessing Grid's API
@@ -256,7 +253,7 @@ return (
         animateRows={true} // Optional - set to 'true' to have rows animate when sorted
         rowSelection='multiple' // Options - allows click selection of rows
         getRowStyle={getRowStyle}
-        pagination={true}
+        pagination={false}
         onCellValueChanged={onCellValueChanged}
       />
     </div>
