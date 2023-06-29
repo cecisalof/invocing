@@ -636,7 +636,8 @@ export const Dashboard = () => {
                   </div>
                 ) : (
                   <div>
-                    <img src={dragDrop} alt="dragDrop"  style = {{width: '8%'}}/>
+
+                    <img src={dragDrop} alt="dragDrop" className='cards-logo'/>
                   </div>
                 )}
   
@@ -675,7 +676,8 @@ export const Dashboard = () => {
                   </div>
                 ) : (
                   <div>
-                    <img src={cashYellow} alt="dragDrop" style = {{width: '8%'}}/>
+
+                    <img src={cashYellow} alt="dragDrop" className='cards-logo'/>
                   </div>
                 )}
   

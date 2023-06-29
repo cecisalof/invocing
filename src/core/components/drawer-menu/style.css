@@ -22,6 +22,7 @@
 
   a.navbar-brand {
     margin-left: .5rem;
+    margin-top: 1rem;
   }
 
   .navabar .navabar-nav .nav-link {
@@ -38,12 +39,11 @@
   }
   .navbarlogo {
     margin-bottom: 24px;
-    margin-top: 24px;
+    margin-top: 30px;
   }
 
   .img-fluid{
-    max-width: 198px;
-    max-height: 60px;
+    max-width: 80% !important;
   }
 
   .nav-link {

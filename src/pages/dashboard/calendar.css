@@ -106,3 +106,7 @@
     background: #005CFF;
     color: white;
   }
+
+  .cards-logo {
+    max-width: 50px;
+  }
