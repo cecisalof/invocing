@@ -327,13 +327,11 @@ body {
   font-size: 13px;
   line-height: 11px;
   text-align: center;
-  color: #005CFF;
+  color: #ADB9FB;
   padding-bottom: 20px;
   padding-top: 10px;
   background: transparent;
-  border: 2px solid #eaf1ff;
-  margin-bottom: 30px;
-
+  border: 2px solid #ADB9FB;
 }
 
 .states {
