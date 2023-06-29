@@ -1,10 +1,10 @@
 import { Link, Outlet, NavLink } from "react-router-dom";
 import React, { useState } from 'react';
 import profileIcon from '../../../assets/icons/profile.png';
-import profileWhiteIcon from '../../../assets/icons/profileWhite.png';
+//import profileWhiteIcon from '../../../assets/icons/profileWhite.png';
 //import sellIcon from '../../../assets/icons/sellout.png';
 //import sellWhitecon from '../../../assets/icons/selloutWhite.png';
-import cashIcon from '../../../assets/icons/cash.svg';
+//import cashIcon from '../../../assets/icons/cash.svg';
 import cashIconBlue from '../../../assets/icons/Cash.png';
 //import calendarIcon from '../../../assets/icons/calendar.png';
 // import calendarWhiteIcon from '../../../assets/icons/calendarWhite.png';
@@ -42,11 +42,15 @@ export const DrawerMenuComponent = ({ user }) => {
   const handleClickGastos = () => {
     //setSellInCollapsed(true);
     setGastosCollapsed(!gastosCollapsed)
-    setProfilesCollapsed(true)
+    //setProfilesCollapsed(true)
     //setHolidaysCollapsed(true)
     //setPayrollCollapsed(true)
     //setDocumentsCollapsed(true)
   }
+  const handleClick = () => {
+    setProfilesCollapsed(true)
+    // Aquí puedes realizar las acciones que deseas ejecutar al hacer clic en el enlace
+  };
   // const handleClickSellin = () => {
   //   setSellInCollapsed(false);
   //   setGastosCollapsed(true)
@@ -107,7 +111,7 @@ export const DrawerMenuComponent = ({ user }) => {
                     type="button"
 
                     style={{
-                      backgroundColor: profileCollapsed ? 'transparent' : '#005CFF', color: profileCollapsed ? '#005CFF' : '#ffffff', fontFamily: 'Nunito',
+                      backgroundColor:'transparent', color:  '#005CFF' , fontFamily: 'Nunito',
                       fontStyle: 'normal',
                       fontWeight: '500',
                       fontSize: '19px',
@@ -124,8 +128,12 @@ export const DrawerMenuComponent = ({ user }) => {
                     aria-controls="flush-collapseOne"
                     onClick={handleClickDashboard}
                   >
-                    <img className="menuIcon" src={profileCollapsed ? profileIcon : profileWhiteIcon} alt="Profile" />
+                    <img className="menuIcon" src={profileIcon} alt="Profile" />
+                    
                     Dashboard
+
+                    <img className={`arrow ${profileCollapsed ? 'rotate-down' : 'rotate-right'}`} src={arrow} alt="Arrow" />
+
 
                   </button>
 
@@ -170,7 +178,7 @@ export const DrawerMenuComponent = ({ user }) => {
                         type="button"
 
                         style={{
-                          backgroundColor: gastosCollapsed ? 'transparent' : '#005CFF', color: gastosCollapsed ? '#005CFF' : '#ffffff', fontFamily: 'Nunito',
+                          backgroundColor:  'transparent', color: '#005CFF', fontFamily: 'Nunito',
                           fontStyle: 'normal',
                           fontWeight: '500',
                           fontSize: '19px',
@@ -188,21 +196,21 @@ export const DrawerMenuComponent = ({ user }) => {
                         aria-controls="flush-collapseOne"
                         onClick={handleClickGastos}
                       >
-                        <img className="menuIcon" src={gastosCollapsed ? cashIconBlue : cashIcon} alt="Profile" />
+                        <img className="menuIcon" src={cashIconBlue} alt="Profile" />
                         Gastos
 
-                        <img className={`arrow ${gastosCollapsed ? 'rotate-down' : 'rotate-up'}`} src={arrow} alt="Arrow" />
+                        <img className={`arrow ${gastosCollapsed ? 'rotate-down' : 'rotate-up'}`} src={arrow} style={{marginLeft: '50px'}} alt="Arrow" />
                       </button>
                     </h2>
                     <div id="flush-collapseOne" className="accordion-collapse collapse" data-bs-parent="#accordionFlushExample" style={{ background: 'rgba(0, 92, 255, 0.03)' }}>
                       <div className="menuItemContainer">
-                        <NavLink className={(navData) => (navData.isActive ? 'subactive' : 'sub-nav-link')} to="/outcome/suppliers">Proveedores</NavLink>
+                        <NavLink className={(navData) => (navData.isActive ? 'subactive' : 'sub-nav-link')} onClick={handleClick} to="/outcome/suppliers">Proveedores</NavLink>
                       </div>
                       <div className="menuItemContainer">
-                        <NavLink className={(navData) => (navData.isActive ? 'subactive' : 'sub-nav-link')} to="/outcome/invoices-to-pay">Facturas</NavLink>
+                        <NavLink className={(navData) => (navData.isActive ? 'subactive' : 'sub-nav-link')} onClick={handleClick} to="/outcome/invoices-to-pay">Facturas</NavLink>
                       </div>
                       <div className="menuItemContainer">
-                        <NavLink className={(navData) => (navData.isActive ? 'subactive' : 'sub-nav-link')} to="/outcome/expense-tickets">Tickets de gastos</NavLink>
+                        <NavLink className={(navData) => (navData.isActive ? 'subactive' : 'sub-nav-link')} onClick={handleClick} to="/outcome/expense-tickets">Tickets de gastos</NavLink>
                       </div>
                     </div>
                   </div>
