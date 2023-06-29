@@ -113,13 +113,13 @@ export const DrawerMenuComponent = ({ user }) => {
                     style={{
                       backgroundColor:'transparent', color:  '#005CFF' , fontFamily: 'Nunito',
                       fontStyle: 'normal',
-                      fontWeight: '500',
-                      fontSize: '19px',
+                      fontWeight: '400',
+                      fontSize: '17px',
                       lineHeight: '26px', border: 'none',
                       paddingLeft: '5px',
                       paddingRight: '135px',
-                      paddingBottom: '15px',
-                      paddingTop: '10px',
+                      //paddingBottom: '15px',
+                      //paddingTop: '10px',
                       cursor: 'pointer',
                       marginRight: '20px'
                     }}
@@ -180,13 +180,13 @@ export const DrawerMenuComponent = ({ user }) => {
                         style={{
                           backgroundColor:  'transparent', color: '#005CFF', fontFamily: 'Nunito',
                           fontStyle: 'normal',
-                          fontWeight: '500',
-                          fontSize: '19px',
+                          fontWeight: '400',
+                          fontSize: '17px',
                           lineHeight: '26px', border: 'none',
                           paddingLeft: '5px',
                           paddingRight: '105px',
-                          paddingBottom: '15px',
-                          paddingTop: '10px',
+                          // paddingBottom: '15px',
+                          // paddingTop: '10px',
                           cursor: 'pointer',
                           marginRight: '20px'
                         }}
