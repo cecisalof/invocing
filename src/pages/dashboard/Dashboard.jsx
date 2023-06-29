@@ -704,9 +704,9 @@ export const Dashboard = () => {
                 <div className="row align-items-left">
                   <div className="col">
                     <div className="card-container">
-                      <div className="dashboard-titles">Total gastos</div>
-                      <div className="dashboard-titles">Total IVA</div>
-                      <div className="dashboard-titles">Total ret. IRPF</div>
+                      <div className="dashboard-titles mx-lg-4 mx-md-0">Total gastos</div>
+                      <div className="dashboard-titles mx-lg-4 mx-md-0">Total IVA</div>
+                      <div className="dashboard-titles mx-lg-4 mx-md-0">Total ret. IRPF</div>
                     </div>
                   </div>
                   <div className="col">
@@ -726,10 +726,10 @@ export const Dashboard = () => {
               <div className="container text-left">
                 <img src={dragDrop} alt="dragDrop" className='card-img' />
                 <div className="row align-items-center">
-                  <div className="col-6">
+                  <div className="col-lg-6 col-md-4">
                     <div className='card-container'>  
-                      <div className="dashboard-titles-invoices" > {`${invoiceCount.count} Facturas `}</div>
-                      <div className="dashboard-text">SUBIDAS {`${invoiceCount.text}`}</div>
+                      <div className="dashboard-titles-invoices mx-lg-4 mx-md-0" > {`${invoiceCount.count} Facturas `}</div>
+                      <div className="dashboard-text mx-lg-4 mx-md-0">SUBIDAS {`${invoiceCount.text}`}</div>
                     </div>
                   </div>
                   <div className="col">
