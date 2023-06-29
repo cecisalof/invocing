@@ -145,8 +145,8 @@ body {
 }
 
 .dashboard-titles {
-  font-weight: 700;
-  font-size: 19px;
+  font-weight: 400;
+  font-size: 17px;
   line-height: 25px;
   color: #005CFF;
   margin-top: 20px;
@@ -178,8 +178,8 @@ body {
 }
 
 .dashboard-titles-invoices {
-  font-weight: 700;
-  font-size: 19px;
+  font-weight: 400;
+  font-size: 17px;
   line-height: 25px;
   color: #005CFF;
   margin-top: 20px;
