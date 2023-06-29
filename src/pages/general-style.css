@@ -151,7 +151,6 @@ body {
   color: #005CFF;
   margin-top: 20px;
   margin-bottom: 20px;
-  margin-left: 45px;
   border-bottom: 1px solid #eaf1ff;
   width: 100%;
 }
@@ -162,7 +161,6 @@ body {
   line-height: 20px;
   color: #999999;
   margin-top: 2px;
-  margin-left: 45px;
   letter-spacing: 3px;
 }
 
@@ -173,7 +171,6 @@ body {
   line-height: 20px;
   color: #005CFF;
   margin-top: 2px;
-  /* margin-left: 50px; */
   letter-spacing: 3px;
 }
 
@@ -184,8 +181,6 @@ body {
   color: #005CFF;
   margin-top: 20px;
   margin-bottom: 20px;
-  margin-left: 45px;
-  /* border-bottom: 1px solid #999999; */
   width: 100%;
 }
 
@@ -240,6 +235,12 @@ body {
   transition: background-color 0.3s;
 }
 
+@media (max-width: 991px){
+  .file-drop-zone {
+    width: 50vw;
+  }
+}
+
 .file-drop-zone-full {
   border: 'none';
   border-radius: 20px;
@@ -260,6 +261,12 @@ body {
   text-align: left;
   font-size: 18px;
   width: 40vw;
+}
+
+@media (max-width: 991px){
+  .card {
+    width: 50vw;
+  }
 }
 
 .card-img {
@@ -368,7 +375,6 @@ body {
   font-size: 19px;
   line-height: 26px;
   color: #005CFF;
-  margin-left: 45px;
   margin-bottom: 0;
 }
 
