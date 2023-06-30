@@ -241,7 +241,7 @@ return (
     <div>
     <button type="button" className="btn btn-primary rounded-pill px-4" onClick={handleAddIncome}>Añadir venta</button>
     {/* <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} /> */}
-    <img src={deleteIcon} alt="Delete icon" onClick={handleTrashClick} style={{ marginLeft: '30px', hegiht: '33px'}} />
+    <img src={deleteIcon} alt="Delete icon" onClick={handleTrashClick} className='trashIcon' />
     </div>
     <div className="ag-theme-alpine gridStyle">
       <AgGridReact

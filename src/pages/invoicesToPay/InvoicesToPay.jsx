@@ -501,7 +501,7 @@ const processFiles = async (files) => {
       <div className='mx-3'>
         <button type="button" className="btn btn-primary rounded-pill px-4" onClick={handleAddInvoice}>Añadir factura</button>
         {/* <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} /> */}
-        <img src={deleteIcon} alt="Delete icon" onClick={handleTrashClick} style={{ marginLeft: '30px', height: '33px'  }} />
+        <img src={deleteIcon} alt="Delete icon" onClick={handleTrashClick} className='trashIcon'/>
       </div>
       <div className="ag-theme-alpine mx-3 gridStyle">
         <AgGridReact
