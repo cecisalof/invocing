@@ -105,6 +105,9 @@ export const Dashboard = () => {
   };
 
   const handleDrop = (event) => {
+    if (userDataContext.isLoadingRef && userDataContext.progress < 100){
+      console.log("Se está cargando otros archivos")
+    }else{
     event.preventDefault();
     event.stopPropagation();
     event.target.classList.remove('file-drop-zone-dragging');
@@ -122,9 +125,13 @@ export const Dashboard = () => {
       processFiles()
       
     }
+  }
   };
 
   const handleDropEx = (event) => {
+    if (userDataContext.isLoadingRefEx && userDataContext.progressEx < 100){
+      console.log("Se está cargando otros archivos")
+    }else{
     event.preventDefault();
     event.stopPropagation();
     event.target.classList.remove('file-drop-zone-dragging');
@@ -141,7 +148,7 @@ export const Dashboard = () => {
       }
       processFilesEx()
       
-    }
+    }}
   };
 
   const processFiles = async () => {
@@ -508,9 +515,9 @@ export const Dashboard = () => {
                   </div>
                   <div className="col">
                   <div className="card-container">
-                    <div className="totals" > {`${totals.total_amount}  €`}</div>
-                    <div className="totals" >  {`${totals.total_taxes}  €`}</div>
-                    <div className="totals" >  {`${totals.total_retention}  €`}</div>
+                    <div className="totals">{`${totals.total_amount || 0} €`}</div>
+                    <div className="totals">{`${totals.total_taxes || 0} €`}</div>
+                    <div className="totals">{`${totals.total_retention || 0} €`}</div>
                   </div>
                   </div>
                 </div>
@@ -525,7 +532,8 @@ export const Dashboard = () => {
                 <div className="row align-items-center">
                   <div className="col-lg-6 col-md-4">
                     <div className='card-container'>  
-                      <div className="dashboard-titles-invoices mx-lg-4 mx-md-0" > {`${invoiceCount.count} Facturas `}</div>
+
+                      <div className="dashboard-titles-invoices mx-lg-4 mx-md-0" > {`${invoiceCount.count || 0} Facturas `}</div>
                       <div className="dashboard-text mx-lg-4 mx-md-0">SUBIDAS {`${invoiceCount.text}`}</div>
                     </div>
                   </div>
@@ -543,21 +551,27 @@ export const Dashboard = () => {
                       <div>
                         <p className='states reject'>RECHAZADA</p>
                       </div>
+                      <div>
+                        <p className='states undefined'>SIN DEFINIR</p>
+                      </div>
                     </div>
                   </div>
                   <div className="col">
                     <div className="card-container">
                       <div>
-                        <p className='count-states'>{`${invoiceStates.Pendiente}`}</p>
+                        <p className='count-states'>{`${invoiceStates.Pendiente || 0}`}</p>
                       </div>
                       <div>
-                        <p className='count-states'>{`${invoiceStates.Pagada}`}</p>
+                        <p className='count-states'>{`${invoiceStates.Pagada || 0}`}</p>
                       </div>
                       <div>
-                        <p className='count-states'>{`${invoiceStates.Recibida}`}</p>
+                        <p className='count-states'>{`${invoiceStates.Recibida || 0}`}</p>
                       </div>
                       <div>
-                        <p className='count-states'>{`${invoiceStates.Rechazado}`}</p>
+                        <p className='count-states'>{`${invoiceStates.Rechazado || 0}`}</p>
+                      </div>
+                      <div>
+                        <p className='count-states'>{`${invoiceStates.SinDefinir || 0}`}</p>
                       </div>
                     </div>
                   </div>
