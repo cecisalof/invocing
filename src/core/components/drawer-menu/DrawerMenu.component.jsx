@@ -99,9 +99,9 @@ export const DrawerMenuComponent = ({ user }) => {
             <div className='navbarlogo'>
               <img src={logo} className="img-fluid" alt="Logo" />
             </div ></NavLink>
-          {/* <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>
-          </button> */}
+          </button>
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item">
@@ -308,9 +308,9 @@ export const DrawerMenuComponent = ({ user }) => {
               </li> */}
 
 
-              <div className="">
+              <div>
                 <li className="nav-item">
-                  <div className="menuItemContainer logout">
+                  <div className="menuItemContainer logout" style={{ marginLeft: 4 }}>
                     <img className="menuIcon" src={logoutIcon} alt="Profile" />
                     <Link className="nav-link" to="/logout">Salir</Link>
                   </div>
