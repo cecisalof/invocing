@@ -442,7 +442,7 @@ const processFiles = async () => {
         <img src={close} alt="Close icon" onClick={handleCloseClick} style={{ marginRight: '100px', width: '20 px', height: '20px'}} />
         </div>)}
         <div className='mx-3'>
-          <button type="button" className="btn btn-primary rounded-pill px-4" onClick={handleAddExpenses}>Añadir gasto</button>
+          <button type="button" className="btn btn-primary rounded-pill px-4 opacity-hover-05" onClick={handleAddExpenses}>Añadir gasto</button>
           {/* <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} /> */}
           <img src={deleteIcon} alt="Delete icon" onClick={handleTrashClick} className='trashIcon' />
         </div>

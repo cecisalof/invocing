@@ -499,7 +499,7 @@ const processFiles = async (files) => {
   </div>)}
 
       <div className='mx-3'>
-        <button type="button" className="btn btn-primary rounded-pill px-4" onClick={handleAddInvoice}>Añadir factura</button>
+        <button type="button" className="btn btn-primary rounded-pill px-4 opacity-hover-05" onClick={handleAddInvoice}>Añadir factura</button>
         {/* <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} /> */}
         <img src={deleteIcon} alt="Delete icon" onClick={handleTrashClick} className='trashIcon'/>
       </div>

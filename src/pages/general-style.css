@@ -406,3 +406,7 @@ body {
   margin-left: 30px;
   height: 33px;
 }
+
+.opacity-hover-05:hover{
+  opacity: 0.5;
+}
