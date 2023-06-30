@@ -711,9 +711,9 @@ export const Dashboard = () => {
                   </div>
                   <div className="col">
                   <div className="card-container">
-                    <div className="totals" > {`${totals.total_amount}  €`}</div>
-                    <div className="totals" >  {`${totals.total_taxes}  €`}</div>
-                    <div className="totals" >  {`${totals.total_retention}  €`}</div>
+                    <div className="totals">{`${totals.total_amount || 0} €`}</div>
+                    <div className="totals">{`${totals.total_taxes || 0} €`}</div>
+                    <div className="totals">{`${totals.total_retention || 0} €`}</div>
                   </div>
                   </div>
                 </div>
@@ -728,7 +728,7 @@ export const Dashboard = () => {
                 <div className="row align-items-center">
                   <div className="col-6">
                     <div className='card-container'>  
-                      <div className="dashboard-titles-invoices" > {`${invoiceCount.count} Facturas `}</div>
+                      <div className="dashboard-titles-invoices" > {`${invoiceCount.count || 0} Facturas `}</div>
                       <div className="dashboard-text">SUBIDAS {`${invoiceCount.text}`}</div>
                     </div>
                   </div>
@@ -746,21 +746,27 @@ export const Dashboard = () => {
                       <div>
                         <p className='states reject'>RECHAZADA</p>
                       </div>
+                      <div>
+                        <p className='states undefined'>SIN DEFINIR</p>
+                      </div>
                     </div>
                   </div>
                   <div className="col">
                     <div className="card-container">
                       <div>
-                        <p className='count-states'>{`${invoiceStates.Pendiente}`}</p>
+                        <p className='count-states'>{`${invoiceStates.Pendiente || 0}`}</p>
                       </div>
                       <div>
-                        <p className='count-states'>{`${invoiceStates.Pagada}`}</p>
+                        <p className='count-states'>{`${invoiceStates.Pagada || 0}`}</p>
                       </div>
                       <div>
-                        <p className='count-states'>{`${invoiceStates.Recibida}`}</p>
+                        <p className='count-states'>{`${invoiceStates.Recibida || 0}`}</p>
                       </div>
                       <div>
-                        <p className='count-states'>{`${invoiceStates.Rechazado}`}</p>
+                        <p className='count-states'>{`${invoiceStates.Rechazado || 0}`}</p>
+                      </div>
+                      <div>
+                        <p className='count-states'>{`${invoiceStates.SinDefinir || 0}`}</p>
                       </div>
                     </div>
                   </div>

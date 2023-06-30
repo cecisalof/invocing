@@ -55,10 +55,11 @@ export const InvoicesToPay = () => {
   }, [userDataContext]);
 
   const ragCellClassRules = {
-    'rag-green-outer': (props) => props.value === 'payed' || props.value === 'Pagada',
-    'rag-yellow-outer': (props) => props.value === 'received' || props.value === 'Recibida',
-    'rag-red-outer': (props) => props.value === 'rejected' || props.value === 'Rechazado',
-    'rag-orange-outer': (props) => props.value === 'pending' || props.value === 'Pendiente',
+    'rag-payed-outer': (props) => props.value === 'payed' || props.value === 'Pagada',
+    'rag-received-outer': (props) => props.value === 'received' || props.value === 'Recibida',
+    'rag-rejected-outer': (props) => props.value === 'rejected' || props.value === 'Rechazado',
+    'rag-pending-outer': (props) => props.value === 'pending' || props.value === 'Pendiente',
+    'rag-undefined-outer': (props) => props.value === 'undefined' || props.value === 'Sin definir',
   };
   const providerCellRenderer = (params) => {
     if (params.value) {
@@ -99,7 +100,7 @@ export const InvoicesToPay = () => {
       cellClassRules: ragCellClassRules,
       cellEditor: 'agSelectCellEditor',
       cellEditorParams: {
-        values: ['Recibida', 'Pagada', 'Rechazado', 'Pendiente'],
+        values: ['Recibida', 'Pagada', 'Rechazado', 'Pendiente', 'Sin definir'],
         cellRenderer: ragRenderer,
       },
       headerComponent: (props) => (
@@ -190,7 +191,7 @@ export const InvoicesToPay = () => {
           cellClassRules: ragCellClassRules,
           cellEditor: 'agSelectCellEditor',
           cellEditorParams: {
-            values: ['Recibida', 'Pagada', 'Rechazado', 'Pendiente'],
+            values: ['Recibida', 'Pagada', 'Rechazado', 'Pendiente', 'Sin definir'],
             cellRenderer: ragRenderer,
           },
           headerComponent: (props) => (
@@ -254,7 +255,8 @@ export const InvoicesToPay = () => {
       'Pendiente': 'pending',
       'Recibida': 'received',
       'Pagada': 'payed',
-      'Rechazado': 'rejected'
+      'Rechazado': 'rejected',
+      'Sin definir': 'undefined',
     };
 
     const paymentMapping = {

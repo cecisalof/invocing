@@ -54,7 +54,8 @@ export const Income = () => {
     {field: 'total', headerName: "Importe", 
     headerComponent: (props) => (
       <CustomHeader displayName={props.displayName} props={props}/>
-    ),},
+    ),
+    },
     {field: 'name', headerName: "Empresa", 
     headerComponent: (props) => (
       <CustomHeader displayName={props.displayName} props={props}/>
