@@ -4,6 +4,7 @@
     background-color: white;
     padding: 2rem 4rem;
     width: 80vw;
+    height: 100vh;
 }
 
 @media (min-width: 1441px) {
@@ -14,7 +15,6 @@
 
 .gridStyle {
     height: 70vh; 
-    /* width: 75.5vw;  */
     margin-top: 24; 
     margin-bottom: 32, 
 }
@@ -24,11 +24,10 @@
         left: 0;
         width: 100vw;
         padding: 1rem;
-        height: 100vh;
+        height: 100%;
     }
 
     .gridStyle {
-        /* width: 95vw; */
         margin-top: 24px;
         margin-bottom: 32px;
     }
