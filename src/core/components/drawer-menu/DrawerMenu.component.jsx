@@ -32,7 +32,6 @@ export const DrawerMenuComponent = ({ user }) => {
 
   const handleClickDashboard = () => {
     //setSellInCollapsed(true);
-    setGastosCollapsed(true)
     setProfilesCollapsed(false)
     //setHolidaysCollapsed(true)
     //setPayrollCollapsed(true)
@@ -53,7 +52,6 @@ export const DrawerMenuComponent = ({ user }) => {
   };
   // const handleClickSellin = () => {
   //   setSellInCollapsed(false);
-  //   setGastosCollapsed(true)
   //   setProfilesCollapsed(true)
   //   setHolidaysCollapsed(true)
   //   setPayrollCollapsed(true)
@@ -63,7 +61,6 @@ export const DrawerMenuComponent = ({ user }) => {
 
   // const handleClickHolidays = () => {
   //   setSellInCollapsed(true);
-  //   setGastosCollapsed(true)
   //   setProfilesCollapsed(true)
   //   setHolidaysCollapsed(false)
   //   setPayrollCollapsed(true)
@@ -72,7 +69,6 @@ export const DrawerMenuComponent = ({ user }) => {
 
   // const handleClickPayroll = () => {
   //   setSellInCollapsed(true);
-  //   setGastosCollapsed(true)
   //   setProfilesCollapsed(true)
   //   setHolidaysCollapsed(true)
   //   setPayrollCollapsed(false)
@@ -82,7 +78,6 @@ export const DrawerMenuComponent = ({ user }) => {
 
   // const handleClickDocuments = () => {
   //   setSellInCollapsed(true);
-  //   setGastosCollapsed(true)
   //   setProfilesCollapsed(true)
   //   setHolidaysCollapsed(true)
   //   setPayrollCollapsed(true)
