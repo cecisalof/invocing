@@ -28,6 +28,7 @@ export const ExpenseTickets = () => {
 
   const [userToken, setUserToken] = useState('');
   const [isFileUploaded, setIsFileUploaded] = useState(false);
+  const [updatePercentage, setUpdatePercentage] = useState(false);
   
   const gridRef = useRef(); // Optional - for accessing Grid's API
   const [rowData, setRowData] = useState(); // Set rowData to Array of Objects, one Object per Row
@@ -44,6 +45,17 @@ export const ExpenseTickets = () => {
     }
     return '';
   };
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      if (userDataContext.progressEx < 100 && updatePercentage) {
+        userDataContext.updateProgressEx(userDataContext.progressEx +  Math.floor(Math.random() * 4) + 1);
+      }
+    }, 10000); // 1 second interval
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [userDataContext]);
 
   const [columnDefs, setColumnDefs] = useState([
     {
@@ -436,7 +448,7 @@ const handleDragLeave = (event) => {
 };
 
 const handleDrop = (event) => {
-  if (userDataContext.isLoadingRefEx && userDataContext.progressEx < 100){
+  if (userDataContext.isLoadingRef && userDataContext.progress < 100){
     console.log("Se está cargando otros archivos")
   }else{
   event.preventDefault();
@@ -445,19 +457,79 @@ const handleDrop = (event) => {
   
   const files = event.dataTransfer.files;
   userDataContext.updateFilesEx(files)
-
   if (files.length > 10){
     setIsFileUploaded(true);
     userDataContext.toggleProcessBottonEx()
   }
   else{
-    if (userDataContext.processBottonEx){
+    if (userDataContext.processBotton){
       userDataContext.toggleProcessBottonEx()
     }
-    processFiles()
+    setUpdatePercentage(true)
+    processFiles(files)
     
   }}
+  
 };
+
+const processFiles = async (files) => {
+  console.log("Procesando archivos automáticamente...");
+  userDataContext.toggleLoadingEx();
+  setIsFileUploaded(false);
+  console.log(files);
+  const response = await postExpenseTicketAutomatic(userToken, files);
+  const ids = response.data.schendules;
+  console.log(ids);
+  
+
+  const checkStatus = async () => {
+    const response = await getSchenduleStatus(userToken, ids);
+    const statusResponse = response.status;
+
+    let allDone = true;
+    let loadedCount = 0;
+    let notPending = 0;
+
+    statusResponse.map((item) => {
+      const totalCount = ids.length;
+      for (const id of ids) {
+        const status = item[id.toString()]; // Obtener el estado del ID
+        console.log(status);
+        if (status === "DONE") {
+          loadedCount = loadedCount + 1; // Incrementar el contador si el estado es "DONE"
+
+          const percentage = Math.round((loadedCount * 100) / totalCount);
+          userDataContext.updateProgressEx(percentage);
+          notPending = notPending + 1
+        } else if (status === "ERROR") {
+          notPending = notPending + 1
+        }
+        else {
+          allDone = false;
+        }
+      }
+    });
+
+
+
+    if (allDone) {
+      console.log("Procesamiento completo");
+      setUpdatePercentage(false)
+      getData(userToken);
+    } else if(notPending === ids.length){
+      console.log("Proceso con errores");
+      setUpdatePercentage(false)
+      handleCloseClick()
+    }
+    else {
+      setTimeout(checkStatus, 10000);
+    }
+  };
+
+  await checkStatus();
+
+};
+
 
 function handleCloseClick() {
   userDataContext.updateProgressEx(0)
@@ -465,58 +537,6 @@ function handleCloseClick() {
   userDataContext.toggleLoadingEx()
 }
 
-const processFiles = async () => {
-  console.log("Procesando archivos automáticamente...");
-  userDataContext.toggleLoadingEx()
-  setIsFileUploaded(false);
-  const response = await postExpenseTicketAutomatic(userToken, userDataContext.filesEx);
-  const ids = response.data.schendules
-  console.log(ids)
-  
-
-  const checkStatus = async () => {
-    
-    const response = await getSchenduleStatus(userToken, ids);
-    const statusResponse = response.status
-
-    // Verificar si todos los IDs están en el estado "DONE"
-    let allDone = true;
-    let loadedCount = 0
-    
-
-    statusResponse.map((item) => {
-      for (const id of ids) {
-        const status = item[id.toString()]; // Obtener el estado del ID
-        if (status === "DONE") {
-          loadedCount =  loadedCount + 1; // Incrementar el contador si el estado es "DONE"
-          console.log(loadedCount); // Imprimir el número de IDs con estado "DONE"
-          const totalCount = ids.length;
-          const percentage = Math.round((loadedCount * 100) / totalCount);
-          console.log(percentage)
-          userDataContext.updateProgressEx(percentage)
-        }else{
-          allDone = false;
-          const totalCount = ids.length;
-          const percentage = Math.round((loadedCount * 100) / totalCount);
-          userDataContext.updateProgressEx(percentage)
-        }
-
-      }
-    });
-    if (!allDone) {
-      // Si no todos los IDs están en el estado "DONE", esperar un tiempo y volver a verificar
-      setTimeout(checkStatus, 10000); // Esperar 2 segundos (puedes ajustar el tiempo según tus necesidades)
-    } else {
-      console.log(userDataContext.progressEx)
-      console.log("Procesamiento completo");
-      getData(userToken);
-    }   
-    
-  };
-  // Iniciar la verificación del estado de los IDs
-  await checkStatus();
-
- };
 
 //  function handleViewClick() {
 //   setViewFiles(!viewFiles)

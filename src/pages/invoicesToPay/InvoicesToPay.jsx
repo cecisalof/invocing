@@ -589,17 +589,18 @@ const processFiles = async (files) => {
 
 
 
-    if (!allDone) {
-      setTimeout(checkStatus, 10000); // Esperar 10 segundos y volver a verificar
+    if (allDone) {
+      console.log("Procesamiento completo");
+      setUpdatePercentage(false)
+      getData(userToken);
     } else if(notPending === ids.length){
       console.log("Proceso con errores");
       setUpdatePercentage(false)
       handleCloseClick()
     }
     else {
-      console.log("Procesamiento completo");
-      setUpdatePercentage(false)
-      getData(userToken);
+      setTimeout(checkStatus, 10000); // Esperar 10 segundos y volver a verificar
+      
     }
   };
 
