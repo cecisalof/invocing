@@ -2,6 +2,7 @@ import React from 'react';
 
 export default React.createContext({
   userData: {},
+  isInitialLoading: true,
   files: [],
   progress: 0,
   isLoadingRef: false,
