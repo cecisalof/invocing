@@ -3,35 +3,35 @@ import { useLocation } from 'react-router-dom';
 import { AppBar } from "../../components/appBar/AppBar";
 import Context from '../../contexts/context';
 import { useContext } from 'react';
-import { postExpenseTicket} from "./services";
+import { postExpenseTicket } from "./services";
 import { getProviders } from "../suppliers/services";
 import './style.css';
 import '../general-style.css'
 import { Alert } from '@mui/material';
 
 export const AddExpenseTickets = () => {
-    const [userToken, setUserToken] = useState('');
+  const [userToken, setUserToken] = useState('');
 
-    const [provider, setProvider] = useState('');
-    const [date, setDate] = useState('');
-    const [number, setNumber] = useState('');
-    const [concept, setConcept] = useState('');
-    const [total, setTotal] = useState('');
-    const [totalTaxes, setTotalTaxes] = useState('');
-    const [totalPretaxes, setTotalPretaxes] = useState('');
-    const [taxesPercentage, setTaxesPercentage] = useState('');
-    const [currency, setCurrency] = useState('');
-    const [file, setManualFile] = useState('');
-    
+  const [provider, setProvider] = useState('');
+  const [date, setDate] = useState('');
+  const [number, setNumber] = useState('');
+  const [concept, setConcept] = useState('');
+  const [total, setTotal] = useState('');
+  const [totalTaxes, setTotalTaxes] = useState('');
+  const [totalPretaxes, setTotalPretaxes] = useState('');
+  const [taxesPercentage, setTaxesPercentage] = useState('');
+  const [currency, setCurrency] = useState('');
+  const [file, setManualFile] = useState('');
 
-    const [rowProviders, setrowProviders] = useState(); // Set rowData to Array of Objects, one Object per Row
-    const [providersLoaded, setProvidersLoaded] = useState(false);
-  
-    const [isSuccess, setIsSuccess] = useState(false);
-    const [isError, setIsError] = useState(false);
-  
-    const location = useLocation();
-    const userDataContext = useContext(Context);
+
+  const [rowProviders, setrowProviders] = useState(); // Set rowData to Array of Objects, one Object per Row
+  const [providersLoaded, setProvidersLoaded] = useState(false);
+
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [isError, setIsError] = useState(false);
+
+  const location = useLocation();
+  const userDataContext = useContext(Context);
 
 
 
@@ -96,8 +96,8 @@ export const AddExpenseTickets = () => {
 
 
 
-  
-   const handleFileChange = (event) => {
+
+  const handleFileChange = (event) => {
     const file = event.target.files;
     setManualFile(file);
     console.log(file);
@@ -124,47 +124,47 @@ export const AddExpenseTickets = () => {
     setIsSuccess(false);
     setIsError(false);
 
-      const response = await postExpenseTicket(userToken, formData);
-      if (response === undefined){
-        setIsError(true)
-      }else{
-        setIsSuccess(true)
-      }
+    const response = await postExpenseTicket(userToken, formData);
+    if (response === undefined) {
+      setIsError(true)
+    } else {
+      setIsSuccess(true)
+    }
 
 
     // Reiniciar los valores de los campos
 
-  setDate('');
-  setNumber('');
-  setConcept('');
-  setTotal('');
-  setTotalTaxes('');
-  setTotalPretaxes('');
-  setTaxesPercentage('');
-  setCurrency('');
+    setDate('');
+    setNumber('');
+    setConcept('');
+    setTotal('');
+    setTotalTaxes('');
+    setTotalPretaxes('');
+    setTaxesPercentage('');
+    setCurrency('');
   };
 
   return (
     <div className="root">
       <div>
-        <AppBar location={location}/>
+        <AppBar location={location} />
       </div>
       <div className="title">Nuevo gasto</div>
-    {isSuccess && (
-      <Alert onClose={() => {setIsSuccess(false)}} severity="success" className="custom-alert">
-        La operación se realizó correctamente.
-      </Alert>
-    )}
+      {isSuccess && (
+        <Alert onClose={() => { setIsSuccess(false) }} severity="success" className="custom-alert">
+          La operación se realizó correctamente.
+        </Alert>
+      )}
       {isError && (
-      <Alert  severity="error" className="custom-alert" onClose={() => {setIsError(false)}}>
-        Hubo un error al realizar la operación.
-      </Alert>)}
+        <Alert severity="error" className="custom-alert" onClose={() => { setIsError(false) }}>
+          Hubo un error al realizar la operación.
+        </Alert>)}
 
-      <div className="panel">
-      <div className="input-container">
+      <div className="">
+        <div className="">
           <input type="file" id="file" onChange={handleFileChange} />
         </div>
-      <div className="form-row">
+        {/* <div className="form-row">
           <div className="input-container">
             <label className="label" htmlFor="nombre-juridico">Proveedor</label>
             <select
@@ -192,9 +192,9 @@ export const AddExpenseTickets = () => {
                 />
               </div>
             </div>
-          </div>
+          </div> */}
 
-          <div className="form-row">
+        {/* <div className="form-row">
               <div className="input-container">
                 <label className="label" htmlFor="nif">Concepto</label>
                 <input
@@ -221,9 +221,9 @@ export const AddExpenseTickets = () => {
             </div>
 
             
-          </div>
+          </div> */}
 
-          <div className="form-row">
+        {/* <div className="form-row">
               <div className="input-container">
                 <label className="label" htmlFor="invoice_amount">Total</label>
                 <input
@@ -255,9 +255,9 @@ export const AddExpenseTickets = () => {
                   className="midtextbox" 
                 />
             </div>
-          </div>
+          </div> */}
 
-          <div className="form-row">
+        {/* <div className="form-row">
             <div className="input-container">
                 <label className="label" htmlFor="taxes_percentage">Total de impuestos</label>
                 <input
@@ -280,18 +280,150 @@ export const AddExpenseTickets = () => {
                   className="midtextbox" 
                 />
             </div>
-          </div>
+          </div> */}
 
-          <button
-              type="button"
-              className="btn btn-primary rounded-pill px-4 my-3" onClick={handleSubmit} // Agrega las clases de Bootstrap y estilos personalizados
-              style={{ marginTop: '200px', width: '200px' }} // Estilos en línea para margen superior y ancho
-            >
-              Guardar
-            </button>
-            
+        {/* <button
+          type="button"
+          className="btn btn-primary rounded-pill px-4 my-3" onClick={handleSubmit} // Agrega las clases de Bootstrap y estilos personalizados
+          style={{ marginTop: '200px', width: '200px' }} // Estilos en línea para margen superior y ancho
+        >
+          Guardar
+        </button> */}
+
+        <div className='row'>
+          <div className='col-lg-4 col-xs-12 col-md-6'>
+            <div className="mb-3">
+              <label className="label" htmlFor="nombre-juridico">Proveedor</label>
+              <select
+                id="nombre-juridico"
+                value={provider}
+                onChange={handleAddProvider}
+                className="inputTextbox form-select" // Agrega las clases CSS para mantener el mismo estilo
+                disabled={!providersLoaded} // Deshabilita el select mientras se cargan las opciones
+              >
+                {providersLoaded && rowProviders.map(option => (
+                  <option key={option.name} value={option.uuid}>{option.name}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <div className='col-lg-4 col-md-6 col-xs-12'>
+            <div className="mb-3">
+              <label className="label" htmlFor="address">Numero de factura</label>
+              <input
+                type="text"
+                id="address"
+                value={number}
+                onChange={handleAddNumber}
+                className="inputTextbox"
+              />
+            </div>
+          </div>
         </div>
-      
+        <div className='row'>
+          <div className='col-lg-4 col-xs-12 col-md-6'>
+            <div className="mb-3">
+              <label className="label" htmlFor="nif">Concepto</label>
+              <input
+                type="text"
+                id="nif"
+                value={concept}
+                onChange={handleAddConcept}
+                placeholder=""
+                className="inputTextbox"
+              />
+            </div>
+          </div>
+          <div className='col-lg-4 col-md-6 col-xs-12'>
+            <div className="mb-3">
+              <label className="label" htmlFor="Fecha">Fecha</label>
+              <input
+                type="text"
+                id="Fecha"
+                value={date}
+                onChange={handleAddDate}
+                placeholder="yyyy-mm-dd"
+                className="inputTextbox"
+              />
+            </div>
+          </div>
+        </div>
+        <div className='row'>
+          <div className='col-lg-4 col-xs-12 col-md-6'>
+            <div className="mb-3">
+              <label className="label" htmlFor="invoice_amount">Total</label>
+              <input
+                type="text"
+                id="invoice_amount"
+                value={total}
+                onChange={handleAddTotal}
+                className="inputTextbox"
+              />
+            </div>
+          </div>
+          <div className='col-lg-4 col-md-6 col-xs-12'>
+            <div className="mb-3">
+              <label className="label" htmlFor="taxes_percentage">Porcentaje de impuestos</label>
+              <input
+                type="text"
+                id="taxes_percentage"
+                value={taxesPercentage}
+                onChange={handleAddTaxes}
+                className="inputTextbox"
+              />
+            </div>
+          </div>
+          <div className='col-lg-4 col-md-6 col-xs-12'>
+            <div className="mb-3">
+              <label className="label" htmlFor="currecy">Divisa</label>
+              <input
+                type="text"
+                id="curreny"
+                value={currency}
+                onChange={handleAddCurrency}
+                placeholder="EUR"
+                className="inputTextbox"
+              />
+            </div>
+          </div>
+        </div>
+        <div className='row'>
+          <div className='col-lg-4 col-xs-12 col-md-6'>
+            <div className="mb-3">
+              <label className="label" htmlFor="taxes_percentage">Total de impuestos</label>
+              <input
+                type="text"
+                id="taxes_percentage"
+                value={totalTaxes}
+                onChange={handleAddTotalTaxes}
+                placeholder=""
+                className="inputTextbox"
+              />
+            </div>
+          </div>
+          <div className='col-lg-4 col-md-6 col-xs-12'>
+            <div className="mb-3">
+              <label className="label" htmlFor="currecy">Total sin impuestos</label>
+              <input
+                type="text"
+                id="curreny"
+                value={totalPretaxes}
+                onChange={handleAddTotalPretaxes}
+                placeholder=""
+                className="inputTextbox"
+              />
+            </div>
+          </div>
+        </div>
+        <button
+          type="button"
+          className="btn btn-primary rounded-pill px-4 my-3" onClick={handleSubmit} // Agrega las clases de Bootstrap y estilos personalizados
+          style={{ marginTop: '200px', width: '200px' }} // Estilos en línea para margen superior y ancho
+        >
+          Guardar
+        </button>
+      </div>
+
     </div>
   );
 };
