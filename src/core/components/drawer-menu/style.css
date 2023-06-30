@@ -17,6 +17,7 @@
 
   nav.navbar.navbar-expand-lg.shadow.p-3 {
     background-color: #F3F4FF !important;
+    min-height: 500px;
   }
 
   a.navbar-brand {
@@ -28,6 +29,10 @@
     color: #000;
   }
 }
+
+  .navbar *:focus{
+    background: none;
+  }
 
   .navbar-toggler{
     border: 1px solid #005CFF !important;
@@ -42,7 +47,7 @@
     text-decoration: none;
     outline: none;
     box-shadow: 0 0 0;
-}
+  }
 
   .navbar-toggler-icon {
     background-image: url("../../../assets/icons/Hamburger.png");
@@ -125,6 +130,18 @@
     justify-content: left;
     align-items: center;
     width: 15vw;
+  }
+
+  .menuItemContainer:hover, .accordion-button:hover img, .accordion-button:hover span, .navbarlogo:hover{
+    opacity: 0.5;
+  }
+
+  .accordion-button.open{
+    background: rgba(0, 92, 255, 0.03);
+  }
+  
+  .accordion-button.close{
+    background: transparent;
   }
 
   @media (max-width: 992px) {

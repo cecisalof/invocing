@@ -313,6 +313,10 @@ body {
   border: 2px solid #ADB9FB;
 }
 
+.filters:hover{
+  opacity: 0.5;
+}
+
 .states {
   margin: 6px;
   border-radius: 100px;
@@ -396,4 +400,9 @@ body {
 .ag-chart-wrapper {
   border-radius: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.trashIcon {
+  margin-left: 30px;
+  height: 33px;
 }
