@@ -17,7 +17,6 @@ import PropTypes from 'prop-types';
 
 export const Suppliers = () => {
   const location = useLocation();
-  const [userToken, setUserToken] = useState('');
 
   const navigate = useNavigate();
 
@@ -57,35 +56,24 @@ export const Suppliers = () => {
   const handleAddProvider = () => {
     navigate('/add-suppliers'); // Reemplaza '/ruta-del-formulario' con la ruta de tu formulario
   };
-
-  useEffect(() => {
-    let token = userDataContext.userData.token;
-    if (token !== null) {
-      setUserToken(token);
-    }
-  }, [userDataContext.userData.token]);
   
   useEffect(() => {
-    if (userToken !== undefined) {
-      getData(userToken);
-    }
-  }, [userToken]);
+    getPanelData();
+  }, [userDataContext.userData.token]);
 
-  // Get data
-  const getData = async (userToken) => {
+  let isLoading = false; // Class variable to avoid taking too long to save that we are loading (state is not enough to control this). Also avoids multiple request under 1 second
+  const getPanelData = async () => {
+    if (!userDataContext.userData.token || isLoading) return
+    isLoading = true
     try {
-      console.log(userToken)
-      const data = await getProviders(userToken);
-      console.log(data)
+      const data = await getProviders(userDataContext.userData.token);
       setRowData(data || []);
     } catch (error) {
       setRowData([]);
       console.log('No hay datos para mostrar.');
     }
-  };
-  useEffect(() => { 
-    getData();
-  }, []);
+    setTimeout(()=>{isLoading = false},1000)
+  }
 
   const defaultColDef = useMemo(() => {
     return {
@@ -131,13 +119,13 @@ function handleTrashClick() {
   // Crear una Promesa que se resuelva cuando se hayan eliminado todas las facturas
   const deletePromises = selectedData.map((obj) => {
     console.log(obj.uuid);
-    return deleteProvider(obj.uuid, userToken);
+    return deleteProvider(obj.uuid, userDataContext.userData.token);
   });
   
   Promise.all(deletePromises)
     .then(() => {
-      // Llamada a getData() después de que se hayan eliminado todas las facturas
-      getData(userToken);
+      // Llamada a getPanelData() después de que se hayan eliminado todas las facturas
+      getPanelData();
     })
     .catch((error) => {
       console.log(error);
@@ -158,9 +146,9 @@ const onCellValueChanged = (event) => {
     newValue = stateMappings[newValue] || newValue;
   }
   const data = { [event.colDef.field]: newValue };
-  patchProvider(event.data.uuid, data, userToken).then(() => {
+  patchProvider(event.data.uuid, data).then(() => {
     // Espera a que se complete la solicitud PATCH y luego carga los datos
-    getData(userToken);
+    getPanelData();
   });
 
 };
