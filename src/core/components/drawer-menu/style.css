@@ -1,4 +1,3 @@
-
 @media screen and (min-width:992px) {
   .navbar,
   .container-fluid,
@@ -18,6 +17,7 @@
 
   nav.navbar.navbar-expand-lg.shadow.p-3 {
     background-color: #F3F4FF !important;
+    min-height: 500px;
   }
 
   a.navbar-brand {
@@ -29,14 +29,44 @@
     color: #000;
   }
 }
+
+  .navbar *:focus{
+    background: none;
+  }
+
+  .navbar-toggler{
+    border: 1px solid #005CFF !important;
+  }
+  
+  .navbar-toggler:hover{
+    border: 1px solid #005CFF !important;
+    background-color: #005CFF;
+  }
+
+  .navbar-toggler:focus {
+    text-decoration: none;
+    outline: none;
+    box-shadow: 0 0 0;
+  }
+
+  .navbar-toggler-icon {
+    background-image: url("../../../assets/icons/Hamburger.png");
+  }
+
+  .navbar-toggler-icon:hover {
+    background-image: url("../../../assets/icons/hamburger-white.png");
+  }
+
   .navbar .navbar-nav .nav-link {
     color: #000;
   }
+
   .navbar-brand {
     font-size: 1.5em !important;
     font-weight: bold !important;
     color: #000;
   }
+
   .navbarlogo {
     margin-bottom: 24px;
     margin-top: 30px;
@@ -74,9 +104,11 @@
     list-style-type: none;
     width: 15vw;
   }
-  
-  .logout {
-    margin-top: 300px;
+
+  @media (max-width: 992px) {
+    .nav-item {
+      width: 100%;
+    }
   }
 
   .logoutItem {
@@ -84,18 +116,38 @@
     margin-bottom: 8px;
   }
 
-  .logout {
-    position:absolute;
-    bottom: 24px;
-    left: 42px;
-    margin-top: 330px;
+  @media (min-width: 993px){
+    .logout {
+      position:absolute;
+      bottom: 24px;
+      left: 42px;
+      margin-top: 330px;
+    }
   }
 
   .menuItemContainer {
     display: flex;
     justify-content: left;
     align-items: center;
-    width: 15vw !important;
+    width: 15vw;
+  }
+
+  .menuItemContainer:hover, .accordion-button:hover img, .accordion-button:hover span, .navbarlogo:hover{
+    opacity: 0.5;
+  }
+
+  .accordion-button.open{
+    background: rgba(0, 92, 255, 0.03);
+  }
+  
+  .accordion-button.close{
+    background: transparent;
+  }
+
+  @media (max-width: 992px) {
+    .menuItemContainer {
+      width: 100%;
+    }
   }
 
   .menuIcon {
@@ -115,7 +167,6 @@
     margin-top: 10px;
     margin-bottom: 10px;
   }
-
 
   .rotate-up {
     transform: rotate(180deg);
@@ -137,5 +188,3 @@
   .arrow{
     margin-left: 20px;
   }
-  
-  

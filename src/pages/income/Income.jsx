@@ -11,7 +11,7 @@ import Context from '../../contexts/context';
 import { useContext } from 'react';
 //import filterIcon from '../../assets/icons/Filtrar.png';
 import { useNavigate } from 'react-router-dom';
-import deleteIcon from '../../assets/icons/Papelera.png';
+import deleteIcon from '../../assets/icons/trash.svg';
 import CustomHeader from '../customHeader.jsx';
 import CustomElement from '../customElement.jsx';
 import PropTypes from 'prop-types';
@@ -242,7 +242,7 @@ return (
     <div>
     <button type="button" className="btn btn-primary rounded-pill px-4" onClick={handleAddIncome}>Añadir venta</button>
     {/* <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} /> */}
-    <img src={deleteIcon} alt="Delete icon" onClick={handleTrashClick} style={{ marginLeft: '30px'  }} />
+    <img src={deleteIcon} alt="Delete icon" onClick={handleTrashClick} className='trashIcon' />
     </div>
     <div className="ag-theme-alpine gridStyle">
       <AgGridReact

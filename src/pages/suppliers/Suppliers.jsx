@@ -7,11 +7,11 @@ import Context from '../../contexts/context';
 import { useContext } from 'react';
 import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
 import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
-import './style.css';
+// import './style.css';
 import '../general-style.css'
 import { useNavigate } from 'react-router-dom';
 //import filterIcon from '../../assets/icons/Filtrar.png';
-import deleteIcon from '../../assets/icons/Papelera.png';
+import deleteIcon from '../../assets/icons/trash.svg';
 import CustomHeader from '../customHeader.jsx';
 import PropTypes from 'prop-types';
 
@@ -174,7 +174,7 @@ return (
     <div className='mx-1'>
       <button type="button" className="btn btn-primary rounded-pill px-4 mx-2" onClick={handleAddProvider}>Añadir proveedor</button>
       {/* <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} /> */}
-      <img src={deleteIcon} alt="Delete icon" onClick={handleTrashClick} style={{ marginLeft: '30px'  }} />
+      <img src={deleteIcon} alt="Delete icon" onClick={handleTrashClick} className='trashIcon' />
     </div>
     <div className="ag-theme-alpine mx-3 gridStyle">
       <AgGridReact

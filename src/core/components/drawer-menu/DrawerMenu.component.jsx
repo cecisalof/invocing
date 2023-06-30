@@ -94,9 +94,9 @@ export const DrawerMenuComponent = ({ user }) => {
             <div className='navbarlogo'>
               <img src={logo} className="img-fluid" alt="Logo" />
             </div ></NavLink>
-          {/* <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>
-          </button> */}
+          </button>
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item">
@@ -169,11 +169,11 @@ export const DrawerMenuComponent = ({ user }) => {
                   <div className="accordion-item">
                     <h2 className="accordion-header">
                       <button
-                        className={`accordion-button collapsed ${gastosCollapsed ? 'collapsed-icon' : ''}`}
+                        className={`accordion-button collapsed ${gastosCollapsed ? 'collapsed-icon closed' : 'open'}`}
                         type="button"
 
                         style={{
-                          backgroundColor:  'transparent', color: '#005CFF', fontFamily: 'Nunito',
+                          color: '#005CFF', fontFamily: 'Nunito',
                           fontStyle: 'normal',
                           fontWeight: '400',
                           fontSize: '17px',
@@ -183,7 +183,10 @@ export const DrawerMenuComponent = ({ user }) => {
                           // paddingBottom: '15px',
                           // paddingTop: '10px',
                           cursor: 'pointer',
-                          marginRight: '20px'
+                          marginRight: '20px',
+                          borderTopLeftRadius: '10px',
+                          borderTopRightRadius: '10px',
+                          paddingTop: '3px'
                         }}
                         data-bs-toggle="collapse"
                         data-bs-target="#flush-collapseOne"
@@ -192,7 +195,7 @@ export const DrawerMenuComponent = ({ user }) => {
                         onClick={handleClickGastos}
                       >
                         <img className="menuIcon" src={cashIconBlue} alt="Profile" />
-                        Gastos
+                        <span>Gastos</span>
 
                         <img className={`arrow ${gastosCollapsed ? 'rotate-down' : 'rotate-up'}`} src={arrow} style={{marginLeft: '50px'}} alt="Arrow" />
                       </button>
@@ -303,12 +306,12 @@ export const DrawerMenuComponent = ({ user }) => {
               </li> */}
 
 
-              <div className="">
+              <div>
                 <li className="nav-item">
-                  <div className="menuItemContainer logout">
+                  <Link className="menuItemContainer logout nav-link" to="/logout">
                     <img className="menuIcon" src={logoutIcon} alt="Profile" />
-                    <Link className="nav-link" to="/logout">Salir</Link>
-                  </div>
+                    <span className="nav-link" to="/logout">Salir</span>
+                  </Link>
                 </li>
               </div>
             </ul>
