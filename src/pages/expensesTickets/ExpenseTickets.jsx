@@ -288,6 +288,9 @@ const handleDragLeave = (event) => {
 };
 
 const handleDrop = (event) => {
+  if (userDataContext.isLoadingRefEx && userDataContext.progressEx < 100){
+    console.log("Se está cargando otros archivos")
+  }else{
   event.preventDefault();
   event.stopPropagation();
   event.target.classList.remove('file-drop-zone-dragging');
@@ -305,7 +308,7 @@ const handleDrop = (event) => {
     }
     processFiles()
     
-  }
+  }}
 };
 
 function handleCloseClick() {

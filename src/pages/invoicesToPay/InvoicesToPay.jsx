@@ -372,6 +372,9 @@ const handleDragLeave = (event) => {
 };
 
 const handleDrop = (event) => {
+  if (userDataContext.isLoadingRef && userDataContext.progress < 100){
+    console.log("Se está cargando otros archivos")
+  }else{
   event.preventDefault();
   event.stopPropagation();
   event.target.classList.remove('file-drop-zone-dragging');
@@ -389,7 +392,7 @@ const handleDrop = (event) => {
     setUpdatePercentage(true)
     processFiles(files)
     
-  }
+  }}
   
 };
 

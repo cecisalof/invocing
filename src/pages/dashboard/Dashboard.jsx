@@ -224,6 +224,9 @@ export const Dashboard = () => {
   };
 
   const handleDrop = (event) => {
+    if (userDataContext.isLoadingRef && userDataContext.progress < 100){
+      console.log("Se está cargando otros archivos")
+    }else{
     event.preventDefault();
     event.stopPropagation();
     event.target.classList.remove('file-drop-zone-dragging');
@@ -241,9 +244,13 @@ export const Dashboard = () => {
       processFiles()
       
     }
+  }
   };
 
   const handleDropEx = (event) => {
+    if (userDataContext.isLoadingRefEx && userDataContext.progressEx < 100){
+      console.log("Se está cargando otros archivos")
+    }else{
     event.preventDefault();
     event.stopPropagation();
     event.target.classList.remove('file-drop-zone-dragging');
@@ -260,7 +267,7 @@ export const Dashboard = () => {
       }
       processFilesEx()
       
-    }
+    }}
   };
 
   const processFiles = async () => {
