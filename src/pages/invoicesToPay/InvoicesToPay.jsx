@@ -45,7 +45,7 @@ export const InvoicesToPay = () => {
   useEffect(() => {
     const intervalId = setInterval(() => {
       if (userDataContext.progress < 100 && updatePercentage) {
-        userDataContext.updateProgress(userDataContext.progress + 2);
+        userDataContext.updateProgress(userDataContext.progress +  Math.floor(Math.random() * 4) + 1);
       }
     }, 10000); // 1 second interval
 
@@ -82,7 +82,24 @@ export const InvoicesToPay = () => {
     {field: 'total', headerName: "Importe", 
     headerComponent: (props) => (
       <CustomHeader displayName={props.displayName} props={props}/>
-    ),},
+    ),
+    valueFormatter: (params) => {
+      const value = params.value;
+      const currency = params.data.currency;
+  
+      let currencySymbol = '';
+      if (currency === 'EUR') {
+        currencySymbol = '€';
+      } else if (currency === 'USD') {
+        currencySymbol = '$';
+      } else {
+        // Otros formatos de moneda
+        // Puedes agregar lógica adicional para manejar otras monedas según sea necesario
+        currencySymbol = currency; // En caso de que el valor de currency sea directamente el símbolo de la moneda
+      }
+  
+      return value ? `${value} ${currencySymbol}` : '';
+    },},
     {field: 'sender.name', headerName: "Proveedor",
     headerComponent: (props) => (
       <CustomHeader displayName={props.displayName} props={props}/>
@@ -114,11 +131,70 @@ export const InvoicesToPay = () => {
     ),},
    
     {field: 'concept', headerName: 'Concepto'},
-    {field: 'retention_percentage', headerName: '% Retención'}, 
-    {field: 'taxes_percentage', headerName: '% Impuestos'},
-    {field: 'total_pretaxes', headerName: 'Total sin impuestos'},
-    {field: 'total_retention', headerName: 'Total retenciones'},
-    {field: 'total_taxes', headerName: 'Total impuestos'},
+    {field: 'retention_percentage', headerName: '% Retención',
+    valueFormatter: (params) => {
+      const value = params.value;
+      return value ? `${value} %` : '';
+    },}, 
+    {field: 'taxes_percentage', headerName: '% Impuestos',
+    valueFormatter: (params) => {
+      const value = params.value;
+      return value ? `${value} %` : '';
+    },},
+    {field: 'total_pretaxes', headerName: 'Total sin impuestos',
+    valueFormatter: (params) => {
+      const value = params.value;
+      const currency = params.data.currency;
+  
+      let currencySymbol = '';
+      if (currency === 'EUR') {
+        currencySymbol = '€';
+      } else if (currency === 'USD') {
+        currencySymbol = '$';
+      } else {
+        // Otros formatos de moneda
+        // Puedes agregar lógica adicional para manejar otras monedas según sea necesario
+        currencySymbol = currency; // En caso de que el valor de currency sea directamente el símbolo de la moneda
+      }
+  
+      return value ? `${value} ${currencySymbol}` : '';
+    },},
+    {field: 'total_retention', headerName: 'Total retenciones',
+    valueFormatter: (params) => {
+      const value = params.value;
+      const currency = params.data.currency;
+  
+      let currencySymbol = '';
+      if (currency === 'EUR') {
+        currencySymbol = '€';
+      } else if (currency === 'USD') {
+        currencySymbol = '$';
+      } else {
+        // Otros formatos de moneda
+        // Puedes agregar lógica adicional para manejar otras monedas según sea necesario
+        currencySymbol = currency; // En caso de que el valor de currency sea directamente el símbolo de la moneda
+      }
+  
+      return value ? `${value} ${currencySymbol}` : '';
+    },},
+    {field: 'total_taxes', headerName: 'Total impuestos',
+    valueFormatter: (params) => {
+      const value = params.value;
+      const currency = params.data.currency;
+  
+      let currencySymbol = '';
+      if (currency === 'EUR') {
+        currencySymbol = '€';
+      } else if (currency === 'USD') {
+        currencySymbol = '$';
+      } else {
+        // Otros formatos de moneda
+        // Puedes agregar lógica adicional para manejar otras monedas según sea necesario
+        currencySymbol = currency; // En caso de que el valor de currency sea directamente el símbolo de la moneda
+      }
+  
+      return value ? `${value} ${currencySymbol}` : '';
+    },},
     {
       field: 'file',
       headerName: 'Descargar',
@@ -173,7 +249,25 @@ export const InvoicesToPay = () => {
         {field: 'total', headerName: "Importe", 
         headerComponent: (props) => (
           <CustomHeader displayName={props.displayName} props={props}/>
-        ),},
+        ),
+        valueFormatter: (params) => {
+          const value = params.value;
+          const currency = params.data.currency;
+      
+          let currencySymbol = '';
+          if (currency === 'EUR') {
+            currencySymbol = '€';
+          } else if (currency === 'USD') {
+            currencySymbol = '$';
+          } else {
+            // Otros formatos de moneda
+            // Puedes agregar lógica adicional para manejar otras monedas según sea necesario
+            currencySymbol = currency; // En caso de que el valor de currency sea directamente el símbolo de la moneda
+          }
+      
+          return value ? `${value} ${currencySymbol}` : '';
+        },
+      },
         {field: 'sender.name', headerName: "Proveedor",
         headerComponent: (props) => (
           <CustomHeader displayName={props.displayName} props={props}/>
@@ -219,11 +313,70 @@ export const InvoicesToPay = () => {
         ),},
         
         {field: 'concept', headerName: 'Concepto'},
-        {field: 'retention_percentage', headerName: '% Retención'}, 
-        {field: 'taxes_percentage', headerName: '% Impuestos'},
-        {field: 'total_pretaxes', headerName: 'Total sin impuestos'},
-        {field: 'total_retention', headerName: 'Total retenciones'},
-        {field: 'total_taxes', headerName: 'Total impuestos'},
+        {field: 'retention_percentage', headerName: '% Retención',
+        valueFormatter: (params) => {
+          const value = params.value;
+          return value ? `${value} %` : '';
+        },}, 
+        {field: 'taxes_percentage', headerName: '% Impuestos',
+        valueFormatter: (params) => {
+          const value = params.value;
+          return value ? `${value} %` : '';
+        },},
+        {field: 'total_pretaxes', headerName: 'Total sin impuestos',
+        valueFormatter: (params) => {
+          const value = params.value;
+          const currency = params.data.currency;
+      
+          let currencySymbol = '';
+          if (currency === 'EUR') {
+            currencySymbol = '€';
+          } else if (currency === 'USD') {
+            currencySymbol = '$';
+          } else {
+            // Otros formatos de moneda
+            // Puedes agregar lógica adicional para manejar otras monedas según sea necesario
+            currencySymbol = currency; // En caso de que el valor de currency sea directamente el símbolo de la moneda
+          }
+      
+          return value ? `${value} ${currencySymbol}` : '';
+        },},
+        {field: 'total_retention', headerName: 'Total retenciones',
+        valueFormatter: (params) => {
+          const value = params.value;
+          const currency = params.data.currency;
+      
+          let currencySymbol = '';
+          if (currency === 'EUR') {
+            currencySymbol = '€';
+          } else if (currency === 'USD') {
+            currencySymbol = '$';
+          } else {
+            // Otros formatos de moneda
+            // Puedes agregar lógica adicional para manejar otras monedas según sea necesario
+            currencySymbol = currency; // En caso de que el valor de currency sea directamente el símbolo de la moneda
+          }
+      
+          return value ? `${value} ${currencySymbol}` : '';
+        },},
+        {field: 'total_taxes', headerName: 'Total impuestos',
+        valueFormatter: (params) => {
+          const value = params.value;
+          const currency = params.data.currency;
+      
+          let currencySymbol = '';
+          if (currency === 'EUR') {
+            currencySymbol = '€';
+          } else if (currency === 'USD') {
+            currencySymbol = '$';
+          } else {
+            // Otros formatos de moneda
+            // Puedes agregar lógica adicional para manejar otras monedas según sea necesario
+            currencySymbol = currency; // En caso de que el valor de currency sea directamente el símbolo de la moneda
+          }
+      
+          return value ? `${value} ${currencySymbol}` : '';
+        },},
         {
           field: 'file',
           headerName: 'Descargar',
@@ -412,6 +565,7 @@ const processFiles = async (files) => {
 
     let allDone = true;
     let loadedCount = 0;
+    let notPending = 0;
 
     statusResponse.map((item) => {
       const totalCount = ids.length;
@@ -423,7 +577,11 @@ const processFiles = async (files) => {
 
           const percentage = Math.round((loadedCount * 100) / totalCount);
           userDataContext.updateProgress(percentage);
-        } else {
+          notPending = notPending + 1
+        } else if (status === "ERROR") {
+          notPending = notPending + 1
+        }
+        else {
           allDone = false;
         }
       }
@@ -433,7 +591,12 @@ const processFiles = async (files) => {
 
     if (!allDone) {
       setTimeout(checkStatus, 10000); // Esperar 10 segundos y volver a verificar
-    } else {
+    } else if(notPending === ids.length){
+      console.log("Proceso con errores");
+      setUpdatePercentage(false)
+      handleCloseClick()
+    }
+    else {
       console.log("Procesamiento completo");
       setUpdatePercentage(false)
       getData(userToken);

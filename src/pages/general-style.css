@@ -211,10 +211,12 @@ body {
 .custom-width-progess {
   width: 1300px;
   background-color: #e7eaee;
+  margin-left: 20px
 }
 
 .custom-progress .progress-bar {
   background-color: #005CFF;
+  
   /* Color personalizado */
 }
 
