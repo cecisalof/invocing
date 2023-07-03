@@ -78,7 +78,7 @@ export const Dashboard = () => {
     }
   };
 
-  let isLoading = false; // Class variable to avoid taking too long to save that we are loading (state is not enough to control this)
+  let isLoading = false; // Class variable to avoid taking too long to save that we are loading (state is not enough to control this). Also avoids multiple request under 1 second
   const getPanelData = async (filters = null) => {
     if (!userDataContext.userData.token || isLoading) return
     isLoading = true

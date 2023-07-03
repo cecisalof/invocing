@@ -25,9 +25,6 @@ import PropTypes from 'prop-types';
 export const InvoicesToPay = () => {
   const location = useLocation();
   const navigate = useNavigate();
-
-  const [userToken, setUserToken] = useState('');
-
   
   const gridRef = useRef(); // Optional - for accessing Grid's API
   const [rowData, setRowData] = useState(); // Set rowData to Array of Objects, one Object per Row
@@ -203,33 +200,38 @@ export const InvoicesToPay = () => {
   ]);
 
   useEffect(() => {
-    let token = userDataContext.userData.token;
-    if (token !== null) {
-      setUserToken(token);
-    }
+    getPanelData();
   }, [userDataContext.userData.token]);
-  
-  useEffect(() => {
-    if (userToken !== undefined) {
-      getData(userToken);
-    }
-  }, [userToken]);
 
-  useEffect(() => {
-    if (userToken !== undefined) {
-      getDataProviders(userToken);
-    }
-  }, [userToken]);
+  let isLoading = false; // Class variable to avoid taking too long to save that we are loading (state is not enough to control this). Also avoids multiple request under 1 second
+  const getPanelData = async () => {
+    if (!userDataContext.userData.token || isLoading) return
+    isLoading = true
+    await getDataProviders();
+    await getDataInvoices();
+    setTimeout(()=>{isLoading = false},1000)
+  }
 
-  const getDataProviders = async (userToken) => {
+  const getDataProviders = async () => {
     try {
-      const data = await getProviders(userToken);
+      const data = await getProviders(userDataContext.userData.token);
       setrowProviders(data || []);
       setProvidersLoaded(true);
     } catch (error) {
       setrowProviders([]);
       console.log('No hay datos para mostrar.');
       setProvidersLoaded(true); // Si ocurre un error, también establece providersLoaded como true para continuar con la configuración de columnDefs
+    }
+  };
+
+  const getDataInvoices = async () => {
+    try {
+      const data = await getInvoices(userDataContext.userData.token);
+      console.log(data)
+      setRowData(data || []);
+    } catch (error) {
+      setRowData([]);
+      console.log('No hay datos para mostrar.');
     }
   };
 
@@ -387,19 +389,6 @@ export const InvoicesToPay = () => {
       setColumnDefs(updatedColumnDefs);
     }
   }, [providersLoaded, rowProviders]);
-  
-
-  // Get data
-  const getData = async (userToken) => {
-    try {
-      const data = await getInvoices(userToken);
-      console.log(data)
-      setRowData(data || []);
-    } catch (error) {
-      setRowData([]);
-      console.log('No hay datos para mostrar.');
-    }
-  };
 
   const onCellValueChanged = (event) => {
     let newValue = event.newValue
@@ -437,14 +426,14 @@ export const InvoicesToPay = () => {
         }
       });
       data = { "uuid": updateSender };
-      patchProviderInvoice(event.data.uuid, data, userToken).then(() => {
+      patchProviderInvoice(event.data.uuid, data).then(() => {
         // Espera a que se complete la solicitud PATCH y luego carga los datos
-        getData(userToken);
+        getPanelData();
       });
     }else{
-      patchInvoice(event.data.uuid, data, userToken).then(() => {
+      patchInvoice(event.data.uuid, data).then(() => {
         // Espera a que se complete la solicitud PATCH y luego carga los datos
-        getData(userToken);
+        getPanelData();
       });
     }
   };
@@ -496,13 +485,13 @@ function handleTrashClick() {
   // Crear una Promesa que se resuelva cuando se hayan eliminado todas las facturas
   const deletePromises = selectedData.map((obj) => {
     console.log(obj.uuid);
-    return deleteInvoice(obj.uuid, userToken);
+    return deleteInvoice(obj.uuid, userDataContext.userData.token);
   });
   
   Promise.all(deletePromises)
     .then(() => {
       // Llamada a getData() después de que se hayan eliminado todas las facturas
-      getData(userToken);
+      getPanelData();
     })
     .catch((error) => {
       console.log(error);
@@ -554,13 +543,13 @@ const processFiles = async (files) => {
   userDataContext.toggleLoading();
   setIsFileUploaded(false);
   console.log(files);
-  const response = await postInvoiceAutomatic(userToken, files);
+  const response = await postInvoiceAutomatic(userDataContext.userData.token, files);
   const ids = response.data.schendules;
   console.log(ids);
   
 
   const checkStatus = async () => {
-    const response = await getSchenduleStatus(userToken, ids);
+    const response = await getSchenduleStatus(userDataContext.userData.token, ids);
     const statusResponse = response.status;
 
     let allDone = true;
@@ -592,7 +581,7 @@ const processFiles = async (files) => {
     if (allDone) {
       console.log("Procesamiento completo");
       setUpdatePercentage(false)
-      getData(userToken);
+      getPanelData();
     } else if(notPending === ids.length){
       console.log("Proceso con errores");
       setUpdatePercentage(false)
