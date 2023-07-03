@@ -182,11 +182,8 @@ export const Dashboard = () => {
     console.log("Procesando archivos automáticamente...");
     userDataContext.toggleLoading();
     setIsFileUploaded(false);
-    console.log(files);
     const response = await postInvoiceAutomatic(userDataContext.userData.token, files);
-    const ids = response.data.schendules;
-    console.log(ids);
-    
+    const ids = response.data.schendules;    
   
     const checkStatus = async () => {
       const response = await getSchenduleStatus(userDataContext.userData.token, ids);
@@ -243,11 +240,8 @@ export const Dashboard = () => {
     console.log("Procesando archivos automáticamente...");
   userDataContext.toggleLoadingEx();
   setIsFileUploadedEx(false);
-  console.log(files);
   const response = await postExpenseTicketAutomatic(userDataContext.userData.token, files);
-  const ids = response.data.schendules;
-  console.log(ids);
-  
+  const ids = response.data.schendules;  
 
   const checkStatus = async () => {
     const response = await getSchenduleStatus(userDataContext.userData.token, ids);

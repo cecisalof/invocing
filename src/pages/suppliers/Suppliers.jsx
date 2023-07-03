@@ -92,9 +92,6 @@ export const Suppliers = () => {
       sortable: true,
       filter: true,
       resizable: true,
-      enableRowGroup: true,
-      enablePivot: true,
-      enableValue: true,
       editable: true,
       sideBar: true,
       cellStyle: { color: '#999999', fontSize: '15px' }
@@ -128,7 +125,6 @@ export const Suppliers = () => {
 
     // Crear una Promesa que se resuelva cuando se hayan eliminado todas las facturas
     const deletePromises = selectedData.map((obj) => {
-      console.log(obj.uuid);
       return deleteProvider(obj.uuid, userDataContext.userData.token);
     });
 
@@ -192,8 +188,8 @@ export const Suppliers = () => {
   )
 }
 Suppliers.propTypes = {
-  value: PropTypes.object.isRequired,
-  displayName: PropTypes.object.isRequired,
-  api: PropTypes.object.isRequired,
-  node: PropTypes.object.isRequired,
+  value: PropTypes.object,
+  displayName: PropTypes.object,
+  api: PropTypes.object,
+  node: PropTypes.object,
 };

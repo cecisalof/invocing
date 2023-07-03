@@ -242,7 +242,6 @@ export const InvoicesToPay = () => {
   const getDataInvoices = async () => {
     try {
       const data = await getInvoices(userDataContext.userData.token);
-      console.log(data)
       setRowData(data || []);
     } catch (error) {
       setRowData([]);
@@ -480,9 +479,6 @@ export const InvoicesToPay = () => {
       sortable: true,
       filter: true,
       resizable: true,
-      enableRowGroup: true,
-      enablePivot: true,
-      enableValue: true,
       editable: true,
       sideBar: true,
       cellStyle: { color: '#999999', fontSize: '15px' }
@@ -511,7 +507,6 @@ export const InvoicesToPay = () => {
 
     // Crear una Promesa que se resuelva cuando se hayan eliminado todas las facturas
     const deletePromises = selectedData.map((obj) => {
-      console.log(obj.uuid);
       return deleteInvoice(obj.uuid, userDataContext.userData.token);
     });
 
@@ -570,7 +565,6 @@ export const InvoicesToPay = () => {
     console.log("Procesando archivos automáticamente...");
     userDataContext.toggleLoading();
     setIsFileUploaded(false);
-    console.log(files);
     const response = await postInvoiceAutomatic(userDataContext.userData.token, files);
     const ids = response.data.schendules;
 
@@ -701,9 +695,9 @@ export const InvoicesToPay = () => {
   )
 };
 InvoicesToPay.propTypes = {
-  value: PropTypes.object.isRequired,
-  displayName: PropTypes.object.isRequired,
-  api: PropTypes.object.isRequired,
-  node: PropTypes.object.isRequired,
+  value: PropTypes.object,
+  displayName: PropTypes.object,
+  api: PropTypes.object,
+  node: PropTypes.object,
 };
 export default InvoicesToPay;

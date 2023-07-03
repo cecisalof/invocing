@@ -197,9 +197,6 @@ export const Income = () => {
       sortable: true,
       filter: true,
       resizable: true,
-      enableRowGroup: true,
-      enablePivot: true,
-      enableValue: true,
       editable: true,
       sideBar: true,
       cellStyle: { color: '#999999', fontSize: '15px' }
@@ -274,9 +271,9 @@ export const Income = () => {
   )
 };
 Income.propTypes = {
-  value: PropTypes.object.isRequired,
-  displayName: PropTypes.object.isRequired,
-  api: PropTypes.object.isRequired,
-  node: PropTypes.object.isRequired,
+  value: PropTypes.object,
+  displayName: PropTypes.object,
+  api: PropTypes.object,
+  node: PropTypes.object,
 };
 export default Income;
