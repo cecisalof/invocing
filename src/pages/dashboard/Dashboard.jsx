@@ -35,14 +35,11 @@ export const Dashboard = () => {
   const [showCalendar, setShowCalendar] = useState(false);
   const [selectedRange, setSelectedRange] = useState([new Date(), new Date()]);
 
-  //const [income, setIncome] = useState([]);
-  const [userToken, setUserToken] = useState('');
-
   const userDataContext = useContext(Context);
 
-  const getCountInvoice = async (userToken, filters = null) => {
+  const getCountInvoice = async (filters = null) => {
     try {
-      const data = await getInvoicesCount(userToken, filters);
+      const data = await getInvoicesCount(userDataContext.userData.token, filters);
       if (data !== undefined) {
         setInvoiceCount(data);
       }
@@ -53,23 +50,9 @@ export const Dashboard = () => {
     }
   };
 
-
-  // const getCountInvoiceEmit = async (userToken, filters = null) => {
-  //   try {
-  //     const data = await getInvoicesEmitCount(userToken, filters);
-  //     if (data !== undefined) {
-  //       setInvoiceEmitCount(data);
-  //     }
-
-  //   } catch (error) {
-  //     setInvoiceEmitCount({});
-  //     console.log('No hay datos para mostrar.');
-  //   }
-  // };
-
-  const getCountStates = async (userToken, filters = null) => {
+  const getCountStates = async (filters = null) => {
     try {
-      const data = await getInvoicesStates(userToken, filters);
+      const data = await getInvoicesStates(userDataContext.userData.token, filters);
       if (data !== undefined) {
         setInvoiceStates(data);
       }
@@ -80,22 +63,9 @@ export const Dashboard = () => {
     }
   };
 
-  // const getCountStatesEmit = async (userToken, filters = null) => {
-  //   try {
-  //     const data = await getInvoicesEmitStates(userToken, filters);
-  //     if (data !== undefined) {
-  //       setInvoiceEmitStates(data);
-  //     }
-
-  //   } catch (error) {
-  //     setInvoiceEmitStates({});
-  //     console.log('No hay datos para mostrar.');
-  //   }
-  // };
-
-  const getTotals = async (userToken, filters = null) => {
+  const getTotals = async (filters = null) => {
     try {
-      const data = await getInvoicesTotals(userToken, filters);
+      const data = await getInvoicesTotals(userDataContext.userData.token, filters);
       if (data !== undefined) {
         console.log(data)
         setTotals(data);
@@ -108,107 +78,18 @@ export const Dashboard = () => {
     }
   };
 
-  // const getData = async (userToken, filters=null) => {
-  //   try {
-  //     const data = await getIncome(userToken, filters);
-  //     setIncome(data || []);
-  //   } catch (error) {
-  //     setIncome([]);
-  //     console.log('No hay datos para mostrar.');
-  //   }
-  // };
+  let isLoading = false; // Class variable to avoid taking too long to save that we are loading (state is not enough to control this)
+  const getPanelData = async (filters = null) => {
+    if (!userDataContext.userData.token || isLoading) return
+    isLoading = true
+    await getTotals(filters);
+    await getCountInvoice(filters);
+    await getCountStates(filters);
+    setTimeout(()=>{isLoading = false},1000)
+  }
 
   useEffect(() => {
-    const fetchData = async () => {
-      if (userToken !== undefined) {
-        try {
-          await getTotals(userToken);
-        } catch (error) {
-          console.log('Error al obtener el dato de invoiceCount:', error);
-        }
-      }
-    };
-
-    fetchData();
-  }, [userToken]);
-
-
-  useEffect(() => {
-    const fetchData = async () => {
-      if (userToken !== undefined) {
-        try {
-          await getCountInvoice(userToken);
-        } catch (error) {
-          console.log('Error al obtener el dato de invoiceCount:', error);
-        }
-      }
-    };
-
-    fetchData();
-  }, [userToken]);
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     if (userToken !== undefined) {
-  //       try {
-  //         await getCountInvoiceEmit(userToken);
-  //       } catch (error) {
-  //         console.log('Error al obtener el dato de invoiceCount:', error);
-  //       }
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, [userToken]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      if (userToken !== undefined) {
-        try {
-          await getCountStates(userToken);
-        } catch (error) {
-          console.log('Error al obtener el dato de invoiceStates:', error);
-        }
-      }
-    };
-
-    fetchData();
-  }, [userToken]);
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     if (userToken !== undefined) {
-  //       try {
-  //         await getCountStatesEmit(userToken);
-  //       } catch (error) {
-  //         console.log('Error al obtener el dato de invoiceStates:', error);
-  //       }
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, [userToken]);
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     if (userToken !== undefined) {
-  //       try {
-  //         await getData(userToken);
-  //       } catch (error) {
-  //         console.log('Error al obtener el dato de invoiceStates:', error);
-  //       }
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, [userToken]);
-
-
-  useEffect(() => {
-    let token = userDataContext.userData.token;
-    if (token !== null) {
-      setUserToken(token);
-    }
+    getPanelData();
   }, [userDataContext.userData.token]);
 
   const handleDragOver = (event) => {
@@ -274,12 +155,12 @@ export const Dashboard = () => {
     console.log("Procesando archivos automáticamente...");
     userDataContext.toggleLoading()
     setIsFileUploaded(false);
-    const response = await postInvoiceAutomatic(userToken, userDataContext.files);
+    const response = await postInvoiceAutomatic(userDataContext.userData.token, userDataContext.files);
     const ids = response.data.schendules;
 
     const checkStatus = async () => {
 
-      const response = await getSchenduleStatus(userToken, ids);
+      const response = await getSchenduleStatus(userDataContext.userData.token, ids);
       const statusResponse = response.status
 
       // Verificar si todos los IDs están en el estado "DONE"
@@ -323,14 +204,14 @@ export const Dashboard = () => {
     console.log("Procesando archivos automáticamente...");
     userDataContext.toggleLoadingEx()
     setIsFileUploadedEx(false);
-    const response = await postExpenseTicketAutomatic(userToken, userDataContext.filesEx);
+    const response = await postExpenseTicketAutomatic(userDataContext.userData.token, userDataContext.filesEx);
     const ids = response.data.schendules
     console.log(ids)
 
 
     const checkStatus = async () => {
 
-      const response = await getSchenduleStatus(userToken, ids);
+      const response = await getSchenduleStatus(userDataContext.userData.token, ids);
       const statusResponse = response.status
 
       // Verificar si todos los IDs están en el estado "DONE"
@@ -398,7 +279,6 @@ export const Dashboard = () => {
   // };
 
 
-
   const handleSelect = (date) => {
     if (selectedRange.length === 2) {
       setSelectedRange([date, date]);
@@ -415,84 +295,10 @@ export const Dashboard = () => {
       }
     }
   };
-  const handleAnualClick = async () => {
-    const filters = "?year=1";
-    if (userToken !== undefined) {
-      try {
-        await getTotals(userToken, filters);
-        //await getCountStatesEmit(userToken, filters);
-        await getCountStates(userToken, filters);
-        await getCountInvoice(userToken, filters);
-        //await getCountInvoiceEmit(userToken, filters);
-        //await getData(userToken, filters);
-      } catch (error) {
-        console.log('Error al obtener el dato de invoiceCount:', error);
-      }
-    }
+  
+  const getDataWithFilter = async (filters) => {
+    await getPanelData(filters);
   };
-  const handle1TrimClick = async () => {
-    const filters = "?quarter=1";
-    if (userToken !== undefined) {
-      try {
-        await getTotals(userToken, filters);
-        //await getCountStatesEmit(userToken, filters);
-        await getCountStates(userToken, filters);
-        await getCountInvoice(userToken, filters);
-        //await getCountInvoiceEmit(userToken, filters);
-        //await getData(userToken, filters);
-      } catch (error) {
-        console.log('Error al obtener el dato de invoiceCount:', error);
-      }
-    }
-  };
-
-  const handle2TrimClick = async () => {
-    const filters = "?quarter=2";
-    if (userToken !== undefined) {
-      try {
-        await getTotals(userToken, filters);
-        //await getCountStatesEmit(userToken, filters);
-        await getCountStates(userToken, filters);
-        await getCountInvoice(userToken, filters);
-        //await getCountInvoiceEmit(userToken, filters);
-        //await getData(userToken, filters);
-      } catch (error) {
-        console.log('Error al obtener el dato de invoiceCount:', error);
-      }
-    }
-  };
-
-  const handle3TrimClick = async () => {
-    const filters = "?quarter=3";
-    if (userToken !== undefined) {
-      try {
-        await getTotals(userToken, filters);
-        //await getCountStatesEmit(userToken, filters);
-        await getCountStates(userToken, filters);
-        await getCountInvoice(userToken, filters);
-        //await getCountInvoiceEmit(userToken, filters);
-        //await getData(userToken, filters);
-      } catch (error) {
-        console.log('Error al obtener el dato de invoiceCount:', error);
-      }
-    }
-  };
-
-  const handle4TrimClick = async () => {
-    const filters = "?quarter=4";
-    if (userToken !== undefined) {
-      try {
-        await getTotals(userToken, filters);
-        //await getCountStatesEmit(userToken, filters);
-        await getCountStates(userToken, filters);
-        await getCountInvoice(userToken, filters);
-        //await getCountInvoiceEmit(userToken, filters);
-      } catch (error) {
-        console.log('Error al obtener el dato de invoiceCount:', error);
-      }
-    }
-  };
-
 
   const selectRange = async (dateParam) => {
 
@@ -513,19 +319,7 @@ export const Dashboard = () => {
       const formattedEndDate = `${endYear}-${endMonth}-${endDay}`; // Formatear la fecha en formato yyyy-mm-dd
 
       const filters = "?start_date=" + formattedStartDate + "&end_date=" + formattedEndDate;
-
-      if (userToken !== undefined) {
-        try {
-          await getTotals(userToken, filters);
-          //await getCountStatesEmit(userToken, filters);
-          await getCountStates(userToken, filters);
-          await getCountInvoice(userToken, filters);
-          //await getCountInvoiceEmit(userToken, filters);
-          //await getData(userToken, filters);
-        } catch (error) {
-          console.log('Error al obtener el dato de invoiceCount:', error);
-        }
-      }
+      await getPanelData(filters);
 
       setSelectedRange([new Date(), new Date()]);
 
@@ -596,20 +390,23 @@ export const Dashboard = () => {
             <button className='filters' onClick={handleButtonClick}>
               Fechas
             </button>
-            <button className='filters' onClick={handleAnualClick}>
+            <button className='filters' onClick={()=>{getDataWithFilter("?year=1")}}>
               Anual
             </button>
-            <button className='filters' onClick={handle1TrimClick}>
+            <button className='filters' onClick={()=>{getDataWithFilter("?quarter=1")}}>
               1erTrimestre
             </button>
-            <button className='filters' onClick={handle2TrimClick}>
+            <button className='filters' onClick={()=>{getDataWithFilter("?quarter=2")}}>
               2ºTrimestre
             </button>
-            <button className='filters' onClick={handle3TrimClick}>
+            <button className='filters' onClick={()=>{getDataWithFilter("?quarter=3")}}>
               3erTrimestre
             </button>
-            <button className='filters' onClick={handle4TrimClick}>
+            <button className='filters' onClick={()=>{getDataWithFilter("?quarter=4")}}>
               4ºTrimestre
+            </button>
+            <button className='filters' onClick={()=>{getDataWithFilter("?month=1")}}>
+              Último mes
             </button>
             {showCalendar && (
               

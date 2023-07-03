@@ -172,7 +172,7 @@ return (
       <AppBar location={location}/>
     </div>
     <div className='mx-1'>
-      <button type="button" className="btn btn-primary rounded-pill px-4 mx-2" onClick={handleAddProvider}>Añadir proveedor</button>
+      <button type="button" className="btn btn-primary rounded-pill px-4 mx-2 addBtn opacity-hover-05" onClick={handleAddProvider}>Añadir proveedor</button>
       {/* <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} /> */}
       <img src={deleteIcon} alt="Delete icon" onClick={handleTrashClick} className='trashIcon' />
     </div>
