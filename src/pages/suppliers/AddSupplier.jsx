@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom'
 import { AppBar } from "../../components/appBar/AppBar";
 import Context from '../../contexts/context';
@@ -9,8 +9,6 @@ import '../general-style.css'
 import { Alert } from '@mui/material';
 
 export const AddSupplier = () => {
-  const [userToken, setUserToken] = useState('');
-
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [address, setAddress] = useState('');
@@ -24,13 +22,6 @@ export const AddSupplier = () => {
 
   const location = useLocation();
   const userDataContext = useContext(Context);
-
-  useEffect(() => {
-    let token = userDataContext.userData.token;
-    if (token !== null) {
-      setUserToken(token);
-    }
-  }, [userDataContext.userData.token]);
 
   const handleAddName = (e) => {
     setName(e.target.value);
@@ -71,16 +62,13 @@ export const AddSupplier = () => {
     setIsSuccess(false);
     setIsError(false);
 
-
-
-    const response = await postProviders(userToken, data);
+    const response = await postProviders(userDataContext.userData.token, data);
     console.log(response)
     if (response === undefined) {
       setIsError(true)
     } else {
       setIsSuccess(true)
     }
-
 
     // Reiniciar los valores de los campos
     setName('')
