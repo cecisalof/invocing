@@ -65,26 +65,32 @@ body {
   background: #F7FAFF;
 }
 
-.rag-red-outer .rag-element {
-  background-color: #000000;
+.rag-rejected-outer .rag-element {
+  background-color: #FF6A36;
   border-radius: 1em;
   padding: 0.4em 0.7em;
 }
 
-.rag-green-outer .rag-element {
-  background-color: #00BA98;
+.rag-payed-outer .rag-element {
+  background-color: #00C7E2;
   border-radius: 1em;
   padding: 0.4em 0.7em;
 }
 
-.rag-yellow-outer .rag-element {
+.rag-received-outer .rag-element {
+  background-color: #97A4FF;
+  border-radius: 1em;
+  padding: 0.4em 0.7em;
+}
+
+.rag-pending-outer .rag-element {
   background-color: #FFBC11;
   border-radius: 1em;
   padding: 0.4em 0.7em;
 }
 
-.rag-orange-outer .rag-element {
-  background-color: #BA3800;
+.rag-undefined-outer .rag-element {
+  background-color: #A67C52;
   border-radius: 1em;
   padding: 0.4em 0.7em;
 }
@@ -172,10 +178,12 @@ body {
 .custom-width-progess {
   width: 1300px;
   background-color: #e7eaee;
+  margin-left: 20px
 }
 
 .custom-progress .progress-bar {
   background-color: #005CFF;
+  
   /* Color personalizado */
 }
 
@@ -328,25 +336,28 @@ body {
 }
 
 .pending {
-  background: #BA3800;
+  background: #FFBC11;
 }
 
 .reject {
-  background: #000000;
+  background: #FF6A36;
 }
 
 .payed {
-  background: #00BA98;
+  background: #00C7E2
 }
 
 .received {
-  background: #FFBC11;
+  background: #97A4FF;
+}
+.undefined{
+  background: #A67C52
 }
 
 .count-states {
   text-align: center;
-  font-weight: 700;
-  font-size: 19px;
+  font-weight: 400;
+  font-size: 17px;
   line-height: 26px;
   color: #005CFF;
   margin-bottom: 0;
@@ -388,7 +399,7 @@ body {
 .totals {
   font-family: 'Nunito';
   font-weight: 300;
-  font-size: 19px;
+  font-size: 17px;
   line-height: 25px;
   color: #999999;
   margin-top: 20px;
@@ -405,6 +416,10 @@ body {
 .trashIcon {
   margin-left: 30px;
   height: 33px;
+}
+
+.opacity-hover-05:hover{
+  opacity: 0.5;
 }
 
 /* .customHeaderMenuButton {

@@ -34,15 +34,14 @@ export const Dashboard = () => {
   const [totals, setTotals] = useState({});
   const [showCalendar, setShowCalendar] = useState(false);
   const [selectedRange, setSelectedRange] = useState([new Date(), new Date()]);
-
-  //const [income, setIncome] = useState([]);
-  const [userToken, setUserToken] = useState('');
+  const [updatePercentage, setUpdatePercentage] = useState(false);
+  const [updatePercentageEx, setUpdatePercentageEx] = useState(false);
 
   const userDataContext = useContext(Context);
 
-  const getCountInvoice = async (userToken, filters = null) => {
+  const getCountInvoice = async (filters = null) => {
     try {
-      const data = await getInvoicesCount(userToken, filters);
+      const data = await getInvoicesCount(userDataContext.userData.token, filters);
       if (data !== undefined) {
         setInvoiceCount(data);
       }
@@ -53,23 +52,9 @@ export const Dashboard = () => {
     }
   };
 
-
-  // const getCountInvoiceEmit = async (userToken, filters = null) => {
-  //   try {
-  //     const data = await getInvoicesEmitCount(userToken, filters);
-  //     if (data !== undefined) {
-  //       setInvoiceEmitCount(data);
-  //     }
-
-  //   } catch (error) {
-  //     setInvoiceEmitCount({});
-  //     console.log('No hay datos para mostrar.');
-  //   }
-  // };
-
-  const getCountStates = async (userToken, filters = null) => {
+  const getCountStates = async (filters = null) => {
     try {
-      const data = await getInvoicesStates(userToken, filters);
+      const data = await getInvoicesStates(userDataContext.userData.token, filters);
       if (data !== undefined) {
         setInvoiceStates(data);
       }
@@ -80,22 +65,9 @@ export const Dashboard = () => {
     }
   };
 
-  // const getCountStatesEmit = async (userToken, filters = null) => {
-  //   try {
-  //     const data = await getInvoicesEmitStates(userToken, filters);
-  //     if (data !== undefined) {
-  //       setInvoiceEmitStates(data);
-  //     }
-
-  //   } catch (error) {
-  //     setInvoiceEmitStates({});
-  //     console.log('No hay datos para mostrar.');
-  //   }
-  // };
-
-  const getTotals = async (userToken, filters = null) => {
+  const getTotals = async (filters = null) => {
     try {
-      const data = await getInvoicesTotals(userToken, filters);
+      const data = await getInvoicesTotals(userDataContext.userData.token, filters);
       if (data !== undefined) {
         setTotals(data);
       }
@@ -106,108 +78,42 @@ export const Dashboard = () => {
 
     }
   };
-
-  // const getData = async (userToken, filters=null) => {
-  //   try {
-  //     const data = await getIncome(userToken, filters);
-  //     setIncome(data || []);
-  //   } catch (error) {
-  //     setIncome([]);
-  //     console.log('No hay datos para mostrar.');
-  //   }
-  // };
-
   useEffect(() => {
-    const fetchData = async () => {
-      if (userToken !== undefined) {
-        try {
-          await getTotals(userToken);
-        } catch (error) {
-          console.log('Error al obtener el dato de invoiceCount:', error);
-        }
+    const intervalId = setInterval(() => {
+      if (userDataContext.progress < 100 && updatePercentage) {
+        userDataContext.updateProgress(userDataContext.progress +  Math.floor(Math.random() * 4) + 1);
       }
+    }, 10000); // 1 second interval
+
+    return () => {
+      clearInterval(intervalId);
     };
-
-    fetchData();
-  }, [userToken]);
-
+  }, [userDataContext]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      if (userToken !== undefined) {
-        try {
-          await getCountInvoice(userToken);
-        } catch (error) {
-          console.log('Error al obtener el dato de invoiceCount:', error);
-        }
+    const intervalId = setInterval(() => {
+      if (userDataContext.progressEx < 100 && updatePercentageEx) {
+        userDataContext.updateProgressEx(userDataContext.progressEx +  Math.floor(Math.random() * 4) + 1);
       }
+    }, 10000); // 1 second interval
+
+    return () => {
+      clearInterval(intervalId);
     };
+  }, [userDataContext]);
 
-    fetchData();
-  }, [userToken]);
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     if (userToken !== undefined) {
-  //       try {
-  //         await getCountInvoiceEmit(userToken);
-  //       } catch (error) {
-  //         console.log('Error al obtener el dato de invoiceCount:', error);
-  //       }
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, [userToken]);
+  let isLoading = false; // Class variable to avoid taking too long to save that we are loading (state is not enough to control this). Also avoids multiple request under 1 second
+  const getPanelData = async (filters = null) => {
+    if (!userDataContext.userData.token || isLoading) return
+    isLoading = true
+    await getTotals(filters);
+    await getCountInvoice(filters);
+    await getCountStates(filters);
+    setTimeout(()=>{isLoading = false},1000)
+  }
 
   useEffect(() => {
-    const fetchData = async () => {
-      if (userToken !== undefined) {
-        try {
-          await getCountStates(userToken);
-        } catch (error) {
-          console.log('Error al obtener el dato de invoiceStates:', error);
-        }
-      }
-    };
-
-    fetchData();
-  }, [userToken]);
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     if (userToken !== undefined) {
-  //       try {
-  //         await getCountStatesEmit(userToken);
-  //       } catch (error) {
-  //         ('Error al obtener el dato de invoiceStates:', error);
-  //       }
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, [userToken]);
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     if (userToken !== undefined) {
-  //       try {
-  //         await getData(userToken);
-  //       } catch (error) {
-  //         console.log('Error al obtener el dato de invoiceStates:', error);
-  //       }
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, [userToken]);
-
-
-  useEffect(() => {
-    let token = userDataContext.userData.token;
-    if (token !== null) {
-      setUserToken(token);
-    }
+    getPanelData();
   }, [userDataContext.userData.token]);
 
   const handleDragOver = (event) => {
@@ -223,6 +129,9 @@ export const Dashboard = () => {
   };
 
   const handleDrop = (event) => {
+    if (userDataContext.isLoadingRef && userDataContext.progress < 100){
+      console.log("Se está cargando otros archivos")
+    }else{
     event.preventDefault();
     event.stopPropagation();
     event.target.classList.remove('file-drop-zone-dragging');
@@ -237,12 +146,17 @@ export const Dashboard = () => {
       if (userDataContext.processBotton){
         userDataContext.toggleProcessBotton()
       }
-      processFiles()
+      setUpdatePercentage(true)
+      processFiles(files)
       
     }
+  }
   };
 
   const handleDropEx = (event) => {
+    if (userDataContext.isLoadingRefEx && userDataContext.progressEx < 100){
+      console.log("Se está cargando otros archivos")
+    }else{
     event.preventDefault();
     event.stopPropagation();
     event.target.classList.remove('file-drop-zone-dragging');
@@ -250,114 +164,139 @@ export const Dashboard = () => {
     const files = event.dataTransfer.files;
     userDataContext.updateFiles(files)
     if (files.length > 10){
-      setIsFileUploaded(true);
+      setIsFileUploadedEx(true);
       userDataContext.toggleProcessBottonEx()
     }
     else{
       if (userDataContext.processBottonEx){
         userDataContext.toggleProcessBottonEx()
       }
-      processFilesEx()
+      setUpdatePercentageEx(true)
+      processFilesEx(files)
       
+    }}
+  };
+
+  const processFiles = async (files) => {
+    console.log("Procesando archivos automáticamente...");
+    userDataContext.toggleLoading();
+    setIsFileUploaded(false);
+    console.log(files);
+    const response = await postInvoiceAutomatic(userDataContext.userData.token, files);
+    const ids = response.data.schendules;
+    console.log(ids);
+    
+  
+    const checkStatus = async () => {
+      const response = await getSchenduleStatus(userDataContext.userData.token, ids);
+      const statusResponse = response.status;
+  
+      let allDone = true;
+      let loadedCount = 0;
+      let notPending = 0;
+  
+      statusResponse.map((item) => {
+        const totalCount = ids.length;
+        for (const id of ids) {
+          const status = item[id.toString()]; // Obtener el estado del ID
+          console.log(status);
+          if (status === "DONE") {
+            loadedCount = loadedCount + 1; // Incrementar el contador si el estado es "DONE"
+  
+            const percentage = Math.round((loadedCount * 100) / totalCount);
+            userDataContext.updateProgress(percentage);
+            notPending = notPending + 1
+          } else if (status === "ERROR") {
+            notPending = notPending + 1
+          }
+          else {
+            allDone = false;
+          }
+        }
+      });
+  
+  
+  
+      if (allDone) {
+        console.log("Procesamiento completo");
+        setUpdatePercentage(false)
+        getPanelData();
+      } else if(notPending === ids.length){
+        console.log("Proceso con errores");
+        setUpdatePercentage(false)
+        userDataContext.updateProgress(0)
+        userDataContext.updateFiles([])
+        userDataContext.toggleLoading()
+      }
+      else {
+        setTimeout(checkStatus, 10000); // Esperar 10 segundos y volver a verificar
+        
+      }
+    };
+  
+    await checkStatus();
+  
+  };
+
+  const processFilesEx = async (files) => {
+    console.log("Procesando archivos automáticamente...");
+  userDataContext.toggleLoadingEx();
+  setIsFileUploadedEx(false);
+  console.log(files);
+  const response = await postExpenseTicketAutomatic(userDataContext.userData.token, files);
+  const ids = response.data.schendules;
+  console.log(ids);
+  
+
+  const checkStatus = async () => {
+    const response = await getSchenduleStatus(userDataContext.userData.token, ids);
+    const statusResponse = response.status;
+
+    let allDone = true;
+    let loadedCount = 0;
+    let notPending = 0;
+
+    statusResponse.map((item) => {
+      const totalCount = ids.length;
+      for (const id of ids) {
+        const status = item[id.toString()]; // Obtener el estado del ID
+        console.log(status);
+        if (status === "DONE") {
+          loadedCount = loadedCount + 1; // Incrementar el contador si el estado es "DONE"
+
+          const percentage = Math.round((loadedCount * 100) / totalCount);
+          userDataContext.updateProgressEx(percentage);
+          notPending = notPending + 1
+        } else if (status === "ERROR") {
+          notPending = notPending + 1
+        }
+        else {
+          allDone = false;
+        }
+      }
+    });
+
+
+
+    if (allDone) {
+      console.log("Procesamiento completo");
+      setUpdatePercentage(false)
+      getPanelData();
+    } else if(notPending === ids.length){
+      console.log("Proceso con errores");
+      setUpdatePercentage(false)
+      userDataContext.updateProgressEx(0)
+      userDataContext.updateFilesEx([])
+      userDataContext.toggleLoadingEx()
+    }
+    else {
+      setTimeout(checkStatus, 10000);
     }
   };
 
-  const processFiles = async () => {
-    userDataContext.toggleLoading()
-    setIsFileUploaded(false);
-    const response = await postInvoiceAutomatic(userToken, userDataContext.files);
-    const ids = response.data.schendules;
+  await checkStatus();
 
-    const checkStatus = async () => {
-
-      const response = await getSchenduleStatus(userToken, ids);
-      const statusResponse = response.status
-
-      // Verificar si todos los IDs están en el estado "DONE"
-      let allDone = true;
-      let loadedCount = 0
-
-
-      statusResponse.map((item) => {
-        for (const id of ids) {
-          const status = item[id.toString()]; // Obtener el estado del ID
-          if (status === "DONE") {
-            loadedCount = loadedCount + 1; // Incrementar el contador si el estado es "DONE"
-            const totalCount = ids.length;
-            const percentage = Math.round((loadedCount * 100) / totalCount);
-            userDataContext.updateProgress(percentage)
-          } else {
-            allDone = false;
-            const totalCount = ids.length;
-            const percentage = Math.round((loadedCount * 100) / totalCount);
-            userDataContext.updateProgress(percentage)
-          }
-
-        }
-      });
-      if (!allDone) {
-        // Si no todos los IDs están en el estado "DONE", esperar un tiempo y volver a verificar
-        setTimeout(checkStatus, 10000); // Esperar 2 segundos (puedes ajustar el tiempo según tus necesidades)
-      } else {
-        // console.log(userDataContext.progress)
-        console.log("Procesamiento completo");
-      }
-
-    };
-    // Iniciar la verificación del estado de los IDs
-    await checkStatus();
-
-
-  };
-
-  const processFilesEx = async () => {
-    console.log("Procesando archivos automáticamente...");
-    userDataContext.toggleLoadingEx()
-    setIsFileUploadedEx(false);
-    const response = await postExpenseTicketAutomatic(userToken, userDataContext.filesEx);
-    const ids = response.data.schendules
-
-    const checkStatus = async () => {
-
-      const response = await getSchenduleStatus(userToken, ids);
-      const statusResponse = response.status
-
-      // Verificar si todos los IDs están en el estado "DONE"
-      let allDone = true;
-      let loadedCount = 0
-
-
-      statusResponse.map((item) => {
-        for (const id of ids) {
-          const status = item[id.toString()]; // Obtener el estado del ID
-          if (status === "DONE") {
-            loadedCount = loadedCount + 1; // Incrementar el contador si el estado es "DONE"
-            const totalCount = ids.length;
-            const percentage = Math.round((loadedCount * 100) / totalCount);
-            userDataContext.updateProgressEx(percentage)
-          } else {
-            allDone = false;
-            const totalCount = ids.length;
-            const percentage = Math.round((loadedCount * 100) / totalCount);
-            userDataContext.updateProgressEx(percentage)
-          }
-
-        }
-      });
-      if (!allDone) {
-        // Si no todos los IDs están en el estado "DONE", esperar un tiempo y volver a verificar
-        setTimeout(checkStatus, 10000); // Esperar 2 segundos (puedes ajustar el tiempo según tus necesidades)
-      } else {
-        console.log("Procesamiento completo");
-      }
-
-    };
-    // Iniciar la verificación del estado de los IDs
-    await checkStatus();
-
-  
-  
-   };
+};
   
   
   
@@ -387,7 +326,6 @@ export const Dashboard = () => {
   // };
 
 
-
   const handleSelect = (date) => {
     if (selectedRange.length === 2) {
       setSelectedRange([date, date]);
@@ -403,84 +341,10 @@ export const Dashboard = () => {
       }
     }
   };
-  const handleAnualClick = async () => {
-    const filters = "?year=1";
-    if (userToken !== undefined) {
-      try {
-        await getTotals(userToken, filters);
-        //await getCountStatesEmit(userToken, filters);
-        await getCountStates(userToken, filters);
-        await getCountInvoice(userToken, filters);
-        //await getCountInvoiceEmit(userToken, filters);
-        //await getData(userToken, filters);
-      } catch (error) {
-        console.log('Error al obtener el dato de invoiceCount:', error);
-      }
-    }
+  
+  const getDataWithFilter = async (filters) => {
+    await getPanelData(filters);
   };
-  const handle1TrimClick = async () => {
-    const filters = "?quarter=1";
-    if (userToken !== undefined) {
-      try {
-        await getTotals(userToken, filters);
-        //await getCountStatesEmit(userToken, filters);
-        await getCountStates(userToken, filters);
-        await getCountInvoice(userToken, filters);
-        //await getCountInvoiceEmit(userToken, filters);
-        //await getData(userToken, filters);
-      } catch (error) {
-        console.log('Error al obtener el dato de invoiceCount:', error);
-      }
-    }
-  };
-
-  const handle2TrimClick = async () => {
-    const filters = "?quarter=2";
-    if (userToken !== undefined) {
-      try {
-        await getTotals(userToken, filters);
-        //await getCountStatesEmit(userToken, filters);
-        await getCountStates(userToken, filters);
-        await getCountInvoice(userToken, filters);
-        //await getCountInvoiceEmit(userToken, filters);
-        //await getData(userToken, filters);
-      } catch (error) {
-        console.log('Error al obtener el dato de invoiceCount:', error);
-      }
-    }
-  };
-
-  const handle3TrimClick = async () => {
-    const filters = "?quarter=3";
-    if (userToken !== undefined) {
-      try {
-        await getTotals(userToken, filters);
-        //await getCountStatesEmit(userToken, filters);
-        await getCountStates(userToken, filters);
-        await getCountInvoice(userToken, filters);
-        //await getCountInvoiceEmit(userToken, filters);
-        //await getData(userToken, filters);
-      } catch (error) {
-        console.log('Error al obtener el dato de invoiceCount:', error);
-      }
-    }
-  };
-
-  const handle4TrimClick = async () => {
-    const filters = "?quarter=4";
-    if (userToken !== undefined) {
-      try {
-        await getTotals(userToken, filters);
-        //await getCountStatesEmit(userToken, filters);
-        await getCountStates(userToken, filters);
-        await getCountInvoice(userToken, filters);
-        //await getCountInvoiceEmit(userToken, filters);
-      } catch (error) {
-        console.log('Error al obtener el dato de invoiceCount:', error);
-      }
-    }
-  };
-
 
   const selectRange = async (dateParam) => {
 
@@ -499,19 +363,7 @@ export const Dashboard = () => {
       const formattedEndDate = `${endYear}-${endMonth}-${endDay}`; // Formatear la fecha en formato yyyy-mm-dd
 
       const filters = "?start_date=" + formattedStartDate + "&end_date=" + formattedEndDate;
-
-      if (userToken !== undefined) {
-        try {
-          await getTotals(userToken, filters);
-          //await getCountStatesEmit(userToken, filters);
-          await getCountStates(userToken, filters);
-          await getCountInvoice(userToken, filters);
-          //await getCountInvoiceEmit(userToken, filters);
-          //await getData(userToken, filters);
-        } catch (error) {
-          console.log('Error al obtener el dato de invoiceCount:', error);
-        }
-      }
+      await getPanelData(filters);
 
       setSelectedRange([new Date(), new Date()]);
 
@@ -582,20 +434,23 @@ export const Dashboard = () => {
             <button className='filters' onClick={handleButtonClick}>
               Fechas
             </button>
-            <button className='filters' onClick={handleAnualClick}>
+            <button className='filters' onClick={()=>{getDataWithFilter("?year=1")}}>
               Anual
             </button>
-            <button className='filters' onClick={handle1TrimClick}>
+            <button className='filters' onClick={()=>{getDataWithFilter("?quarter=1")}}>
               1erTrimestre
             </button>
-            <button className='filters' onClick={handle2TrimClick}>
+            <button className='filters' onClick={()=>{getDataWithFilter("?quarter=2")}}>
               2ºTrimestre
             </button>
-            <button className='filters' onClick={handle3TrimClick}>
+            <button className='filters' onClick={()=>{getDataWithFilter("?quarter=3")}}>
               3erTrimestre
             </button>
-            <button className='filters' onClick={handle4TrimClick}>
+            <button className='filters' onClick={()=>{getDataWithFilter("?quarter=4")}}>
               4ºTrimestre
+            </button>
+            <button className='filters' onClick={()=>{getDataWithFilter("?month=1")}}>
+              Último mes
             </button>
             {showCalendar && (
               
@@ -704,9 +559,9 @@ export const Dashboard = () => {
                   </div>
                   <div className="col">
                   <div className="card-container">
-                    <div className="totals" > {`${totals.total_amount}  €`}</div>
-                    <div className="totals" >  {`${totals.total_taxes}  €`}</div>
-                    <div className="totals" >  {`${totals.total_retention}  €`}</div>
+                    <div className="totals">{`${totals.total_amount || 0} €`}</div>
+                    <div className="totals">{`${totals.total_taxes || 0} €`}</div>
+                    <div className="totals">{`${totals.total_retention || 0} €`}</div>
                   </div>
                   </div>
                 </div>
@@ -721,7 +576,8 @@ export const Dashboard = () => {
                 <div className="row align-items-center">
                   <div className="col-lg-6 col-md-4">
                     <div className='card-container'>  
-                      <div className="dashboard-titles-invoices mx-lg-4 mx-md-0" > {`${invoiceCount.count} Facturas `}</div>
+
+                      <div className="dashboard-titles-invoices mx-lg-4 mx-md-0" > {`${invoiceCount.count || 0} Facturas `}</div>
                       <div className="dashboard-text mx-lg-4 mx-md-0">SUBIDAS {`${invoiceCount.text}`}</div>
                     </div>
                   </div>
@@ -739,21 +595,27 @@ export const Dashboard = () => {
                       <div>
                         <p className='states reject'>RECHAZADA</p>
                       </div>
+                      <div>
+                        <p className='states undefined'>SIN DEFINIR</p>
+                      </div>
                     </div>
                   </div>
                   <div className="col">
                     <div className="card-container">
                       <div>
-                        <p className='count-states'>{`${invoiceStates.Pendiente}`}</p>
+                        <p className='count-states'>{`${invoiceStates.Pendiente || 0}`}</p>
                       </div>
                       <div>
-                        <p className='count-states'>{`${invoiceStates.Pagada}`}</p>
+                        <p className='count-states'>{`${invoiceStates.Pagada || 0}`}</p>
                       </div>
                       <div>
-                        <p className='count-states'>{`${invoiceStates.Recibida}`}</p>
+                        <p className='count-states'>{`${invoiceStates.Recibida || 0}`}</p>
                       </div>
                       <div>
-                        <p className='count-states'>{`${invoiceStates.Rechazado}`}</p>
+                        <p className='count-states'>{`${invoiceStates.Rechazado || 0}`}</p>
+                      </div>
+                      <div>
+                        <p className='count-states'>{`${invoiceStates.SinDefinir || 0}`}</p>
                       </div>
                     </div>
                   </div>

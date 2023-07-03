@@ -10,9 +10,6 @@ import '../general-style.css'
 import { Alert } from '@mui/material';
 
 export const AddInvoicesToPay = () => {
-  const [userToken, setUserToken] = useState('');
-
-
   const [provider, setProvider] = useState('');
   const [date, setDate] = useState('');
   const [state, setState] = useState('');
@@ -38,13 +35,25 @@ export const AddInvoicesToPay = () => {
   const location = useLocation();
   const userDataContext = useContext(Context);
 
-
   useEffect(() => {
-    let token = userDataContext.userData.token;
-    if (token !== null) {
-      setUserToken(token);
-    }
+    getPanelData();
   }, [userDataContext.userData.token]);
+
+  let isLoading = false; // Class variable to avoid taking too long to save that we are loading (state is not enough to control this). Also avoids multiple request under 1 second
+  const getPanelData = async () => {
+    if (!userDataContext.userData.token || isLoading) return
+    isLoading = true
+    try {
+      const data = await getProviders(userDataContext.userData.token);
+      setrowProviders(data || []);
+      setProvidersLoaded(true);
+    } catch (error) {
+      setrowProviders([]);
+      console.log('No hay datos para mostrar.');
+      setProvidersLoaded(true); // Si ocurre un error, también establece providersLoaded como true para continuar con la configuración de columnDefs
+    }
+    setTimeout(()=>{isLoading = false},1000)
+  }
 
   const handleAddProvider = (e) => {
     setProvider(e.target.value);
@@ -92,27 +101,6 @@ export const AddInvoicesToPay = () => {
     setTotalTaxes(e.target.value);
   };
 
-
-  useEffect(() => {
-    if (userToken !== undefined) {
-      getDataProviders(userToken);
-    }
-  }, [userToken]);
-
-  const getDataProviders = async (userToken) => {
-    try {
-      const data = await getProviders(userToken);
-      setrowProviders(data || []);
-      setProvidersLoaded(true);
-    } catch (error) {
-      setrowProviders([]);
-      console.log('No hay datos para mostrar.');
-      setProvidersLoaded(true); // Si ocurre un error, también establece providersLoaded como true para continuar con la configuración de columnDefs
-    }
-  };
-
-
-
   const handleFileChange = (event) => {
     const file = event.target.files;
     setManualFile(file);
@@ -142,7 +130,7 @@ export const AddInvoicesToPay = () => {
     setIsSuccess(false);
     setIsError(false);
 
-    const response = await postInvoice(userToken, data);
+    const response = await postInvoice(userDataContext.userData.token, data);
     if (response === undefined) {
       setIsError(true)
     } else {

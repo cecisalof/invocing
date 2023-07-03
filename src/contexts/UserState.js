@@ -7,6 +7,7 @@ export default class UserState extends React.Component{
 
   state = {
     userData: {},
+    isInitialLoading: true,
     files: [],
     progress: 0,
     isLoadingRef: false,
@@ -118,7 +119,7 @@ export default class UserState extends React.Component{
     try{
       let storedValues = window.localStorage.getItem('userData');
       storedValues = JSON.parse(storedValues)
-      this.setState({userData: storedValues});
+      this.setState({userData: storedValues, isInitialLoading: false});
     } catch(error) { 
       console.error(error)
     }  
@@ -129,6 +130,7 @@ export default class UserState extends React.Component{
       <Context.Provider 
         value={{
           userData: this.state.userData,
+          isInitialLoading: this.state.isInitialLoading,
           files: this.state.files,
           progress: this.state.progress,
           isLoadingRef: this.state.isLoadingRef,

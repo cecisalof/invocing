@@ -27,9 +27,19 @@ const CustomHeader = ( props ) => {
         const filteredData = tableData.filter((row) => {
           let cellData = row;
           for (let part of columnParts) {
-            cellData = cellData[part];
+            if (cellData && typeof cellData === 'object') {
+              cellData = cellData[part];
+            } else {
+              cellData = null;
+              break;
+            }
           }
-          return cellData.toLowerCase().includes(searchTerm.toLowerCase());
+          if (cellData && searchTerm) {
+            const cellDataValue = typeof cellData === 'string' ? cellData.toLowerCase() : cellData;
+            const searchTermValue = searchTerm.toLowerCase();
+            return cellDataValue.includes(searchTermValue);
+          }
+          return false;
         });
 
         props.api.setRowData(filteredData);
