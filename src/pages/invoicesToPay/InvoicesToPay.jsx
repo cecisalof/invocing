@@ -598,6 +598,7 @@ const processFiles = async (files) => {
 };
 
 
+
    function handleCloseClick() {
     userDataContext.updateProgress(0)
     userDataContext.updateFiles([])
