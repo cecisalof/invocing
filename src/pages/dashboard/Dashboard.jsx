@@ -107,7 +107,7 @@ export const Dashboard = () => {
   const getPanelData = async (filters = null) => {
     if (!userDataContext.userData.token || isLoading) return
     isLoading = true
-    await getTotals();
+    await getTotals(filters);
     await getCountInvoice(filters);
     await getCountStates(filters);
     setTimeout(()=>{isLoading = false},1000)
