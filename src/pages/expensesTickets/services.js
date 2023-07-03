@@ -41,7 +41,6 @@ export const deleteExpenseTicket = async (uuid, token) => {
 
 
   export const patchExpenseTicket = async (uuid, data, token) => {
-    console.log(token)
     try {
         const response = await axios.patch( BASE_URL + API_URL.EXPENSE_TICKET + uuid, data, {
             headers: { 
@@ -103,7 +102,6 @@ export const deleteExpenseTicket = async (uuid, token) => {
             const file = fileList[i];
             formData.append('files', file);
         }
-        console.log(formData)
         const response = await axios.post(BASE_URL + API_URL.EXPENSE_TICKET_AUTOMATIC, formData, {
             headers: { 
                 'Authorization': `Token ${token}`,

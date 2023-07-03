@@ -102,7 +102,6 @@ export default class UserState extends React.Component{
   };
 
   componentDidMount() {
-    // console.log('Mirando state!')
     this.readFromMemory()
  }
   
@@ -112,7 +111,6 @@ export default class UserState extends React.Component{
   };
 
   updateUserData = (newUserData) => {
-      // console.log('Se va a guardar,,,', newUserData)
       this.setState({userData: newUserData});
       window.localStorage.setItem('userData', JSON.stringify(newUserData));
   };
@@ -120,7 +118,6 @@ export default class UserState extends React.Component{
   readFromMemory = async () => {
     try{
       let storedValues = window.localStorage.getItem('userData');
-      // console.log('stored', storedValues)
       storedValues = JSON.parse(storedValues)
       this.setState({userData: storedValues, isInitialLoading: false});
     } catch(error) { 

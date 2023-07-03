@@ -34,6 +34,8 @@ export const Dashboard = () => {
   const [totals, setTotals] = useState({});
   const [showCalendar, setShowCalendar] = useState(false);
   const [selectedRange, setSelectedRange] = useState([new Date(), new Date()]);
+  const [updatePercentage, setUpdatePercentage] = useState(false);
+  const [updatePercentageEx, setUpdatePercentageEx] = useState(false);
 
   const userDataContext = useContext(Context);
 
@@ -67,7 +69,6 @@ export const Dashboard = () => {
     try {
       const data = await getInvoicesTotals(userDataContext.userData.token, filters);
       if (data !== undefined) {
-        console.log(data)
         setTotals(data);
       }
 
@@ -77,6 +78,29 @@ export const Dashboard = () => {
 
     }
   };
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      if (userDataContext.progress < 100 && updatePercentage) {
+        userDataContext.updateProgress(userDataContext.progress +  Math.floor(Math.random() * 4) + 1);
+      }
+    }, 10000); // 1 second interval
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [userDataContext]);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      if (userDataContext.progressEx < 100 && updatePercentageEx) {
+        userDataContext.updateProgressEx(userDataContext.progressEx +  Math.floor(Math.random() * 4) + 1);
+      }
+    }, 10000); // 1 second interval
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [userDataContext]);
 
   let isLoading = false; // Class variable to avoid taking too long to save that we are loading (state is not enough to control this). Also avoids multiple request under 1 second
   const getPanelData = async (filters = null) => {
@@ -122,7 +146,8 @@ export const Dashboard = () => {
       if (userDataContext.processBotton){
         userDataContext.toggleProcessBotton()
       }
-      processFiles()
+      setUpdatePercentage(true)
+      processFiles(files)
       
     }
   }
@@ -139,117 +164,139 @@ export const Dashboard = () => {
     const files = event.dataTransfer.files;
     userDataContext.updateFiles(files)
     if (files.length > 10){
-      setIsFileUploaded(true);
+      setIsFileUploadedEx(true);
       userDataContext.toggleProcessBottonEx()
     }
     else{
       if (userDataContext.processBottonEx){
         userDataContext.toggleProcessBottonEx()
       }
-      processFilesEx()
+      setUpdatePercentageEx(true)
+      processFilesEx(files)
       
     }}
   };
 
-  const processFiles = async () => {
+  const processFiles = async (files) => {
     console.log("Procesando archivos automáticamente...");
-    userDataContext.toggleLoading()
+    userDataContext.toggleLoading();
     setIsFileUploaded(false);
-    const response = await postInvoiceAutomatic(userDataContext.userData.token, userDataContext.files);
+    console.log(files);
+    const response = await postInvoiceAutomatic(userDataContext.userData.token, files);
     const ids = response.data.schendules;
-
+    console.log(ids);
+    
+  
     const checkStatus = async () => {
-
       const response = await getSchenduleStatus(userDataContext.userData.token, ids);
-      const statusResponse = response.status
-
-      // Verificar si todos los IDs están en el estado "DONE"
+      const statusResponse = response.status;
+  
       let allDone = true;
-      let loadedCount = 0
-
-
+      let loadedCount = 0;
+      let notPending = 0;
+  
       statusResponse.map((item) => {
+        const totalCount = ids.length;
         for (const id of ids) {
           const status = item[id.toString()]; // Obtener el estado del ID
+          console.log(status);
           if (status === "DONE") {
             loadedCount = loadedCount + 1; // Incrementar el contador si el estado es "DONE"
-            const totalCount = ids.length;
+  
             const percentage = Math.round((loadedCount * 100) / totalCount);
-            userDataContext.updateProgress(percentage)
-          } else {
-            allDone = false;
-            const totalCount = ids.length;
-            const percentage = Math.round((loadedCount * 100) / totalCount);
-            userDataContext.updateProgress(percentage)
+            userDataContext.updateProgress(percentage);
+            notPending = notPending + 1
+          } else if (status === "ERROR") {
+            notPending = notPending + 1
           }
-
+          else {
+            allDone = false;
+          }
         }
       });
-      if (!allDone) {
-        // Si no todos los IDs están en el estado "DONE", esperar un tiempo y volver a verificar
-        setTimeout(checkStatus, 10000); // Esperar 2 segundos (puedes ajustar el tiempo según tus necesidades)
-      } else {
-        // console.log(userDataContext.progress)
+  
+  
+  
+      if (allDone) {
         console.log("Procesamiento completo");
+        setUpdatePercentage(false)
+        getPanelData();
+      } else if(notPending === ids.length){
+        console.log("Proceso con errores");
+        setUpdatePercentage(false)
+        userDataContext.updateProgress(0)
+        userDataContext.updateFiles([])
+        userDataContext.toggleLoading()
       }
-
+      else {
+        setTimeout(checkStatus, 10000); // Esperar 10 segundos y volver a verificar
+        
+      }
     };
-    // Iniciar la verificación del estado de los IDs
+  
     await checkStatus();
-
-
+  
   };
 
-  const processFilesEx = async () => {
+  const processFilesEx = async (files) => {
     console.log("Procesando archivos automáticamente...");
-    userDataContext.toggleLoadingEx()
-    setIsFileUploadedEx(false);
-    const response = await postExpenseTicketAutomatic(userDataContext.userData.token, userDataContext.filesEx);
-    const ids = response.data.schendules
-    console.log(ids)
+  userDataContext.toggleLoadingEx();
+  setIsFileUploadedEx(false);
+  console.log(files);
+  const response = await postExpenseTicketAutomatic(userDataContext.userData.token, files);
+  const ids = response.data.schendules;
+  console.log(ids);
+  
 
+  const checkStatus = async () => {
+    const response = await getSchenduleStatus(userDataContext.userData.token, ids);
+    const statusResponse = response.status;
 
-    const checkStatus = async () => {
+    let allDone = true;
+    let loadedCount = 0;
+    let notPending = 0;
 
-      const response = await getSchenduleStatus(userDataContext.userData.token, ids);
-      const statusResponse = response.status
+    statusResponse.map((item) => {
+      const totalCount = ids.length;
+      for (const id of ids) {
+        const status = item[id.toString()]; // Obtener el estado del ID
+        console.log(status);
+        if (status === "DONE") {
+          loadedCount = loadedCount + 1; // Incrementar el contador si el estado es "DONE"
 
-      // Verificar si todos los IDs están en el estado "DONE"
-      let allDone = true;
-      let loadedCount = 0
-
-
-      statusResponse.map((item) => {
-        for (const id of ids) {
-          const status = item[id.toString()]; // Obtener el estado del ID
-          if (status === "DONE") {
-            loadedCount = loadedCount + 1; // Incrementar el contador si el estado es "DONE"
-            const totalCount = ids.length;
-            const percentage = Math.round((loadedCount * 100) / totalCount);
-            userDataContext.updateProgressEx(percentage)
-          } else {
-            allDone = false;
-            const totalCount = ids.length;
-            const percentage = Math.round((loadedCount * 100) / totalCount);
-            userDataContext.updateProgressEx(percentage)
-          }
-
+          const percentage = Math.round((loadedCount * 100) / totalCount);
+          userDataContext.updateProgressEx(percentage);
+          notPending = notPending + 1
+        } else if (status === "ERROR") {
+          notPending = notPending + 1
         }
-      });
-      if (!allDone) {
-        // Si no todos los IDs están en el estado "DONE", esperar un tiempo y volver a verificar
-        setTimeout(checkStatus, 10000); // Esperar 2 segundos (puedes ajustar el tiempo según tus necesidades)
-      } else {
-        console.log("Procesamiento completo");
+        else {
+          allDone = false;
+        }
       }
+    });
 
-    };
-    // Iniciar la verificación del estado de los IDs
-    await checkStatus();
 
-  
-  
-   };
+
+    if (allDone) {
+      console.log("Procesamiento completo");
+      setUpdatePercentage(false)
+      getPanelData();
+    } else if(notPending === ids.length){
+      console.log("Proceso con errores");
+      setUpdatePercentage(false)
+      userDataContext.updateProgressEx(0)
+      userDataContext.updateFilesEx([])
+      userDataContext.toggleLoadingEx()
+    }
+    else {
+      setTimeout(checkStatus, 10000);
+    }
+  };
+
+  await checkStatus();
+
+};
   
   
   
@@ -282,7 +329,6 @@ export const Dashboard = () => {
   const handleSelect = (date) => {
     if (selectedRange.length === 2) {
       setSelectedRange([date, date]);
-      console.log("1")
       selectRange([date, date])
     } else if (selectedRange.length === 1) {
       const [startDate] = selectedRange;
@@ -306,8 +352,6 @@ export const Dashboard = () => {
       // Verificar si selectedRange es nulo o no tiene dos fechas
       const startDate = dateParam[0][0]
       const endDate =  dateParam[0][1]
-      console.log(startDate)
-      console.log(endDate)
       const startYear = startDate.getFullYear(); // Obtener el año (ejemplo: 2023)
       const startMonth = ('0' + (startDate.getMonth() + 1)).slice(-2); // Obtener el mes, agregando 1 al índice base 0 y asegurándose de tener dos dígitos (ejemplo: 06)
       const startDay = ('0' + startDate.getDate()).slice(-2); // Obtener el día y asegurarse de tener dos dígitos (ejemplo: 05)

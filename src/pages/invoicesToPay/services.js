@@ -102,7 +102,6 @@ export const deleteInvoice = async (uuid, token) => {
             const file = fileList[i];
             formData.append('files', file);
         }
-        console.log(formData)
         const response = await axios.post(BASE_URL + API_URL.INVOICE_TO_PAY_AUTOMATIC, formData, {
             headers: { 
                 'Authorization': `Token ${token}`,

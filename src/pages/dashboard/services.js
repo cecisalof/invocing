@@ -117,7 +117,6 @@ export const getInvoicesEmitTotals = async (token, filters=null) => {
         let url =  BASE_URL + API_URL.INVOICE_TO_EMIT_TOTALS
         if (filters){
             url = url + filters}
-        console.log(url)
         const response = await axios.get(url, {
             headers: { 
                 'accept': 'application/json', 
