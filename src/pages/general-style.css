@@ -215,6 +215,10 @@ body {
   transition: background-color 0.3s;
 }
 
+div.file-drop-zone-dragging {
+  opacity: 0.5;
+}
+
 @media (max-width: 991px){
   .file-drop-zone {
     width: 50vw;
