@@ -9,12 +9,6 @@ const HeaderColumn = (props) => {
     const [descSort, setDescSort] = useState('inactive');
     const [noSort, setNoSort] = useState('inactive');
 
-  //   const refButton = useRef(null);
-
-  // const onMenuClicked = () => {
-  //   showColumnMenu(refButton.current);
-  // };
-
   const onSortChanged = () => {
     setAscSort(column.isSortAscending() ? 'active' : 'inactive');
     setDescSort(column.isSortDescending() ? 'active' : 'inactive');
@@ -42,20 +36,6 @@ const HeaderColumn = (props) => {
     }
   }, [column]);
 
-  
-  // let menu = null;
-  // if (enableMenu) {
-  //   menu = (
-  //      <button
-  //      type="button"
-  //      ref={refButton}
-  //      onClick={() => onMenuClicked()}
-  //      className="customHeaderMenuButton"
-  //    >
-  //     <span className={`bi ${menuIcon}`}></span>
-  //    </button>
-  //   );
-  // }
 
   let sort = null;
   if (enableSorting) {
@@ -91,21 +71,19 @@ const HeaderColumn = (props) => {
     <div style={{display: 'flex'}}>
       <div className="customHeaderLabel">{displayName}</div>
       {sort}
-      {/* {menu} */}
     </div>
   );
 
 };
-// 
+
+
 HeaderColumn.propTypes = {
     displayName: PropTypes.string.isRequired,
     api: PropTypes.object.isRequired,
     column: PropTypes.object.isRequired,
     showColumnMenu: PropTypes.func.isRequired,
-    // enableMenu: PropTypes.bool.isRequired,
     setSort: PropTypes.func.isRequired,
     enableSorting: PropTypes.bool.isRequired,
-    // menuIcon: PropTypes.string.isRequired
   };
   
 export default HeaderColumn;
