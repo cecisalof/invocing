@@ -34,8 +34,15 @@ const HeaderColumn = (props) => {
       column.addEventListener('sortChanged', onSortChanged);
       onSortChanged();
     }
+
+    // giving DOM element a class to change filter icon
+    const columnFilterIcon = document.getElementsByClassName('ag-icon-filter');
+    for (const el of columnFilterIcon){
+      el.setAttribute("class", "bi bi-funnel");
+    }
   }, [column]);
 
+  
   // let menu = null;
   // if (enableMenu) {
   //   menu = (
