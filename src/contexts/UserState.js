@@ -7,6 +7,7 @@ export default class UserState extends React.Component{
 
   state = {
     userData: {},
+    isInitialLoading: true,
     files: [],
     progress: 0,
     isLoadingRef: false,
@@ -101,7 +102,7 @@ export default class UserState extends React.Component{
   };
 
   componentDidMount() {
-    console.log('Mirando state!')
+    // console.log('Mirando state!')
     this.readFromMemory()
  }
   
@@ -111,7 +112,7 @@ export default class UserState extends React.Component{
   };
 
   updateUserData = (newUserData) => {
-    console.log('Se va a guardar,,,', newUserData)
+      // console.log('Se va a guardar,,,', newUserData)
       this.setState({userData: newUserData});
       window.localStorage.setItem('userData', JSON.stringify(newUserData));
   };
@@ -121,8 +122,7 @@ export default class UserState extends React.Component{
       let storedValues = window.localStorage.getItem('userData');
       // console.log('stored', storedValues)
       storedValues = JSON.parse(storedValues)
-      console.log('parsed', storedValues)
-      this.setState({userData: storedValues});
+      this.setState({userData: storedValues, isInitialLoading: false});
     } catch(error) { 
       console.error(error)
     }  
@@ -133,6 +133,7 @@ export default class UserState extends React.Component{
       <Context.Provider 
         value={{
           userData: this.state.userData,
+          isInitialLoading: this.state.isInitialLoading,
           files: this.state.files,
           progress: this.state.progress,
           isLoadingRef: this.state.isLoadingRef,
