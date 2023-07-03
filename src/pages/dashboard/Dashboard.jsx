@@ -97,7 +97,6 @@ export const Dashboard = () => {
     try {
       const data = await getInvoicesTotals(userToken, filters);
       if (data !== undefined) {
-        console.log(data)
         setTotals(data);
       }
 
@@ -181,7 +180,7 @@ export const Dashboard = () => {
   //       try {
   //         await getCountStatesEmit(userToken);
   //       } catch (error) {
-  //         console.log('Error al obtener el dato de invoiceStates:', error);
+  //         ('Error al obtener el dato de invoiceStates:', error);
   //       }
   //     }
   //   };
@@ -264,7 +263,6 @@ export const Dashboard = () => {
   };
 
   const processFiles = async () => {
-    console.log("Procesando archivos automáticamente...");
     userDataContext.toggleLoading()
     setIsFileUploaded(false);
     const response = await postInvoiceAutomatic(userToken, userDataContext.files);
@@ -318,8 +316,6 @@ export const Dashboard = () => {
     setIsFileUploadedEx(false);
     const response = await postExpenseTicketAutomatic(userToken, userDataContext.filesEx);
     const ids = response.data.schendules
-    console.log(ids)
-
 
     const checkStatus = async () => {
 
@@ -395,7 +391,6 @@ export const Dashboard = () => {
   const handleSelect = (date) => {
     if (selectedRange.length === 2) {
       setSelectedRange([date, date]);
-      console.log("1")
       selectRange([date, date])
     } else if (selectedRange.length === 1) {
       const [startDate] = selectedRange;
@@ -493,8 +488,6 @@ export const Dashboard = () => {
       // Verificar si selectedRange es nulo o no tiene dos fechas
       const startDate = dateParam[0][0]
       const endDate =  dateParam[0][1]
-      console.log(startDate)
-      console.log(endDate)
       const startYear = startDate.getFullYear(); // Obtener el año (ejemplo: 2023)
       const startMonth = ('0' + (startDate.getMonth() + 1)).slice(-2); // Obtener el mes, agregando 1 al índice base 0 y asegurándose de tener dos dígitos (ejemplo: 06)
       const startDay = ('0' + startDate.getDate()).slice(-2); // Obtener el día y asegurarse de tener dos dígitos (ejemplo: 05)

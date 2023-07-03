@@ -74,9 +74,7 @@ export const Suppliers = () => {
   // Get data
   const getData = async (userToken) => {
     try {
-      console.log(userToken)
       const data = await getProviders(userToken);
-      console.log(data)
       setRowData(data || []);
     } catch (error) {
       setRowData([]);
@@ -123,14 +121,11 @@ export const Suppliers = () => {
 // }
 
 function handleTrashClick() {
-  console.log('Botón de basura clickeado');
   const selectedNodes = gridRef.current.api.getSelectedNodes();
   const selectedData = selectedNodes.map((node) => node.data);
-  console.log(selectedData);
   
   // Crear una Promesa que se resuelva cuando se hayan eliminado todas las facturas
   const deletePromises = selectedData.map((obj) => {
-    console.log(obj.uuid);
     return deleteProvider(obj.uuid, userToken);
   });
   

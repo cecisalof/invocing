@@ -74,7 +74,6 @@ export const AddSupplier = () => {
 
 
     const response = await postProviders(userToken, data);
-    console.log(response)
     if (response === undefined) {
       setIsError(true)
     } else {

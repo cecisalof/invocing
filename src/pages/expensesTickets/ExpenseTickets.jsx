@@ -10,7 +10,8 @@ import '../general-style.css'
 import Context from '../../contexts/context';
 import { useContext } from 'react';
 import deleteIcon from '../../assets/icons/trash.svg';
-import CustomHeader from '../customHeader.jsx';
+// import CustomHeader from '../customHeader.jsx';
+import HeaderColumn from '../HeaderColumn';
 import { getProviders } from "../suppliers/services";
 import CustomElement from '../customElement.jsx';
 import { useNavigate } from 'react-router-dom';
@@ -28,7 +29,7 @@ export const ExpenseTickets = () => {
 
   const [userToken, setUserToken] = useState('');
   const [isFileUploaded, setIsFileUploaded] = useState(false);
-  
+
   const gridRef = useRef(); // Optional - for accessing Grid's API
   const [rowData, setRowData] = useState(); // Set rowData to Array of Objects, one Object per Row
 
@@ -52,34 +53,28 @@ export const ExpenseTickets = () => {
       headerCheckboxSelection: false,
       checkboxSelection: true,
       showDisabledCheckboxes: true,
-      headerComponent: (props) => (
-        <CustomHeader displayName={props.displayName} props={props}/>
-      ),
     },
-    {field: 'total', headerName: "Importe", 
-    headerComponent: (props) => (
-      <CustomHeader displayName={props.displayName} props={props}/>
-    ),},
-    {field: 'sender.name', headerName: "Proveedor",
-        headerComponent: (props) => (
-          <CustomHeader displayName={props.displayName} props={props}/>
-        ),
-        cellEditor: 'agSelectCellEditor',
-        cellEditorParams:{
-          values: rowProviders ? rowProviders.map((provider) => provider.name) : [],
-          cellRenderer: providerCellRenderer,
-        },
+    {
+      field: 'total', headerName: "Importe",
+    },
+    {
+      field: 'sender.name', headerName: "Proveedor",
+      cellEditor: 'agSelectCellEditor',
+      cellEditorParams: {
+        values: rowProviders ? rowProviders.map((provider) => provider.name) : [],
+        cellRenderer: providerCellRenderer,
       },
-    {field: 'date',headerName: "Fecha",headerComponent: (props) => (
-      <CustomHeader displayName={props.displayName} props={props}/>
-    ),},
-    
-    {field: 'concept', headerName: 'Concepto'},
-    {field: 'retention_percentage', headerName: '% Retención'}, 
-    {field: 'taxes_percentage', headerName: '% Impuestos'},
-    {field: 'total_pretaxes', headerName: 'Total sin impuestos'},
-    {field: 'total_retention', headerName: 'Total retenciones'},
-    {field: 'total_taxes', headerName: 'Total impuestos'},
+    },
+    {
+      field: 'date', headerName: "Fecha", 
+    },
+
+    { field: 'concept', headerName: 'Concepto' },
+    { field: 'retention_percentage', headerName: '% Retención' },
+    { field: 'taxes_percentage', headerName: '% Impuestos' },
+    { field: 'total_pretaxes', headerName: 'Total sin impuestos' },
+    { field: 'total_retention', headerName: 'Total retenciones' },
+    { field: 'total_taxes', headerName: 'Total impuestos' },
     {
       field: 'file',
       headerName: 'Descargar',
@@ -93,7 +88,7 @@ export const ExpenseTickets = () => {
       setUserToken(token);
     }
   }, [userDataContext.userData.token]);
-  
+
   useEffect(() => {
     if (userToken !== undefined) {
       getData(userToken);
@@ -103,9 +98,7 @@ export const ExpenseTickets = () => {
   // Get data
   const getData = async (userToken) => {
     try {
-      console.log(userToken)
       const data = await getExpenseTicket(userToken);
-      console.log(data)
       setRowData(data || []);
     } catch (error) {
       setRowData([]);
@@ -140,62 +133,56 @@ export const ExpenseTickets = () => {
           headerCheckboxSelection: false,
           checkboxSelection: true,
           showDisabledCheckboxes: true,
-          headerComponent: (props) => (
-            <CustomHeader displayName={props.displayName} props={props}/>
-          ),
         },
-        {field: 'total', headerName: "Importe", 
-        headerComponent: (props) => (
-          <CustomHeader displayName={props.displayName} props={props}/>
-        ),},
-        {field: 'sender.name', headerName: "Proveedor",
-            headerComponent: (props) => (
-              <CustomHeader displayName={props.displayName} props={props}/>
-            ),
-            cellEditor: 'agSelectCellEditor',
-            cellEditorParams:{
-              values: rowProviders ? rowProviders.map((provider) => provider.name) : [],
-              cellRenderer: providerCellRenderer,
-            },
+        {
+          field: 'total', headerName: "Importe",
+        },
+        {
+          field: 'sender.name', headerName: "Proveedor",
+          cellEditor: 'agSelectCellEditor',
+          cellEditorParams: {
+            values: rowProviders ? rowProviders.map((provider) => provider.name) : [],
+            cellRenderer: providerCellRenderer,
           },
-        {field: 'date',headerName: "Fecha",headerComponent: (props) => (
-          <CustomHeader displayName={props.displayName} props={props}/>
-        ),},
-        
-        {field: 'concept', headerName: 'Concepto'},
-        {field: 'retention_percentage', headerName: '% Retención'}, 
-        {field: 'taxes_percentage', headerName: '% Impuestos'},
-        {field: 'total_pretaxes', headerName: 'Total sin impuestos'},
-        {field: 'total_retention', headerName: 'Total retenciones'},
-        {field: 'total_taxes', headerName: 'Total impuestos'},
+        },
+        {
+          field: 'date', headerName: "Fecha", 
+        },
+
+        { field: 'concept', headerName: 'Concepto' },
+        { field: 'retention_percentage', headerName: '% Retención' },
+        { field: 'taxes_percentage', headerName: '% Impuestos' },
+        { field: 'total_pretaxes', headerName: 'Total sin impuestos' },
+        { field: 'total_retention', headerName: 'Total retenciones' },
+        { field: 'total_taxes', headerName: 'Total impuestos' },
         {
           field: 'file',
           headerName: 'Descargar',
           cellRenderer: CustomElement
         },
       ];
-  
+
       setColumnDefs(updatedColumnDefs);
     }
   }, [providersLoaded, rowProviders]);
 
   const onCellValueChanged = (event) => {
     let newValue = event.newValue
-    
+
     const stateMappings = {
       'Pendiente': 'pending',
       'Recibida': 'received',
       'Pagada': 'payed',
       'Rechazado': 'rejected'
     };
-    
-    if (event.colDef.field === 'state'){
+
+    if (event.colDef.field === 'state') {
       newValue = stateMappings[newValue] || newValue;
     }
     let data = { [event.colDef.field]: newValue };
-    
-    if (event.colDef.field === 'sender.name'){
-      let updateSender= null;
+
+    if (event.colDef.field === 'sender.name') {
+      let updateSender = null;
       rowProviders.forEach((row) => {
         if (row && row.name === newValue) {
           updateSender = row.uuid
@@ -206,7 +193,7 @@ export const ExpenseTickets = () => {
         // Espera a que se complete la solicitud PATCH y luego carga los datos
         getData(userToken);
       });
-    }else{
+    } else {
       patchExpenseTicket(event.data.uuid, data, userToken).then(() => {
         // Espera a que se complete la solicitud PATCH y luego carga los datos
         getData(userToken);
@@ -223,160 +210,152 @@ export const ExpenseTickets = () => {
 
   const defaultColDef = useMemo(() => {
     return {
+      editable: true,
       sortable: true,
+      flex: 1,
+      minWidth: 250,
       filter: true,
       resizable: true,
-      enableRowGroup: true,
-      enablePivot: true,
-      enableValue: true,
-      editable: true,
-      sideBar: true,
-      cellStyle: {color: '#999999',  fontSize: '15px'}
+      cellStyle: { color: '#999999', fontSize: '15px' },
+      headerComponentParams: {
+        menuIcon: 'bi-list',
+      },
+      floatingFilter: true
     };
   }, []);
 
 
   function getRowStyle(props) {
     if (props.node.rowIndex % 2 === 0) {
-        // Fila par
-        return { background: '#F7FAFF' };
+      // Fila par
+      return { background: '#F7FAFF' };
     } else {
-        // Fila impar
-        return { background: '#ffffff' };
+      // Fila impar
+      return { background: '#ffffff' };
     }
-}
-// function handleFilterClick() {
-//   console.log('Botón de filtro clickeado');
-
-// }
-
-function handleTrashClick() {
-  console.log('Botón de basura clickeado');
-  const selectedNodes = gridRef.current.api.getSelectedNodes();
-  const selectedData = selectedNodes.map((node) => node.data);
-  console.log(selectedData);
-  
-  // Crear una Promesa que se resuelva cuando se hayan eliminado todas las facturas
-  const deletePromises = selectedData.map((obj) => {
-    console.log(obj.uuid);
-    return deleteExpenseTicket(obj.uuid, userToken);
-  });
-  
-  Promise.all(deletePromises)
-    .then(() => {
-      // Llamada a getData() después de que se hayan eliminado todas las facturas
-      getData(userToken);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-}
-const handleAddExpenses = () => {
-  navigate('/add-expenses'); // Reemplaza '/ruta-del-formulario' con la ruta de tu formulario
-};
-
-const handleDragOver = (event) => {
-  event.preventDefault();
-  event.stopPropagation();
-  event.target.classList.add('file-drop-zone-dragging');
-};
-
-const handleDragLeave = (event) => {
-  event.preventDefault();
-  event.stopPropagation();
-  event.target.classList.remove('file-drop-zone-dragging');
-};
-
-const handleDrop = (event) => {
-  event.preventDefault();
-  event.stopPropagation();
-  event.target.classList.remove('file-drop-zone-dragging');
-  
-  const files = event.dataTransfer.files;
-  userDataContext.updateFilesEx(files)
-
-  if (files.length > 10){
-    setIsFileUploaded(true);
-    userDataContext.toggleProcessBottonEx()
   }
-  else{
-    if (userDataContext.processBottonEx){
+
+  function handleTrashClick() {
+    const selectedNodes = gridRef.current.api.getSelectedNodes();
+    const selectedData = selectedNodes.map((node) => node.data);
+
+    // Crear una Promesa que se resuelva cuando se hayan eliminado todas las facturas
+    const deletePromises = selectedData.map((obj) => {
+      console.log(obj.uuid);
+      return deleteExpenseTicket(obj.uuid, userToken);
+    });
+
+    Promise.all(deletePromises)
+      .then(() => {
+        // Llamada a getData() después de que se hayan eliminado todas las facturas
+        getData(userToken);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+  const handleAddExpenses = () => {
+    navigate('/add-expenses'); // Reemplaza '/ruta-del-formulario' con la ruta de tu formulario
+  };
+
+  const handleDragOver = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    event.target.classList.add('file-drop-zone-dragging');
+  };
+
+  const handleDragLeave = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    event.target.classList.remove('file-drop-zone-dragging');
+  };
+
+  const handleDrop = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    event.target.classList.remove('file-drop-zone-dragging');
+
+    const files = event.dataTransfer.files;
+    userDataContext.updateFilesEx(files)
+
+    if (files.length > 10) {
+      setIsFileUploaded(true);
       userDataContext.toggleProcessBottonEx()
     }
-    processFiles()
-    
-  }
-};
-
-function handleCloseClick() {
-  userDataContext.updateProgressEx(0)
-  userDataContext.updateFilesEx([])
-  userDataContext.toggleLoadingEx()
-}
-
-const processFiles = async () => {
-  console.log("Procesando archivos automáticamente...");
-  userDataContext.toggleLoadingEx()
-  setIsFileUploaded(false);
-  const response = await postExpenseTicketAutomatic(userToken, userDataContext.filesEx);
-  const ids = response.data.schendules
-  console.log(ids)
-  
-
-  const checkStatus = async () => {
-    
-    const response = await getSchenduleStatus(userToken, ids);
-    const statusResponse = response.status
-
-    // Verificar si todos los IDs están en el estado "DONE"
-    let allDone = true;
-    let loadedCount = 0
-    
-
-    statusResponse.map((item) => {
-      for (const id of ids) {
-        const status = item[id.toString()]; // Obtener el estado del ID
-        if (status === "DONE") {
-          loadedCount =  loadedCount + 1; // Incrementar el contador si el estado es "DONE"
-          console.log(loadedCount); // Imprimir el número de IDs con estado "DONE"
-          const totalCount = ids.length;
-          const percentage = Math.round((loadedCount * 100) / totalCount);
-          console.log(percentage)
-          userDataContext.updateProgressEx(percentage)
-        }else{
-          allDone = false;
-          const totalCount = ids.length;
-          const percentage = Math.round((loadedCount * 100) / totalCount);
-          userDataContext.updateProgressEx(percentage)
-        }
-
+    else {
+      if (userDataContext.processBottonEx) {
+        userDataContext.toggleProcessBottonEx()
       }
-    });
-    if (!allDone) {
-      // Si no todos los IDs están en el estado "DONE", esperar un tiempo y volver a verificar
-      setTimeout(checkStatus, 10000); // Esperar 2 segundos (puedes ajustar el tiempo según tus necesidades)
-    } else {
-      console.log(userDataContext.progressEx)
-      console.log("Procesamiento completo");
-      getData(userToken);
-    }   
-    
+      processFiles()
+
+    }
   };
-  // Iniciar la verificación del estado de los IDs
-  await checkStatus();
 
- };
+  function handleCloseClick() {
+    userDataContext.updateProgressEx(0)
+    userDataContext.updateFilesEx([])
+    userDataContext.toggleLoadingEx()
+  }
 
-//  function handleViewClick() {
-//   setViewFiles(!viewFiles)
-//   console.log(userDataContext.filesEx)
-// }
+  const processFiles = async () => {
+    userDataContext.toggleLoadingEx()
+    setIsFileUploaded(false);
+    const response = await postExpenseTicketAutomatic(userToken, userDataContext.filesEx);
+    const ids = response.data.schendules;
+
+    const checkStatus = async () => {
+
+      const response = await getSchenduleStatus(userToken, ids);
+      const statusResponse = response.status
+
+      // Verificar si todos los IDs están en el estado "DONE"
+      let allDone = true;
+      let loadedCount = 0
+
+
+      statusResponse.map((item) => {
+        for (const id of ids) {
+          const status = item[id.toString()]; // Obtener el estado del ID
+          if (status === "DONE") {
+            loadedCount = loadedCount + 1; // Incrementar el contador si el estado es "DONE"
+            console.log(loadedCount); // Imprimir el número de IDs con estado "DONE"
+            const totalCount = ids.length;
+            const percentage = Math.round((loadedCount * 100) / totalCount);
+            userDataContext.updateProgressEx(percentage)
+          } else {
+            allDone = false;
+            const totalCount = ids.length;
+            const percentage = Math.round((loadedCount * 100) / totalCount);
+            userDataContext.updateProgressEx(percentage)
+          }
+
+        }
+      });
+      if (!allDone) {
+        // Si no todos los IDs están en el estado "DONE", esperar un tiempo y volver a verificar
+        setTimeout(checkStatus, 10000); // Esperar 2 segundos (puedes ajustar el tiempo según tus necesidades)
+      } else {
+        console.log(userDataContext.progressEx)
+        console.log("Procesamiento completo");
+        getData(userToken);
+      }
+
+    };
+    // Iniciar la verificación del estado de los IDs
+    await checkStatus();
+
+  };
+
+  //  function handleViewClick() {
+  //   setViewFiles(!viewFiles)
+  //   console.log(userDataContext.filesEx)
+  // }
 
 
   return (
     <>
       <div>
-        <AppBar location={location}/>
+        <AppBar location={location} />
       </div>
 
       <div
@@ -384,7 +363,7 @@ const processFiles = async () => {
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
-        
+
       >
         {/* <div className="eye-icon">
         <img src={eye} alt="Eye" onClick={handleViewClick} />
@@ -417,35 +396,35 @@ const processFiles = async () => {
             </div>
           ) : (
             <div>
-              <img src={dragDrop} alt="dragDrop"/>
+              <img src={dragDrop} alt="dragDrop" />
             </div>
           )}
-          
+
         </div>
-      {userDataContext.processBottonEx && (
-        <button className="process-button" onClick={processFiles}>
-          Procesar automáticamente
-        </button>
-      )}
+        {userDataContext.processBottonEx && (
+          <button className="process-button" onClick={processFiles}>
+            Procesar automáticamente
+          </button>
+        )}
       </div>
 
       {userDataContext.isLoadingRefEx && (
-        <div style={{display: 'flex', justifyContent: 'space-between'}}>
-          
-        <ProgressBar
-          now={userDataContext.progressEx}
-          label={userDataContext.progressEx === 0 ? "0%" : `${userDataContext.progressEx}%`}
-          animated={userDataContext.progressEx === 0}
-          variant="custom-color"
-          className="mb-3 custom-width-progess custom-progress"
-        />
-        <img src={close} alt="Close icon" onClick={handleCloseClick} style={{ marginRight: '100px', width: '20 px', height: '20px'}} />
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+
+          <ProgressBar
+            now={userDataContext.progressEx}
+            label={userDataContext.progressEx === 0 ? "0%" : `${userDataContext.progressEx}%`}
+            animated={userDataContext.progressEx === 0}
+            variant="custom-color"
+            className="mb-3 custom-width-progess custom-progress"
+          />
+          <img src={close} alt="Close icon" onClick={handleCloseClick} style={{ marginRight: '100px', width: '20 px', height: '20px' }} />
         </div>)}
-        <div className='mx-3'>
-          <button type="button" className="btn btn-primary rounded-pill px-4" onClick={handleAddExpenses}>Añadir gasto</button>
-          {/* <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} /> */}
-          <img src={deleteIcon} alt="Delete icon" onClick={handleTrashClick} className='trashIcon' />
-        </div>
+      <div className='mx-3'>
+        <button type="button" className="btn btn-primary rounded-pill px-4" onClick={handleAddExpenses}>Añadir gasto</button>
+        {/* <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} /> */}
+        <img src={deleteIcon} alt="Delete icon" onClick={handleTrashClick} className='trashIcon' />
+      </div>
       <div className="ag-theme-alpine mx-3 gridStyle">
         <AgGridReact
           onGridReady={onGridReady}
@@ -458,6 +437,8 @@ const processFiles = async () => {
           getRowStyle={getRowStyle}
           pagination={false}
           onCellValueChanged={onCellValueChanged}
+          components={{ agColumnHeader: HeaderColumn }}
+          accentedSort={true}
         />
       </div>
     </>

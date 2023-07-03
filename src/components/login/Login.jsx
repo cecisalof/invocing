@@ -18,7 +18,6 @@ export const Login = () => {
     
     useEffect( () => { // Check if user is already logged in
       if (userDataContext.userData && userDataContext.userData.token && userDataContext.userData.uuid) {
-        console.log('Already logged in!')
         navigate("/", { replace: true });
       }
     }, [userDataContext])

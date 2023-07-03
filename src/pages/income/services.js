@@ -45,7 +45,6 @@ export const deleteIncome = async (uuid, token) => {
 
 
   export const patchIncome = async (uuid, data, token) => {
-    console.log(token)
     try {
         const response = await axios.patch( BASE_URL + API_URL.INVOICE_TO_EMIT + uuid, data, {
             headers: { 

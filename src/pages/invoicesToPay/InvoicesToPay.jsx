@@ -239,7 +239,6 @@ export const InvoicesToPay = () => {
   const getData = async (userToken) => {
     try {
       const data = await getInvoices(userToken);
-      console.log(data)
       setRowData(data || []);
     } catch (error) {
       setRowData([]);
@@ -333,14 +332,11 @@ export const InvoicesToPay = () => {
 // }
 
 function handleTrashClick() {
-  console.log('Botón de basura clickeado');
   const selectedNodes = gridRef.current.api.getSelectedNodes();
   const selectedData = selectedNodes.map((node) => node.data);
-  console.log(selectedData);
   
   // Crear una Promesa que se resuelva cuando se hayan eliminado todas las facturas
   const deletePromises = selectedData.map((obj) => {
-    console.log(obj.uuid);
     return deleteInvoice(obj.uuid, userToken);
   });
   
@@ -395,11 +391,8 @@ const processFiles = async (files) => {
   console.log("Procesando archivos automáticamente...");
   userDataContext.toggleLoading();
   setIsFileUploaded(false);
-  console.log(files);
   const response = await postInvoiceAutomatic(userToken, files);
   const ids = response.data.schendules;
-  console.log(ids);
-  
 
   const checkStatus = async () => {
     const response = await getSchenduleStatus(userToken, ids);
@@ -412,7 +405,6 @@ const processFiles = async (files) => {
       const totalCount = ids.length;
       for (const id of ids) {
         const status = item[id.toString()]; // Obtener el estado del ID
-        console.log(status);
         if (status === "DONE") {
           loadedCount = loadedCount + 1; // Incrementar el contador si el estado es "DONE"
 

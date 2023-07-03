@@ -43,7 +43,6 @@
   
   
     export const patchProvider = async (uuid, data, token) => {
-      console.log(token)
       try {
           const response = await axios.patch( BASE_URL + API_URL.PROVIDER + uuid, data, {
               headers: { 

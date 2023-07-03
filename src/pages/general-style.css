@@ -406,3 +406,53 @@ body {
   margin-left: 30px;
   height: 33px;
 }
+
+/* .customHeaderMenuButton {
+  float: left;
+  margin: 0 0 0 3px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  margin-left: 4px;
+  position: absolute;
+    right: 0;
+} */
+
+.customHeaderLabel {
+  float: left;
+  margin: 0 0 0 3px;
+}
+
+.customSortDownLabel {
+  float: left;
+  margin: 0 0 0 3px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  margin-left: 4px;
+}
+
+.customSortUpLabel {
+  float: left;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: none;
+  margin-left: 4px;
+}
+
+.customSortRemoveLabel {
+  float: left;
+  margin: 0 0 0 3px;
+  font-size: 20px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  margin-left: 4px;
+}
+
+.active, .customHeaderMenuButton:hover {
+  color:  #005CFF;
+
+}
+

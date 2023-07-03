@@ -11,7 +11,6 @@ export const MainLayout = () => {
 
   useEffect( () => { // Check if user is already logged in
     if (!userDataContext.userData || !userDataContext.userData.token || !userDataContext.userData.uuid) {
-      console.log("Redirecting to login...")
       navigate("/login", { replace: true });
     }
   }, [userDataContext])
