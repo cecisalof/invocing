@@ -325,6 +325,23 @@ body {
   opacity: 0.5;
 }
 
+.active-filters {
+  margin: 5px;
+  width: 98px;
+  height: 20px;
+  border-radius: 100px;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 11px;
+  text-align: center;
+  padding-bottom: 20px;
+  padding-top: 10px;
+  border: 2px solid #ADB9FB;
+  background: #ADB9FB;
+  color: white;
+}
+
 .states {
   margin: 6px;
   border-radius: 100px;
