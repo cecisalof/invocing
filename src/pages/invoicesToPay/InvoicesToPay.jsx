@@ -675,7 +675,7 @@ export const InvoicesToPay = () => {
             variant="custom-color"
             className="mb-3 custom-width-progess custom-progress"
           />
-          <img src={close} alt="Close icon" onClick={handleCloseClick} style={{ marginRight: '100px', width: '20 px', height: '20px' }} />
+          <img src={close} alt="Close icon" onClick={handleCloseClick} style={{ marginRight: '20px', width: '20px', height: '20px', marginTop: '-2px' }} />
         </div>)}
 
       <div className='mx-3'>
