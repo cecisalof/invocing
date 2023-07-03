@@ -96,8 +96,10 @@ export const ExpenseTickets = () => {
         cellRenderer: providerCellRenderer,
       },
     },
-    { field: 'date', headerName: "Fecha" },
-
+    { field: 'date', 
+      headerName: "Fecha",
+      sort: 'asc' 
+    },
     { field: 'concept', headerName: 'Concepto' },
     {
       field: 'retention_percentage', headerName: '% Retención', valueFormatter: (params) => {
@@ -256,8 +258,10 @@ export const ExpenseTickets = () => {
             cellRenderer: providerCellRenderer,
           },
         },
-        { field: 'date', headerName: "Fecha" },
-
+        { field: 'date', 
+          headerName: "Fecha",
+          sort: 'asc' 
+        },
         { field: 'concept', headerName: 'Concepto' },
         {
           field: 'retention_percentage', headerName: '% Retención', valueFormatter: (params) => {
