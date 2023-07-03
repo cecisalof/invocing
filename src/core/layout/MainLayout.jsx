@@ -10,19 +10,19 @@ export const MainLayout = () => {
   const navigate = useNavigate();
 
   useEffect( () => { // Check if user is already logged in
-    if (!userDataContext.userData || !userDataContext.userData.token || !userDataContext.userData.uuid) {
-      console.log("Redirecting to login...")
+    if ((!userDataContext.userData || !userDataContext.userData.token || !userDataContext.userData.uuid) && !userDataContext.isInitialLoading) {
+      console.log("Redirecting to login...") 
       navigate("/login", { replace: true });
     }
   }, [userDataContext])
 
     return (
       <>
-        <div className="mainContainer">
+        {!userDataContext.isInitialLoading && userDataContext.userData && userDataContext.userData.token && <div className="mainContainer">
           <div className="">
             <DrawerComponent user={userDataContext.userData} />
           </div>
-        </div>
+        </div>}
       </>
     );
   };

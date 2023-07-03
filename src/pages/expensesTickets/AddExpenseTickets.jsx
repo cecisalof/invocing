@@ -10,8 +10,6 @@ import '../general-style.css'
 import { Alert } from '@mui/material';
 
 export const AddExpenseTickets = () => {
-  const [userToken, setUserToken] = useState('');
-
   const [provider, setProvider] = useState('');
   const [date, setDate] = useState('');
   const [number, setNumber] = useState('');
@@ -33,23 +31,12 @@ export const AddExpenseTickets = () => {
   const location = useLocation();
   const userDataContext = useContext(Context);
 
-
-
-  useEffect(() => {
-    let token = userDataContext.userData.token;
-    if (token !== null) {
-      setUserToken(token);
-    }
-  }, [userDataContext.userData.token]);
-
   const handleAddProvider = (e) => {
     setProvider(e.target.value);
   };
-
   const handleAddDate = (e) => {
     setDate(e.target.value);
   };
-
   const handleAddNumber = (e) => {
     setNumber(e.target.value);
   };
@@ -65,26 +52,23 @@ export const AddExpenseTickets = () => {
   const handleAddConcept = (e) => {
     setConcept(e.target.value);
   };
-
-
   const handleAddTotalPretaxes = (e) => {
     setTotalPretaxes(e.target.value);
   };
-
-
   const handleAddTotalTaxes = (e) => {
     setTotalTaxes(e.target.value);
   };
 
   useEffect(() => {
-    if (userToken !== undefined) {
-      getDataProviders(userToken);
-    }
-  }, [userToken]);
+    getPanelData();
+  }, [userDataContext.userData.token]);
 
-  const getDataProviders = async (userToken) => {
+  let isLoading = false; // Class variable to avoid taking too long to save that we are loading (state is not enough to control this). Also avoids multiple request under 1 second
+  const getPanelData = async () => {
+    if (!userDataContext.userData.token || isLoading) return
+    isLoading = true
     try {
-      const data = await getProviders(userToken);
+      const data = await getProviders(userDataContext.userData.token);
       setrowProviders(data || []);
       setProvidersLoaded(true);
     } catch (error) {
@@ -92,10 +76,8 @@ export const AddExpenseTickets = () => {
       console.log('No hay datos para mostrar.');
       setProvidersLoaded(true); // Si ocurre un error, también establece providersLoaded como true para continuar con la configuración de columnDefs
     }
-  };
-
-
-
+    setTimeout(()=>{isLoading = false},1000)
+  }
 
   const handleFileChange = (event) => {
     const file = event.target.files;
@@ -124,13 +106,12 @@ export const AddExpenseTickets = () => {
     setIsSuccess(false);
     setIsError(false);
 
-    const response = await postExpenseTicket(userToken, formData);
+    const response = await postExpenseTicket(userDataContext.userData.token, formData);
     if (response === undefined) {
       setIsError(true)
     } else {
       setIsSuccess(true)
     }
-
 
     // Reiniciar los valores de los campos
 

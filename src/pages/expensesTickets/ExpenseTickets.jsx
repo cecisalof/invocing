@@ -26,7 +26,6 @@ export const ExpenseTickets = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const [userToken, setUserToken] = useState('');
   const [isFileUploaded, setIsFileUploaded] = useState(false);
   const [updatePercentage, setUpdatePercentage] = useState(false);
   
@@ -172,25 +171,24 @@ export const ExpenseTickets = () => {
       cellRenderer: CustomElement
     },
   ]);
-
-  useEffect(() => {
-    let token = userDataContext.userData.token;
-    if (token !== null) {
-      setUserToken(token);
-    }
-  }, [userDataContext.userData.token]);
   
   useEffect(() => {
-    if (userToken !== undefined) {
-      getData(userToken);
-    }
-  }, [userToken]);
+    getPanelData();
+  }, [userDataContext.userData.token]);
+
+  let isLoading = false; // Class variable to avoid taking too long to save that we are loading (state is not enough to control this). Also avoids multiple request under 1 second
+  const getPanelData = async () => {
+    if (!userDataContext.userData.token || isLoading) return
+    isLoading = true
+    await getDataProviders();
+    await getDataExpenseTicket();
+    setTimeout(()=>{isLoading = false},1000)
+  }
 
   // Get data
-  const getData = async (userToken) => {
+  const getDataExpenseTicket = async () => {
     try {
-      console.log(userToken)
-      const data = await getExpenseTicket(userToken);
+      const data = await getExpenseTicket(userDataContext.userData.token);
       console.log(data)
       setRowData(data || []);
     } catch (error) {
@@ -199,15 +197,9 @@ export const ExpenseTickets = () => {
     }
   };
 
-  useEffect(() => {
-    if (userToken !== undefined) {
-      getDataProviders(userToken);
-    }
-  }, [userToken]);
-
-  const getDataProviders = async (userToken) => {
+  const getDataProviders = async () => {
     try {
-      const data = await getProviders(userToken);
+      const data = await getProviders(userDataContext.userData.token);
       setrowProviders(data || []);
       setProvidersLoaded(true);
     } catch (error) {
@@ -362,14 +354,14 @@ export const ExpenseTickets = () => {
         }
       });
       data = { "uuid": updateSender };
-      patchProviderExpenseTicket(event.data.uuid, data, userToken).then(() => {
+      patchProviderExpenseTicket(event.data.uuid, data).then(() => {
         // Espera a que se complete la solicitud PATCH y luego carga los datos
-        getData(userToken);
+        getPanelData();
       });
     }else{
-      patchExpenseTicket(event.data.uuid, data, userToken).then(() => {
+      patchExpenseTicket(event.data.uuid, data).then(() => {
         // Espera a que se complete la solicitud PATCH y luego carga los datos
-        getData(userToken);
+        getPanelData();
       });
     }
 
@@ -419,13 +411,13 @@ function handleTrashClick() {
   // Crear una Promesa que se resuelva cuando se hayan eliminado todas las facturas
   const deletePromises = selectedData.map((obj) => {
     console.log(obj.uuid);
-    return deleteExpenseTicket(obj.uuid, userToken);
+    return deleteExpenseTicket(obj.uuid, userDataContext.userData.token);
   });
   
   Promise.all(deletePromises)
     .then(() => {
       // Llamada a getData() después de que se hayan eliminado todas las facturas
-      getData(userToken);
+      getPanelData();
     })
     .catch((error) => {
       console.log(error);
@@ -477,13 +469,13 @@ const processFiles = async (files) => {
   userDataContext.toggleLoadingEx();
   setIsFileUploaded(false);
   console.log(files);
-  const response = await postExpenseTicketAutomatic(userToken, files);
+  const response = await postExpenseTicketAutomatic(userDataContext.userData.token, files);
   const ids = response.data.schendules;
   console.log(ids);
   
 
   const checkStatus = async () => {
-    const response = await getSchenduleStatus(userToken, ids);
+    const response = await getSchenduleStatus(userDataContext.userData.token, ids);
     const statusResponse = response.status;
 
     let allDone = true;
@@ -515,7 +507,7 @@ const processFiles = async (files) => {
     if (allDone) {
       console.log("Procesamiento completo");
       setUpdatePercentage(false)
-      getData(userToken);
+      getPanelData();
     } else if(notPending === ids.length){
       console.log("Proceso con errores");
       setUpdatePercentage(false)
