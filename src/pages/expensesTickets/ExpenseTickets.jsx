@@ -10,7 +10,6 @@ import '../general-style.css'
 import Context from '../../contexts/context';
 import { useContext } from 'react';
 import deleteIcon from '../../assets/icons/trash.svg';
-// import CustomHeader from '../customHeader.jsx';
 import HeaderColumn from '../HeaderColumn';
 import { getProviders } from "../suppliers/services";
 import CustomElement from '../customElement.jsx';
@@ -386,7 +385,7 @@ export const ExpenseTickets = () => {
       editable: true,
       sortable: true,
       flex: 1,
-      minWidth: 250,
+      minWidth: 300,
       filter: true,
       resizable: true,
       cellStyle: { color: '#999999', fontSize: '15px' },
@@ -623,7 +622,6 @@ export const ExpenseTickets = () => {
           pagination={false}
           onCellValueChanged={onCellValueChanged}
           components={{ agColumnHeader: HeaderColumn }}
-          accentedSort={true}
         />
       </div>
     </>
