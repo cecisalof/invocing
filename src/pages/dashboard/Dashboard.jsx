@@ -27,7 +27,6 @@ export const Dashboard = () => {
 
   const [isFileUploaded, setIsFileUploaded] = useState(false);
   const [isFileUploadedEx, setIsFileUploadedEx] = useState(false);
-  console.log(isFileUploadedEx);
   const [invoiceCount, setInvoiceCount] = useState({});
   const [invoiceStates, setInvoiceStates] = useState({});
   //const [invoiceEmitCount, setInvoiceEmitCount] = useState({});
@@ -37,7 +36,7 @@ export const Dashboard = () => {
   const [selectedRange, setSelectedRange] = useState([new Date(), new Date()]);
   const [updatePercentage, setUpdatePercentage] = useState(false);
   const [updatePercentageEx, setUpdatePercentageEx] = useState(false);
-  const [active, setActive] = useState("");
+  const [active, setActive] = useState("month-1");
 
   const userDataContext = useContext(Context);
 
@@ -450,6 +449,9 @@ export const Dashboard = () => {
           <button className={active === "year" ? "active-filters" : "filters"} id={"year"} onClick={(event) => { getDataWithFilter("?year=1", event) }}>
             Anual
           </button>
+          <button className={active === "month-1" ? "active-filters" : "filters"} id={"month-1"} onClick={(event) => { getDataWithFilter("?month=1", event) }}>
+            Último mes
+          </button>
           <button className={active === "quarter-1" ? "active-filters" : "filters"} id={"quarter-1"} onClick={(event) => { getDataWithFilter("?quarter=1", event) }}>
             1erTrimestre
           </button>
@@ -461,9 +463,6 @@ export const Dashboard = () => {
           </button>
           <button className={active === "quarter-4" ? "active-filters" : "filters"} id={"quarter-4"} onClick={(event) => { getDataWithFilter("?quarter=4", event) }}>
             4ºTrimestre
-          </button>
-          <button className={active === "month-1" ? "active-filters" : "filters"} id={"month-1"} onClick={(event) => { getDataWithFilter("?month=1", event) }}>
-            Último mes
           </button>
           {showCalendar && (
 
