@@ -78,12 +78,12 @@ const HeaderColumn = (props) => {
 
 
 HeaderColumn.propTypes = {
-    displayName: PropTypes.string.isRequired,
-    api: PropTypes.object.isRequired,
-    column: PropTypes.object.isRequired,
-    showColumnMenu: PropTypes.func.isRequired,
-    setSort: PropTypes.func.isRequired,
-    enableSorting: PropTypes.bool.isRequired,
+    displayName: PropTypes.string,
+    api: PropTypes.object,
+    column: PropTypes.object,
+    showColumnMenu: PropTypes.func,
+    setSort: PropTypes.func,
+    enableSorting: PropTypes.bool,
   };
   
 export default HeaderColumn;

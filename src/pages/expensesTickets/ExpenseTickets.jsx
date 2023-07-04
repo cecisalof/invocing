@@ -197,7 +197,6 @@ export const ExpenseTickets = () => {
   const getDataExpenseTicket = async () => {
     try {
       const data = await getExpenseTicket(userDataContext.userData.token);
-      console.log(data)
       setRowData(data || []);
     } catch (error) {
       setRowData([]);
@@ -416,14 +415,11 @@ export const ExpenseTickets = () => {
   }
 
   function handleTrashClick() {
-    console.log('Botón de basura clickeado');
     const selectedNodes = gridRef.current.api.getSelectedNodes();
     const selectedData = selectedNodes.map((node) => node.data);
-    console.log(selectedData);
 
     // Crear una Promesa que se resuelva cuando se hayan eliminado todas las facturas
     const deletePromises = selectedData.map((obj) => {
-      console.log(obj.uuid);
       return deleteExpenseTicket(obj.uuid, userDataContext.userData.token);
     });
 
@@ -482,11 +478,8 @@ export const ExpenseTickets = () => {
     console.log("Procesando archivos automáticamente...");
     userDataContext.toggleLoadingEx();
     setIsFileUploaded(false);
-    console.log(files);
     const response = await postExpenseTicketAutomatic(userDataContext.userData.token, files);
     const ids = response.data.schendules;
-    console.log(ids);
-
 
     const checkStatus = async () => {
       const response = await getSchenduleStatus(userDataContext.userData.token, ids);
@@ -644,8 +637,8 @@ export const ExpenseTickets = () => {
 };
 
 ExpenseTickets.propTypes = {
-  displayName: PropTypes.object.isRequired,
-  api: PropTypes.object.isRequired,
-  node: PropTypes.object.isRequired,
+  displayName: PropTypes.object,
+  api: PropTypes.object,
+  node: PropTypes.object,
 };
 export default ExpenseTickets;

@@ -63,7 +63,6 @@ export const AddSupplier = () => {
     setIsError(false);
 
     const response = await postProviders(userDataContext.userData.token, data);
-    console.log(response)
     if (response === undefined) {
       setIsError(true)
     } else {

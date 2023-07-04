@@ -75,10 +75,10 @@ const CustomHeader = ( props ) => {
 };
 
 CustomHeader.propTypes = {
-  displayName: PropTypes.string.isRequired,
-  props: PropTypes.object.isRequired,
-  api: PropTypes.object.isRequired,
-  column: PropTypes.object.isRequired,
+  displayName: PropTypes.string,
+  props: PropTypes.object,
+  api: PropTypes.object,
+  column: PropTypes.object,
 };
 
 CustomHeader.displayName = 'CustomHeader';

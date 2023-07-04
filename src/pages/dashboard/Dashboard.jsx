@@ -36,6 +36,7 @@ export const Dashboard = () => {
   const [selectedRange, setSelectedRange] = useState([new Date(), new Date()]);
   const [updatePercentage, setUpdatePercentage] = useState(false);
   const [updatePercentageEx, setUpdatePercentageEx] = useState(false);
+  const [active, setActive] = useState("");
 
   const userDataContext = useContext(Context);
 
@@ -181,11 +182,8 @@ export const Dashboard = () => {
     console.log("Procesando archivos automáticamente...");
     userDataContext.toggleLoading();
     setIsFileUploaded(false);
-    console.log(files);
     const response = await postInvoiceAutomatic(userDataContext.userData.token, files);
-    const ids = response.data.schendules;
-    console.log(ids);
-    
+    const ids = response.data.schendules;    
   
     const checkStatus = async () => {
       const response = await getSchenduleStatus(userDataContext.userData.token, ids);
@@ -242,11 +240,8 @@ export const Dashboard = () => {
     console.log("Procesando archivos automáticamente...");
   userDataContext.toggleLoadingEx();
   setIsFileUploadedEx(false);
-  console.log(files);
   const response = await postExpenseTicketAutomatic(userDataContext.userData.token, files);
-  const ids = response.data.schendules;
-  console.log(ids);
-  
+  const ids = response.data.schendules;  
 
   const checkStatus = async () => {
     const response = await getSchenduleStatus(userDataContext.userData.token, ids);
@@ -342,8 +337,9 @@ export const Dashboard = () => {
     }
   };
   
-  const getDataWithFilter = async (filters) => {
+  const getDataWithFilter = async (filters, event) => {
     await getPanelData(filters);
+    setActive(event.target.id);
   };
 
   const selectRange = async (dateParam) => {
@@ -434,22 +430,22 @@ export const Dashboard = () => {
             <button className='filters' onClick={handleButtonClick}>
               Fechas
             </button>
-            <button className='filters' onClick={()=>{getDataWithFilter("?year=1")}}>
+            <button className={active === "year" ? "active-filters" : "filters"} id={"year"} onClick={(event)=>{getDataWithFilter("?year=1", event)}}>
               Anual
             </button>
-            <button className='filters' onClick={()=>{getDataWithFilter("?quarter=1")}}>
+            <button className={active === "quarter-1" ? "active-filters" : "filters"} id={"quarter-1"} onClick={(event)=>{getDataWithFilter("?quarter=1", event)}}>
               1erTrimestre
             </button>
-            <button className='filters' onClick={()=>{getDataWithFilter("?quarter=2")}}>
+            <button className={active === "quarter-2" ? "active-filters" : "filters"} id={"quarter-2"} onClick={(event)=>{getDataWithFilter("?quarter=2", event)}}>
               2ºTrimestre
             </button>
-            <button className='filters' onClick={()=>{getDataWithFilter("?quarter=3")}}>
+            <button className={active === "quarter-3" ? "active-filters" : "filters"} id={"quarter-3"} onClick={(event)=>{getDataWithFilter("?quarter=3", event)}}>
               3erTrimestre
             </button>
-            <button className='filters' onClick={()=>{getDataWithFilter("?quarter=4")}}>
+            <button className={active === "quarter-4" ? "active-filters" : "filters"} id={"quarter-4"} onClick={(event)=>{getDataWithFilter("?quarter=4", event)}}>
               4ºTrimestre
             </button>
-            <button className='filters' onClick={()=>{getDataWithFilter("?month=1")}}>
+            <button className={active === "month-1" ? "active-filters" : "filters"} id={"month-1"} onClick={(event)=>{getDataWithFilter("?month=1", event)}}>
               Último mes
             </button>
             {showCalendar && (
