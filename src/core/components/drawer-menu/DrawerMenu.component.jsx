@@ -200,7 +200,7 @@ export const DrawerMenuComponent = ({ user }) => {
                         <img className={`arrow ${gastosCollapsed ? 'rotate-down' : 'rotate-up'}`} src={arrow} style={{ marginLeft: '50px' }} alt="Arrow" />
                       </button>
                     </h2>
-                    <div id="flush-collapseOne" className="accordion-collapse collapse" data-bs-parent="#accordionFlushExample" style={{ background: 'rgba(0, 92, 255, 0.03)' }}>
+                    <div id="flush-collapseOne" className="accordion-collapse collapse" data-bs-parent="#accordionFlushExample" style={{ background: 'transparent' }}>
                       <div className="menuItemContainer">
                         <NavLink className={(navData) => (navData.isActive ? 'subactive' : 'sub-nav-link')} onClick={handleClick} to="/outcome/suppliers">Proveedores</NavLink>
                       </div>
