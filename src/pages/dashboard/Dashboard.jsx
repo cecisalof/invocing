@@ -84,8 +84,8 @@ export const Dashboard = () => {
   };
   useEffect(() => {
     const intervalId = setInterval(() => {
-      if (userDataContext.progress < 100 && updatePercentage) {
-        userDataContext.updateProgress(userDataContext.progress + Math.floor(Math.random() * 4) + 1);
+      if (userDataContext.progress < 90 && updatePercentage) {
+        userDataContext.updateProgress(userDataContext.progress +  Math.floor(Math.random() * 4) + 1);
       }
     }, 10000); // 1 second interval
 
@@ -96,8 +96,8 @@ export const Dashboard = () => {
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      if (userDataContext.progressEx < 100 && updatePercentageEx) {
-        userDataContext.updateProgressEx(userDataContext.progressEx + Math.floor(Math.random() * 4) + 1);
+      if (userDataContext.progressEx < 90 && updatePercentageEx) {
+        userDataContext.updateProgressEx(userDataContext.progressEx +  Math.floor(Math.random() * 4) + 1);
       }
     }, 10000); // 1 second interval
 
