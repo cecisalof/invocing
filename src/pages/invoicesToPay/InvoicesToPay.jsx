@@ -15,12 +15,13 @@ import HeaderColumn from '../HeaderColumn';
 import CustomElement from '../customElement.jsx';
 import { getProviders } from "../suppliers/services";
 import { useNavigate } from 'react-router-dom';
-import { FaCheckCircle, FaCircleNotch } from 'react-icons/fa';
+import { FaCheckCircle } from 'react-icons/fa';
 import dragDrop from '../../assets/icons/drag-and-drop.png';
 import close from '../../assets/icons/close.png';
 import { ProgressBar } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import { Alert } from '@mui/material';
+import spinner from '../../assets/icons/spinner.png';
 
 
 export const InvoicesToPay = () => {
@@ -646,8 +647,8 @@ export const InvoicesToPay = () => {
         <div className="drop-message">
           {userDataContext.isLoadingRef && userDataContext.progress < 100 ? (
             <div>
-              <FaCircleNotch className="loading-icon" />
-              <span className="upload-text">Cargando </span>
+              <img src={spinner} className="loading-icon" />
+              <span className="upload-text">Subiendo archivos... </span>
             </div>
           ) : isFileUploaded ? (
             <div className="upload-indicator">
