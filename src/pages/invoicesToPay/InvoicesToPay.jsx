@@ -20,6 +20,7 @@ import dragDrop from '../../assets/icons/drag-and-drop.png';
 import close from '../../assets/icons/close.png';
 import { ProgressBar } from 'react-bootstrap';
 import PropTypes from 'prop-types';
+import { Alert } from '@mui/material';
 
 
 export const InvoicesToPay = () => {
@@ -32,6 +33,7 @@ export const InvoicesToPay = () => {
   const [providersLoaded, setProvidersLoaded] = useState(false);
   const [isFileUploaded, setIsFileUploaded] = useState(false);
   const [updatePercentage, setUpdatePercentage] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   const userDataContext = useContext(Context);
 
@@ -563,56 +565,62 @@ export const InvoicesToPay = () => {
 
   const processFiles = async (files) => {
     console.log("Procesando archivos automáticamente...");
-    userDataContext.toggleLoading();
-    setIsFileUploaded(false);
+    
     const response = await postInvoiceAutomatic(userDataContext.userData.token, files);
-    const ids = response.data.schendules;
+    if (response !== undefined){
+      userDataContext.toggleLoading();
+      setIsFileUploaded(false);
+      const ids = response.data.schendules;
 
-    const checkStatus = async () => {
-      const response = await getSchenduleStatus(userDataContext.userData.token, ids);
-      const statusResponse = response.status;
+      const checkStatus = async () => {
+        const response = await getSchenduleStatus(userDataContext.userData.token, ids);
+        const statusResponse = response.status;
 
-      let allDone = true;
-      let loadedCount = 0;
-      let notPending = 0;
+        let allDone = true;
+        let loadedCount = 0;
+        let notPending = 0;
 
-      statusResponse.map((item) => {
-        const totalCount = ids.length;
-        for (const id of ids) {
-          const status = item[id.toString()]; // Obtener el estado del ID
-          if (status === "DONE") {
-            loadedCount = loadedCount + 1; // Incrementar el contador si el estado es "DONE"
+        statusResponse.map((item) => {
+          const totalCount = ids.length;
+          for (const id of ids) {
+            const status = item[id.toString()]; // Obtener el estado del ID
+            if (status === "DONE") {
+              loadedCount = loadedCount + 1; // Incrementar el contador si el estado es "DONE"
 
-            const percentage = Math.round((loadedCount * 100) / totalCount);
-            userDataContext.updateProgress(percentage);
-            notPending = notPending + 1
-          } else if (status === "ERROR") {
-            notPending = notPending + 1
+              const percentage = Math.round((loadedCount * 100) / totalCount);
+              userDataContext.updateProgress(percentage);
+              notPending = notPending + 1
+            } else if (status === "ERROR") {
+              notPending = notPending + 1
+            }
+            else {
+              allDone = false;
+            }
           }
-          else {
-            allDone = false;
-          }
+        });
+
+
+
+        if (allDone) {
+          console.log("Procesamiento completo");
+          setUpdatePercentage(false)
+          getPanelData();
+        } else if (notPending === ids.length) {
+          console.log("Proceso con errores");
+          setUpdatePercentage(false)
+          handleCloseClick()
         }
-      });
+        else {
+          setTimeout(checkStatus, 10000); // Esperar 10 segundos y volver a verificar
 
+        }
+      };
 
-
-      if (allDone) {
-        console.log("Procesamiento completo");
-        setUpdatePercentage(false)
-        getPanelData();
-      } else if (notPending === ids.length) {
-        console.log("Proceso con errores");
-        setUpdatePercentage(false)
-        handleCloseClick()
-      }
-      else {
-        setTimeout(checkStatus, 10000); // Esperar 10 segundos y volver a verificar
-
-      }
-    };
-
-    await checkStatus();
+      await checkStatus();
+    }
+    else{
+      setIsError(true)
+    }
 
   };
 
@@ -629,6 +637,10 @@ export const InvoicesToPay = () => {
       <div>
         <AppBar location={location} />
       </div>
+      {isError && (
+        <Alert severity="error" className="custom-alert" onClose={() => { setIsError(false) }}>
+          Hubo un error al subir los ficheros
+        </Alert>)}
       <div
         className="file-drop-zone-full"
         onDragOver={handleDragOver}

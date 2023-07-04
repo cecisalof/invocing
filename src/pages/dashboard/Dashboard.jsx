@@ -17,6 +17,7 @@ import cashYellow from '../../assets/icons/cashYellow.png';
 //import sellIcon from '../../assets/icons/sellout.png';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
+import { Alert } from '@mui/material';
 //import { getIncome } from "./../income/services";
 //import { AgChartsReact } from 'ag-charts-react';
 
@@ -37,6 +38,8 @@ export const Dashboard = () => {
   const [updatePercentage, setUpdatePercentage] = useState(false);
   const [updatePercentageEx, setUpdatePercentageEx] = useState(false);
   const [active, setActive] = useState("");
+  const [isError, setIsError] = useState(false);
+  
 
   const userDataContext = useContext(Context);
 
@@ -180,116 +183,126 @@ export const Dashboard = () => {
 
   const processFiles = async (files) => {
     console.log("Procesando archivos automáticamente...");
-    userDataContext.toggleLoading();
-    setIsFileUploaded(false);
+    
     const response = await postInvoiceAutomatic(userDataContext.userData.token, files);
-    const ids = response.data.schendules;    
-  
-    const checkStatus = async () => {
-      const response = await getSchenduleStatus(userDataContext.userData.token, ids);
-      const statusResponse = response.status;
-  
-      let allDone = true;
-      let loadedCount = 0;
-      let notPending = 0;
-  
-      statusResponse.map((item) => {
-        const totalCount = ids.length;
-        for (const id of ids) {
-          const status = item[id.toString()]; // Obtener el estado del ID
-          console.log(status);
-          if (status === "DONE") {
-            loadedCount = loadedCount + 1; // Incrementar el contador si el estado es "DONE"
-  
-            const percentage = Math.round((loadedCount * 100) / totalCount);
-            userDataContext.updateProgress(percentage);
-            notPending = notPending + 1
-          } else if (status === "ERROR") {
-            notPending = notPending + 1
+    if (response  !== undefined){
+      const ids = response.data.schendules;
+      userDataContext.toggleLoading();
+      setIsFileUploaded(false);   
+    
+      const checkStatus = async () => {
+        const response = await getSchenduleStatus(userDataContext.userData.token, ids);
+        const statusResponse = response.status;
+    
+        let allDone = true;
+        let loadedCount = 0;
+        let notPending = 0;
+    
+        statusResponse.map((item) => {
+          const totalCount = ids.length;
+          for (const id of ids) {
+            const status = item[id.toString()]; // Obtener el estado del ID
+            console.log(status);
+            if (status === "DONE") {
+              loadedCount = loadedCount + 1; // Incrementar el contador si el estado es "DONE"
+    
+              const percentage = Math.round((loadedCount * 100) / totalCount);
+              userDataContext.updateProgress(percentage);
+              notPending = notPending + 1
+            } else if (status === "ERROR") {
+              notPending = notPending + 1
+            }
+            else {
+              allDone = false;
+            }
           }
-          else {
-            allDone = false;
-          }
+        });
+    
+        if (allDone) {
+          console.log("Procesamiento completo");
+          setUpdatePercentage(false)
+          getPanelData();
+        } else if(notPending === ids.length){
+          console.log("Proceso con errores");
+          setUpdatePercentage(false)
+          userDataContext.updateProgress(0)
+          userDataContext.updateFiles([])
+          userDataContext.toggleLoading()
         }
-      });
-  
-  
-  
-      if (allDone) {
-        console.log("Procesamiento completo");
-        setUpdatePercentage(false)
-        getPanelData();
-      } else if(notPending === ids.length){
-        console.log("Proceso con errores");
-        setUpdatePercentage(false)
-        userDataContext.updateProgress(0)
-        userDataContext.updateFiles([])
-        userDataContext.toggleLoading()
-      }
-      else {
-        setTimeout(checkStatus, 10000); // Esperar 10 segundos y volver a verificar
-        
-      }
-    };
-  
-    await checkStatus();
+        else {
+          setTimeout(checkStatus, 10000); // Esperar 10 segundos y volver a verificar
+          
+        }
+      };
+    
+      await checkStatus();
+    }
+    else{
+      setIsError(true)
+    }
+
   
   };
 
   const processFilesEx = async (files) => {
     console.log("Procesando archivos automáticamente...");
-  userDataContext.toggleLoadingEx();
-  setIsFileUploadedEx(false);
-  const response = await postExpenseTicketAutomatic(userDataContext.userData.token, files);
-  const ids = response.data.schendules;  
+    const response = await postExpenseTicketAutomatic(userDataContext.userData.token, files);
+    if (response !== undefined){
+      const ids = response.data.schendules;
+      userDataContext.toggleLoadingEx();
+      setIsFileUploadedEx(false);
 
-  const checkStatus = async () => {
-    const response = await getSchenduleStatus(userDataContext.userData.token, ids);
-    const statusResponse = response.status;
+      const checkStatus = async () => {
+        const response = await getSchenduleStatus(userDataContext.userData.token, ids);
+        const statusResponse = response.status;
 
-    let allDone = true;
-    let loadedCount = 0;
-    let notPending = 0;
+        let allDone = true;
+        let loadedCount = 0;
+        let notPending = 0;
 
-    statusResponse.map((item) => {
-      const totalCount = ids.length;
-      for (const id of ids) {
-        const status = item[id.toString()]; // Obtener el estado del ID
-        console.log(status);
-        if (status === "DONE") {
-          loadedCount = loadedCount + 1; // Incrementar el contador si el estado es "DONE"
+        statusResponse.map((item) => {
+          const totalCount = ids.length;
+          for (const id of ids) {
+            const status = item[id.toString()]; // Obtener el estado del ID
+            console.log(status);
+            if (status === "DONE") {
+              loadedCount = loadedCount + 1; // Incrementar el contador si el estado es "DONE"
 
-          const percentage = Math.round((loadedCount * 100) / totalCount);
-          userDataContext.updateProgressEx(percentage);
-          notPending = notPending + 1
-        } else if (status === "ERROR") {
-          notPending = notPending + 1
+              const percentage = Math.round((loadedCount * 100) / totalCount);
+              userDataContext.updateProgressEx(percentage);
+              notPending = notPending + 1
+            } else if (status === "ERROR") {
+              notPending = notPending + 1
+            }
+            else {
+              allDone = false;
+            }
+          }
+        });
+
+
+
+        if (allDone) {
+          console.log("Procesamiento completo");
+          setUpdatePercentage(false)
+          getPanelData();
+        } else if(notPending === ids.length){
+          console.log("Proceso con errores");
+          setUpdatePercentage(false)
+          userDataContext.updateProgressEx(0)
+          userDataContext.updateFilesEx([])
+          userDataContext.toggleLoadingEx()
         }
         else {
-          allDone = false;
+          setTimeout(checkStatus, 10000);
         }
-      }
-    });
+      };
 
-
-
-    if (allDone) {
-      console.log("Procesamiento completo");
-      setUpdatePercentage(false)
-      getPanelData();
-    } else if(notPending === ids.length){
-      console.log("Proceso con errores");
-      setUpdatePercentage(false)
-      userDataContext.updateProgressEx(0)
-      userDataContext.updateFilesEx([])
-      userDataContext.toggleLoadingEx()
-    }
-    else {
-      setTimeout(checkStatus, 10000);
-    }
-  };
-
-  await checkStatus();
+      await checkStatus();
+  }
+  else{
+    setIsError(true)
+  }
 
 };
   
@@ -459,6 +472,10 @@ export const Dashboard = () => {
               </div>
             )}
           </div>
+          {isError && (
+              <Alert severity="error" className="custom-alert" onClose={() => { setIsError(false) }}>
+                Hubo un error al subir los ficheros
+              </Alert>)}
           <div style={{ display: 'flex' }}>
             <div
               className="file-drop-zone"
@@ -486,6 +503,7 @@ export const Dashboard = () => {
                 )}
   
               </div>
+              
               {!userDataContext.processBotton && (
                 <div>
                   <span className="text-drop color-drop-blue">

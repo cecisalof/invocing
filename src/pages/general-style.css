@@ -405,8 +405,9 @@ div.file-drop-zone-dragging {
 
 .custom-alert {
   background-color: #f0f0f0;
-  width: 1000px;
+  width: 500px;
   margin-bottom: 30px;
+  margin: 1rem;
 }
 
 .ag-header-cell-resize::after {
