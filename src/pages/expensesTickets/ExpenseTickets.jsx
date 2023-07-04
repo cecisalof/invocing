@@ -14,9 +14,10 @@ import HeaderColumn from '../HeaderColumn';
 import { getProviders } from "../suppliers/services";
 import CustomElement from '../customElement.jsx';
 import { useNavigate } from 'react-router-dom';
-import { FaCheckCircle, FaCircleNotch } from 'react-icons/fa';
+import { FaCheckCircle } from 'react-icons/fa';
 import dragDrop from '../../assets/icons/drag-and-drop.png';
 import close from '../../assets/icons/close.png';
+import spinner from '../../assets/icons/spinner.png';
 //import eye from '../../assets/icons/Eye.png';
 import { ProgressBar } from 'react-bootstrap';
 import { Alert } from '@mui/material';
@@ -603,8 +604,8 @@ export const ExpenseTickets = () => {
         <div className="drop-message">
           {userDataContext.isLoadingRefEx && userDataContext.progressEx < 100 ? (
             <div>
-              <FaCircleNotch className="loading-icon" />
-              <span className="upload-text">Cargando </span>
+              <img src={spinner} className="loading-icon" />
+              <span className="upload-text">Subiendo archivos... </span>
             </div>
           ) : isFileUploaded ? (
             <div className="upload-indicator">
@@ -628,15 +629,15 @@ export const ExpenseTickets = () => {
       {userDataContext.isLoadingRefEx && (
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
 
-          <ProgressBar
-            now={userDataContext.progressEx}
-            label={userDataContext.progressEx === 0 ? "0%" : `${userDataContext.progressEx}%`}
-            animated={userDataContext.progressEx === 0}
-            variant="custom-color"
-            className="mb-3 custom-width-progess custom-progress"
-          />
-          <img src={close} alt="Close icon" onClick={handleCloseClick} style={{ marginRight: '100px', width: '20 px', height: '20px' }} />
-        </div>)}
+        <ProgressBar
+          now={userDataContext.progress}
+          label={userDataContext.progress === 0 ? "0%" : `${userDataContext.progress}%`}
+          animated={userDataContext.progress === 0}
+          variant="custom-color"
+          className="mb-3 custom-width-progess custom-progress"
+        />
+        <img src={close} alt="Close icon" onClick={handleCloseClick} style={{ marginRight: '20px', width: '20px', height: '20px', marginTop: '-2px' }} />
+      </div>)}
       <div className='mx-3'>
         <button type="button" className="btn btn-primary rounded-pill px-4 opacity-hover-05" onClick={handleAddExpenses}>Añadir gasto</button>
         {/* <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} /> */}

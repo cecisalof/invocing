@@ -198,9 +198,18 @@ body {
 
 .upload-text {
   font-weight: 400;
-  font-size: 18px;
+  font-size: 17px;
+  font-family: 'Nunito';
   line-height: 25px;
   margin-top: 20px;
+}
+
+.yellow{
+  color: #FFBC11;
+}
+
+.blue{
+  color: #005CFF;
 }
 
 .file-drop-zone {
@@ -400,7 +409,7 @@ div.file-drop-zone-dragging {
 
 .loading-icon {
   animation: spin 1s infinite linear;
-  margin-right: 5px;
+  margin-right: 10px;
 }
 
 .custom-alert {
