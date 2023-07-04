@@ -11,9 +11,11 @@ import { getInvoicesCount, getInvoicesStates, getInvoicesTotals } from "./servic
 import Context from '../../contexts/context';
 import { useContext } from 'react';
 import cashIconBlue from '../../assets/icons/Cash.png';
-import { FaCheckCircle, FaCircleNotch } from 'react-icons/fa';
+import { FaCheckCircle } from 'react-icons/fa';
 import dragDrop from '../../assets/icons/drag-and-drop.png';
 import cashYellow from '../../assets/icons/cashYellow.png';
+import spinner from '../../assets/icons/spinner.svg';
+import spinnerYellow from '../../assets/icons/spinnerYellow.svg';
 //import sellIcon from '../../assets/icons/sellout.png';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
@@ -529,8 +531,8 @@ export const Dashboard = () => {
             <div className="drop-message">
               {(userDataContext.isLoadingRef && userDataContext.progress < 100) ? (
                 <div>
-                  <FaCircleNotch className="loading-icon" />
-                  <span className="upload-text">Cargando </span>
+                  <img src={spinner} className="loading-icon" />
+                  <span className="upload-text blue">Subiendo archivos... </span>
                 </div>
               ) : isFileUploaded ? (
                 <div className="upload-indicator">
@@ -539,24 +541,17 @@ export const Dashboard = () => {
                 </div>
               ) : (
                 <div>
-
                   <img src={dragDrop} alt="dragDrop" className='cards-logo' />
-                </div>
-              )}
-
-            </div>
-            {!userDataContext.processBotton && (
-              <div>
+                  <div>
                 <span className="text-drop color-drop-blue">
                   Procesar facturas automáticamente
                 </span>
               </div>
-            )}
-            {userDataContext.processBotton && (
-              <button className="process-button" onClick={processFiles}>
-                Procesar facturas automáticamente
-              </button>
-            )}
+                </div>
+              )}
+
+            </div>
+          
           </div>
           {/* Yellow card */}
           <div
@@ -577,8 +572,8 @@ export const Dashboard = () => {
             <div className="drop-message">
               {(userDataContext.isLoadingRefEx && userDataContext.progressEx < 100) ? (
                 <div>
-                  <FaCircleNotch className="loading-icon" />
-                  <span className="upload-text">Cargando </span>
+                   <img src={spinnerYellow} className="loading-icon" />
+                  <span className="upload-text yellow">Subiendo archivos... </span>
                 </div>
               ) : isFileUploadedEx ? (
                 <div className="upload-indicator">
@@ -589,20 +584,15 @@ export const Dashboard = () => {
                 <div>
 
                   <img src={cashYellow} alt="dragDrop" className='cards-logo' />
+                  <div>
+                  <span className="text-drop color-drop-yellow">
+                    Procesar gasto automáticamente
+                  </span>
+                </div>
                 </div>
               )}
 
             </div>
-            {!userDataContext.processBottonEx && (
-              <span className="text-drop color-drop-yellow">
-                Procesar gasto automáticamente
-              </span>
-            )}
-            {userDataContext.processBottonEx && (
-              <button className="process-button-yellow" onClick={processFilesEx} >
-                Procesar gastos automáticamente
-              </button>
-            )}
           </div>
         </div>
         <div style={{ display: 'flex' }}>
