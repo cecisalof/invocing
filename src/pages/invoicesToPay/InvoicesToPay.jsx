@@ -34,6 +34,9 @@ export const InvoicesToPay = () => {
   const [updatePercentage, setUpdatePercentage] = useState(false);
 
   const userDataContext = useContext(Context);
+  
+  // click input ref
+  const inputRef = useRef(null);
 
   const ragRenderer = (props) => {
     return <span className="rag-element">{props.value}</span>;
@@ -616,13 +619,24 @@ export const InvoicesToPay = () => {
 
   };
 
-
-
   function handleCloseClick() {
     userDataContext.updateProgress(0)
     userDataContext.updateFiles([])
     userDataContext.toggleLoading()
   }
+
+  const handleClick = () => {
+    inputRef.current.click();
+  }
+
+  const handleFileUpload = event => {
+    const fileObj = event.target.files;
+    if (!fileObj) {
+      return;
+    }
+
+    processFiles(fileObj);
+  };
 
   return (
     <>
@@ -634,7 +648,14 @@ export const InvoicesToPay = () => {
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
+        onClick={handleClick}
       >
+        <input
+          style={{ display: 'none' }}
+          ref={inputRef}
+          type="file"
+          onChange={handleFileUpload}
+        />
         <div className="drop-message">
           {userDataContext.isLoadingRef && userDataContext.progress < 100 ? (
             <div>

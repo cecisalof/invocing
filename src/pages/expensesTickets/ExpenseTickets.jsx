@@ -67,9 +67,6 @@ export const ExpenseTickets = () => {
     },
     {
       field: 'total', headerName: "Importe",
-    },
-    {
-      field: 'total', headerName: "Importe",
       valueFormatter: (params) => {
         const value = params.value;
         const currency = params.data.currency;
@@ -225,9 +222,6 @@ export const ExpenseTickets = () => {
           headerCheckboxSelection: false,
           checkboxSelection: true,
           showDisabledCheckboxes: true,
-        },
-        {
-          field: 'total', headerName: "Importe",
         },
         {
           field: 'total', headerName: "Importe",
