@@ -69,7 +69,8 @@
     padding: 10px;
     max-height: 200px;
     overflow-y: scroll;
-    right: 10px;
+    right: 2rem;
+    z-index: 9999
   }
 
   .notification-dot {

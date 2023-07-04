@@ -405,8 +405,9 @@ div.file-drop-zone-dragging {
 
 .custom-alert {
   background-color: #f0f0f0;
-  width: 1000px;
+  width: 500px;
   margin-bottom: 30px;
+  margin: 1rem;
 }
 
 .ag-header-cell-resize::after {
@@ -456,6 +457,8 @@ div.file-drop-zone-dragging {
 
 .customHeaderLabel {
   float: left;
+  font-weight: 400;
+  font-family: 'Nunito';
   margin: 0 0 0 3px;
 }
 
@@ -519,4 +522,17 @@ min-height: 135px !important;
   content: var(--ag-icon-font-code-filter, "\F3E1");
 }
 
+.ag-theme-alpine .ag-menu {
+  background-color: #FAFAFA;
+  color: #999999;
+}
+
+.ag-picker-field-wrapper {
+  border-color: #FAFAFA;
+  border-radius: 100px;
+}
+
+.ag-theme-alpine .ag-popup {
+  background-color: red;
+}
 /*--------------------------------*/

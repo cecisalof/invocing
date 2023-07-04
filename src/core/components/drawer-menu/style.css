@@ -137,7 +137,7 @@
   }
 
   .accordion-button.open{
-    background: rgba(0, 92, 255, 0.03);
+    background: rgba(0, 92, 255, 0.03); 
   }
   
   .accordion-button.close{
@@ -161,9 +161,10 @@
     text-decoration: none;
   }
   .subactive{
-    background-color: rgba(0, 92, 255, 0.03);
-    text-decoration: underline;
+    background-color: transparent;
+    opacity: 0.5;
     margin-left: 60px;
+    text-decoration: none;
     margin-top: 10px;
     margin-bottom: 10px;
   }

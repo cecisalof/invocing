@@ -11,7 +11,7 @@ import Context from '../../contexts/context';
 import { useContext } from 'react';
 //import filterIcon from '../../assets/icons/Filtrar.png';
 import deleteIcon from '../../assets/icons/trash.svg';
-import CustomHeader from '../customHeader.jsx';
+import HeaderColumn from '../HeaderColumn';
 import CustomElement from '../customElement.jsx';
 import { getProviders } from "../suppliers/services";
 import { useNavigate } from 'react-router-dom';
@@ -20,6 +20,7 @@ import dragDrop from '../../assets/icons/drag-and-drop.png';
 import close from '../../assets/icons/close.png';
 import { ProgressBar } from 'react-bootstrap';
 import PropTypes from 'prop-types';
+import { Alert } from '@mui/material';
 
 
 export const InvoicesToPay = () => {
@@ -32,8 +33,12 @@ export const InvoicesToPay = () => {
   const [providersLoaded, setProvidersLoaded] = useState(false);
   const [isFileUploaded, setIsFileUploaded] = useState(false);
   const [updatePercentage, setUpdatePercentage] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   const userDataContext = useContext(Context);
+  
+  // click input ref
+  const inputRef = useRef(null);
 
   const ragRenderer = (props) => {
     return <span className="rag-element">{props.value}</span>;
@@ -72,15 +77,9 @@ export const InvoicesToPay = () => {
       headerCheckboxSelection: false,
       checkboxSelection: true,
       showDisabledCheckboxes: true,
-      headerComponent: (props) => (
-        <CustomHeader displayName={props.displayName} props={props} />
-      ),
     },
     {
       field: 'total', headerName: "Importe",
-      headerComponent: (props) => (
-        <CustomHeader displayName={props.displayName} props={props} />
-      ),
       valueFormatter: (params) => {
         const value = params.value;
         const currency = params.data.currency;
@@ -101,9 +100,6 @@ export const InvoicesToPay = () => {
     },
     {
       field: 'sender.name', headerName: "Proveedor",
-      headerComponent: (props) => (
-        <CustomHeader displayName={props.displayName} props={props} />
-      ),
       cellEditor: 'agSelectCellEditor',
       cellEditorParams: {
         values: rowProviders ? rowProviders.map((provider) => provider.name) : [],
@@ -120,16 +116,12 @@ export const InvoicesToPay = () => {
         values: ['Recibida', 'Pagada', 'Rechazado', 'Pendiente', 'Sin definir'],
         cellRenderer: ragRenderer,
       },
-      headerComponent: (props) => (
-        <CustomHeader displayName={props.displayName} props={props} />
-      ),
-
       cellStyle: { color: 'white', fontSize: '10px' },// agregar estilo al texto de la celda
     },
     {
-      field: 'date', headerName: "Fecha", headerComponent: (props) => (
-        <CustomHeader displayName={props.displayName} props={props} />
-      ),
+      field: 'date', 
+      headerName: "Fecha",
+      sort: 'asc' 
     },
 
     { field: 'concept', headerName: 'Concepto' },
@@ -257,16 +249,10 @@ export const InvoicesToPay = () => {
           headerName: 'Nº Factura',
           headerCheckboxSelection: false,
           checkboxSelection: true,
-          showDisabledCheckboxes: true,
-          headerComponent: (props) => (
-            <CustomHeader displayName={props.displayName} props={props} />
-          ),
+          showDisabledCheckboxes: true
         },
         {
           field: 'total', headerName: "Importe",
-          headerComponent: (props) => (
-            <CustomHeader displayName={props.displayName} props={props} />
-          ),
           valueFormatter: (params) => {
             const value = params.value;
             const currency = params.data.currency;
@@ -287,9 +273,6 @@ export const InvoicesToPay = () => {
         },
         {
           field: 'sender.name', headerName: "Proveedor",
-          headerComponent: (props) => (
-            <CustomHeader displayName={props.displayName} props={props} />
-          ),
           cellEditor: 'agSelectCellEditor',
           cellEditorParams: {
             values: rowProviders ? rowProviders.map((provider) => provider.name) : [],
@@ -306,10 +289,6 @@ export const InvoicesToPay = () => {
             values: ['Recibida', 'Pagada', 'Rechazado', 'Pendiente', 'Sin definir'],
             cellRenderer: ragRenderer,
           },
-          headerComponent: (props) => (
-            <CustomHeader displayName={props.displayName} props={props} />
-          ),
-
           cellStyle: { color: 'white', fontSize: '10px' },// agregar estilo al texto de la celda
         },
 
@@ -320,16 +299,10 @@ export const InvoicesToPay = () => {
           cellEditorParams: {
             values: ['Domiciliación', 'Cheque', 'Transferencia', 'Efectivo', 'Tarjeta'],
           },
-          headerComponent: (props) => (
-            <CustomHeader displayName={props.displayName} props={props} />
-          ),
-
         },
 
         {
-          field: 'date', headerName: "Fecha", headerComponent: (props) => (
-            <CustomHeader displayName={props.displayName} props={props} />
-          ),
+          field: 'date', headerName: "Fecha"
         },
 
         { field: 'concept', headerName: 'Concepto' },
@@ -481,7 +454,12 @@ export const InvoicesToPay = () => {
       resizable: true,
       editable: true,
       sideBar: true,
-      cellStyle: { color: '#999999', fontSize: '15px' }
+      cellStyle: { color: '#999999', fontSize: '15px' },
+      headerComponentParams: {
+        menuIcon: 'bi-list',
+      },
+      floatingFilter: true,
+      minWidth: 300,
     };
   }, []);
 
@@ -553,7 +531,6 @@ export const InvoicesToPay = () => {
         if (userDataContext.processBotton) {
           userDataContext.toggleProcessBotton()
         }
-        setUpdatePercentage(true)
         processFiles(files)
 
       }
@@ -563,60 +540,66 @@ export const InvoicesToPay = () => {
 
   const processFiles = async (files) => {
     console.log("Procesando archivos automáticamente...");
-    userDataContext.toggleLoading();
-    setIsFileUploaded(false);
+    
     const response = await postInvoiceAutomatic(userDataContext.userData.token, files);
-    const ids = response.data.schendules;
+    if (response !== undefined){
 
-    const checkStatus = async () => {
-      const response = await getSchenduleStatus(userDataContext.userData.token, ids);
-      const statusResponse = response.status;
+      setUpdatePercentage(true);
+      userDataContext.toggleLoading();
+      setIsFileUploaded(false);
+      const ids = response.data.schendules;
 
-      let allDone = true;
-      let loadedCount = 0;
-      let notPending = 0;
+      const checkStatus = async () => {
+        const response = await getSchenduleStatus(userDataContext.userData.token, ids);
+        const statusResponse = response.status;
 
-      statusResponse.map((item) => {
-        const totalCount = ids.length;
-        for (const id of ids) {
-          const status = item[id.toString()]; // Obtener el estado del ID
-          if (status === "DONE") {
-            loadedCount = loadedCount + 1; // Incrementar el contador si el estado es "DONE"
+        let allDone = true;
+        let loadedCount = 0;
+        let notPending = 0;
 
-            const percentage = Math.round((loadedCount * 100) / totalCount);
-            userDataContext.updateProgress(percentage);
-            notPending = notPending + 1
-          } else if (status === "ERROR") {
-            notPending = notPending + 1
+        statusResponse.map((item) => {
+          const totalCount = ids.length;
+          for (const id of ids) {
+            const status = item[id.toString()]; // Obtener el estado del ID
+            if (status === "DONE") {
+              loadedCount = loadedCount + 1; // Incrementar el contador si el estado es "DONE"
+
+              const percentage = Math.round((loadedCount * 100) / totalCount);
+              userDataContext.updateProgress(percentage);
+              notPending = notPending + 1
+            } else if (status === "ERROR") {
+              notPending = notPending + 1
+            }
+            else {
+              allDone = false;
+            }
           }
-          else {
-            allDone = false;
-          }
+        });
+
+
+
+        if (allDone) {
+          console.log("Procesamiento completo");
+          setUpdatePercentage(false)
+          getPanelData();
+        } else if (notPending === ids.length) {
+          console.log("Proceso con errores");
+          setUpdatePercentage(false)
+          handleCloseClick()
         }
-      });
+        else {
+          setTimeout(checkStatus, 10000); // Esperar 10 segundos y volver a verificar
 
+        }
+      };
 
-
-      if (allDone) {
-        console.log("Procesamiento completo");
-        setUpdatePercentage(false)
-        getPanelData();
-      } else if (notPending === ids.length) {
-        console.log("Proceso con errores");
-        setUpdatePercentage(false)
-        handleCloseClick()
-      }
-      else {
-        setTimeout(checkStatus, 10000); // Esperar 10 segundos y volver a verificar
-
-      }
-    };
-
-    await checkStatus();
+      await checkStatus();
+    }
+    else{
+      setIsError(true)
+    }
 
   };
-
-
 
   function handleCloseClick() {
     userDataContext.updateProgress(0)
@@ -624,17 +607,42 @@ export const InvoicesToPay = () => {
     userDataContext.toggleLoading()
   }
 
+  const handleClick = () => {
+    inputRef.current.click();
+  }
+
+  const handleFileUpload = event => {
+    const fileObj = event.target.files;
+    if (!fileObj) {
+      return;
+    }
+    
+    processFiles(fileObj);
+  };
+
+
   return (
     <>
       <div>
         <AppBar location={location} />
       </div>
+      {isError && (
+        <Alert severity="error" className="custom-alert" onClose={() => { setIsError(false) }}>
+          Hubo un error al subir los ficheros
+        </Alert>)}
       <div
         className="file-drop-zone-full"
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
+        onClick={handleClick}
       >
+        <input
+          style={{ display: 'none' }}
+          ref={inputRef}
+          type="file"
+          onChange={handleFileUpload}
+        />
         <div className="drop-message">
           {userDataContext.isLoadingRef && userDataContext.progress < 100 ? (
             <div>
@@ -689,6 +697,7 @@ export const InvoicesToPay = () => {
           getRowStyle={getRowStyle}
           pagination={false}
           onCellValueChanged={onCellValueChanged}
+          components={{ agColumnHeader: HeaderColumn }}
         />
       </div>
     </>
