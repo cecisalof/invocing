@@ -63,7 +63,7 @@ export const AppBar = (props)  => {
           <div className="notification-dot" /> // Agregamos un div con clase para el punto rojo
       )}
           {mostrarNotificaciones && (
-        <div className="processes-panel" style={{ position: 'absolute', zIndex: 9999 }}>
+        <div className="processes-panel">
           <label className="label" htmlFor="taxes_percentage">Notificaciones</label>
           {userDataContext.isLoadingRef && (<label style={{ fontFamily: 'Nunito', color: '#999999', fontSize: '12px'}} >Procesando facturas</label>)}
               {userDataContext.isLoadingRef && (

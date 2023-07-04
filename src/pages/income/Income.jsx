@@ -12,7 +12,8 @@ import { useContext } from 'react';
 //import filterIcon from '../../assets/icons/Filtrar.png';
 import { useNavigate } from 'react-router-dom';
 import deleteIcon from '../../assets/icons/trash.svg';
-import CustomHeader from '../customHeader.jsx';
+// import CustomHeader from '../customHeader.jsx';
+import HeaderColumn from '../HeaderColumn';
 import CustomElement from '../customElement.jsx';
 import PropTypes from 'prop-types';
 
@@ -47,39 +48,21 @@ export const Income = () => {
       headerCheckboxSelection: false,
       checkboxSelection: true,
       showDisabledCheckboxes: true,
-      headerComponent: (props) => (
-        <CustomHeader displayName={props.displayName} props={props} />
-      ),
     },
     {
       field: 'total', headerName: "Importe",
-      headerComponent: (props) => (
-        <CustomHeader displayName={props.displayName} props={props} />
-      ),
     },
     {
       field: 'name', headerName: "Empresa",
-      headerComponent: (props) => (
-        <CustomHeader displayName={props.displayName} props={props} />
-      ),
     },
     {
       field: 'nif', headerName: "NIF",
-      headerComponent: (props) => (
-        <CustomHeader displayName={props.displayName} props={props} />
-      ),
     },
     {
       field: 'address', headerName: "Dirección",
-      headerComponent: (props) => (
-        <CustomHeader displayName={props.displayName} props={props} />
-      ),
     },
     {
       field: 'invoice_amount', headerName: "Base imponible",
-      headerComponent: (props) => (
-        <CustomHeader displayName={props.displayName} props={props} />
-      ),
     },
     {
       field: 'state',
@@ -91,10 +74,6 @@ export const Income = () => {
         values: ['Recibida', 'Pagada', 'Rechazado', 'Pendiente'],
         cellRenderer: ragRenderer,
       },
-      headerComponent: (props) => (
-        <CustomHeader displayName={props.displayName} props={props} />
-      ),
-
       cellStyle: { color: 'white', fontSize: '10px' },// agregar estilo al texto de la celda
     },
     {
@@ -104,15 +83,9 @@ export const Income = () => {
       cellEditorParams: {
         values: ['Domiciliación', 'Cheque', 'Transferencia', 'Efectivo', 'Tarjeta'],
       },
-      headerComponent: (props) => (
-        <CustomHeader displayName={props.displayName} props={props} />
-      ),
-
     },
     {
-      field: 'date', headerName: "Fecha", headerComponent: (props) => (
-        <CustomHeader displayName={props.displayName} props={props} />
-      ),
+      field: 'date', headerName: "Fecha"
     },
 
     { field: 'concept', headerName: 'Concepto' },
@@ -199,7 +172,12 @@ export const Income = () => {
       resizable: true,
       editable: true,
       sideBar: true,
-      cellStyle: { color: '#999999', fontSize: '15px' }
+      minWidth: 300,
+      cellStyle: { color: '#999999', fontSize: '15px' },
+      headerComponentParams: {
+        menuIcon: 'bi-list',
+      },
+      floatingFilter: true
     };
   }, []);
 
@@ -264,6 +242,7 @@ export const Income = () => {
             getRowStyle={getRowStyle}
             pagination={false}
             onCellValueChanged={onCellValueChanged}
+            components={{ agColumnHeader: HeaderColumn }}
           />
         </div>
       </div>

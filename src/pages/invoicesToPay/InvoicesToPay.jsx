@@ -11,7 +11,7 @@ import Context from '../../contexts/context';
 import { useContext } from 'react';
 //import filterIcon from '../../assets/icons/Filtrar.png';
 import deleteIcon from '../../assets/icons/trash.svg';
-import CustomHeader from '../customHeader.jsx';
+import HeaderColumn from '../HeaderColumn';
 import CustomElement from '../customElement.jsx';
 import { getProviders } from "../suppliers/services";
 import { useNavigate } from 'react-router-dom';
@@ -77,15 +77,9 @@ export const InvoicesToPay = () => {
       headerCheckboxSelection: false,
       checkboxSelection: true,
       showDisabledCheckboxes: true,
-      headerComponent: (props) => (
-        <CustomHeader displayName={props.displayName} props={props} />
-      ),
     },
     {
       field: 'total', headerName: "Importe",
-      headerComponent: (props) => (
-        <CustomHeader displayName={props.displayName} props={props} />
-      ),
       valueFormatter: (params) => {
         const value = params.value;
         const currency = params.data.currency;
@@ -106,9 +100,6 @@ export const InvoicesToPay = () => {
     },
     {
       field: 'sender.name', headerName: "Proveedor",
-      headerComponent: (props) => (
-        <CustomHeader displayName={props.displayName} props={props} />
-      ),
       cellEditor: 'agSelectCellEditor',
       cellEditorParams: {
         values: rowProviders ? rowProviders.map((provider) => provider.name) : [],
@@ -125,16 +116,12 @@ export const InvoicesToPay = () => {
         values: ['Recibida', 'Pagada', 'Rechazado', 'Pendiente', 'Sin definir'],
         cellRenderer: ragRenderer,
       },
-      headerComponent: (props) => (
-        <CustomHeader displayName={props.displayName} props={props} />
-      ),
-
       cellStyle: { color: 'white', fontSize: '10px' },// agregar estilo al texto de la celda
     },
     {
-      field: 'date', headerName: "Fecha", headerComponent: (props) => (
-        <CustomHeader displayName={props.displayName} props={props} />
-      ),
+      field: 'date', 
+      headerName: "Fecha",
+      sort: 'asc' 
     },
 
     { field: 'concept', headerName: 'Concepto' },
@@ -262,16 +249,10 @@ export const InvoicesToPay = () => {
           headerName: 'Nº Factura',
           headerCheckboxSelection: false,
           checkboxSelection: true,
-          showDisabledCheckboxes: true,
-          headerComponent: (props) => (
-            <CustomHeader displayName={props.displayName} props={props} />
-          ),
+          showDisabledCheckboxes: true
         },
         {
           field: 'total', headerName: "Importe",
-          headerComponent: (props) => (
-            <CustomHeader displayName={props.displayName} props={props} />
-          ),
           valueFormatter: (params) => {
             const value = params.value;
             const currency = params.data.currency;
@@ -292,9 +273,6 @@ export const InvoicesToPay = () => {
         },
         {
           field: 'sender.name', headerName: "Proveedor",
-          headerComponent: (props) => (
-            <CustomHeader displayName={props.displayName} props={props} />
-          ),
           cellEditor: 'agSelectCellEditor',
           cellEditorParams: {
             values: rowProviders ? rowProviders.map((provider) => provider.name) : [],
@@ -311,10 +289,6 @@ export const InvoicesToPay = () => {
             values: ['Recibida', 'Pagada', 'Rechazado', 'Pendiente', 'Sin definir'],
             cellRenderer: ragRenderer,
           },
-          headerComponent: (props) => (
-            <CustomHeader displayName={props.displayName} props={props} />
-          ),
-
           cellStyle: { color: 'white', fontSize: '10px' },// agregar estilo al texto de la celda
         },
 
@@ -325,16 +299,10 @@ export const InvoicesToPay = () => {
           cellEditorParams: {
             values: ['Domiciliación', 'Cheque', 'Transferencia', 'Efectivo', 'Tarjeta'],
           },
-          headerComponent: (props) => (
-            <CustomHeader displayName={props.displayName} props={props} />
-          ),
-
         },
 
         {
-          field: 'date', headerName: "Fecha", headerComponent: (props) => (
-            <CustomHeader displayName={props.displayName} props={props} />
-          ),
+          field: 'date', headerName: "Fecha"
         },
 
         { field: 'concept', headerName: 'Concepto' },
@@ -486,7 +454,12 @@ export const InvoicesToPay = () => {
       resizable: true,
       editable: true,
       sideBar: true,
-      cellStyle: { color: '#999999', fontSize: '15px' }
+      cellStyle: { color: '#999999', fontSize: '15px' },
+      headerComponentParams: {
+        menuIcon: 'bi-list',
+      },
+      floatingFilter: true,
+      minWidth: 300,
     };
   }, []);
 
@@ -724,6 +697,7 @@ export const InvoicesToPay = () => {
           getRowStyle={getRowStyle}
           pagination={false}
           onCellValueChanged={onCellValueChanged}
+          components={{ agColumnHeader: HeaderColumn }}
         />
       </div>
     </>
