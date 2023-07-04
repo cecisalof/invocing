@@ -25,7 +25,7 @@ import PropTypes from 'prop-types';
 export const InvoicesToPay = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  
+
   const gridRef = useRef(); // Optional - for accessing Grid's API
   const [rowData, setRowData] = useState(); // Set rowData to Array of Objects, one Object per Row
   const [rowProviders, setrowProviders] = useState(); // Set rowData to Array of Objects, one Object per Row
@@ -73,40 +73,43 @@ export const InvoicesToPay = () => {
       checkboxSelection: true,
       showDisabledCheckboxes: true,
       headerComponent: (props) => (
-        <CustomHeader displayName={props.displayName} props={props}/>
+        <CustomHeader displayName={props.displayName} props={props} />
       ),
     },
-    {field: 'total', headerName: "Importe", 
-    headerComponent: (props) => (
-      <CustomHeader displayName={props.displayName} props={props}/>
-    ),
-    valueFormatter: (params) => {
-      const value = params.value;
-      const currency = params.data.currency;
-  
-      let currencySymbol = '';
-      if (currency === 'EUR') {
-        currencySymbol = '€';
-      } else if (currency === 'USD') {
-        currencySymbol = '$';
-      } else {
-        // Otros formatos de moneda
-        // Puedes agregar lógica adicional para manejar otras monedas según sea necesario
-        currencySymbol = currency; // En caso de que el valor de currency sea directamente el símbolo de la moneda
-      }
-  
-      return value ? `${value} ${currencySymbol}` : '';
-    },},
-    {field: 'sender.name', headerName: "Proveedor",
-    headerComponent: (props) => (
-      <CustomHeader displayName={props.displayName} props={props}/>
-    ),
-    cellEditor: 'agSelectCellEditor',
-    cellEditorParams:{
-      values: rowProviders ? rowProviders.map((provider) => provider.name) : [],
-      cellRenderer: providerCellRenderer,
+    {
+      field: 'total', headerName: "Importe",
+      headerComponent: (props) => (
+        <CustomHeader displayName={props.displayName} props={props} />
+      ),
+      valueFormatter: (params) => {
+        const value = params.value;
+        const currency = params.data.currency;
+
+        let currencySymbol = '';
+        if (currency === 'EUR') {
+          currencySymbol = '€';
+        } else if (currency === 'USD') {
+          currencySymbol = '$';
+        } else {
+          // Otros formatos de moneda
+          // Puedes agregar lógica adicional para manejar otras monedas según sea necesario
+          currencySymbol = currency; // En caso de que el valor de currency sea directamente el símbolo de la moneda
+        }
+
+        return value ? `${value} ${currencySymbol}` : '';
+      },
     },
-  },
+    {
+      field: 'sender.name', headerName: "Proveedor",
+      headerComponent: (props) => (
+        <CustomHeader displayName={props.displayName} props={props} />
+      ),
+      cellEditor: 'agSelectCellEditor',
+      cellEditorParams: {
+        values: rowProviders ? rowProviders.map((provider) => provider.name) : [],
+        cellRenderer: providerCellRenderer,
+      },
+    },
     {
       field: 'state',
       headerName: 'Estado',
@@ -120,78 +123,90 @@ export const InvoicesToPay = () => {
       headerComponent: (props) => (
         <CustomHeader displayName={props.displayName} props={props} />
       ),
-      
+
       cellStyle: { color: 'white', fontSize: '10px' },// agregar estilo al texto de la celda
     },
-    {field: 'date',headerName: "Fecha",headerComponent: (props) => (
-      <CustomHeader displayName={props.displayName} props={props}/>
-    ),},
-   
-    {field: 'concept', headerName: 'Concepto'},
-    {field: 'retention_percentage', headerName: '% Retención',
-    valueFormatter: (params) => {
-      const value = params.value;
-      return value ? `${value} %` : '';
-    },}, 
-    {field: 'taxes_percentage', headerName: '% Impuestos',
-    valueFormatter: (params) => {
-      const value = params.value;
-      return value ? `${value} %` : '';
-    },},
-    {field: 'total_pretaxes', headerName: 'Total sin impuestos',
-    valueFormatter: (params) => {
-      const value = params.value;
-      const currency = params.data.currency;
-  
-      let currencySymbol = '';
-      if (currency === 'EUR') {
-        currencySymbol = '€';
-      } else if (currency === 'USD') {
-        currencySymbol = '$';
-      } else {
-        // Otros formatos de moneda
-        // Puedes agregar lógica adicional para manejar otras monedas según sea necesario
-        currencySymbol = currency; // En caso de que el valor de currency sea directamente el símbolo de la moneda
-      }
-  
-      return value ? `${value} ${currencySymbol}` : '';
-    },},
-    {field: 'total_retention', headerName: 'Total retenciones',
-    valueFormatter: (params) => {
-      const value = params.value;
-      const currency = params.data.currency;
-  
-      let currencySymbol = '';
-      if (currency === 'EUR') {
-        currencySymbol = '€';
-      } else if (currency === 'USD') {
-        currencySymbol = '$';
-      } else {
-        // Otros formatos de moneda
-        // Puedes agregar lógica adicional para manejar otras monedas según sea necesario
-        currencySymbol = currency; // En caso de que el valor de currency sea directamente el símbolo de la moneda
-      }
-  
-      return value ? `${value} ${currencySymbol}` : '';
-    },},
-    {field: 'total_taxes', headerName: 'Total impuestos',
-    valueFormatter: (params) => {
-      const value = params.value;
-      const currency = params.data.currency;
-  
-      let currencySymbol = '';
-      if (currency === 'EUR') {
-        currencySymbol = '€';
-      } else if (currency === 'USD') {
-        currencySymbol = '$';
-      } else {
-        // Otros formatos de moneda
-        // Puedes agregar lógica adicional para manejar otras monedas según sea necesario
-        currencySymbol = currency; // En caso de que el valor de currency sea directamente el símbolo de la moneda
-      }
-  
-      return value ? `${value} ${currencySymbol}` : '';
-    },},
+    {
+      field: 'date', headerName: "Fecha", headerComponent: (props) => (
+        <CustomHeader displayName={props.displayName} props={props} />
+      ),
+    },
+
+    { field: 'concept', headerName: 'Concepto' },
+    {
+      field: 'retention_percentage', headerName: '% Retención',
+      valueFormatter: (params) => {
+        const value = params.value;
+        return value ? `${value} %` : '';
+      },
+    },
+    {
+      field: 'taxes_percentage', headerName: '% Impuestos',
+      valueFormatter: (params) => {
+        const value = params.value;
+        return value ? `${value} %` : '';
+      },
+    },
+    {
+      field: 'total_pretaxes', headerName: 'Total sin impuestos',
+      valueFormatter: (params) => {
+        const value = params.value;
+        const currency = params.data.currency;
+
+        let currencySymbol = '';
+        if (currency === 'EUR') {
+          currencySymbol = '€';
+        } else if (currency === 'USD') {
+          currencySymbol = '$';
+        } else {
+          // Otros formatos de moneda
+          // Puedes agregar lógica adicional para manejar otras monedas según sea necesario
+          currencySymbol = currency; // En caso de que el valor de currency sea directamente el símbolo de la moneda
+        }
+
+        return value ? `${value} ${currencySymbol}` : '';
+      },
+    },
+    {
+      field: 'total_retention', headerName: 'Total retenciones',
+      valueFormatter: (params) => {
+        const value = params.value;
+        const currency = params.data.currency;
+
+        let currencySymbol = '';
+        if (currency === 'EUR') {
+          currencySymbol = '€';
+        } else if (currency === 'USD') {
+          currencySymbol = '$';
+        } else {
+          // Otros formatos de moneda
+          // Puedes agregar lógica adicional para manejar otras monedas según sea necesario
+          currencySymbol = currency; // En caso de que el valor de currency sea directamente el símbolo de la moneda
+        }
+
+        return value ? `${value} ${currencySymbol}` : '';
+      },
+    },
+    {
+      field: 'total_taxes', headerName: 'Total impuestos',
+      valueFormatter: (params) => {
+        const value = params.value;
+        const currency = params.data.currency;
+
+        let currencySymbol = '';
+        if (currency === 'EUR') {
+          currencySymbol = '€';
+        } else if (currency === 'USD') {
+          currencySymbol = '$';
+        } else {
+          // Otros formatos de moneda
+          // Puedes agregar lógica adicional para manejar otras monedas según sea necesario
+          currencySymbol = currency; // En caso de que el valor de currency sea directamente el símbolo de la moneda
+        }
+
+        return value ? `${value} ${currencySymbol}` : '';
+      },
+    },
     {
       field: 'file',
       headerName: 'Descargar',
@@ -209,7 +224,7 @@ export const InvoicesToPay = () => {
     isLoading = true
     await getDataProviders();
     await getDataInvoices();
-    setTimeout(()=>{isLoading = false},1000)
+    setTimeout(() => { isLoading = false }, 1000)
   }
 
   const getDataProviders = async () => {
@@ -227,7 +242,6 @@ export const InvoicesToPay = () => {
   const getDataInvoices = async () => {
     try {
       const data = await getInvoices(userDataContext.userData.token);
-      console.log(data)
       setRowData(data || []);
     } catch (error) {
       setRowData([]);
@@ -245,41 +259,43 @@ export const InvoicesToPay = () => {
           checkboxSelection: true,
           showDisabledCheckboxes: true,
           headerComponent: (props) => (
-            <CustomHeader displayName={props.displayName} props={props}/>
+            <CustomHeader displayName={props.displayName} props={props} />
           ),
         },
-        {field: 'total', headerName: "Importe", 
-        headerComponent: (props) => (
-          <CustomHeader displayName={props.displayName} props={props}/>
-        ),
-        valueFormatter: (params) => {
-          const value = params.value;
-          const currency = params.data.currency;
-      
-          let currencySymbol = '';
-          if (currency === 'EUR') {
-            currencySymbol = '€';
-          } else if (currency === 'USD') {
-            currencySymbol = '$';
-          } else {
-            // Otros formatos de moneda
-            // Puedes agregar lógica adicional para manejar otras monedas según sea necesario
-            currencySymbol = currency; // En caso de que el valor de currency sea directamente el símbolo de la moneda
-          }
-      
-          return value ? `${value} ${currencySymbol}` : '';
+        {
+          field: 'total', headerName: "Importe",
+          headerComponent: (props) => (
+            <CustomHeader displayName={props.displayName} props={props} />
+          ),
+          valueFormatter: (params) => {
+            const value = params.value;
+            const currency = params.data.currency;
+
+            let currencySymbol = '';
+            if (currency === 'EUR') {
+              currencySymbol = '€';
+            } else if (currency === 'USD') {
+              currencySymbol = '$';
+            } else {
+              // Otros formatos de moneda
+              // Puedes agregar lógica adicional para manejar otras monedas según sea necesario
+              currencySymbol = currency; // En caso de que el valor de currency sea directamente el símbolo de la moneda
+            }
+
+            return value ? `${value} ${currencySymbol}` : '';
+          },
         },
-      },
-        {field: 'sender.name', headerName: "Proveedor",
-        headerComponent: (props) => (
-          <CustomHeader displayName={props.displayName} props={props}/>
-        ),
-        cellEditor: 'agSelectCellEditor',
-        cellEditorParams:{
-          values: rowProviders ? rowProviders.map((provider) => provider.name) : [],
-          cellRenderer: providerCellRenderer,
+        {
+          field: 'sender.name', headerName: "Proveedor",
+          headerComponent: (props) => (
+            <CustomHeader displayName={props.displayName} props={props} />
+          ),
+          cellEditor: 'agSelectCellEditor',
+          cellEditorParams: {
+            values: rowProviders ? rowProviders.map((provider) => provider.name) : [],
+            cellRenderer: providerCellRenderer,
+          },
         },
-      },
         {
           field: 'state',
           headerName: 'Estado',
@@ -293,7 +309,7 @@ export const InvoicesToPay = () => {
           headerComponent: (props) => (
             <CustomHeader displayName={props.displayName} props={props} />
           ),
-          
+
           cellStyle: { color: 'white', fontSize: '10px' },// agregar estilo al texto de la celda
         },
 
@@ -307,92 +323,104 @@ export const InvoicesToPay = () => {
           headerComponent: (props) => (
             <CustomHeader displayName={props.displayName} props={props} />
           ),
-          
+
         },
 
-        {field: 'date',headerName: "Fecha",headerComponent: (props) => (
-          <CustomHeader displayName={props.displayName} props={props}/>
-        ),},
-        
-        {field: 'concept', headerName: 'Concepto'},
-        {field: 'retention_percentage', headerName: '% Retención',
-        valueFormatter: (params) => {
-          const value = params.value;
-          return value ? `${value} %` : '';
-        },}, 
-        {field: 'taxes_percentage', headerName: '% Impuestos',
-        valueFormatter: (params) => {
-          const value = params.value;
-          return value ? `${value} %` : '';
-        },},
-        {field: 'total_pretaxes', headerName: 'Total sin impuestos',
-        valueFormatter: (params) => {
-          const value = params.value;
-          const currency = params.data.currency;
-      
-          let currencySymbol = '';
-          if (currency === 'EUR') {
-            currencySymbol = '€';
-          } else if (currency === 'USD') {
-            currencySymbol = '$';
-          } else {
-            // Otros formatos de moneda
-            // Puedes agregar lógica adicional para manejar otras monedas según sea necesario
-            currencySymbol = currency; // En caso de que el valor de currency sea directamente el símbolo de la moneda
-          }
-      
-          return value ? `${value} ${currencySymbol}` : '';
-        },},
-        {field: 'total_retention', headerName: 'Total retenciones',
-        valueFormatter: (params) => {
-          const value = params.value;
-          const currency = params.data.currency;
-      
-          let currencySymbol = '';
-          if (currency === 'EUR') {
-            currencySymbol = '€';
-          } else if (currency === 'USD') {
-            currencySymbol = '$';
-          } else {
-            // Otros formatos de moneda
-            // Puedes agregar lógica adicional para manejar otras monedas según sea necesario
-            currencySymbol = currency; // En caso de que el valor de currency sea directamente el símbolo de la moneda
-          }
-      
-          return value ? `${value} ${currencySymbol}` : '';
-        },},
-        {field: 'total_taxes', headerName: 'Total impuestos',
-        valueFormatter: (params) => {
-          const value = params.value;
-          const currency = params.data.currency;
-      
-          let currencySymbol = '';
-          if (currency === 'EUR') {
-            currencySymbol = '€';
-          } else if (currency === 'USD') {
-            currencySymbol = '$';
-          } else {
-            // Otros formatos de moneda
-            // Puedes agregar lógica adicional para manejar otras monedas según sea necesario
-            currencySymbol = currency; // En caso de que el valor de currency sea directamente el símbolo de la moneda
-          }
-      
-          return value ? `${value} ${currencySymbol}` : '';
-        },},
+        {
+          field: 'date', headerName: "Fecha", headerComponent: (props) => (
+            <CustomHeader displayName={props.displayName} props={props} />
+          ),
+        },
+
+        { field: 'concept', headerName: 'Concepto' },
+        {
+          field: 'retention_percentage', headerName: '% Retención',
+          valueFormatter: (params) => {
+            const value = params.value;
+            return value ? `${value} %` : '';
+          },
+        },
+        {
+          field: 'taxes_percentage', headerName: '% Impuestos',
+          valueFormatter: (params) => {
+            const value = params.value;
+            return value ? `${value} %` : '';
+          },
+        },
+        {
+          field: 'total_pretaxes', headerName: 'Total sin impuestos',
+          valueFormatter: (params) => {
+            const value = params.value;
+            const currency = params.data.currency;
+
+            let currencySymbol = '';
+            if (currency === 'EUR') {
+              currencySymbol = '€';
+            } else if (currency === 'USD') {
+              currencySymbol = '$';
+            } else {
+              // Otros formatos de moneda
+              // Puedes agregar lógica adicional para manejar otras monedas según sea necesario
+              currencySymbol = currency; // En caso de que el valor de currency sea directamente el símbolo de la moneda
+            }
+
+            return value ? `${value} ${currencySymbol}` : '';
+          },
+        },
+        {
+          field: 'total_retention', headerName: 'Total retenciones',
+          valueFormatter: (params) => {
+            const value = params.value;
+            const currency = params.data.currency;
+
+            let currencySymbol = '';
+            if (currency === 'EUR') {
+              currencySymbol = '€';
+            } else if (currency === 'USD') {
+              currencySymbol = '$';
+            } else {
+              // Otros formatos de moneda
+              // Puedes agregar lógica adicional para manejar otras monedas según sea necesario
+              currencySymbol = currency; // En caso de que el valor de currency sea directamente el símbolo de la moneda
+            }
+
+            return value ? `${value} ${currencySymbol}` : '';
+          },
+        },
+        {
+          field: 'total_taxes', headerName: 'Total impuestos',
+          valueFormatter: (params) => {
+            const value = params.value;
+            const currency = params.data.currency;
+
+            let currencySymbol = '';
+            if (currency === 'EUR') {
+              currencySymbol = '€';
+            } else if (currency === 'USD') {
+              currencySymbol = '$';
+            } else {
+              // Otros formatos de moneda
+              // Puedes agregar lógica adicional para manejar otras monedas según sea necesario
+              currencySymbol = currency; // En caso de que el valor de currency sea directamente el símbolo de la moneda
+            }
+
+            return value ? `${value} ${currencySymbol}` : '';
+          },
+        },
         {
           field: 'file',
           headerName: 'Descargar',
           cellRenderer: CustomElement
         },
       ];
-  
+
       setColumnDefs(updatedColumnDefs);
     }
   }, [providersLoaded, rowProviders]);
 
   const onCellValueChanged = (event) => {
     let newValue = event.newValue
-    
+
     const stateMappings = {
       'Pendiente': 'pending',
       'Recibida': 'received',
@@ -408,18 +436,18 @@ export const InvoicesToPay = () => {
       'Efectivo': 'cash',
       'Tarjeta': 'card'
     }
-    
-    if (event.colDef.field === 'payment_type'){
+
+    if (event.colDef.field === 'payment_type') {
       newValue = paymentMapping[newValue] || newValue;
     }
 
-    if (event.colDef.field === 'state'){
+    if (event.colDef.field === 'state') {
       newValue = stateMappings[newValue] || newValue;
     }
     let data = { [event.colDef.field]: newValue };
 
-    if (event.colDef.field === 'sender.name'){
-      let updateSender= null;
+    if (event.colDef.field === 'sender.name') {
+      let updateSender = null;
       rowProviders.forEach((row) => {
         if (row && row.name === newValue) {
           updateSender = row.uuid
@@ -430,7 +458,7 @@ export const InvoicesToPay = () => {
         // Espera a que se complete la solicitud PATCH y luego carga los datos
         getPanelData();
       });
-    }else{
+    } else {
       patchInvoice(event.data.uuid, data).then(() => {
         // Espera a que se complete la solicitud PATCH y luego carga los datos
         getPanelData();
@@ -451,155 +479,146 @@ export const InvoicesToPay = () => {
       sortable: true,
       filter: true,
       resizable: true,
-      enableRowGroup: true,
-      enablePivot: true,
-      enableValue: true,
       editable: true,
       sideBar: true,
-      cellStyle: {color: '#999999',  fontSize: '15px'}
+      cellStyle: { color: '#999999', fontSize: '15px' }
     };
   }, []);
 
 
   function getRowStyle(props) {
     if (props.node.rowIndex % 2 === 0) {
-        // Fila par
-        return { background: '#F7FAFF' };
+      // Fila par
+      return { background: '#F7FAFF' };
     } else {
-        // Fila impar
-        return { background: '#ffffff' };
+      // Fila impar
+      return { background: '#ffffff' };
     }
-}
-// function handleFilterClick() {
-//   console.log('Botón de filtro clickeado');
-  
-
-// }
-
-function handleTrashClick() {
-  console.log('Botón de basura clickeado');
-  const selectedNodes = gridRef.current.api.getSelectedNodes();
-  const selectedData = selectedNodes.map((node) => node.data);
-  console.log(selectedData);
-  
-  // Crear una Promesa que se resuelva cuando se hayan eliminado todas las facturas
-  const deletePromises = selectedData.map((obj) => {
-    console.log(obj.uuid);
-    return deleteInvoice(obj.uuid, userDataContext.userData.token);
-  });
-  
-  Promise.all(deletePromises)
-    .then(() => {
-      // Llamada a getData() después de que se hayan eliminado todas las facturas
-      getPanelData();
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-}
-
-const handleAddInvoice = () => {
-  navigate('/add-invoices-to-pay'); // Reemplaza '/ruta-del-formulario' con la ruta de tu formulario
-};
-const handleDragOver = (event) => {
-  event.preventDefault();
-  event.stopPropagation();
-  event.target.classList.add('file-drop-zone-dragging');
-};
-
-const handleDragLeave = (event) => {
-  event.preventDefault();
-  event.stopPropagation();
-  event.target.classList.remove('file-drop-zone-dragging');
-};
-
-const handleDrop = (event) => {
-  if (userDataContext.isLoadingRef && userDataContext.progress < 100){
-    console.log("Se está cargando otros archivos")
-  }else{
-  event.preventDefault();
-  event.stopPropagation();
-  event.target.classList.remove('file-drop-zone-dragging');
-  
-  const files = event.dataTransfer.files;
-  userDataContext.updateFiles(files)
-  if (files.length > 10){
-    setIsFileUploaded(true);
-    userDataContext.toggleProcessBotton()
   }
-  else{
-    if (userDataContext.processBotton){
-      userDataContext.toggleProcessBotton()
-    }
-    setUpdatePercentage(true)
-    processFiles(files)
-    
-  }}
-  
-};
+  // function handleFilterClick() {
+  //   console.log('Botón de filtro clickeado');
 
-const processFiles = async (files) => {
-  console.log("Procesando archivos automáticamente...");
-  userDataContext.toggleLoading();
-  setIsFileUploaded(false);
-  console.log(files);
-  const response = await postInvoiceAutomatic(userDataContext.userData.token, files);
-  const ids = response.data.schendules;
-  console.log(ids);
-  
 
-  const checkStatus = async () => {
-    const response = await getSchenduleStatus(userDataContext.userData.token, ids);
-    const statusResponse = response.status;
+  // }
 
-    let allDone = true;
-    let loadedCount = 0;
-    let notPending = 0;
+  function handleTrashClick() {
+    const selectedNodes = gridRef.current.api.getSelectedNodes();
+    const selectedData = selectedNodes.map((node) => node.data);
 
-    statusResponse.map((item) => {
-      const totalCount = ids.length;
-      for (const id of ids) {
-        const status = item[id.toString()]; // Obtener el estado del ID
-        console.log(status);
-        if (status === "DONE") {
-          loadedCount = loadedCount + 1; // Incrementar el contador si el estado es "DONE"
-
-          const percentage = Math.round((loadedCount * 100) / totalCount);
-          userDataContext.updateProgress(percentage);
-          notPending = notPending + 1
-        } else if (status === "ERROR") {
-          notPending = notPending + 1
-        }
-        else {
-          allDone = false;
-        }
-      }
+    // Crear una Promesa que se resuelva cuando se hayan eliminado todas las facturas
+    const deletePromises = selectedData.map((obj) => {
+      return deleteInvoice(obj.uuid, userDataContext.userData.token);
     });
 
+    Promise.all(deletePromises)
+      .then(() => {
+        // Llamada a getData() después de que se hayan eliminado todas las facturas
+        getPanelData();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
-
-    if (allDone) {
-      console.log("Procesamiento completo");
-      setUpdatePercentage(false)
-      getPanelData();
-    } else if(notPending === ids.length){
-      console.log("Proceso con errores");
-      setUpdatePercentage(false)
-      handleCloseClick()
-    }
-    else {
-      setTimeout(checkStatus, 10000); // Esperar 10 segundos y volver a verificar
-      
-    }
+  const handleAddInvoice = () => {
+    navigate('/add-invoices-to-pay'); // Reemplaza '/ruta-del-formulario' con la ruta de tu formulario
+  };
+  const handleDragOver = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    event.target.classList.add('file-drop-zone-dragging');
   };
 
-  await checkStatus();
+  const handleDragLeave = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    event.target.classList.remove('file-drop-zone-dragging');
+  };
 
-};
+  const handleDrop = (event) => {
+    if (userDataContext.isLoadingRef && userDataContext.progress < 100) {
+      console.log("Se está cargando otros archivos")
+    } else {
+      event.preventDefault();
+      event.stopPropagation();
+      event.target.classList.remove('file-drop-zone-dragging');
+
+      const files = event.dataTransfer.files;
+      userDataContext.updateFiles(files)
+      if (files.length > 10) {
+        setIsFileUploaded(true);
+        userDataContext.toggleProcessBotton()
+      }
+      else {
+        if (userDataContext.processBotton) {
+          userDataContext.toggleProcessBotton()
+        }
+        setUpdatePercentage(true)
+        processFiles(files)
+
+      }
+    }
+
+  };
+
+  const processFiles = async (files) => {
+    console.log("Procesando archivos automáticamente...");
+    userDataContext.toggleLoading();
+    setIsFileUploaded(false);
+    const response = await postInvoiceAutomatic(userDataContext.userData.token, files);
+    const ids = response.data.schendules;
+
+    const checkStatus = async () => {
+      const response = await getSchenduleStatus(userDataContext.userData.token, ids);
+      const statusResponse = response.status;
+
+      let allDone = true;
+      let loadedCount = 0;
+      let notPending = 0;
+
+      statusResponse.map((item) => {
+        const totalCount = ids.length;
+        for (const id of ids) {
+          const status = item[id.toString()]; // Obtener el estado del ID
+          if (status === "DONE") {
+            loadedCount = loadedCount + 1; // Incrementar el contador si el estado es "DONE"
+
+            const percentage = Math.round((loadedCount * 100) / totalCount);
+            userDataContext.updateProgress(percentage);
+            notPending = notPending + 1
+          } else if (status === "ERROR") {
+            notPending = notPending + 1
+          }
+          else {
+            allDone = false;
+          }
+        }
+      });
 
 
 
-   function handleCloseClick() {
+      if (allDone) {
+        console.log("Procesamiento completo");
+        setUpdatePercentage(false)
+        getPanelData();
+      } else if (notPending === ids.length) {
+        console.log("Proceso con errores");
+        setUpdatePercentage(false)
+        handleCloseClick()
+      }
+      else {
+        setTimeout(checkStatus, 10000); // Esperar 10 segundos y volver a verificar
+
+      }
+    };
+
+    await checkStatus();
+
+  };
+
+
+
+  function handleCloseClick() {
     userDataContext.updateProgress(0)
     userDataContext.updateFiles([])
     userDataContext.toggleLoading()
@@ -608,7 +627,7 @@ const processFiles = async (files) => {
   return (
     <>
       <div>
-        <AppBar location={location}/>
+        <AppBar location={location} />
       </div>
       <div
         className="file-drop-zone-full"
@@ -629,34 +648,34 @@ const processFiles = async (files) => {
             </div>
           ) : (
             <div>
-              <img src={dragDrop} alt="dragDrop"/>
+              <img src={dragDrop} alt="dragDrop" />
             </div>
           )}
-          
+
         </div>
-      {userDataContext.processBotton && (
-        <button className="process-button" onClick={processFiles}>
-          Procesar automáticamente
-        </button>
-      )}
+        {userDataContext.processBotton && (
+          <button className="process-button" onClick={processFiles}>
+            Procesar automáticamente
+          </button>
+        )}
       </div>
-  {userDataContext.isLoadingRef && (
-  <div style={{display: 'flex', justifyContent: 'space-between'}}>
-    
-  <ProgressBar
-    now={userDataContext.progress}
-    label={userDataContext.progress === 0 ? "0%" : `${userDataContext.progress}%`}
-    animated={userDataContext.progress === 0}
-    variant="custom-color"
-    className="mb-3 custom-width-progess custom-progress"
-  />
-  <img src={close} alt="Close icon" onClick={handleCloseClick} style={{ marginRight: '100px', width: '20 px', height: '20px'}} />
-  </div>)}
+      {userDataContext.isLoadingRef && (
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+
+          <ProgressBar
+            now={userDataContext.progress}
+            label={userDataContext.progress === 0 ? "0%" : `${userDataContext.progress}%`}
+            animated={userDataContext.progress === 0}
+            variant="custom-color"
+            className="mb-3 custom-width-progess custom-progress"
+          />
+          <img src={close} alt="Close icon" onClick={handleCloseClick} style={{ marginRight: '20px', width: '20px', height: '20px', marginTop: '-2px' }} />
+        </div>)}
 
       <div className='mx-3'>
         <button type="button" className="btn btn-primary rounded-pill px-4 opacity-hover-05" onClick={handleAddInvoice}>Añadir factura</button>
         {/* <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} /> */}
-        <img src={deleteIcon} alt="Delete icon" onClick={handleTrashClick} className='trashIcon'/>
+        <img src={deleteIcon} alt="Delete icon" onClick={handleTrashClick} className='trashIcon' />
       </div>
       <div className="ag-theme-alpine mx-3 gridStyle">
         <AgGridReact
@@ -676,9 +695,9 @@ const processFiles = async (files) => {
   )
 };
 InvoicesToPay.propTypes = {
-  value: PropTypes.object.isRequired,
-  displayName: PropTypes.object.isRequired,
-  api: PropTypes.object.isRequired,
-  node: PropTypes.object.isRequired,
+  value: PropTypes.object,
+  displayName: PropTypes.object,
+  api: PropTypes.object,
+  node: PropTypes.object,
 };
 export default InvoicesToPay;

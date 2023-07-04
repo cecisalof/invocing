@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import './general-style.css';
 
-const CustomHeader = ({ displayName, props }) => {
+const CustomHeader = ( props ) => {
+  const { displayName } = props;
   const [searchTerm, setSearchTerm] = useState('');
   const [originalData, setOriginalData] = useState(null);
 
   const onSearch = (e) => {
     if (e.key === 'Enter') {
-      console.log(searchTerm);
       const tableData = props?.api?.rowModel?.rowsToDisplay?.map((node) => node.data);
       if (originalData === null) {
         setOriginalData([...tableData]);
@@ -75,10 +75,10 @@ const CustomHeader = ({ displayName, props }) => {
 };
 
 CustomHeader.propTypes = {
-  displayName: PropTypes.string.isRequired,
-  props: PropTypes.object.isRequired,
-  api: PropTypes.object.isRequired,
-  column: PropTypes.object.isRequired,
+  displayName: PropTypes.string,
+  props: PropTypes.object,
+  api: PropTypes.object,
+  column: PropTypes.object,
 };
 
 CustomHeader.displayName = 'CustomHeader';

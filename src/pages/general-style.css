@@ -215,6 +215,10 @@ body {
   transition: background-color 0.3s;
 }
 
+div.file-drop-zone-dragging {
+  opacity: 0.5;
+}
+
 @media (max-width: 991px){
   .file-drop-zone {
     width: 50vw;
@@ -325,6 +329,23 @@ body {
   opacity: 0.5;
 }
 
+.active-filters {
+  margin: 5px;
+  width: 98px;
+  height: 20px;
+  border-radius: 100px;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 11px;
+  text-align: center;
+  padding-bottom: 20px;
+  padding-top: 10px;
+  border: 2px solid #ADB9FB;
+  background: #ADB9FB;
+  color: white;
+}
+
 .states {
   margin: 6px;
   border-radius: 100px;
@@ -415,9 +436,87 @@ body {
 
 .trashIcon {
   margin-left: 30px;
-  height: 33px;
+  height: 28px;
 }
 
 .opacity-hover-05:hover{
   opacity: 0.5;
 }
+
+/* .customHeaderMenuButton {
+  float: left;
+  margin: 0 0 0 3px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  margin-left: 4px;
+  position: absolute;
+    right: 0;
+} */
+
+.customHeaderLabel {
+  float: left;
+  margin: 0 0 0 3px;
+}
+
+.customSortDownLabel {
+  float: left;
+  margin: 0 0 0 3px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  margin-left: 4px;
+}
+
+.customSortUpLabel {
+  float: left;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: none;
+  margin-left: 4px;
+}
+
+.customSortRemoveLabel {
+  float: left;
+  margin: 0 0 0 3px;
+  font-size: 20px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  margin-left: 4px;
+}
+
+.active, .customHeaderMenuButton:hover {
+  color:  #005CFF;
+
+}
+
+/* ------------Floating filter styles-------------------- */
+
+.ag-header-row.ag-header-row-column-filter{
+  height: 50px !important;
+  top: 80px !important;
+}
+
+.ag-theme-alpine input[class^=ag-]:not([type]), .ag-theme-alpine input[class^=ag-][type=text], .ag-theme-alpine input[class^=ag-][type=number], .ag-theme-alpine input[class^=ag-][type=tel], .ag-theme-alpine input[class^=ag-][type=date], .ag-theme-alpine input[class^=ag-][type=datetime-local], .ag-theme-alpine textarea[class^=ag-], .ag-theme-alpine-dark input[class^=ag-]:not([type]), .ag-theme-alpine-dark input[class^=ag-][type=text], .ag-theme-alpine-dark input[class^=ag-][type=number], .ag-theme-alpine-dark input[class^=ag-][type=tel], .ag-theme-alpine-dark input[class^=ag-][type=date], .ag-theme-alpine-dark input[class^=ag-][type=datetime-local], .ag-theme-alpine-dark textarea[class^=ag-] {
+border-radius: 100px;
+background: #F7FAFF;
+}
+
+
+.ag-theme-alpine .ag-ltr input[class^=ag-]:not([type]), .ag-theme-alpine .ag-ltr input[class^=ag-][type=text], .ag-theme-alpine .ag-ltr input[class^=ag-][type=number], .ag-theme-alpine .ag-ltr input[class^=ag-][type=tel], .ag-theme-alpine .ag-ltr input[class^=ag-][type=date], .ag-theme-alpine .ag-ltr input[class^=ag-][type=datetime-local], .ag-theme-alpine .ag-ltr textarea[class^=ag-], .ag-theme-alpine-dark .ag-ltr input[class^=ag-]:not([type]), .ag-theme-alpine-dark .ag-ltr input[class^=ag-][type=text], .ag-theme-alpine-dark .ag-ltr input[class^=ag-][type=number], .ag-theme-alpine-dark .ag-ltr input[class^=ag-][type=tel], .ag-theme-alpine-dark .ag-ltr input[class^=ag-][type=date], .ag-theme-alpine-dark .ag-ltr input[class^=ag-][type=datetime-local], .ag-theme-alpine-dark .ag-ltr textarea[class^=ag-] {
+margin: 4px;
+}
+
+.ag-header.ag-pivot-off {
+height: 135px !important;
+min-height: 135px !important;
+}
+
+
+.ag-icon-filter::before {
+  content: var(--ag-icon-font-code-filter, "\F3E1");
+}
+
+/*--------------------------------*/

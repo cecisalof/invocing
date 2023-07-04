@@ -106,7 +106,7 @@ export const DrawerMenuComponent = ({ user }) => {
                     type="button"
 
                     style={{
-                      backgroundColor:'transparent', color:  '#005CFF' , fontFamily: 'Nunito',
+                      backgroundColor: 'transparent', color: '#005CFF', fontFamily: 'Nunito',
                       fontStyle: 'normal',
                       fontWeight: '400',
                       fontSize: '17px',
@@ -124,7 +124,7 @@ export const DrawerMenuComponent = ({ user }) => {
                     onClick={handleClickDashboard}
                   >
                     <img className="menuIcon" src={profileIcon} alt="Profile" />
-                    
+
                     Dashboard
 
                     <img className={`arrow ${profileCollapsed ? 'rotate-down' : 'rotate-right'}`} src={arrow} alt="Arrow" />
@@ -165,7 +165,7 @@ export const DrawerMenuComponent = ({ user }) => {
                 </div>
               </li>}
               {isAdministrator && <li className="nav-item">
-                <div> 
+                <div>
                   <div className="accordion-item">
                     <h2 className="accordion-header">
                       <button
@@ -197,7 +197,7 @@ export const DrawerMenuComponent = ({ user }) => {
                         <img className="menuIcon" src={cashIconBlue} alt="Profile" />
                         <span>Gastos</span>
 
-                        <img className={`arrow ${gastosCollapsed ? 'rotate-down' : 'rotate-up'}`} src={arrow} style={{marginLeft: '50px'}} alt="Arrow" />
+                        <img className={`arrow ${gastosCollapsed ? 'rotate-down' : 'rotate-up'}`} src={arrow} style={{ marginLeft: '50px' }} alt="Arrow" />
                       </button>
                     </h2>
                     <div id="flush-collapseOne" className="accordion-collapse collapse" data-bs-parent="#accordionFlushExample" style={{ background: 'rgba(0, 92, 255, 0.03)' }}>

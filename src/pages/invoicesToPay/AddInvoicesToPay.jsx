@@ -104,7 +104,6 @@ export const AddInvoicesToPay = () => {
   const handleFileChange = (event) => {
     const file = event.target.files;
     setManualFile(file);
-    console.log(file);
   };
 
   const handleSubmit = async (e) => {
