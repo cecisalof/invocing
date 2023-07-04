@@ -12,8 +12,8 @@ import '../general-style.css'
 import { useNavigate } from 'react-router-dom';
 //import filterIcon from '../../assets/icons/Filtrar.png';
 import deleteIcon from '../../assets/icons/trash.svg';
-import CustomHeader from '../customHeader.jsx';
 import PropTypes from 'prop-types';
+import HeaderColumn from '../HeaderColumn';
 
 export const Suppliers = () => {
   const location = useLocation();
@@ -33,35 +33,22 @@ export const Suppliers = () => {
       headerName: "Nombre jurídico",
       checkboxSelection: true,
       showDisabledCheckboxes: true,
-      headerComponent: (props) => (
-        <CustomHeader displayName={props.displayName} props={props} />
-      ),
+      sort: 'asc'
     },
     {
-      field: 'activity', headerName: "Actividad", headerComponent: (props) => (
-        <CustomHeader displayName={props.displayName} props={props} />
-      ),
+      field: 'activity', headerName: "Actividad"
     },
     {
-      field: 'nif', headerName: "NIF", headerComponent: (props) => (
-        <CustomHeader displayName={props.displayName} props={props} />
-      ),
+      field: 'nif', headerName: "NIF"
     },
     {
-      field: 'phone_number', headerName: "Teléfono", headerComponent: (props) => (
-        <CustomHeader displayName={props.displayName} props={props} />
-      ),
+      field: 'phone_number', headerName: "Teléfono"
     },
     {
-      field: 'email', headerName: "Correo", headerComponent: (props) => (
-        <CustomHeader displayName={props.displayName} props={props} />
-      ),
+      field: 'email', headerName: "Correo"
     },
     {
-      field: 'adress', headerName: "Dirección",
-      headerComponent: (props) => (
-        <CustomHeader displayName={props.displayName} props={props} />
-      ),
+      field: 'adress', headerName: "Dirección"
     },
   ]);
 
@@ -94,7 +81,12 @@ export const Suppliers = () => {
       resizable: true,
       editable: true,
       sideBar: true,
-      cellStyle: { color: '#999999', fontSize: '15px' }
+      cellStyle: { color: '#999999', fontSize: '15px' },
+      headerComponentParams: {
+        menuIcon: 'bi-list',
+      },
+      floatingFilter: true,
+      minWidth: 300
     };
   }, []);
 
@@ -182,6 +174,7 @@ export const Suppliers = () => {
           getRowStyle={getRowStyle}
           pagination={false}
           onCellValueChanged={onCellValueChanged}
+          components={{ agColumnHeader: HeaderColumn }}
         />
       </div>
     </>

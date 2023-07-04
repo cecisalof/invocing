@@ -519,4 +519,17 @@ min-height: 135px !important;
   content: var(--ag-icon-font-code-filter, "\F3E1");
 }
 
+.ag-theme-alpine .ag-menu {
+  background-color: #FAFAFA;
+  color: #999999;
+}
+
+.ag-picker-field-wrapper {
+  border-color: #FAFAFA;
+  border-radius: 100px;
+}
+
+.ag-theme-alpine .ag-popup {
+  background-color: red;
+}
 /*--------------------------------*/
