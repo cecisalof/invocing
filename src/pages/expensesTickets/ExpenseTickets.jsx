@@ -38,6 +38,8 @@ export const ExpenseTickets = () => {
   const [providersLoaded, setProvidersLoaded] = useState(false);
   const [isError, setIsError] = useState(false);
   // const [viewFiles, setViewFiles] = useState(false);
+  // click input ref
+  const inputRef = useRef(null);
 
 
   const userDataContext = useContext(Context);
@@ -58,6 +60,20 @@ export const ExpenseTickets = () => {
       clearInterval(intervalId);
     };
   }, [userDataContext]);
+
+  const handleClick = () => {
+    inputRef.current.click();
+  }
+
+  const handleFileUpload = event => {
+    const fileObj = event.target.files;
+    if (!fileObj) {
+      return;
+    }
+    
+    processFiles(fileObj);
+  };
+
 
   const [columnDefs, setColumnDefs] = useState([
     {
@@ -462,7 +478,6 @@ export const ExpenseTickets = () => {
         if (userDataContext.processBotton) {
           userDataContext.toggleProcessBottonEx()
         }
-        setUpdatePercentage(true)
         processFiles(files)
 
       }
@@ -474,6 +489,7 @@ export const ExpenseTickets = () => {
     console.log("Procesando archivos automáticamente...");
     const response = await postExpenseTicketAutomatic(userDataContext.userData.token, files);
     if (response !== undefined){
+      setUpdatePercentage(true)
       userDataContext.toggleLoadingEx();
       setIsFileUploaded(false);
       const ids = response.data.schendules;
@@ -559,8 +575,14 @@ export const ExpenseTickets = () => {
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
-
+        onClick={handleClick}
       >
+        <input
+          style={{ display: 'none' }}
+          ref={inputRef}
+          type="file"
+          onChange={handleFileUpload}
+        />
         {/* <div className="eye-icon">
         <img src={eye} alt="Eye" onClick={handleViewClick} />
 

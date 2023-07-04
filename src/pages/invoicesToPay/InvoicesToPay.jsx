@@ -558,7 +558,6 @@ export const InvoicesToPay = () => {
         if (userDataContext.processBotton) {
           userDataContext.toggleProcessBotton()
         }
-        setUpdatePercentage(true)
         processFiles(files)
 
       }
@@ -571,6 +570,8 @@ export const InvoicesToPay = () => {
     
     const response = await postInvoiceAutomatic(userDataContext.userData.token, files);
     if (response !== undefined){
+
+      setUpdatePercentage(true);
       userDataContext.toggleLoading();
       setIsFileUploaded(false);
       const ids = response.data.schendules;
@@ -642,9 +643,10 @@ export const InvoicesToPay = () => {
     if (!fileObj) {
       return;
     }
-
+    
     processFiles(fileObj);
   };
+
 
   return (
     <>

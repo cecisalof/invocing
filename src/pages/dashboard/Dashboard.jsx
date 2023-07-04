@@ -45,6 +45,7 @@ export const Dashboard = () => {
 
   // click input ref
   const inputRef = useRef(null);
+  const inputRefEx = useRef(null);
 
   const getCountInvoice = async (filters = null) => {
     try {
@@ -153,7 +154,7 @@ export const Dashboard = () => {
         if (userDataContext.processBotton) {
           userDataContext.toggleProcessBotton()
         }
-        setUpdatePercentage(true)
+        
         processFiles(files)
 
       }
@@ -178,7 +179,7 @@ export const Dashboard = () => {
         if (userDataContext.processBottonEx) {
           userDataContext.toggleProcessBottonEx()
         }
-        setUpdatePercentageEx(true)
+        
         processFilesEx(files)
 
       }
@@ -191,6 +192,7 @@ export const Dashboard = () => {
     
     const response = await postInvoiceAutomatic(userDataContext.userData.token, files);
     if (response  !== undefined){
+      setUpdatePercentage(true)
       const ids = response.data.schendules;
       userDataContext.toggleLoading();
       setIsFileUploaded(false);   
@@ -251,6 +253,7 @@ export const Dashboard = () => {
     console.log("Procesando archivos automáticamente...");
     const response = await postExpenseTicketAutomatic(userDataContext.userData.token, files);
     if (response !== undefined){
+      setUpdatePercentageEx(true)
       const ids = response.data.schendules;
       userDataContext.toggleLoadingEx();
       setIsFileUploadedEx(false);
@@ -306,7 +309,6 @@ export const Dashboard = () => {
   else{
     setIsError(true)
   }
-
 };
   
   
@@ -392,8 +394,24 @@ export const Dashboard = () => {
     if (!fileObj) {
       return;
     }
+    console.log("ENTRO AQUI1")
 
     processFiles(fileObj);
+  };
+
+  const handleClickEx = () => {
+    inputRefEx.current.click();
+  }
+
+  const handleFileUploadEx = event => {
+    const fileObj = event.target.files;
+    if (!fileObj) {
+      return;
+    }
+    console.log("ENTRO AQUI2")
+
+
+    processFilesEx(fileObj);
   };
 
   // const options = {
@@ -547,13 +565,13 @@ export const Dashboard = () => {
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             onDrop={handleDropEx}
-            onClick={handleClick}
+            onClick={handleClickEx}
           >
             <input
               style={{ display: 'none' }}
-              ref={inputRef}
+              ref={inputRefEx}
               type="file"
-              onChange={handleFileUpload}
+              onChange={handleFileUploadEx}
             />
 
             <div className="drop-message">
