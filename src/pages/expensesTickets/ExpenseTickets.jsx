@@ -66,12 +66,15 @@ export const ExpenseTickets = () => {
   }
 
   const handleFileUpload = event => {
-    const fileObj = event.target.files;
-    if (!fileObj) {
-      return;
-    }
-    
-    processFiles(fileObj);
+      const fileObj = event.target.files;
+      
+      if (!fileObj) {
+        return;
+      }
+      
+      processFiles(fileObj);
+      // 👇️ reset file input
+      event.target.value = null;
   };
 
 
@@ -469,6 +472,9 @@ export const ExpenseTickets = () => {
       event.target.classList.remove('file-drop-zone-dragging');
 
       const files = event.dataTransfer.files;
+      console.log(event.dataTransfer);
+      console.log(files);
+
       userDataContext.updateFilesEx(files)
       if (files.length > 10) {
         setIsFileUploaded(true);
