@@ -457,6 +457,8 @@ div.file-drop-zone-dragging {
 
 .customHeaderLabel {
   float: left;
+  font-weight: 400;
+  font-family: 'Nunito';
   margin: 0 0 0 3px;
 }
 
