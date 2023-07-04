@@ -47,8 +47,8 @@ export const ExpenseTickets = () => {
   };
   useEffect(() => {
     const intervalId = setInterval(() => {
-      if (userDataContext.progressEx < 100 && updatePercentage) {
-        userDataContext.updateProgressEx(userDataContext.progressEx + Math.floor(Math.random() * 4) + 1);
+      if (userDataContext.progressEx < 90 && updatePercentage) {
+        userDataContext.updateProgressEx(userDataContext.progressEx +  Math.floor(Math.random() * 4) + 1);
       }
     }, 10000); // 1 second interval
 
