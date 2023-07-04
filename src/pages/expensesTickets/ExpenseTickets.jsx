@@ -19,6 +19,7 @@ import dragDrop from '../../assets/icons/drag-and-drop.png';
 import close from '../../assets/icons/close.png';
 //import eye from '../../assets/icons/Eye.png';
 import { ProgressBar } from 'react-bootstrap';
+import { Alert } from '@mui/material';
 import PropTypes from 'prop-types';
 
 
@@ -34,7 +35,10 @@ export const ExpenseTickets = () => {
 
   const [rowProviders, setrowProviders] = useState(); // Set rowData to Array of Objects, one Object per Row
   const [providersLoaded, setProvidersLoaded] = useState(false);
+  const [isError, setIsError] = useState(false);
   // const [viewFiles, setViewFiles] = useState(false);
+  // click input ref
+  const inputRef = useRef(null);
 
 
   const userDataContext = useContext(Context);
@@ -55,6 +59,20 @@ export const ExpenseTickets = () => {
       clearInterval(intervalId);
     };
   }, [userDataContext]);
+
+  const handleClick = () => {
+    inputRef.current.click();
+  }
+
+  const handleFileUpload = event => {
+    const fileObj = event.target.files;
+    if (!fileObj) {
+      return;
+    }
+    
+    processFiles(fileObj);
+  };
+
 
   const [columnDefs, setColumnDefs] = useState([
     {
@@ -459,7 +477,6 @@ export const ExpenseTickets = () => {
         if (userDataContext.processBotton) {
           userDataContext.toggleProcessBottonEx()
         }
-        setUpdatePercentage(true)
         processFiles(files)
 
       }
@@ -469,59 +486,64 @@ export const ExpenseTickets = () => {
 
   const processFiles = async (files) => {
     console.log("Procesando archivos automáticamente...");
-    userDataContext.toggleLoadingEx();
-    setIsFileUploaded(false);
     const response = await postExpenseTicketAutomatic(userDataContext.userData.token, files);
-    const ids = response.data.schendules;
+    if (response !== undefined){
+      setUpdatePercentage(true)
+      userDataContext.toggleLoadingEx();
+      setIsFileUploaded(false);
+      const ids = response.data.schendules;
 
-    const checkStatus = async () => {
-      const response = await getSchenduleStatus(userDataContext.userData.token, ids);
-      const statusResponse = response.status;
+      const checkStatus = async () => {
+        const response = await getSchenduleStatus(userDataContext.userData.token, ids);
+        const statusResponse = response.status;
 
-      let allDone = true;
-      let loadedCount = 0;
-      let notPending = 0;
+        let allDone = true;
+        let loadedCount = 0;
+        let notPending = 0;
 
-      statusResponse.map((item) => {
-        const totalCount = ids.length;
-        for (const id of ids) {
-          const status = item[id.toString()]; // Obtener el estado del ID
-          console.log(status);
-          if (status === "DONE") {
-            loadedCount = loadedCount + 1; // Incrementar el contador si el estado es "DONE"
+        statusResponse.map((item) => {
+          const totalCount = ids.length;
+          for (const id of ids) {
+            const status = item[id.toString()]; // Obtener el estado del ID
+            console.log(status);
+            if (status === "DONE") {
+              loadedCount = loadedCount + 1; // Incrementar el contador si el estado es "DONE"
 
-            const percentage = Math.round((loadedCount * 100) / totalCount);
-            userDataContext.updateProgressEx(percentage);
-            notPending = notPending + 1
-          } else if (status === "ERROR") {
-            notPending = notPending + 1
+              const percentage = Math.round((loadedCount * 100) / totalCount);
+              userDataContext.updateProgressEx(percentage);
+              notPending = notPending + 1
+            } else if (status === "ERROR") {
+              notPending = notPending + 1
+            }
+            else {
+              allDone = false;
+            }
           }
-          else {
-            allDone = false;
-          }
+        });
+
+
+
+        if (allDone) {
+          console.log("Procesamiento completo");
+          setUpdatePercentage(false)
+          getPanelData();
+        } else if (notPending === ids.length) {
+          console.log("Proceso con errores");
+          setUpdatePercentage(false)
+          handleCloseClick()
         }
-      });
+        else {
+          setTimeout(checkStatus, 10000);
+        }
+      };
 
-
-
-      if (allDone) {
-        console.log("Procesamiento completo");
-        setUpdatePercentage(false)
-        getPanelData();
-      } else if (notPending === ids.length) {
-        console.log("Proceso con errores");
-        setUpdatePercentage(false)
-        handleCloseClick()
-      }
-      else {
-        setTimeout(checkStatus, 10000);
-      }
-    };
-
-    await checkStatus();
+      await checkStatus();
+    }
+    else{
+      setIsError(true)
+    }
 
   };
-
 
   function handleCloseClick() {
     userDataContext.updateProgressEx(0)
@@ -542,13 +564,24 @@ export const ExpenseTickets = () => {
         <AppBar location={location} />
       </div>
 
+      {isError && (
+        <Alert severity="error" className="custom-alert" onClose={() => { setIsError(false) }}>
+          Hubo un error al subir los ficheros
+        </Alert>)}
+
       <div
         className="file-drop-zone-full"
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
-
+        onClick={handleClick}
       >
+        <input
+          style={{ display: 'none' }}
+          ref={inputRef}
+          type="file"
+          onChange={handleFileUpload}
+        />
         {/* <div className="eye-icon">
         <img src={eye} alt="Eye" onClick={handleViewClick} />
 
