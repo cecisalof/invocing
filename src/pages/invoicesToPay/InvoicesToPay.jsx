@@ -41,7 +41,7 @@ export const InvoicesToPay = () => {
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      if (userDataContext.progress < 100 && updatePercentage) {
+      if (userDataContext.progress < 90 && updatePercentage) {
         userDataContext.updateProgress(userDataContext.progress +  Math.floor(Math.random() * 4) + 1);
       }
     }, 10000); // 1 second interval
