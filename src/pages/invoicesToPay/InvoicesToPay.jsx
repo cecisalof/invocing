@@ -21,7 +21,7 @@ import close from '../../assets/icons/close.png';
 import { ProgressBar } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import { Alert } from '@mui/material';
-import spinner from '../../assets/icons/spinner.png';
+import spinner from '../../assets/icons/spinner.svg';
 
 
 export const InvoicesToPay = () => {
@@ -544,7 +544,12 @@ export const InvoicesToPay = () => {
     if (response !== undefined) {
 
       setUpdatePercentage(true);
+      if (userDataContext.isLoadingRef){
+        userDataContext.updateProgress(0)
+
+      }else{
       userDataContext.toggleLoading();
+      }
       setIsFileUploaded(false);
       const ids = response.data.schendules;
 
@@ -650,12 +655,12 @@ export const InvoicesToPay = () => {
           {userDataContext.isLoadingRef && userDataContext.progress < 100 ? (
             <div>
               <img src={spinner} className="loading-icon" />
-              <span className="upload-text">Subiendo archivos... </span>
+              <span className="upload-text blue">Subiendo archivos... </span>
             </div>
           ) : isFileUploaded ? (
             <div className="upload-indicator">
               <FaCheckCircle className="upload-icon" />
-              <span className="upload-text">Archivos subidos</span>
+              <span className="upload-text ">Archivos subidos</span>
             </div>
           ) : (
             <div>

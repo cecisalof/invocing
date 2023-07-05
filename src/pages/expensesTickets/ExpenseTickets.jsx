@@ -17,7 +17,7 @@ import { useNavigate } from 'react-router-dom';
 import { FaCheckCircle } from 'react-icons/fa';
 import dragDrop from '../../assets/icons/drag-and-drop.png';
 import close from '../../assets/icons/close.png';
-import spinner from '../../assets/icons/spinner.png';
+import spinner from '../../assets/icons/spinner.svg';
 //import eye from '../../assets/icons/Eye.png';
 import { ProgressBar } from 'react-bootstrap';
 import { Alert } from '@mui/material';
@@ -496,7 +496,13 @@ export const ExpenseTickets = () => {
     const response = await postExpenseTicketAutomatic(userDataContext.userData.token, files);
     if (response !== undefined){
       setUpdatePercentage(true)
+      if (userDataContext.isLoadingRefEx){
+        userDataContext.updateProgressEx(0)
+
+      }else{
       userDataContext.toggleLoadingEx();
+      
+    }
       setIsFileUploaded(false);
       const ids = response.data.schendules;
 
@@ -611,7 +617,7 @@ export const ExpenseTickets = () => {
           {userDataContext.isLoadingRefEx && userDataContext.progressEx < 100 ? (
             <div>
               <img src={spinner} className="loading-icon" />
-              <span className="upload-text">Subiendo archivos... </span>
+              <span className="upload-text blue">Subiendo archivos... </span>
             </div>
           ) : isFileUploaded ? (
             <div className="upload-indicator">
@@ -636,9 +642,9 @@ export const ExpenseTickets = () => {
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
 
         <ProgressBar
-          now={userDataContext.progress}
-          label={userDataContext.progress === 0 ? "0%" : `${userDataContext.progress}%`}
-          animated={userDataContext.progress === 0}
+          now={userDataContext.progressEx}
+          label={userDataContext.progressEx === 0 ? "0%" : `${userDataContext.progressEx}%`}
+          animated={userDataContext.progressEx === 0}
           variant="custom-color"
           className="mb-3 custom-width-progess custom-progress"
         />
