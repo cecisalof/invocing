@@ -21,7 +21,7 @@ import close from '../../assets/icons/close.png';
 import { ProgressBar } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import { Alert } from '@mui/material';
-import spinner from '../../assets/icons/spinner.png';
+import spinner from '../../assets/icons/spinner.svg';
 
 
 export const InvoicesToPay = () => {
@@ -37,7 +37,6 @@ export const InvoicesToPay = () => {
   const [isError, setIsError] = useState(false);
 
   const userDataContext = useContext(Context);
-  
   // click input ref
   const inputRef = useRef(null);
 
@@ -48,7 +47,7 @@ export const InvoicesToPay = () => {
   useEffect(() => {
     const intervalId = setInterval(() => {
       if (userDataContext.progress < 90 && updatePercentage) {
-        userDataContext.updateProgress(userDataContext.progress +  Math.floor(Math.random() * 4) + 1);
+        userDataContext.updateProgress(userDataContext.progress + Math.floor(Math.random() * 4) + 1);
       }
     }, 10000); // 1 second interval
 
@@ -120,9 +119,9 @@ export const InvoicesToPay = () => {
       cellStyle: { color: 'white', fontSize: '10px' },// agregar estilo al texto de la celda
     },
     {
-      field: 'date', 
+      field: 'date',
       headerName: "Fecha",
-      sort: 'asc' 
+      sort: 'asc'
     },
 
     { field: 'concept', headerName: 'Concepto' },
@@ -541,12 +540,16 @@ export const InvoicesToPay = () => {
 
   const processFiles = async (files) => {
     console.log("Procesando archivos automáticamente...");
-    
     const response = await postInvoiceAutomatic(userDataContext.userData.token, files);
-    if (response !== undefined){
+    if (response !== undefined) {
 
       setUpdatePercentage(true);
+      if (userDataContext.isLoadingRef){
+        userDataContext.updateProgress(0)
+
+      }else{
       userDataContext.toggleLoading();
+      }
       setIsFileUploaded(false);
       const ids = response.data.schendules;
 
@@ -596,7 +599,7 @@ export const InvoicesToPay = () => {
 
       await checkStatus();
     }
-    else{
+    else {
       setIsError(true)
     }
 
@@ -614,11 +617,15 @@ export const InvoicesToPay = () => {
 
   const handleFileUpload = event => {
     const fileObj = event.target.files;
+    
     if (!fileObj) {
       return;
     }
-    
+
     processFiles(fileObj);
+    // 👇️ reset file input
+    event.target.value = null;
+
   };
 
 
@@ -648,12 +655,12 @@ export const InvoicesToPay = () => {
           {userDataContext.isLoadingRef && userDataContext.progress < 100 ? (
             <div>
               <img src={spinner} className="loading-icon" />
-              <span className="upload-text">Subiendo archivos... </span>
+              <span className="upload-text blue">Subiendo archivos... </span>
             </div>
           ) : isFileUploaded ? (
             <div className="upload-indicator">
               <FaCheckCircle className="upload-icon" />
-              <span className="upload-text">Archivos subidos</span>
+              <span className="upload-text ">Archivos subidos</span>
             </div>
           ) : (
             <div>

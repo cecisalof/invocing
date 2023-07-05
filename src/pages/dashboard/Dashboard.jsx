@@ -195,8 +195,13 @@ export const Dashboard = () => {
     const response = await postInvoiceAutomatic(userDataContext.userData.token, files);
     if (response  !== undefined){
       setUpdatePercentage(true)
-      const ids = response.data.schendules;
+      if (userDataContext.isLoadingRef){
+        userDataContext.updateProgress(0)
+
+      }else{
       userDataContext.toggleLoading();
+      }
+      const ids = response.data.schendules;
       setIsFileUploaded(false);   
     
       const checkStatus = async () => {
@@ -256,8 +261,14 @@ export const Dashboard = () => {
     const response = await postExpenseTicketAutomatic(userDataContext.userData.token, files);
     if (response !== undefined){
       setUpdatePercentageEx(true)
-      const ids = response.data.schendules;
+      if (userDataContext.isLoadingRefEx){
+        userDataContext.updateProgressEx(0)
+
+      }else{
       userDataContext.toggleLoadingEx();
+      
+      }
+      const ids = response.data.schendules;
       setIsFileUploadedEx(false);
 
       const checkStatus = async () => {
@@ -396,9 +407,10 @@ export const Dashboard = () => {
     if (!fileObj) {
       return;
     }
-    console.log("ENTRO AQUI1")
 
     processFiles(fileObj);
+    // 👇️ reset file input
+    event.target.value = null;
   };
 
   const handleClickEx = () => {
@@ -410,10 +422,11 @@ export const Dashboard = () => {
     if (!fileObj) {
       return;
     }
-    console.log("ENTRO AQUI2")
 
 
     processFilesEx(fileObj);
+    // 👇️ reset file input
+    event.target.value = null;
   };
 
   // const options = {
