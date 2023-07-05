@@ -11,6 +11,7 @@ import Context from '../../contexts/context';
 import { useContext } from 'react';
 //import filterIcon from '../../assets/icons/Filtrar.png';
 import deleteIcon from '../../assets/icons/trash.svg';
+import deleteIconD from '../../assets/icons/trashDeactive.svg';
 import HeaderColumn from '../HeaderColumn';
 import CustomElement from '../customElement.jsx';
 import { getProviders } from "../suppliers/services";
@@ -35,6 +36,8 @@ export const InvoicesToPay = () => {
   const [isFileUploaded, setIsFileUploaded] = useState(false);
   const [updatePercentage, setUpdatePercentage] = useState(false);
   const [isError, setIsError] = useState(false);
+  // const [trashActive, settrashActive] = useState(false);
+  const trashActive = false
 
   const userDataContext = useContext(Context);
   
@@ -684,7 +687,7 @@ export const InvoicesToPay = () => {
       <div className='mx-3'>
         <button type="button" className="btn btn-primary rounded-pill px-4 opacity-hover-05" onClick={handleAddInvoice}>Añadir factura</button>
         {/* <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} /> */}
-        <img src={deleteIcon} alt="Delete icon" onClick={handleTrashClick} className='trashIcon' />
+        <img src={trashActive ? deleteIcon : deleteIconD} alt="Delete icon" onClick={handleTrashClick} className='trashIcon' />
       </div>
       <div className="ag-theme-alpine mx-3 gridStyle">
         <AgGridReact
