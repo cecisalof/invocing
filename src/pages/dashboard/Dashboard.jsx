@@ -40,6 +40,7 @@ export const Dashboard = () => {
   const [updatePercentage, setUpdatePercentage] = useState(false);
   const [updatePercentageEx, setUpdatePercentageEx] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [isWarning, setIsWarning] = useState(false);
   const [active, setActive] = useState("month-1");
 
 
@@ -140,7 +141,7 @@ export const Dashboard = () => {
 
   const handleDrop = (event) => {
     if (userDataContext.isLoadingRef && userDataContext.progress < 100) {
-      console.log("Se está cargando otros archivos")
+      setIsWarning(true)
     } else {
       event.preventDefault();
       event.stopPropagation();
@@ -165,7 +166,7 @@ export const Dashboard = () => {
 
   const handleDropEx = (event) => {
     if (userDataContext.isLoadingRefEx && userDataContext.progressEx < 100) {
-      console.log("Se está cargando otros archivos")
+      setIsWarning(true)
     } else {
       event.preventDefault();
       event.stopPropagation();
@@ -195,8 +196,13 @@ export const Dashboard = () => {
     const response = await postInvoiceAutomatic(userDataContext.userData.token, files);
     if (response  !== undefined){
       setUpdatePercentage(true)
-      const ids = response.data.schendules;
+      if (userDataContext.isLoadingRef){
+        userDataContext.updateProgress(0)
+
+      }else{
       userDataContext.toggleLoading();
+      }
+      const ids = response.data.schendules;
       setIsFileUploaded(false);   
     
       const checkStatus = async () => {
@@ -256,8 +262,14 @@ export const Dashboard = () => {
     const response = await postExpenseTicketAutomatic(userDataContext.userData.token, files);
     if (response !== undefined){
       setUpdatePercentageEx(true)
-      const ids = response.data.schendules;
+      if (userDataContext.isLoadingRefEx){
+        userDataContext.updateProgressEx(0)
+
+      }else{
       userDataContext.toggleLoadingEx();
+      
+      }
+      const ids = response.data.schendules;
       setIsFileUploadedEx(false);
 
       const checkStatus = async () => {
@@ -388,7 +400,11 @@ export const Dashboard = () => {
   };
 
   const handleClick = () => {
-    inputRef.current.click();
+    if (userDataContext.isLoadingRef && userDataContext.progress < 100) {
+      setIsWarning(true)
+    } else{
+      inputRef.current.click();
+    }
   }
 
   const handleFileUpload = event => {
@@ -396,13 +412,18 @@ export const Dashboard = () => {
     if (!fileObj) {
       return;
     }
-    console.log("ENTRO AQUI1")
 
     processFiles(fileObj);
+    // 👇️ reset file input
+    event.target.value = null;
   };
 
   const handleClickEx = () => {
-    inputRefEx.current.click();
+    if (userDataContext.isLoadingRefEx && userDataContext.progressEx < 100) {
+      setIsWarning(true)
+    } else{
+      inputRefEx.current.click();
+    }
   }
 
   const handleFileUploadEx = event => {
@@ -410,10 +431,11 @@ export const Dashboard = () => {
     if (!fileObj) {
       return;
     }
-    console.log("ENTRO AQUI2")
 
 
     processFilesEx(fileObj);
+    // 👇️ reset file input
+    event.target.value = null;
   };
 
   // const options = {
@@ -513,6 +535,10 @@ export const Dashboard = () => {
           <Alert severity="error" className="custom-alert" onClose={() => { setIsError(false) }}>
             Hubo un error al subir los ficheros
           </Alert>)}
+          {isWarning && (
+        <Alert severity="warning" className="custom-alert" onClose={() => { setIsWarning(false) }}>
+          Espere a que se procesen los archivos
+        </Alert>)}
         <div style={{ display: 'flex' }}>
           <div
             className="file-drop-zone"

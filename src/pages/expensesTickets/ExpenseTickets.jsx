@@ -17,7 +17,7 @@ import { useNavigate } from 'react-router-dom';
 import { FaCheckCircle } from 'react-icons/fa';
 import dragDrop from '../../assets/icons/drag-and-drop.png';
 import close from '../../assets/icons/close.png';
-import spinner from '../../assets/icons/spinner.png';
+import spinner from '../../assets/icons/spinner.svg';
 //import eye from '../../assets/icons/Eye.png';
 import { ProgressBar } from 'react-bootstrap';
 import { Alert } from '@mui/material';
@@ -69,12 +69,15 @@ export const ExpenseTickets = () => {
   }
 
   const handleFileUpload = event => {
-    const fileObj = event.target.files;
-    if (!fileObj) {
-      return;
-    }
-    
-    processFiles(fileObj);
+      const fileObj = event.target.files;
+      
+      if (!fileObj) {
+        return;
+      }
+      
+      processFiles(fileObj);
+      // 👇️ reset file input
+      event.target.value = null;
   };
 
 
@@ -472,6 +475,9 @@ export const ExpenseTickets = () => {
       event.target.classList.remove('file-drop-zone-dragging');
 
       const files = event.dataTransfer.files;
+      console.log(event.dataTransfer);
+      console.log(files);
+
       userDataContext.updateFilesEx(files)
       if (files.length > 10) {
         setIsFileUploaded(true);
@@ -493,7 +499,13 @@ export const ExpenseTickets = () => {
     const response = await postExpenseTicketAutomatic(userDataContext.userData.token, files);
     if (response !== undefined){
       setUpdatePercentage(true)
+      if (userDataContext.isLoadingRefEx){
+        userDataContext.updateProgressEx(0)
+
+      }else{
       userDataContext.toggleLoadingEx();
+      
+    }
       setIsFileUploaded(false);
       const ids = response.data.schendules;
 
