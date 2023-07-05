@@ -40,6 +40,7 @@ export const ExpenseTickets = () => {
   // const [viewFiles, setViewFiles] = useState(false);
   // click input ref
   const inputRef = useRef(null);
+  const [isWarning, setIsWarning] = useState(false);
 
 
   const userDataContext = useContext(Context);
@@ -62,7 +63,9 @@ export const ExpenseTickets = () => {
   }, [userDataContext]);
 
   const handleClick = () => {
-    inputRef.current.click();
+    if (userDataContext.isLoadingRefEx && userDataContext.progressEx < 100) {
+      setIsWarning(true)}
+    else{inputRef.current.click();}
   }
 
   const handleFileUpload = event => {
@@ -461,8 +464,8 @@ export const ExpenseTickets = () => {
   };
 
   const handleDrop = (event) => {
-    if (userDataContext.isLoadingRef && userDataContext.progress < 100) {
-      console.log("Se está cargando otros archivos")
+    if (userDataContext.isLoadingRefEx && userDataContext.progressEx < 100) {
+      setIsWarning(true)
     } else {
       event.preventDefault();
       event.stopPropagation();
@@ -569,6 +572,10 @@ export const ExpenseTickets = () => {
         <Alert severity="error" className="custom-alert" onClose={() => { setIsError(false) }}>
           Hubo un error al subir los ficheros
         </Alert>)}
+        {isWarning && (
+        <Alert severity="warning" className="custom-alert" onClose={() => { setIsWarning(false) }}>
+          Espere a que se procesen los archivos
+        </Alert>)}
 
       <div
         className="file-drop-zone-full"
@@ -605,7 +612,7 @@ export const ExpenseTickets = () => {
           {userDataContext.isLoadingRefEx && userDataContext.progressEx < 100 ? (
             <div>
               <img src={spinner} className="loading-icon" />
-              <span className="upload-text">Subiendo archivos... </span>
+              <span className="upload-text blue">Subiendo archivos... </span>
             </div>
           ) : isFileUploaded ? (
             <div className="upload-indicator">
@@ -630,9 +637,9 @@ export const ExpenseTickets = () => {
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
 
         <ProgressBar
-          now={userDataContext.progress}
-          label={userDataContext.progress === 0 ? "0%" : `${userDataContext.progress}%`}
-          animated={userDataContext.progress === 0}
+          now={userDataContext.progressEx}
+          label={userDataContext.progressEx === 0 ? "0%" : `${userDataContext.progressEx}%`}
+          animated={userDataContext.progressEx === 0}
           variant="custom-color"
           className="mb-3 custom-width-progess custom-progress"
         />

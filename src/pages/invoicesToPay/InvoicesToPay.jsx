@@ -36,6 +36,7 @@ export const InvoicesToPay = () => {
   const [isFileUploaded, setIsFileUploaded] = useState(false);
   const [updatePercentage, setUpdatePercentage] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [isWarning, setIsWarning] = useState(false);
   // const [trashActive, settrashActive] = useState(false);
   const trashActive = false
 
@@ -519,7 +520,7 @@ export const InvoicesToPay = () => {
 
   const handleDrop = (event) => {
     if (userDataContext.isLoadingRef && userDataContext.progress < 100) {
-      console.log("Se está cargando otros archivos")
+      setIsWarning(true)
     } else {
       event.preventDefault();
       event.stopPropagation();
@@ -612,16 +613,20 @@ export const InvoicesToPay = () => {
   }
 
   const handleClick = () => {
-    inputRef.current.click();
+    if (userDataContext.isLoadingRef && userDataContext.progress < 100) {
+      setIsWarning(true)}
+    else{inputRef.current.click();}
+    
   }
 
   const handleFileUpload = event => {
-    const fileObj = event.target.files;
-    if (!fileObj) {
-      return;
-    }
+      const fileObj = event.target.files;
+      if (!fileObj) {
+        return;
+      }
     
     processFiles(fileObj);
+   
   };
 
 
@@ -633,6 +638,10 @@ export const InvoicesToPay = () => {
       {isError && (
         <Alert severity="error" className="custom-alert" onClose={() => { setIsError(false) }}>
           Hubo un error al subir los ficheros
+        </Alert>)}
+        {isWarning && (
+        <Alert severity="warning" className="custom-alert" onClose={() => { setIsWarning(false) }}>
+          Espere a que se procesen los archivos
         </Alert>)}
       <div
         className="file-drop-zone-full"
@@ -651,7 +660,7 @@ export const InvoicesToPay = () => {
           {userDataContext.isLoadingRef && userDataContext.progress < 100 ? (
             <div>
               <img src={spinner} className="loading-icon" />
-              <span className="upload-text">Subiendo archivos... </span>
+              <span className="upload-text blue">Subiendo archivos... </span>
             </div>
           ) : isFileUploaded ? (
             <div className="upload-indicator">
