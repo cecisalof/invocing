@@ -30,7 +30,6 @@ import { ProgressBar } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import { Alert } from '@mui/material';
 import spinner from '../../assets/icons/spinner.svg';
-// import XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 
 export const InvoicesToPay = () => {
