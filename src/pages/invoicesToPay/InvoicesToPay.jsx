@@ -2,7 +2,15 @@ import { useLocation } from 'react-router-dom'
 import { AppBar } from "../../components/appBar/AppBar";
 import { AgGridReact } from 'ag-grid-react'; // the AG Grid React Component
 import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
-import { getInvoices, deleteInvoice, patchInvoice, patchProviderInvoice, postInvoiceAutomatic, getSchenduleStatus } from "./services";
+import {
+  getInvoices,
+  deleteInvoice,
+  patchInvoice,
+  patchProviderInvoice,
+  postInvoiceAutomatic,
+  getSchenduleStatus,
+  invoiceToPayExcel
+} from "./services";
 import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
 import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
 import './style.css';
@@ -22,7 +30,7 @@ import { ProgressBar } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import { Alert } from '@mui/material';
 import spinner from '../../assets/icons/spinner.svg';
-
+import { saveAs } from 'file-saver';
 
 export const InvoicesToPay = () => {
   const location = useLocation();
@@ -544,11 +552,11 @@ export const InvoicesToPay = () => {
     if (response !== undefined) {
 
       setUpdatePercentage(true);
-      if (userDataContext.isLoadingRef){
+      if (userDataContext.isLoadingRef) {
         userDataContext.updateProgress(0)
 
-      }else{
-      userDataContext.toggleLoading();
+      } else {
+        userDataContext.toggleLoading();
       }
       setIsFileUploaded(false);
       const ids = response.data.schendules;
@@ -617,7 +625,7 @@ export const InvoicesToPay = () => {
 
   const handleFileUpload = event => {
     const fileObj = event.target.files;
-    
+
     if (!fileObj) {
       return;
     }
@@ -628,6 +636,20 @@ export const InvoicesToPay = () => {
 
   };
 
+
+  const handleDownloadFile = async () => {
+    console.log('click');
+    try {
+      // getting excel file from backend
+      const response = await invoiceToPayExcel(userDataContext.userData.token);
+      // Reading Blob file
+      if (response.data) {
+        saveAs(response.data, 'facturas.xlsx');
+      }
+    } catch (error) {
+      console.log('Error', error);
+    }
+  }
 
   return (
     <>
@@ -687,11 +709,15 @@ export const InvoicesToPay = () => {
           />
           <img src={close} alt="Close icon" onClick={handleCloseClick} style={{ marginRight: '20px', width: '20px', height: '20px', marginTop: '-2px' }} />
         </div>)}
-
-      <div className='mx-3'>
-        <button type="button" className="btn btn-primary rounded-pill px-4 opacity-hover-05" onClick={handleAddInvoice}>Añadir factura</button>
-        {/* <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} /> */}
-        <img src={deleteIcon} alt="Delete icon" onClick={handleTrashClick} className='trashIcon' />
+      <div className='d-flex'>
+        <div className='mx-3'>
+          <button type="button" className="btn btn-primary rounded-pill px-4 opacity-hover-05" onClick={handleAddInvoice}>Añadir factura</button>
+          {/* <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} /> */}
+          <img src={deleteIcon} alt="Delete icon" onClick={handleTrashClick} className='trashIcon' />
+        </div>
+        <div className='mx-3'>
+          <button type="button" className="btn btn-outline-primary bi bi-download" onClick={handleDownloadFile}></button>
+        </div>
       </div>
       <div className="ag-theme-alpine mx-3 gridStyle">
         <AgGridReact
