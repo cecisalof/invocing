@@ -111,7 +111,7 @@ export const InvoicesToPay = () => {
     {
       field: 'date',
       headerName: "Fecha",
-      sort: 'asc'
+      sort: 'desc'
     },
 
     { field: 'concept', headerName: 'Concepto' },
