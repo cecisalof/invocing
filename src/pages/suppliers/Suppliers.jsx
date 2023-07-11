@@ -12,6 +12,7 @@ import '../general-style.css'
 import { useNavigate } from 'react-router-dom';
 //import filterIcon from '../../assets/icons/Filtrar.png';
 import deleteIcon from '../../assets/icons/trash.svg';
+import deleteIconD from '../../assets/icons/trashDeactive.svg';
 import PropTypes from 'prop-types';
 import HeaderColumn from '../HeaderColumn';
 
@@ -22,6 +23,7 @@ export const Suppliers = () => {
 
   const gridRef = useRef(); // Optional - for accessing Grid's API
   const [rowData, setRowData] = useState(); // Set rowData to Array of Objects, one Object per Row
+  const [rowSelection ,setRowSelection] = useState(false);
 
   const userDataContext = useContext(Context);
 
@@ -90,6 +92,7 @@ export const Suppliers = () => {
     };
   }, []);
 
+
   const onGridReady = useCallback((props) => {
     // whenever grid is remounted again API object has to replaced
     const gridRef = props.api;
@@ -105,11 +108,23 @@ export const Suppliers = () => {
       return { background: '#ffffff' };
     }
   }
+
   // function handleFilterClick() {
   //   console.log('Botón de filtro clickeado');
-
-
   // }
+
+  const onRowSelected = (event) => {
+    if (event.node.selected) {
+      setRowSelection(true);
+    }
+  }
+
+  const onSelectionChanged = (event) => {
+    const selectedRows = event.api.getSelectedNodes();
+    if (selectedRows.length == 0) {
+      setRowSelection(false);
+    }
+  }
 
   function handleTrashClick() {
     const selectedNodes = gridRef.current.api.getSelectedNodes();
@@ -124,6 +139,10 @@ export const Suppliers = () => {
       .then(() => {
         // Llamada a getPanelData() después de que se hayan eliminado todas las facturas
         getPanelData();
+        // Wait one second until the data is reloaded after deleting the row, to display disabled trash icon again.
+        setTimeout(() => {
+          setRowSelection(false);
+        }, 1000);
       })
       .catch((error) => {
         console.log(error);
@@ -151,7 +170,6 @@ export const Suppliers = () => {
 
   };
 
-
   return (
     <>
       <div>
@@ -160,7 +178,7 @@ export const Suppliers = () => {
       <div className='mx-1'>
         <button type="button" className="btn btn-primary rounded-pill px-4 mx-2 addBtn opacity-hover-05" onClick={handleAddProvider}>Añadir proveedor</button>
         {/* <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} /> */}
-        <img src={deleteIcon} alt="Delete icon" onClick={handleTrashClick} className='trashIcon' />
+        <img src={rowSelection ? deleteIcon : deleteIconD} alt="Delete icon" onClick={handleTrashClick} className='trashIcon' />
       </div>
       <div className="ag-theme-alpine mx-3 gridStyle">
         <AgGridReact
@@ -175,6 +193,8 @@ export const Suppliers = () => {
           pagination={false}
           onCellValueChanged={onCellValueChanged}
           components={{ agColumnHeader: HeaderColumn }}
+          onSelectionChanged={onSelectionChanged}
+          onRowSelected={onRowSelected}
         />
       </div>
     </>
