@@ -350,12 +350,12 @@ export const ExpenseTickets = () => {
         }
       });
       data = { "uuid": updateSender };
-      patchProviderExpenseTicket(event.data.uuid, data).then(() => {
+      patchProviderExpenseTicket(event.data.uuid, data, userDataContext.userData.token).then(() => {
         // Espera a que se complete la solicitud PATCH y luego carga los datos
         getPanelData();
       });
     } else {
-      patchExpenseTicket(event.data.uuid, data).then(() => {
+      patchExpenseTicket(event.data.uuid, data, userDataContext.userData.token).then(() => {
         // Espera a que se complete la solicitud PATCH y luego carga los datos
         getPanelData();
       });

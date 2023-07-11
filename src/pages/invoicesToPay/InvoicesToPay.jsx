@@ -420,12 +420,12 @@ export const InvoicesToPay = () => {
         }
       });
       data = { "uuid": updateSender };
-      patchProviderInvoice(event.data.uuid, data).then(() => {
+      patchProviderInvoice(event.data.uuid, data, userDataContext.userData.token).then(() => {
         // Espera a que se complete la solicitud PATCH y luego carga los datos
         getPanelData();
       });
     } else {
-      patchInvoice(event.data.uuid, data).then(() => {
+      patchInvoice(event.data.uuid, data, userDataContext.userData.token).then(() => {
         // Espera a que se complete la solicitud PATCH y luego carga los datos
         getPanelData();
       });
