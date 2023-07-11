@@ -9,7 +9,6 @@ import './style.css';
 import '../general-style.css'
 import Context from '../../contexts/context';
 import { useContext } from 'react';
-import deleteIcon from '../../assets/icons/trash.svg';
 import HeaderColumn from '../HeaderColumn';
 import { getProviders } from "../suppliers/services";
 import CustomElement from '../customElement.jsx';
@@ -17,8 +16,10 @@ import { useNavigate } from 'react-router-dom';
 import { FaCheckCircle } from 'react-icons/fa';
 import dragDrop from '../../assets/icons/drag-and-drop.png';
 import close from '../../assets/icons/close.png';
-import spinner from '../../assets/icons/spinner.png';
+import spinner from '../../assets/icons/spinner.svg';
 //import eye from '../../assets/icons/Eye.png';
+import deleteIcon from '../../assets/icons/trash.svg';
+import deleteIconD from '../../assets/icons/trashDeactive.svg';
 import { ProgressBar } from 'react-bootstrap';
 import { Alert } from '@mui/material';
 import PropTypes from 'prop-types';
@@ -30,6 +31,7 @@ export const ExpenseTickets = () => {
 
   const [isFileUploaded, setIsFileUploaded] = useState(false);
   const [updatePercentage, setUpdatePercentage] = useState(false);
+  const [rowSelection, setRowSelection] = useState(false);
 
   const gridRef = useRef(); // Optional - for accessing Grid's API
   const [rowData, setRowData] = useState(); // Set rowData to Array of Objects, one Object per Row
@@ -40,6 +42,7 @@ export const ExpenseTickets = () => {
   // const [viewFiles, setViewFiles] = useState(false);
   // click input ref
   const inputRef = useRef(null);
+  const [isWarning, setIsWarning] = useState(false);
 
 
   const userDataContext = useContext(Context);
@@ -52,7 +55,7 @@ export const ExpenseTickets = () => {
   useEffect(() => {
     const intervalId = setInterval(() => {
       if (userDataContext.progressEx < 90 && updatePercentage) {
-        userDataContext.updateProgressEx(userDataContext.progressEx +  Math.floor(Math.random() * 4) + 1);
+        userDataContext.updateProgressEx(userDataContext.progressEx + Math.floor(Math.random() * 4) + 1);
       }
     }, 10000); // 1 second interval
 
@@ -62,16 +65,22 @@ export const ExpenseTickets = () => {
   }, [userDataContext]);
 
   const handleClick = () => {
-    inputRef.current.click();
+    if (userDataContext.isLoadingRefEx && userDataContext.progressEx < 100) {
+      setIsWarning(true)
+    }
+    else { inputRef.current.click(); }
   }
 
   const handleFileUpload = event => {
     const fileObj = event.target.files;
+
     if (!fileObj) {
       return;
     }
-    
+
     processFiles(fileObj);
+    // 👇️ reset file input
+    event.target.value = null;
   };
 
 
@@ -111,9 +120,10 @@ export const ExpenseTickets = () => {
         cellRenderer: providerCellRenderer,
       },
     },
-    { field: 'date', 
+    {
+      field: 'date',
       headerName: "Fecha",
-      sort: 'asc' 
+      sort: 'asc'
     },
     { field: 'concept', headerName: 'Concepto' },
     {
@@ -269,9 +279,10 @@ export const ExpenseTickets = () => {
             cellRenderer: providerCellRenderer,
           },
         },
-        { field: 'date', 
+        {
+          field: 'date',
           headerName: "Fecha",
-          sort: 'asc' 
+          sort: 'asc'
         },
         { field: 'concept', headerName: 'Concepto' },
         {
@@ -416,6 +427,19 @@ export const ExpenseTickets = () => {
   }, []);
 
 
+  const onRowSelected = (event) => {
+    if (event.node.selected) {
+      setRowSelection(true);
+    }
+  }
+
+  const onSelectionChanged = (event) => {
+    const selectedRows = event.api.getSelectedNodes();
+    if (selectedRows.length == 0) {
+      setRowSelection(false);
+    }
+  }
+
   function getRowStyle(props) {
     if (props.node.rowIndex % 2 === 0) {
       // Fila par
@@ -439,11 +463,16 @@ export const ExpenseTickets = () => {
       .then(() => {
         // Llamada a getData() después de que se hayan eliminado todas las facturas
         getPanelData();
+        // Wait one second until the data is reloaded after deleting the row, to display disabled trash icon again.
+        setTimeout(() => {
+          setRowSelection(false);
+        }, 1000); 
       })
       .catch((error) => {
         console.log(error);
       });
   }
+
   const handleAddExpenses = () => {
     navigate('/add-expenses'); // Reemplaza '/ruta-del-formulario' con la ruta de tu formulario
   };
@@ -461,14 +490,17 @@ export const ExpenseTickets = () => {
   };
 
   const handleDrop = (event) => {
-    if (userDataContext.isLoadingRef && userDataContext.progress < 100) {
-      console.log("Se está cargando otros archivos")
+    if (userDataContext.isLoadingRefEx && userDataContext.progressEx < 100) {
+      setIsWarning(true)
     } else {
       event.preventDefault();
       event.stopPropagation();
       event.target.classList.remove('file-drop-zone-dragging');
 
       const files = event.dataTransfer.files;
+      console.log(event.dataTransfer);
+      console.log(files);
+
       userDataContext.updateFilesEx(files)
       if (files.length > 10) {
         setIsFileUploaded(true);
@@ -488,9 +520,15 @@ export const ExpenseTickets = () => {
   const processFiles = async (files) => {
     console.log("Procesando archivos automáticamente...");
     const response = await postExpenseTicketAutomatic(userDataContext.userData.token, files);
-    if (response !== undefined){
+    if (response !== undefined) {
       setUpdatePercentage(true)
-      userDataContext.toggleLoadingEx();
+      if (userDataContext.isLoadingRefEx) {
+        userDataContext.updateProgressEx(0)
+
+      } else {
+        userDataContext.toggleLoadingEx();
+
+      }
       setIsFileUploaded(false);
       const ids = response.data.schendules;
 
@@ -540,7 +578,7 @@ export const ExpenseTickets = () => {
 
       await checkStatus();
     }
-    else{
+    else {
       setIsError(true)
     }
 
@@ -568,6 +606,10 @@ export const ExpenseTickets = () => {
       {isError && (
         <Alert severity="error" className="custom-alert" onClose={() => { setIsError(false) }}>
           Hubo un error al subir los ficheros
+        </Alert>)}
+      {isWarning && (
+        <Alert severity="warning" className="custom-alert" onClose={() => { setIsWarning(false) }}>
+          Espere a que se procesen los archivos
         </Alert>)}
 
       <div
@@ -605,7 +647,7 @@ export const ExpenseTickets = () => {
           {userDataContext.isLoadingRefEx && userDataContext.progressEx < 100 ? (
             <div>
               <img src={spinner} className="loading-icon" />
-              <span className="upload-text">Subiendo archivos... </span>
+              <span className="upload-text blue">Subiendo archivos... </span>
             </div>
           ) : isFileUploaded ? (
             <div className="upload-indicator">
@@ -629,19 +671,19 @@ export const ExpenseTickets = () => {
       {userDataContext.isLoadingRefEx && (
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
 
-        <ProgressBar
-          now={userDataContext.progress}
-          label={userDataContext.progress === 0 ? "0%" : `${userDataContext.progress}%`}
-          animated={userDataContext.progress === 0}
-          variant="custom-color"
-          className="mb-3 custom-width-progess custom-progress"
-        />
-        <img src={close} alt="Close icon" onClick={handleCloseClick} style={{ marginRight: '20px', width: '20px', height: '20px', marginTop: '-2px' }} />
-      </div>)}
+          <ProgressBar
+            now={userDataContext.progressEx}
+            label={userDataContext.progressEx === 0 ? "0%" : `${userDataContext.progressEx}%`}
+            animated={userDataContext.progressEx === 0}
+            variant="custom-color"
+            className="mb-3 custom-width-progess custom-progress"
+          />
+          <img src={close} alt="Close icon" onClick={handleCloseClick} style={{ marginRight: '20px', width: '20px', height: '20px', marginTop: '-2px' }} />
+        </div>)}
       <div className='mx-3'>
         <button type="button" className="btn btn-primary rounded-pill px-4 opacity-hover-05" onClick={handleAddExpenses}>Añadir gasto</button>
         {/* <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} /> */}
-        <img src={deleteIcon} alt="Delete icon" onClick={handleTrashClick} className='trashIcon' />
+        <img src={rowSelection ? deleteIcon : deleteIconD} alt="Delete icon" onClick={handleTrashClick} className='trashIcon' />
       </div>
       <div className="ag-theme-alpine mx-3 gridStyle">
         <AgGridReact
@@ -656,6 +698,8 @@ export const ExpenseTickets = () => {
           pagination={false}
           onCellValueChanged={onCellValueChanged}
           components={{ agColumnHeader: HeaderColumn }}
+          onRowSelected={onRowSelected}
+          onSelectionChanged={onSelectionChanged}
         />
       </div>
     </>
