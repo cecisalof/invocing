@@ -137,3 +137,22 @@ export const deleteInvoice = async (uuid, token) => {
         return console.log('error');
       }
   };
+
+  export const invoiceToPayExcel = async (token) => {
+    try {
+        const response = await axios.get(BASE_URL + API_URL.INVOICE_TO_PAY_EXCEL, {
+            headers: { 
+                'accept': 'application/json', 
+                'Authorization': `Token ${token}`,
+            },
+            params: {
+                limit: 500,
+                offset: 0
+            },
+            responseType: 'blob'
+        });
+        return response;
+      } catch (error) {
+        return console.log('error');
+      }
+  };

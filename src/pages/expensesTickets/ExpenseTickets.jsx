@@ -2,7 +2,7 @@ import { useLocation } from 'react-router-dom'
 import { AppBar } from "../../components/appBar/AppBar";
 import { AgGridReact } from 'ag-grid-react'; // the AG Grid React Component
 import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
-import { getExpenseTicket, deleteExpenseTicket, patchExpenseTicket, patchProviderExpenseTicket, postExpenseTicketAutomatic, getSchenduleStatus } from "./services";
+import { getExpenseTicket, deleteExpenseTicket, patchExpenseTicket, patchProviderExpenseTicket } from "./services";
 import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
 import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
 import './style.css';
@@ -13,15 +13,13 @@ import HeaderColumn from '../HeaderColumn';
 import { getProviders } from "../suppliers/services";
 import CustomElement from '../customElement.jsx';
 import { useNavigate } from 'react-router-dom';
-import { FaCheckCircle } from 'react-icons/fa';
-import dragDrop from '../../assets/icons/drag-and-drop.png';
 import close from '../../assets/icons/close.png';
-import spinner from '../../assets/icons/spinner.svg';
 //import eye from '../../assets/icons/Eye.png';
 import deleteIcon from '../../assets/icons/trash.svg';
 import deleteIconD from '../../assets/icons/trashDeactive.svg';
 import { ProgressBar } from 'react-bootstrap';
 import { Alert } from '@mui/material';
+import { DragAndDropCardComponent } from "../../components/dragAndDropCard";
 import PropTypes from 'prop-types';
 
 
@@ -29,21 +27,13 @@ export const ExpenseTickets = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const [isFileUploaded, setIsFileUploaded] = useState(false);
-  const [updatePercentage, setUpdatePercentage] = useState(false);
-  const [rowSelection, setRowSelection] = useState(false);
-
   const gridRef = useRef(); // Optional - for accessing Grid's API
   const [rowData, setRowData] = useState(); // Set rowData to Array of Objects, one Object per Row
 
+  const [rowSelection, setRowSelection] = useState(false);
   const [rowProviders, setrowProviders] = useState(); // Set rowData to Array of Objects, one Object per Row
   const [providersLoaded, setProvidersLoaded] = useState(false);
   const [isError, setIsError] = useState(false);
-  // const [viewFiles, setViewFiles] = useState(false);
-  // click input ref
-  const inputRef = useRef(null);
-  const [isWarning, setIsWarning] = useState(false);
-
 
   const userDataContext = useContext(Context);
   const providerCellRenderer = (params) => {
@@ -52,37 +42,6 @@ export const ExpenseTickets = () => {
     }
     return '';
   };
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      if (userDataContext.progressEx < 90 && updatePercentage) {
-        userDataContext.updateProgressEx(userDataContext.progressEx + Math.floor(Math.random() * 4) + 1);
-      }
-    }, 10000); // 1 second interval
-
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, [userDataContext]);
-
-  const handleClick = () => {
-    if (userDataContext.isLoadingRefEx && userDataContext.progressEx < 100) {
-      setIsWarning(true)
-    }
-    else { inputRef.current.click(); }
-  }
-
-  const handleFileUpload = event => {
-    const fileObj = event.target.files;
-
-    if (!fileObj) {
-      return;
-    }
-
-    processFiles(fileObj);
-    // 👇️ reset file input
-    event.target.value = null;
-  };
-
 
   const [columnDefs, setColumnDefs] = useState([
     {
@@ -477,125 +436,11 @@ export const ExpenseTickets = () => {
     navigate('/add-expenses'); // Reemplaza '/ruta-del-formulario' con la ruta de tu formulario
   };
 
-  const handleDragOver = (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    event.target.classList.add('file-drop-zone-dragging');
-  };
-
-  const handleDragLeave = (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    event.target.classList.remove('file-drop-zone-dragging');
-  };
-
-  const handleDrop = (event) => {
-    if (userDataContext.isLoadingRefEx && userDataContext.progressEx < 100) {
-      setIsWarning(true)
-    } else {
-      event.preventDefault();
-      event.stopPropagation();
-      event.target.classList.remove('file-drop-zone-dragging');
-
-      const files = event.dataTransfer.files;
-      console.log(event.dataTransfer);
-      console.log(files);
-
-      userDataContext.updateFilesEx(files)
-      if (files.length > 10) {
-        setIsFileUploaded(true);
-        userDataContext.toggleProcessBottonEx()
-      }
-      else {
-        if (userDataContext.processBotton) {
-          userDataContext.toggleProcessBottonEx()
-        }
-        processFiles(files)
-
-      }
-    }
-
-  };
-
-  const processFiles = async (files) => {
-    console.log("Procesando archivos automáticamente...");
-    const response = await postExpenseTicketAutomatic(userDataContext.userData.token, files);
-    if (response !== undefined) {
-      setUpdatePercentage(true)
-      if (userDataContext.isLoadingRefEx) {
-        userDataContext.updateProgressEx(0)
-
-      } else {
-        userDataContext.toggleLoadingEx();
-
-      }
-      setIsFileUploaded(false);
-      const ids = response.data.schendules;
-
-      const checkStatus = async () => {
-        const response = await getSchenduleStatus(userDataContext.userData.token, ids);
-        const statusResponse = response.status;
-
-        let allDone = true;
-        let loadedCount = 0;
-        let notPending = 0;
-
-        statusResponse.map((item) => {
-          const totalCount = ids.length;
-          for (const id of ids) {
-            const status = item[id.toString()]; // Obtener el estado del ID
-            console.log(status);
-            if (status === "DONE") {
-              loadedCount = loadedCount + 1; // Incrementar el contador si el estado es "DONE"
-
-              const percentage = Math.round((loadedCount * 100) / totalCount);
-              userDataContext.updateProgressEx(percentage);
-              notPending = notPending + 1
-            } else if (status === "ERROR") {
-              notPending = notPending + 1
-            }
-            else {
-              allDone = false;
-            }
-          }
-        });
-
-
-
-        if (allDone) {
-          console.log("Procesamiento completo");
-          setUpdatePercentage(false)
-          getPanelData();
-        } else if (notPending === ids.length) {
-          console.log("Proceso con errores");
-          setUpdatePercentage(false)
-          handleCloseClick()
-        }
-        else {
-          setTimeout(checkStatus, 10000);
-        }
-      };
-
-      await checkStatus();
-    }
-    else {
-      setIsError(true)
-    }
-
-  };
-
   function handleCloseClick() {
     userDataContext.updateProgressEx(0)
     userDataContext.updateFilesEx([])
     userDataContext.toggleLoadingEx()
   }
-
-
-  //  function handleViewClick() {
-  //   setViewFiles(!viewFiles)
-  //   console.log(userDataContext.filesEx)
-  // }
-
 
   return (
     <>
@@ -607,80 +452,28 @@ export const ExpenseTickets = () => {
         <Alert severity="error" className="custom-alert" onClose={() => { setIsError(false) }}>
           Hubo un error al subir los ficheros
         </Alert>)}
-      {isWarning && (
-        <Alert severity="warning" className="custom-alert" onClose={() => { setIsWarning(false) }}>
-          Espere a que se procesen los archivos
-        </Alert>)}
 
-      <div
-        className="file-drop-zone-full"
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        onDrop={handleDrop}
-        onClick={handleClick}
-      >
-        <input
-          style={{ display: 'none' }}
-          ref={inputRef}
-          type="file"
-          onChange={handleFileUpload}
+        {/* yellow card */}
+        <DragAndDropCardComponent 
+          type="ticket"
+          userToken={userDataContext.userData.token} 
+          setIsError={(newValue) => {setIsError(newValue)}}
+          onFinishedUploading={() => {()=>{getPanelData()}}}
         />
-        {/* <div className="eye-icon">
-        <img src={eye} alt="Eye" onClick={handleViewClick} />
-
-        {viewFiles && (
-        <div style={{ position: 'absolute', zIndex: 9999 }}>
-          <label >Archivos</label>
-          <ul>
-          {Array.from(userDataContext.filesEx).map((file, index) => (
-            <li key={index}  style={{ fontSize: '10px', fontFamily: 'Nunito' }}> {file.name}</li>
-          ))}
-        </ul>
-          
-        </div>
-        
-          )}
-
-        </div> */}
-
-        <div className="drop-message">
-          {userDataContext.isLoadingRefEx && userDataContext.progressEx < 100 ? (
-            <div>
-              <img src={spinner} className="loading-icon" />
-              <span className="upload-text blue">Subiendo archivos... </span>
-            </div>
-          ) : isFileUploaded ? (
-            <div className="upload-indicator">
-              <FaCheckCircle className="upload-icon" />
-              <span className="upload-text">Archivos subidos</span>
-            </div>
-          ) : (
-            <div>
-              <img src={dragDrop} alt="dragDrop" />
-            </div>
-          )}
-
-        </div>
-        {userDataContext.processBottonEx && (
-          <button className="process-button" onClick={processFiles}>
-            Procesar automáticamente
-          </button>
-        )}
-      </div>
 
       {userDataContext.isLoadingRefEx && (
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
 
-          <ProgressBar
-            now={userDataContext.progressEx}
-            label={userDataContext.progressEx === 0 ? "0%" : `${userDataContext.progressEx}%`}
-            animated={userDataContext.progressEx === 0}
-            variant="custom-color"
-            className="mb-3 custom-width-progess custom-progress"
-          />
-          <img src={close} alt="Close icon" onClick={handleCloseClick} style={{ marginRight: '20px', width: '20px', height: '20px', marginTop: '-2px' }} />
-        </div>)}
-      <div className='mx-3'>
+        <ProgressBar
+          now={userDataContext.progressEx}
+          label={userDataContext.progressEx === 0 ? "0%" : `${userDataContext.progressEx}%`}
+          animated={userDataContext.progressEx === 0}
+          variant="custom-color"
+          className="mb-3 custom-width-progess custom-progress"
+        />
+        <img src={close} alt="Close icon" onClick={handleCloseClick} style={{ marginRight: '20px', width: '20px', height: '20px', marginTop: '-2px' }} />
+      </div>)}
+      <div className='mx-3 mt-4'>
         <button type="button" className="btn btn-primary rounded-pill px-4 opacity-hover-05" onClick={handleAddExpenses}>Añadir gasto</button>
         {/* <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} /> */}
         <img src={rowSelection ? deleteIcon : deleteIconD} alt="Delete icon" onClick={handleTrashClick} className='trashIcon' />

@@ -2,7 +2,13 @@ import { useLocation } from 'react-router-dom'
 import { AppBar } from "../../components/appBar/AppBar";
 import { AgGridReact } from 'ag-grid-react'; // the AG Grid React Component
 import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
-import { getInvoices, patchInvoice, deleteInvoice, patchProviderInvoice, postInvoiceAutomatic, getSchenduleStatus } from "./services";
+import {
+  getInvoices,
+  deleteInvoice,
+  patchInvoice,
+  patchProviderInvoice,
+  invoiceToPayExcel
+} from "./services";
 import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
 import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
 import './style.css';
@@ -16,14 +22,12 @@ import HeaderColumn from '../HeaderColumn';
 import CustomElement from '../customElement.jsx';
 import { getProviders } from "../suppliers/services";
 import { useNavigate } from 'react-router-dom';
-import { FaCheckCircle } from 'react-icons/fa';
-import dragDrop from '../../assets/icons/drag-and-drop.png';
 import close from '../../assets/icons/close.png';
 import { ProgressBar } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import { Alert } from '@mui/material';
-import spinner from '../../assets/icons/spinner.svg';
-
+import { DragAndDropCardComponent } from "../../components/dragAndDropCard";
+import { saveAs } from 'file-saver';
 
 export const InvoicesToPay = () => {
   const location = useLocation();
@@ -33,31 +37,14 @@ export const InvoicesToPay = () => {
   const [rowData, setRowData] = useState(); // Set rowData to Array of Objects, one Object per Row
   const [rowProviders, setRowProviders] = useState(); // Set rowData to Array of Objects, one Object per Row
   const [providersLoaded, setProvidersLoaded] = useState(false);
-  const [isFileUploaded, setIsFileUploaded] = useState(false);
-  const [updatePercentage, setUpdatePercentage] = useState(false);
   const [isError, setIsError] = useState(false);
-  const [isWarning, setIsWarning] = useState(false);
   const [rowSelection ,setRowSelection] = useState(false);
  
   const userDataContext = useContext(Context);
-  // click input ref
-  const inputRef = useRef(null);
 
   const ragRenderer = (props) => {
     return <span className="rag-element">{props.value}</span>;
   };
-
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      if (userDataContext.progress < 90 && updatePercentage) {
-        userDataContext.updateProgress(userDataContext.progress + Math.floor(Math.random() * 4) + 1);
-      }
-    }, 10000); // 1 second interval
-
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, [userDataContext]);
 
   const ragCellClassRules = {
     'rag-payed-outer': (props) => props.value === 'payed' || props.value === 'Pagada',
@@ -518,132 +505,25 @@ export const InvoicesToPay = () => {
     navigate('/add-invoices-to-pay'); // Reemplaza '/ruta-del-formulario' con la ruta de tu formulario
   };
 
-  const handleDragOver = (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    event.target.classList.add('file-drop-zone-dragging');
-  };
-
-  const handleDragLeave = (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    event.target.classList.remove('file-drop-zone-dragging');
-  };
-
-  const handleDrop = (event) => {
-    if (userDataContext.isLoadingRef && userDataContext.progress < 100) {
-      setIsWarning(true)
-    } else {
-      event.preventDefault();
-      event.stopPropagation();
-      event.target.classList.remove('file-drop-zone-dragging');
-
-      const files = event.dataTransfer.files;
-      userDataContext.updateFiles(files)
-      
-      if (files.length > 10) {
-        setIsFileUploaded(true);
-        userDataContext.toggleProcessBotton()
-      } else {
-        if (userDataContext.processBotton) {
-          userDataContext.toggleProcessBotton()
-        }
-        processFiles(files)
-      }
-    }
-  };
-
-  const processFiles = async (files) => {
-    console.log("Procesando archivos automáticamente...");
-    const response = await postInvoiceAutomatic(userDataContext.userData.token, files);
-    if (response !== undefined) {
-
-      setUpdatePercentage(true);
-      if (userDataContext.isLoadingRef) {
-        userDataContext.updateProgress(0)
-
-      } else {
-        userDataContext.toggleLoading();
-      }
-      setIsFileUploaded(false);
-      const ids = response.data.schendules;
-
-      const checkStatus = async () => {
-        const response = await getSchenduleStatus(userDataContext.userData.token, ids);
-        const statusResponse = response.status;
-
-        let allDone = true;
-        let loadedCount = 0;
-        let notPending = 0;
-
-        statusResponse.map((item) => {
-          const totalCount = ids.length;
-          for (const id of ids) {
-            const status = item[id.toString()]; // Obtener el estado del ID
-            if (status === "DONE") {
-              loadedCount = loadedCount + 1; // Incrementar el contador si el estado es "DONE"
-
-              const percentage = Math.round((loadedCount * 100) / totalCount);
-              userDataContext.updateProgress(percentage);
-              notPending = notPending + 1
-            } else if (status === "ERROR") {
-              notPending = notPending + 1
-            }
-            else {
-              allDone = false;
-            }
-          }
-        });
-
-        if (allDone) {
-          console.log("Procesamiento completo");
-          setUpdatePercentage(false)
-          getPanelData();
-        } else if (notPending === ids.length) {
-          console.log("Proceso con errores");
-          setUpdatePercentage(false)
-          handleCloseClick()
-        }
-        else {
-          setTimeout(checkStatus, 10000); // Esperar 10 segundos y volver a verificar
-
-        }
-      };
-
-      await checkStatus();
-    }
-    else {
-      setIsError(true)
-    }
-
-  };
-
   function handleCloseClick() {
     userDataContext.updateProgress(0)
     userDataContext.updateFiles([])
     userDataContext.toggleLoading()
   }
 
-  const handleClick = () => {
-    if (userDataContext.isLoadingRef && userDataContext.progress < 100) {
-      setIsWarning(true)
+  const handleDownloadFile = async () => {
+    console.log('click');
+    try {
+      // getting excel file from backend
+      const response = await invoiceToPayExcel(userDataContext.userData.token);
+      // Reading Blob file
+      if (response.data) {
+        saveAs(response.data, 'facturas.xlsx');
+      }
+    } catch (error) {
+      console.log('Error', error);
     }
-    else { inputRef.current.click(); }
-
   }
-
-  const handleFileUpload = event => {
-    const fileObj = event.target.files;
-
-    if (!fileObj) {
-      return;
-    }
-
-    processFiles(fileObj);
-    // 👇️ reset file input
-    event.target.value = null;
-  };
-
 
   return (
     <>
@@ -653,50 +533,16 @@ export const InvoicesToPay = () => {
       {isError && (
         <Alert severity="error" className="custom-alert" onClose={() => { setIsError(false) }}>
           Hubo un error al subir los ficheros
-        </Alert>
-      )}
-      {isWarning && (
-        <Alert severity="warning" className="custom-alert" onClose={() => { setIsWarning(false) }}>
-          Espere a que se procesen los archivos
-        </Alert>
-      )}
-      <div
-        className="file-drop-zone-full"
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        onDrop={handleDrop}
-        onClick={handleClick}
-      >
-        <input
-          style={{ display: 'none' }}
-          ref={inputRef}
-          type="file"
-          onChange={handleFileUpload}
-        />
-        <div className="drop-message">
-          {userDataContext.isLoadingRef && userDataContext.progress < 100 ? (
-            <div>
-              <img src={spinner} className="loading-icon" />
-              <span className="upload-text blue">Subiendo archivos... </span>
-            </div>
-          ) : isFileUploaded ? (
-            <div className="upload-indicator">
-              <FaCheckCircle className="upload-icon" />
-              <span className="upload-text ">Archivos subidos</span>
-            </div>
-          ) : (
-            <div>
-              <img src={dragDrop} alt="dragDrop" />
-            </div>
-          )}
+        </Alert>)}
 
-        </div>
-        {userDataContext.processBotton && (
-          <button className="process-button" onClick={processFiles}>
-            Procesar automáticamente
-          </button>
-        )}
-      </div>
+        {/* Blue card */}
+        <DragAndDropCardComponent 
+          type="invoice"
+          userToken={userDataContext.userData.token} 
+          setIsError={(newValue) => {setIsError(newValue)}}
+          onFinishedUploading={() => {()=>{getPanelData()}}}
+        />
+
       {userDataContext.isLoadingRef && (
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <ProgressBar
@@ -708,10 +554,15 @@ export const InvoicesToPay = () => {
           />
           <img src={close} alt="Close icon" onClick={handleCloseClick} style={{ marginRight: '20px', width: '20px', height: '20px', marginTop: '-2px' }} />
         </div>)}
-      <div className='mx-3'>
-        <button type="button" className="btn btn-primary rounded-pill px-4 opacity-hover-05" onClick={handleAddInvoice}>Añadir factura</button>
-        {/* <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} /> */}
-        <img src={rowSelection ? deleteIcon : deleteIconD} alt="Delete icon" onClick={handleTrashClick} className='trashIcon' />
+      <div className='d-flex mt-4'>
+        <div className='mx-3'>
+          <button type="button" className="btn btn-primary rounded-pill px-4 opacity-hover-05" onClick={handleAddInvoice}>Añadir factura</button>
+          {/* <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} /> */}
+          <img src={rowSelection ? deleteIcon : deleteIconD} alt="Delete icon" onClick={handleTrashClick} className='trashIcon' />
+        </div>
+        <div className='mx-3'>
+          <button type="button" className="btn btn-outline-primary bi bi-download" onClick={handleDownloadFile}></button>
+        </div>
       </div>
       <div className="ag-theme-alpine mx-3 gridStyle">
         <AgGridReact

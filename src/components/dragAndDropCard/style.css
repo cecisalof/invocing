@@ -1,0 +1,60 @@
+.-dragging {
+    border-color: #005CFF;
+    background-color: #e6f7ff;
+}
+  
+.file-drop-zone:hover {
+background-color: #eaf1ff;
+}
+
+.text-drop {
+    font-weight: 400;
+    font-size: 17px;
+}
+
+.text-drop.small{
+    font-size: 10px;
+}
+
+.file-drop-zone-invoice .color-drop {
+    color: #005CFF;
+}
+
+.file-drop-zone-ticket .color-drop {
+    color: #FFBC11;
+}
+
+.file-drop-zone {
+    cursor: pointer;
+    border: none;
+    border-radius: 20px;
+    margin: 1rem;
+    min-height: 200px;
+    padding: 2.5em;
+    text-align: center;
+    font-size: 18px;
+    background-color: #eaf1ff;
+    width: 40vw;
+    transition: background-color 0.3s;
+}
+
+.file-drop-zone.file-drop-zone-ticket {
+    background-color: rgba(255, 188, 17, 0.1);
+}
+  
+@media (max-width: 991px){
+    .file-drop-zone {
+        width: 50vw;
+    }
+}
+  
+.file-drop-zone-full {
+    border: 'none';
+    border-radius: 20px;
+    margin: 1rem;
+    padding: 2.5em;
+    text-align: center;
+    font-size: 18px;
+    background-color: #eaf1ff;
+    transition: background-color 0.3s;
+}
