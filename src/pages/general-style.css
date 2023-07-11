@@ -204,47 +204,6 @@ body {
   margin-top: 20px;
 }
 
-.yellow{
-  color: #FFBC11;
-}
-
-.blue{
-  color: #005CFF;
-}
-
-.file-drop-zone {
-  border: 'none';
-  border-radius: 20px;
-  margin: 1rem;
-  padding: 2.5em;
-  text-align: center;
-  font-size: 18px;
-  background-color: #eaf1ff;
-  width: 40vw;
-  transition: background-color 0.3s;
-}
-
-div.file-drop-zone-dragging {
-  opacity: 0.5;
-}
-
-@media (max-width: 991px){
-  .file-drop-zone {
-    width: 50vw;
-  }
-}
-
-.file-drop-zone-full {
-  border: 'none';
-  border-radius: 20px;
-  margin: 1rem;
-  padding: 2.5em;
-  text-align: center;
-  font-size: 18px;
-  background-color: #eaf1ff;
-  transition: background-color 0.3s;
-}
-
 /* Dashboard cards */
 .card {
   border: none;
@@ -273,21 +232,6 @@ div.file-drop-zone-dragging {
 
 .eye-icon {
   text-align: left;
-}
-
-.file-drop-zone:hover {
-  background-color: #eaf1ff;
-}
-
-.-dragging {
-  border-color: #005CFF;
-  background-color: #e6f7ff;
-}
-
-
-.drop-message {
-  margin-bottom: 10px;
-  color: #333;
 }
 
 .download-icon {
@@ -449,7 +393,7 @@ div.file-drop-zone-dragging {
   height: 28px;
 }
 
-.opacity-hover-05:hover{
+.opacity-hover-05:hover, .opacity-05{
   opacity: 0.5;
 }
 

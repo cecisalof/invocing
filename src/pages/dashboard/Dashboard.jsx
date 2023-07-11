@@ -1,21 +1,17 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom'
 import { AppBar } from "../../components/appBar/AppBar";
 import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
 import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
 import '../general-style.css'
 import './calendar.css'
-import { postInvoiceAutomatic, getSchenduleStatus } from "../invoicesToPay/services";
-import { postExpenseTicketAutomatic } from "../expensesTickets/services";
+import { DragAndDropCardComponent } from "../../components/dragAndDropCard";
 import { getInvoicesCount, getInvoicesStates, getInvoicesTotals } from "./services";
 import Context from '../../contexts/context';
 import { useContext } from 'react';
 import cashIconBlue from '../../assets/icons/Cash.png';
-import { FaCheckCircle } from 'react-icons/fa';
 import dragDrop from '../../assets/icons/drag-and-drop.png';
-import cashYellow from '../../assets/icons/cashYellow.png';
-import spinner from '../../assets/icons/spinner.svg';
-import spinnerYellow from '../../assets/icons/spinnerYellow.svg';
+
 //import sellIcon from '../../assets/icons/sellout.png';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
@@ -27,9 +23,6 @@ import { Alert } from '@mui/material';
 export const Dashboard = () => {
   const location = useLocation();
 
-
-  const [isFileUploaded, setIsFileUploaded] = useState(false);
-  const [isFileUploadedEx, setIsFileUploadedEx] = useState(false);
   const [invoiceCount, setInvoiceCount] = useState({});
   const [invoiceStates, setInvoiceStates] = useState({});
   //const [invoiceEmitCount, setInvoiceEmitCount] = useState({});
@@ -37,17 +30,11 @@ export const Dashboard = () => {
   const [totals, setTotals] = useState({});
   const [showCalendar, setShowCalendar] = useState(false);
   const [selectedRange, setSelectedRange] = useState([new Date(), new Date()]);
-  const [updatePercentage, setUpdatePercentage] = useState(false);
-  const [updatePercentageEx, setUpdatePercentageEx] = useState(false);
   const [isError, setIsError] = useState(false);
   const [active, setActive] = useState("month-1");
 
 
   const userDataContext = useContext(Context);
-
-  // click input ref
-  const inputRef = useRef(null);
-  const inputRefEx = useRef(null);
 
   const getCountInvoice = async (filters = null) => {
     try {
@@ -88,29 +75,6 @@ export const Dashboard = () => {
 
     }
   };
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      if (userDataContext.progress < 90 && updatePercentage) {
-        userDataContext.updateProgress(userDataContext.progress +  Math.floor(Math.random() * 4) + 1);
-      }
-    }, 10000); // 1 second interval
-
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, [userDataContext]);
-
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      if (userDataContext.progressEx < 90 && updatePercentageEx) {
-        userDataContext.updateProgressEx(userDataContext.progressEx +  Math.floor(Math.random() * 4) + 1);
-      }
-    }, 10000); // 1 second interval
-
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, [userDataContext]);
 
   let isLoading = false; // Class variable to avoid taking too long to save that we are loading (state is not enough to control this). Also avoids multiple request under 1 second
   const getPanelData = async (filters = null) => {
@@ -124,207 +88,7 @@ export const Dashboard = () => {
 
   useEffect(() => {
     getPanelData();
-  }, [userDataContext.userData.token]);
-
-  const handleDragOver = (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    event.target.classList.add('file-drop-zone-dragging');
-  };
-
-  const handleDragLeave = (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    event.target.classList.remove('file-drop-zone-dragging');
-  };
-
-  const handleDrop = (event) => {
-    if (userDataContext.isLoadingRef && userDataContext.progress < 100) {
-      console.log("Se está cargando otros archivos")
-    } else {
-      event.preventDefault();
-      event.stopPropagation();
-      event.target.classList.remove('file-drop-zone-dragging');
-
-      const files = event.dataTransfer.files;
-      userDataContext.updateFiles(files)
-      if (files.length > 10) {
-        setIsFileUploaded(true);
-        userDataContext.toggleProcessBotton()
-      }
-      else {
-        if (userDataContext.processBotton) {
-          userDataContext.toggleProcessBotton()
-        }
-        
-        processFiles(files)
-
-      }
-    }
-  };
-
-  const handleDropEx = (event) => {
-    if (userDataContext.isLoadingRefEx && userDataContext.progressEx < 100) {
-      console.log("Se está cargando otros archivos")
-    } else {
-      event.preventDefault();
-      event.stopPropagation();
-      event.target.classList.remove('file-drop-zone-dragging');
-
-      const files = event.dataTransfer.files;
-      userDataContext.updateFiles(files)
-      if (files.length > 10) {
-        setIsFileUploadedEx(true);
-        userDataContext.toggleProcessBottonEx()
-      }
-      else {
-        if (userDataContext.processBottonEx) {
-          userDataContext.toggleProcessBottonEx()
-        }
-        
-        processFilesEx(files)
-
-      }
-    }
-  };
-
-  const processFiles = async (files) => {
-    console.log(files);
-    console.log("Procesando archivos automáticamente...");
-    
-    const response = await postInvoiceAutomatic(userDataContext.userData.token, files);
-    if (response  !== undefined){
-      setUpdatePercentage(true)
-      if (userDataContext.isLoadingRef){
-        userDataContext.updateProgress(0)
-
-      }else{
-      userDataContext.toggleLoading();
-      }
-      const ids = response.data.schendules;
-      setIsFileUploaded(false);   
-    
-      const checkStatus = async () => {
-        const response = await getSchenduleStatus(userDataContext.userData.token, ids);
-        const statusResponse = response.status;
-    
-        let allDone = true;
-        let loadedCount = 0;
-        let notPending = 0;
-    
-        statusResponse.map((item) => {
-          const totalCount = ids.length;
-          for (const id of ids) {
-            const status = item[id.toString()]; // Obtener el estado del ID
-            console.log(status);
-            if (status === "DONE") {
-              loadedCount = loadedCount + 1; // Incrementar el contador si el estado es "DONE"
-    
-              const percentage = Math.round((loadedCount * 100) / totalCount);
-              userDataContext.updateProgress(percentage);
-              notPending = notPending + 1
-            } else if (status === "ERROR") {
-              notPending = notPending + 1
-            }
-            else {
-              allDone = false;
-            }
-          }
-        });
-    
-        if (allDone) {
-          console.log("Procesamiento completo");
-          setUpdatePercentage(false)
-          getPanelData();
-        } else if(notPending === ids.length){
-          console.log("Proceso con errores");
-          setUpdatePercentage(false)
-          userDataContext.updateProgress(0)
-          userDataContext.updateFiles([])
-          userDataContext.toggleLoading()
-        }
-        else {
-          setTimeout(checkStatus, 10000); // Esperar 10 segundos y volver a verificar
-          
-        }
-      };
-    
-      await checkStatus();
-    }
-    else{
-      setIsError(true)
-    }
-  };
-
-  const processFilesEx = async (files) => {
-    console.log("Procesando archivos automáticamente...");
-    const response = await postExpenseTicketAutomatic(userDataContext.userData.token, files);
-    if (response !== undefined){
-      setUpdatePercentageEx(true)
-      if (userDataContext.isLoadingRefEx){
-        userDataContext.updateProgressEx(0)
-
-      }else{
-      userDataContext.toggleLoadingEx();
-      
-      }
-      const ids = response.data.schendules;
-      setIsFileUploadedEx(false);
-
-      const checkStatus = async () => {
-        const response = await getSchenduleStatus(userDataContext.userData.token, ids);
-        const statusResponse = response.status;
-
-        let allDone = true;
-        let loadedCount = 0;
-        let notPending = 0;
-
-        statusResponse.map((item) => {
-          const totalCount = ids.length;
-          for (const id of ids) {
-            const status = item[id.toString()]; // Obtener el estado del ID
-            console.log(status);
-            if (status === "DONE") {
-              loadedCount = loadedCount + 1; // Incrementar el contador si el estado es "DONE"
-
-              const percentage = Math.round((loadedCount * 100) / totalCount);
-              userDataContext.updateProgressEx(percentage);
-              notPending = notPending + 1
-            } else if (status === "ERROR") {
-              notPending = notPending + 1
-            }
-            else {
-              allDone = false;
-            }
-          }
-        });
-
-
-
-        if (allDone) {
-          console.log("Procesamiento completo");
-          setUpdatePercentage(false)
-          getPanelData();
-        } else if(notPending === ids.length){
-          console.log("Proceso con errores");
-          setUpdatePercentage(false)
-          userDataContext.updateProgressEx(0)
-          userDataContext.updateFilesEx([])
-          userDataContext.toggleLoadingEx()
-        }
-        else {
-          setTimeout(checkStatus, 10000);
-        }
-      };
-
-      await checkStatus();
-  }
-  else{
-    setIsError(true)
-  }
-};
-  
-  
+  }, [userDataContext.userData.token]);  
   
    const handleButtonClick = () => {
     setSelectedRange([new Date(), new Date()]);
@@ -396,37 +160,6 @@ export const Dashboard = () => {
 
     //}
 
-  };
-
-  const handleClick = () => {
-    inputRef.current.click();
-  }
-
-  const handleFileUpload = event => {
-    const fileObj = event.target.files;
-    if (!fileObj) {
-      return;
-    }
-
-    processFiles(fileObj);
-    // 👇️ reset file input
-    event.target.value = null;
-  };
-
-  const handleClickEx = () => {
-    inputRefEx.current.click();
-  }
-
-  const handleFileUploadEx = event => {
-    const fileObj = event.target.files;
-    if (!fileObj) {
-      return;
-    }
-
-
-    processFilesEx(fileObj);
-    // 👇️ reset file input
-    event.target.value = null;
   };
 
   // const options = {
@@ -526,86 +259,24 @@ export const Dashboard = () => {
           <Alert severity="error" className="custom-alert" onClose={() => { setIsError(false) }}>
             Hubo un error al subir los ficheros
           </Alert>)}
-        <div style={{ display: 'flex' }}>
-          <div
-            className="file-drop-zone"
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
-            onClick={handleClick}
-          >
-            <input
-              style={{ display: 'none' }}
-              ref={inputRef}
-              type="file"
-              onChange={handleFileUpload}
-            />
+        <div className='row'>
+          <div className="col-12 col-md-6">
             {/* Blue card */}
-            <div className="drop-message">
-              {(userDataContext.isLoadingRef && userDataContext.progress < 100) ? (
-                <div>
-                  <img src={spinner} className="loading-icon" />
-                  <span className="upload-text blue">Subiendo archivos... </span>
-                </div>
-              ) : isFileUploaded ? (
-                <div className="upload-indicator">
-                  <FaCheckCircle className="upload-icon" />
-                  <span className="upload-text">Archivos subidos</span>
-                </div>
-              ) : (
-                <div>
-                  <img src={dragDrop} alt="dragDrop" className='cards-logo' />
-                  <div>
-                <span className="text-drop color-drop-blue">
-                  Procesar facturas automáticamente
-                </span>
-              </div>
-                </div>
-              )}
-
-            </div>
-          
-          </div>
-          {/* Yellow card */}
-          <div
-            className="file-drop-zone"
-            style={{ backgroundColor: 'rgba(255, 188, 17, 0.1)' }}
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDropEx}
-            onClick={handleClickEx}
-          >
-            <input
-              style={{ display: 'none' }}
-              ref={inputRefEx}
-              type="file"
-              onChange={handleFileUploadEx}
+            <DragAndDropCardComponent 
+              type="invoice"
+              userToken={userDataContext.userData.token} 
+              setIsError={(newValue) => {setIsError(newValue)}}
+              onFinishedUploading={() => {()=>{getPanelData()}}}
             />
-
-            <div className="drop-message">
-              {(userDataContext.isLoadingRefEx && userDataContext.progressEx < 100) ? (
-                <div>
-                   <img src={spinnerYellow} className="loading-icon" />
-                  <span className="upload-text yellow">Subiendo archivos... </span>
-                </div>
-              ) : isFileUploadedEx ? (
-                <div className="upload-indicator">
-                  <FaCheckCircle className="upload-icon" />
-                  <span className="upload-text">Archivos subidos</span>
-                </div>
-              ) : (
-                <div>
-
-                  <img src={cashYellow} alt="dragDrop" className='cards-logo' />
-                  <div>
-                  <span className="text-drop color-drop-yellow">
-                    Procesar gasto automáticamente
-                  </span>
-                </div>
-                </div>
-              )}
-
-            </div>
+          </div>
+          <div className="col-12 col-md-6 mt-3 mt-md-0">
+            {/* Yellow card */}
+            <DragAndDropCardComponent 
+              type="ticket"
+              userToken={userDataContext.userData.token} 
+              setIsError={(newValue) => {setIsError(newValue)}}
+              onFinishedUploading={() => {()=>{getPanelData()}}}
+            />
           </div>
         </div>
         <div style={{ display: 'flex' }}>

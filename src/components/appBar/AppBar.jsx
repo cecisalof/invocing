@@ -57,7 +57,7 @@ export const AppBar = (props)  => {
             <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
           </form> */}
 
-          <div className='tools'>
+          <div className='tools d-none'>
           <img src={notificationIcon} alt="Notificatoin icon" onClick={handleNotificationClick} />
           {(userDataContext.isLoadingRef || userDataContext.isLoadingRefEx) && (
           <div className="notification-dot" /> // Agregamos un div con clase para el punto rojo
