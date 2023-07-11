@@ -9,13 +9,14 @@ import './style.css';
 import '../general-style.css'
 import Context from '../../contexts/context';
 import { useContext } from 'react';
-import deleteIcon from '../../assets/icons/trash.svg';
 import HeaderColumn from '../HeaderColumn';
 import { getProviders } from "../suppliers/services";
 import CustomElement from '../customElement.jsx';
 import { useNavigate } from 'react-router-dom';
 import close from '../../assets/icons/close.png';
 //import eye from '../../assets/icons/Eye.png';
+import deleteIcon from '../../assets/icons/trash.svg';
+import deleteIconD from '../../assets/icons/trashDeactive.svg';
 import { ProgressBar } from 'react-bootstrap';
 import { Alert } from '@mui/material';
 import { DragAndDropCardComponent } from "../../components/dragAndDropCard";
@@ -29,6 +30,7 @@ export const ExpenseTickets = () => {
   const gridRef = useRef(); // Optional - for accessing Grid's API
   const [rowData, setRowData] = useState(); // Set rowData to Array of Objects, one Object per Row
 
+  const [rowSelection, setRowSelection] = useState(false);
   const [rowProviders, setrowProviders] = useState(); // Set rowData to Array of Objects, one Object per Row
   const [providersLoaded, setProvidersLoaded] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -77,9 +79,10 @@ export const ExpenseTickets = () => {
         cellRenderer: providerCellRenderer,
       },
     },
-    { field: 'date', 
+    {
+      field: 'date',
       headerName: "Fecha",
-      sort: 'asc' 
+      sort: 'asc'
     },
     { field: 'concept', headerName: 'Concepto' },
     {
@@ -235,9 +238,10 @@ export const ExpenseTickets = () => {
             cellRenderer: providerCellRenderer,
           },
         },
-        { field: 'date', 
+        {
+          field: 'date',
           headerName: "Fecha",
-          sort: 'asc' 
+          sort: 'asc'
         },
         { field: 'concept', headerName: 'Concepto' },
         {
@@ -382,6 +386,19 @@ export const ExpenseTickets = () => {
   }, []);
 
 
+  const onRowSelected = (event) => {
+    if (event.node.selected) {
+      setRowSelection(true);
+    }
+  }
+
+  const onSelectionChanged = (event) => {
+    const selectedRows = event.api.getSelectedNodes();
+    if (selectedRows.length == 0) {
+      setRowSelection(false);
+    }
+  }
+
   function getRowStyle(props) {
     if (props.node.rowIndex % 2 === 0) {
       // Fila par
@@ -405,11 +422,16 @@ export const ExpenseTickets = () => {
       .then(() => {
         // Llamada a getData() después de que se hayan eliminado todas las facturas
         getPanelData();
+        // Wait one second until the data is reloaded after deleting the row, to display disabled trash icon again.
+        setTimeout(() => {
+          setRowSelection(false);
+        }, 1000); 
       })
       .catch((error) => {
         console.log(error);
       });
   }
+
   const handleAddExpenses = () => {
     navigate('/add-expenses'); // Reemplaza '/ruta-del-formulario' con la ruta de tu formulario
   };
@@ -454,7 +476,7 @@ export const ExpenseTickets = () => {
       <div className='mx-3 mt-4'>
         <button type="button" className="btn btn-primary rounded-pill px-4 opacity-hover-05" onClick={handleAddExpenses}>Añadir gasto</button>
         {/* <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} /> */}
-        <img src={deleteIcon} alt="Delete icon" onClick={handleTrashClick} className='trashIcon' />
+        <img src={rowSelection ? deleteIcon : deleteIconD} alt="Delete icon" onClick={handleTrashClick} className='trashIcon' />
       </div>
       <div className="ag-theme-alpine mx-3 gridStyle">
         <AgGridReact
@@ -469,6 +491,8 @@ export const ExpenseTickets = () => {
           pagination={false}
           onCellValueChanged={onCellValueChanged}
           components={{ agColumnHeader: HeaderColumn }}
+          onRowSelected={onRowSelected}
+          onSelectionChanged={onSelectionChanged}
         />
       </div>
     </>

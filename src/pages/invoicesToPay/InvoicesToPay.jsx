@@ -17,6 +17,7 @@ import Context from '../../contexts/context';
 import { useContext } from 'react';
 //import filterIcon from '../../assets/icons/Filtrar.png';
 import deleteIcon from '../../assets/icons/trash.svg';
+import deleteIconD from '../../assets/icons/trashDeactive.svg';
 import HeaderColumn from '../HeaderColumn';
 import CustomElement from '../customElement.jsx';
 import { getProviders } from "../suppliers/services";
@@ -34,10 +35,11 @@ export const InvoicesToPay = () => {
 
   const gridRef = useRef(); // Optional - for accessing Grid's API
   const [rowData, setRowData] = useState(); // Set rowData to Array of Objects, one Object per Row
-  const [rowProviders, setrowProviders] = useState(); // Set rowData to Array of Objects, one Object per Row
+  const [rowProviders, setRowProviders] = useState(); // Set rowData to Array of Objects, one Object per Row
   const [providersLoaded, setProvidersLoaded] = useState(false);
   const [isError, setIsError] = useState(false);
-
+  const [rowSelection ,setRowSelection] = useState(false);
+ 
   const userDataContext = useContext(Context);
 
   const ragRenderer = (props) => {
@@ -199,6 +201,7 @@ export const InvoicesToPay = () => {
   }, [userDataContext.userData.token]);
 
   let isLoading = false; // Class variable to avoid taking too long to save that we are loading (state is not enough to control this). Also avoids multiple request under 1 second
+
   const getPanelData = async () => {
     if (!userDataContext.userData.token || isLoading) return
     isLoading = true
@@ -210,10 +213,11 @@ export const InvoicesToPay = () => {
   const getDataProviders = async () => {
     try {
       const data = await getProviders(userDataContext.userData.token);
-      setrowProviders(data || []);
+      console.log('data providers', data);
+      setRowProviders(data || []);
       setProvidersLoaded(true);
     } catch (error) {
-      setrowProviders([]);
+      setRowProviders([]);
       console.log('No hay datos para mostrar.');
       setProvidersLoaded(true); // Si ocurre un error, también establece providersLoaded como true para continuar con la configuración de columnDefs
     }
@@ -222,6 +226,7 @@ export const InvoicesToPay = () => {
   const getDataInvoices = async () => {
     try {
       const data = await getInvoices(userDataContext.userData.token);
+      console.log('data invoice', data);
       setRowData(data || []);
     } catch (error) {
       setRowData([]);
@@ -427,8 +432,6 @@ export const InvoicesToPay = () => {
     }
   };
 
-
-
   const onGridReady = useCallback((props) => {
     // whenever grid is remounted again API object has to replaced
     const gridRef = props.api;
@@ -448,9 +451,22 @@ export const InvoicesToPay = () => {
       },
       floatingFilter: true,
       minWidth: 300,
+
     };
   }, []);
 
+  const onRowSelected = (event) => {
+    if (event.node.selected) {
+      setRowSelection(true);
+    }
+  }
+
+  const onSelectionChanged = (event) => {
+    const selectedRows = event.api.getSelectedNodes();
+    if (selectedRows.length == 0) {
+      setRowSelection(false);
+    }
+  }
 
   function getRowStyle(props) {
     if (props.node.rowIndex % 2 === 0) {
@@ -461,11 +477,6 @@ export const InvoicesToPay = () => {
       return { background: '#ffffff' };
     }
   }
-  // function handleFilterClick() {
-  //   console.log('Botón de filtro clickeado');
-
-
-  // }
 
   function handleTrashClick() {
     const selectedNodes = gridRef.current.api.getSelectedNodes();
@@ -480,6 +491,10 @@ export const InvoicesToPay = () => {
       .then(() => {
         // Llamada a getData() después de que se hayan eliminado todas las facturas
         getPanelData();
+        // Wait one second until the data is reloaded after deleting the row, to display disabled trash icon again.
+        setTimeout(() => {
+          setRowSelection(false);
+        }, 1000); 
       })
       .catch((error) => {
         console.log(error);
@@ -530,7 +545,6 @@ export const InvoicesToPay = () => {
 
       {userDataContext.isLoadingRef && (
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-
           <ProgressBar
             now={userDataContext.progress}
             label={userDataContext.progress === 0 ? "0%" : `${userDataContext.progress}%`}
@@ -544,7 +558,7 @@ export const InvoicesToPay = () => {
         <div className='mx-3'>
           <button type="button" className="btn btn-primary rounded-pill px-4 opacity-hover-05" onClick={handleAddInvoice}>Añadir factura</button>
           {/* <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} /> */}
-          <img src={deleteIcon} alt="Delete icon" onClick={handleTrashClick} className='trashIcon' />
+          <img src={rowSelection ? deleteIcon : deleteIconD} alt="Delete icon" onClick={handleTrashClick} className='trashIcon' />
         </div>
         <div className='mx-3'>
           <button type="button" className="btn btn-outline-primary bi bi-download" onClick={handleDownloadFile}></button>
@@ -563,6 +577,8 @@ export const InvoicesToPay = () => {
           pagination={false}
           onCellValueChanged={onCellValueChanged}
           components={{ agColumnHeader: HeaderColumn }}
+          onRowSelected={onRowSelected}
+          onSelectionChanged={onSelectionChanged}
         />
       </div>
     </>
