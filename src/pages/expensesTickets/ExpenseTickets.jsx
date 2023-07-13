@@ -168,7 +168,7 @@ export const ExpenseTickets = () => {
   ]);
 
   useEffect(() => {
-    getPanelData();
+    getPanelData('?year=1');
   }, [userDataContext.userData.token]);
 
   let isLoading = false; // Class variable to avoid taking too long to save that we are loading (state is not enough to control this). Also avoids multiple request under 1 second

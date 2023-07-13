@@ -83,7 +83,7 @@ export const Dashboard = () => {
   }
 
   useEffect(() => {
-    getPanelData();
+    getPanelData('?year=1');
   }, [userDataContext.userData.token]);
 
 
