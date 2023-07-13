@@ -172,18 +172,19 @@ export const ExpenseTickets = () => {
   }, [userDataContext.userData.token]);
 
   let isLoading = false; // Class variable to avoid taking too long to save that we are loading (state is not enough to control this). Also avoids multiple request under 1 second
-  const getPanelData = async () => {
+
+  const getPanelData = async (filters = null) => {
     if (!userDataContext.userData.token || isLoading) return
     isLoading = true
     await getDataProviders();
-    await getDataExpenseTicket();
+    await getDataExpenseTicket(filters);
     setTimeout(() => { isLoading = false }, 1000)
   }
 
   // Get data
-  const getDataExpenseTicket = async () => {
+  const getDataExpenseTicket = async (filters = null) => {
     try {
-      const data = await getExpenseTicket(userDataContext.userData.token);
+      const data = await getExpenseTicket(userDataContext.userData.token, filters);
       setRowData(data || []);
     } catch (error) {
       setRowData([]);
@@ -404,7 +405,7 @@ export const ExpenseTickets = () => {
     }
   }
 
-    useEffect(() => {
+  useEffect(() => {
     const getTrashButton = document.getElementById('trash');
     if (rowSelection) {
       getTrashButton.removeAttribute("disabled", "");
@@ -439,7 +440,7 @@ export const ExpenseTickets = () => {
         // Wait one second until the data is reloaded after deleting the row, to display disabled trash icon again.
         setTimeout(() => {
           setRowSelection(false);
-        }, 1000); 
+        }, 1000);
       })
       .catch((error) => {
         console.log(error);
@@ -474,32 +475,32 @@ export const ExpenseTickets = () => {
       <div>
         <AppBar location={location} />
       </div>
-      <ButtonBar getPanelData={getPanelData}/>
+      <ButtonBar getPanelData={getPanelData} />
       {isError && (
         <Alert severity="error" className="custom-alert" onClose={() => { setIsError(false) }}>
           Hubo un error al subir los ficheros
         </Alert>)}
 
-        {/* yellow card */}
-        <DragAndDropCardComponent 
-          type="ticket"
-          userToken={userDataContext.userData.token} 
-          setIsError={(newValue) => {setIsError(newValue)}}
-          onFinishedUploading={() => {()=>{getPanelData()}}}
-        />
+      {/* yellow card */}
+      <DragAndDropCardComponent
+        type="ticket"
+        userToken={userDataContext.userData.token}
+        setIsError={(newValue) => { setIsError(newValue) }}
+        onFinishedUploading={() => { () => { getPanelData() } }}
+      />
 
       {userDataContext.isLoadingRefEx && (
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
 
-        <ProgressBar
-          now={userDataContext.progressEx}
-          label={userDataContext.progressEx === 0 ? "0%" : `${userDataContext.progressEx}%`}
-          animated={userDataContext.progressEx === 0}
-          variant="custom-color"
-          className="mb-3 custom-width-progess custom-progress"
-        />
-        <img src={close} alt="Close icon" onClick={handleCloseClick} style={{ marginRight: '20px', width: '20px', height: '20px', marginTop: '-2px' }} />
-      </div>)}
+          <ProgressBar
+            now={userDataContext.progressEx}
+            label={userDataContext.progressEx === 0 ? "0%" : `${userDataContext.progressEx}%`}
+            animated={userDataContext.progressEx === 0}
+            variant="custom-color"
+            className="mb-3 custom-width-progess custom-progress"
+          />
+          <img src={close} alt="Close icon" onClick={handleCloseClick} style={{ marginRight: '20px', width: '20px', height: '20px', marginTop: '-2px' }} />
+        </div>)}
       <div className='d-flex mt-4'>
         <div className='mx-3'>
           <button type="button" className="btn btn-primary rounded-pill px-4 opacity-hover-05" onClick={handleAddExpenses}>Añadir factura</button>
@@ -507,7 +508,7 @@ export const ExpenseTickets = () => {
           {/* <img type="button" disabled src={rowSelection ? deleteIcon : deleteIconD} alt="Delete icon" data-bs-toggle="modal" data-bs-target="#mainModal" className='trashIcon' /> */}
         </div>
         <div className='mx-1'>
-          <button type="button" id="trash" disabled={!rowSelection} className={"btn bi mx-3 "+ (rowSelection ? "btn-outline-primary bi-trash3-fill" : "btn-outline-secondary bi-trash3")} data-bs-toggle="modal" data-bs-target="#mainModal"></button>
+          <button type="button" id="trash" disabled={!rowSelection} className={"btn bi mx-3 " + (rowSelection ? "btn-outline-primary bi-trash3-fill" : "btn-outline-secondary bi-trash3")} data-bs-toggle="modal" data-bs-target="#mainModal"></button>
         </div>
         <Modal handleTrashClick={handleTrashClick} />
         <div className='mx-1'>

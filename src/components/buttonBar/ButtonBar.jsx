@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import PropTypes from 'prop-types';
@@ -9,7 +9,7 @@ export default function ButtonBar(props) {
 
     const [selectedRange, setSelectedRange] = useState([new Date(), new Date()]);
     const [showCalendar, setShowCalendar] = useState(false);
-    const [active, setActive] = useState("month-1");
+    const [active, setActive] = useState("year");
 
     const getDataWithFilter = async (filters, event) => {
         await getPanelData(filters);
