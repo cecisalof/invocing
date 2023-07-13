@@ -15,13 +15,14 @@ import CustomElement from '../customElement.jsx';
 import { useNavigate } from 'react-router-dom';
 import close from '../../assets/icons/close.png';
 //import eye from '../../assets/icons/Eye.png';
-import deleteIcon from '../../assets/icons/trash.svg';
-import deleteIconD from '../../assets/icons/trashDeactive.svg';
+// import deleteIcon from '../../assets/icons/trash.svg';
+// import deleteIconD from '../../assets/icons/trashDeactive.svg';
 import { ProgressBar } from 'react-bootstrap';
 import { Alert } from '@mui/material';
 import { DragAndDropCardComponent } from "../../components/dragAndDropCard";
 import PropTypes from 'prop-types';
 import { saveAs } from 'file-saver';
+import Modal from '../../components/modal/Modal';
 
 
 export const ExpenseTickets = () => {
@@ -402,6 +403,15 @@ export const ExpenseTickets = () => {
     }
   }
 
+  useEffect(() => {
+    const getTrashButton = document.getElementById('trash');
+    if (rowSelection) {
+      getTrashButton.removeAttribute("disabled", "");
+    } else {
+      getTrashButton.setAttribute("disabled", "");
+    }
+  }, [rowSelection])
+
   function getRowStyle(props) {
     if (props.node.rowIndex % 2 === 0) {
       // Fila par
@@ -492,11 +502,15 @@ export const ExpenseTickets = () => {
       </div>)}
       <div className='d-flex mt-4'>
         <div className='mx-3'>
-          <button type="button" className="btn btn-primary rounded-pill px-4 opacity-hover-05" onClick={handleAddExpenses}>Añadir gasto</button>
+          <button type="button" className="btn btn-primary rounded-pill px-4 opacity-hover-05" onClick={handleAddExpenses}>Añadir factura</button>
           {/* <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} /> */}
-          <img src={rowSelection ? deleteIcon : deleteIconD} alt="Delete icon" onClick={handleTrashClick} className='trashIcon' />
+          {/* <img type="button" disabled src={rowSelection ? deleteIcon : deleteIconD} alt="Delete icon" data-bs-toggle="modal" data-bs-target="#exampleModal" className='trashIcon' /> */}
         </div>
-        <div className='mx-3'>
+        <div className='mx-1'>
+          <button type="button" id="trash"  disabled className={rowSelection ? "btn btn-outline-primary bi bi-trash3-fill mx-3" : "btn btn-outline-primary bi bi-trash3 mx-3"} data-bs-toggle="modal" data-bs-target="#exampleModal"></button>
+        </div>
+        <Modal handleTrashClick={handleTrashClick} />
+        <div className='mx-1'>
           <button type="button" className="btn btn-outline-primary bi bi-download" onClick={handleDownloadFile}></button>
         </div>
       </div>
