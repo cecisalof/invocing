@@ -2,7 +2,7 @@ import { useLocation } from 'react-router-dom'
 import { AppBar } from "../../components/appBar/AppBar";
 import { AgGridReact } from 'ag-grid-react'; // the AG Grid React Component
 import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
-import { getExpenseTicket, deleteExpenseTicket, patchExpenseTicket, patchProviderExpenseTicket } from "./services";
+import { getExpenseTicket, deleteExpenseTicket, patchExpenseTicket, patchProviderExpenseTicket, expensesTicketsExcel } from "./services";
 import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
 import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
 import './style.css';
@@ -21,6 +21,7 @@ import { ProgressBar } from 'react-bootstrap';
 import { Alert } from '@mui/material';
 import { DragAndDropCardComponent } from "../../components/dragAndDropCard";
 import PropTypes from 'prop-types';
+import { saveAs } from 'file-saver';
 
 
 export const ExpenseTickets = () => {
@@ -442,6 +443,20 @@ export const ExpenseTickets = () => {
     userDataContext.toggleLoadingEx()
   }
 
+  const handleDownloadFile = async () => {
+    console.log('click');
+    try {
+      // getting excel file from backend
+      const response = await expensesTicketsExcel(userDataContext.userData.token);
+      // Reading Blob file
+      if (response.data) {
+        saveAs(response.data, 'gastos.xlsx');
+      }
+    } catch (error) {
+      console.log('Error', error);
+    }
+  }
+
   return (
     <>
       <div>
@@ -473,10 +488,15 @@ export const ExpenseTickets = () => {
         />
         <img src={close} alt="Close icon" onClick={handleCloseClick} style={{ marginRight: '20px', width: '20px', height: '20px', marginTop: '-2px' }} />
       </div>)}
-      <div className='mx-3 mt-4'>
-        <button type="button" className="btn btn-primary rounded-pill px-4 opacity-hover-05" onClick={handleAddExpenses}>Añadir gasto</button>
-        {/* <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} /> */}
-        <img src={rowSelection ? deleteIcon : deleteIconD} alt="Delete icon" onClick={handleTrashClick} className='trashIcon' />
+      <div className='d-flex mt-4'>
+        <div className='mx-3'>
+          <button type="button" className="btn btn-primary rounded-pill px-4 opacity-hover-05" onClick={handleAddExpenses}>Añadir gasto</button>
+          {/* <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} /> */}
+          <img src={rowSelection ? deleteIcon : deleteIconD} alt="Delete icon" onClick={handleTrashClick} className='trashIcon' />
+        </div>
+        <div className='mx-3'>
+          <button type="button" className="btn btn-outline-primary bi bi-download" onClick={handleDownloadFile}></button>
+        </div>
       </div>
       <div className="ag-theme-alpine mx-3 gridStyle">
         <AgGridReact
