@@ -569,10 +569,10 @@ export const InvoicesToPay = () => {
         <div className='mx-3'>
           <button type="button" className="btn btn-primary rounded-pill px-4 opacity-hover-05" onClick={handleAddInvoice}>Añadir factura</button>
           {/* <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} /> */}
-          {/* <img type="button" disabled src={rowSelection ? deleteIcon : deleteIconD} alt="Delete icon" data-bs-toggle="modal" data-bs-target="#exampleModal" className='trashIcon' /> */}
+          {/* <img type="button" disabled src={rowSelection ? deleteIcon : deleteIconD} alt="Delete icon" data-bs-toggle="modal" data-bs-target="#mainModal" className='trashIcon' /> */}
         </div>
         <div className='mx-1'>
-          <button type="button" id="trash" disabled className={rowSelection ? "btn btn-outline-primary bi bi-trash3-fill mx-3" : "btn btn-outline-primary bi bi-trash3 mx-3"} data-bs-toggle="modal" data-bs-target="#exampleModal"></button>
+          <button type="button" id="trash" disabled={!rowSelection} className={"btn bi mx-3 "+ (rowSelection ? "btn-outline-primary bi-trash3-fill" : "btn-outline-secondary bi-trash3")} data-bs-toggle="modal" data-bs-target="#mainModal"></button>
         </div>
         <Modal handleTrashClick={handleTrashClick} />
         <div className='mx-1'>
