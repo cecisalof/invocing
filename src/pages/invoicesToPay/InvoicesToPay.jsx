@@ -480,7 +480,7 @@ export const InvoicesToPay = () => {
     }
   }
 
-  useEffect (()=> {
+  useEffect(() => {
     const getTrashButton = document.getElementById('trash');
     if (rowSelection) {
       getTrashButton.removeAttribute("disabled", "");
@@ -572,7 +572,7 @@ export const InvoicesToPay = () => {
           {/* <img type="button" disabled src={rowSelection ? deleteIcon : deleteIconD} alt="Delete icon" data-bs-toggle="modal" data-bs-target="#exampleModal" className='trashIcon' /> */}
         </div>
         <div className='mx-1'>
-          <button type="button" id="trash"  disabled className={rowSelection ? "btn btn-outline-primary bi bi-trash3-fill mx-3" : "btn btn-outline-primary bi bi-trash3 mx-3"} data-bs-toggle="modal" data-bs-target="#exampleModal"></button>
+          <button type="button" id="trash" disabled className={rowSelection ? "btn btn-outline-primary bi bi-trash3-fill mx-3" : "btn btn-outline-primary bi bi-trash3 mx-3"} data-bs-toggle="modal" data-bs-target="#exampleModal"></button>
         </div>
         <Modal handleTrashClick={handleTrashClick} />
         <div className='mx-1'>
