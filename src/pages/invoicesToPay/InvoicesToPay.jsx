@@ -198,16 +198,16 @@ export const InvoicesToPay = () => {
   ]);
 
   useEffect(() => {
-    getPanelData();
+    getPanelData('?year=1');
   }, [userDataContext.userData.token]);
 
   let isLoading = false; // Class variable to avoid taking too long to save that we are loading (state is not enough to control this). Also avoids multiple request under 1 second
 
-  const getPanelData = async () => {
+  const getPanelData = async (filters = null) => {
     if (!userDataContext.userData.token || isLoading) return
     isLoading = true
     await getDataProviders();
-    await getDataInvoices();
+    await getDataInvoices(filters);
     setTimeout(() => { isLoading = false }, 1000)
   }
 
@@ -223,9 +223,9 @@ export const InvoicesToPay = () => {
     }
   };
 
-  const getDataInvoices = async () => {
+  const getDataInvoices = async (filters = null) => {
     try {
-      const data = await getInvoices(userDataContext.userData.token);
+      const data = await getInvoices(userDataContext.userData.token, filters);
       setRowData(data || []);
     } catch (error) {
       setRowData([]);
@@ -542,7 +542,7 @@ export const InvoicesToPay = () => {
       </div>
 
       <ButtonBar getPanelData={getPanelData} />
-      
+
       {isError && (
         <Alert severity="error" className="custom-alert" onClose={() => { setIsError(false) }}>
           Hubo un error al subir los ficheros
@@ -574,7 +574,7 @@ export const InvoicesToPay = () => {
           {/* <img type="button" disabled src={rowSelection ? deleteIcon : deleteIconD} alt="Delete icon" data-bs-toggle="modal" data-bs-target="#mainModal" className='trashIcon' /> */}
         </div>
         <div className='mx-1'>
-          <button type="button" id="trash" disabled={!rowSelection} className={"btn bi mx-3 "+ (rowSelection ? "btn-outline-primary bi-trash3-fill" : "btn-outline-secondary bi-trash3")} data-bs-toggle="modal" data-bs-target="#mainModal"></button>
+          <button type="button" id="trash" disabled={!rowSelection} className={"btn bi mx-3 " + (rowSelection ? "btn-outline-primary bi-trash3-fill" : "btn-outline-secondary bi-trash3")} data-bs-toggle="modal" data-bs-target="#mainModal"></button>
         </div>
         <Modal handleTrashClick={handleTrashClick} />
         <div className='mx-1'>

@@ -1,13 +1,18 @@
 import axios from 'axios';
 import {
     API_URL, BASE_URL
-  } from '../../axios/config';
+} from '../../axios/config';
 
-export const getExpenseTicket = async (token) => {
+export const getExpenseTicket = async (token, filters = null) => {
+    let url = BASE_URL + API_URL.EXPENSE_TICKET;
+    if (filters) {
+        url = url + filters
+    }
+
     try {
-        const response = await axios.get(BASE_URL + API_URL.EXPENSE_TICKET, {
-            headers: { 
-                'accept': 'application/json', 
+        const response = await axios.get(url, {
+            headers: {
+                'accept': 'application/json',
                 'Authorization': `Token ${token}`
             },
             params: {
@@ -16,16 +21,16 @@ export const getExpenseTicket = async (token) => {
             },
         });
         return response.data;
-      } catch (error) {
+    } catch (error) {
         return console.log('error');
-      }
-  };
+    }
+};
 
 export const deleteExpenseTicket = async (uuid, token) => {
     try {
-        const response = await axios.delete( BASE_URL + API_URL.EXPENSE_TICKET + uuid, {
-            headers: { 
-                'accept': 'application/json', 
+        const response = await axios.delete(BASE_URL + API_URL.EXPENSE_TICKET + uuid, {
+            headers: {
+                'accept': 'application/json',
                 'Authorization': `Token ${token}`
             },
             params: {
@@ -34,17 +39,17 @@ export const deleteExpenseTicket = async (uuid, token) => {
             },
         });
         return response.data;
-      } catch (error) {
+    } catch (error) {
         return console.log(error);
-      }
-  };
+    }
+};
 
 
-  export const patchExpenseTicket = async (uuid, data, token) => {
+export const patchExpenseTicket = async (uuid, data, token) => {
     try {
-        const response = await axios.patch( BASE_URL + API_URL.EXPENSE_TICKET + uuid, data, {
-            headers: { 
-                'accept': 'application/json', 
+        const response = await axios.patch(BASE_URL + API_URL.EXPENSE_TICKET + uuid, data, {
+            headers: {
+                'accept': 'application/json',
                 'Authorization': `Token ${token}`
             },
             params: {
@@ -53,16 +58,16 @@ export const deleteExpenseTicket = async (uuid, token) => {
             },
         });
         return response.data;
-      } catch (error) {
+    } catch (error) {
         return console.log(error);
-      }
-  };
+    }
+};
 
-  export const patchProviderExpenseTicket = async (uuid, data, token) => {
+export const patchProviderExpenseTicket = async (uuid, data, token) => {
     try {
-        const response = await axios.patch( BASE_URL + API_URL.EXPENSE_TICKET + uuid, data, {
-            headers: { 
-                'accept': 'application/json', 
+        const response = await axios.patch(BASE_URL + API_URL.EXPENSE_TICKET + uuid, data, {
+            headers: {
+                'accept': 'application/json',
                 'Authorization': `Token ${token}`
             },
             params: {
@@ -71,16 +76,16 @@ export const deleteExpenseTicket = async (uuid, token) => {
             },
         });
         return response.data;
-      } catch (error) {
+    } catch (error) {
         return console.log(error);
-      }
-  };
+    }
+};
 
-  export const postExpenseTicket = async (token, data) => {
+export const postExpenseTicket = async (token, data) => {
     try {
         const response = await axios.post(BASE_URL + API_URL.EXPENSE_TICKET, data, {
-            headers: { 
-                'accept': 'application/json', 
+            headers: {
+                'accept': 'application/json',
                 'Authorization': `Token ${token}`
             },
             params: {
@@ -89,21 +94,21 @@ export const deleteExpenseTicket = async (uuid, token) => {
             },
         });
         return response;
-      } catch (error) {
+    } catch (error) {
         return console.log('error');
-      }
-  };
+    }
+};
 
-  export const postExpenseTicketAutomatic = async (token, fileList) => {
+export const postExpenseTicketAutomatic = async (token, fileList) => {
     try {
         const formData = new FormData();
-        
+
         for (let i = 0; i < fileList.length; i++) {
             const file = fileList[i];
             formData.append('files', file);
         }
         const response = await axios.post(BASE_URL + API_URL.EXPENSE_TICKET_AUTOMATIC, formData, {
-            headers: { 
+            headers: {
                 'Authorization': `Token ${token}`,
                 'Content-Type': 'multipart/form-data',
             },
@@ -112,19 +117,20 @@ export const deleteExpenseTicket = async (uuid, token) => {
                 offset: 0
             },
         })
-        
-        return response;
-      } catch (error) {console.log(error);
-        return console.log('error');
-        
-      }
-  };
 
-  export const getSchenduleStatus = async (token, ids) => {
+        return response;
+    } catch (error) {
+        console.log(error);
+        return console.log('error');
+
+    }
+};
+
+export const getSchenduleStatus = async (token, ids) => {
     try {
-        const response = await axios.get(BASE_URL + API_URL.SCHENDULE_STATUS + '?'+ ids.map(id => `id=${id}`).join('&'), {
-            headers: { 
-                'accept': 'application/json', 
+        const response = await axios.get(BASE_URL + API_URL.SCHENDULE_STATUS + '?' + ids.map(id => `id=${id}`).join('&'), {
+            headers: {
+                'accept': 'application/json',
                 'Authorization': `Token ${token}`
             },
             params: {
@@ -133,16 +139,16 @@ export const deleteExpenseTicket = async (uuid, token) => {
             },
         });
         return response.data;
-      } catch (error) {
+    } catch (error) {
         return console.log('error');
-      }
-  };
+    }
+};
 
-  export const expensesTicketsExcel = async (token) => {
+export const expensesTicketsExcel = async (token) => {
     try {
         const response = await axios.get(BASE_URL + API_URL.EXPENSES_TICKETS_EXCEL, {
-            headers: { 
-                'accept': 'application/json', 
+            headers: {
+                'accept': 'application/json',
                 'Authorization': `Token ${token}`,
             },
             params: {
@@ -152,7 +158,7 @@ export const deleteExpenseTicket = async (uuid, token) => {
             responseType: 'blob'
         });
         return response;
-      } catch (error) {
+    } catch (error) {
         return console.log('error');
-      }
-  };
+    }
+};
