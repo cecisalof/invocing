@@ -320,7 +320,9 @@ export const ExpenseTickets = () => {
         {
           field: 'file',
           headerName: 'Descargar',
-          cellRenderer: CustomElement
+          cellRenderer: CustomElement,
+          sortable: false,
+          filter: false
         },
       ];
 

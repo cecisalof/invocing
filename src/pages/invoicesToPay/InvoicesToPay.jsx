@@ -192,7 +192,7 @@ export const InvoicesToPay = () => {
     {
       field: 'file',
       headerName: 'Descargar',
-      cellRenderer: CustomElement
+      cellRenderer: CustomElement,
     },
   ]);
 
@@ -376,7 +376,9 @@ export const InvoicesToPay = () => {
         {
           field: 'file',
           headerName: 'Descargar',
-          cellRenderer: CustomElement
+          cellRenderer: CustomElement,
+          sortable: false,
+          filter: false
         },
       ];
 

@@ -393,6 +393,10 @@ body {
   height: 28px;
 }
 
+.opacity-hover-08:hover, .opacity-08{
+  opacity: 0.8;
+}
+
 .opacity-hover-05:hover, .opacity-05{
   opacity: 0.5;
 }

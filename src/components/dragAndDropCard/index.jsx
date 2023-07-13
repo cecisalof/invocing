@@ -82,7 +82,7 @@ export const DragAndDropCardComponent = ({type, userToken, setIsError, onFinishe
 
   return (
     <div
-      className={"file-drop-zone w-100 m-0 p-0 d-flex flex-column justify-content-center align-items-center file-drop-zone-" + type}
+      className={"file-drop-zone opacity-hover-08 w-100 m-0 p-0 d-flex flex-column justify-content-center align-items-center file-drop-zone-" + type}
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
@@ -105,7 +105,10 @@ export const DragAndDropCardComponent = ({type, userToken, setIsError, onFinishe
         {isFileUploaded && (
           <div className="upload-indicator">
             <FaCheckCircle className="upload-icon" />
-            <span className="">¡Archivos subidos!</span>
+            <span className="">Archivos subidos</span>
+            <span className="text-drop text-success color-drop small"><br/>
+              Tu archivo se va a procesar y aparecerá reflejado en unos segundos
+            </span>
           </div>
         )}
         {!isFileUploading && !isFileUploaded && (
