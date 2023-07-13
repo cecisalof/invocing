@@ -11,11 +11,10 @@ import Context from '../../contexts/context';
 import { useContext } from 'react';
 import cashIconBlue from '../../assets/icons/Cash.png';
 import dragDrop from '../../assets/icons/drag-and-drop.png';
-
 //import sellIcon from '../../assets/icons/sellout.png';
-import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { Alert } from '@mui/material';
+import ButtonBar from '../../components/buttonBar/ButtonBar';
 //import { getIncome } from "./../income/services";
 //import { AgChartsReact } from 'ag-charts-react';
 
@@ -28,11 +27,7 @@ export const Dashboard = () => {
   //const [invoiceEmitCount, setInvoiceEmitCount] = useState({});
   //const [invoiceEmitStates, setInvoiceEmitStates] = useState({});
   const [totals, setTotals] = useState({});
-  const [showCalendar, setShowCalendar] = useState(false);
-  const [selectedRange, setSelectedRange] = useState([new Date(), new Date()]);
   const [isError, setIsError] = useState(false);
-  const [active, setActive] = useState("month-1");
-
 
   const userDataContext = useContext(Context);
 
@@ -77,6 +72,7 @@ export const Dashboard = () => {
   };
 
   let isLoading = false; // Class variable to avoid taking too long to save that we are loading (state is not enough to control this). Also avoids multiple request under 1 second
+  
   const getPanelData = async (filters = null) => {
     if (!userDataContext.userData.token || isLoading) return
     isLoading = true
@@ -87,13 +83,8 @@ export const Dashboard = () => {
   }
 
   useEffect(() => {
-    getPanelData();
-  }, [userDataContext.userData.token]);  
-  
-   const handleButtonClick = () => {
-    setSelectedRange([new Date(), new Date()]);
-    setShowCalendar(!showCalendar);
-  };
+    getPanelData('?year=1');
+  }, [userDataContext.userData.token]);
 
 
   // const chartData = (income) => {
@@ -115,52 +106,6 @@ export const Dashboard = () => {
   //   return Object.values(groupedData);
   // };
 
-
-  const handleSelect = (date) => {
-    if (selectedRange.length === 2) {
-      setSelectedRange([date, date]);
-      selectRange([date, date])
-    } else if (selectedRange.length === 1) {
-      const [startDate] = selectedRange;
-      if (date < startDate) {
-        setSelectedRange([date, startDate]);
-      } else {
-        setSelectedRange([startDate, date]);
-
-
-      }
-    }
-  };
-
-  const getDataWithFilter = async (filters, event) => {
-    await getPanelData(filters);
-    setActive(event.target.id);
-  };
-
-  const selectRange = async (dateParam) => {
-
-    //if (selectedRange || selectedRange.length === 2) {
-    // Verificar si selectedRange es nulo o no tiene dos fechas
-    const startDate = dateParam[0][0]
-    const endDate = dateParam[0][1]
-    const startYear = startDate.getFullYear(); // Obtener el año (ejemplo: 2023)
-    const startMonth = ('0' + (startDate.getMonth() + 1)).slice(-2); // Obtener el mes, agregando 1 al índice base 0 y asegurándose de tener dos dígitos (ejemplo: 06)
-    const startDay = ('0' + startDate.getDate()).slice(-2); // Obtener el día y asegurarse de tener dos dígitos (ejemplo: 05)
-    const formattedStartDate = `${startYear}-${startMonth}-${startDay}`; // Formatear la fecha en formato yyyy-mm-dd
-
-    const endYear = endDate.getFullYear(); // Obtener el año (ejemplo: 2023)
-    const endMonth = ('0' + (endDate.getMonth() + 1)).slice(-2); // Obtener el mes, agregando 1 al índice base 0 y asegurándose de tener dos dígitos (ejemplo: 06)
-    const endDay = ('0' + endDate.getDate()).slice(-2); // Obtener el día y asegurarse de tener dos dígitos (ejemplo: 05)
-    const formattedEndDate = `${endYear}-${endMonth}-${endDay}`; // Formatear la fecha en formato yyyy-mm-dd
-
-    const filters = "?start_date=" + formattedStartDate + "&end_date=" + formattedEndDate;
-    await getPanelData(filters);
-
-    setSelectedRange([new Date(), new Date()]);
-
-    //}
-
-  };
 
   // const options = {
   //   autoSize: true,
@@ -222,39 +167,8 @@ export const Dashboard = () => {
         <div>
           <AppBar location={location} />
         </div>
-        <div className='mx-2 my-3'>
-          <button className='filters' onClick={handleButtonClick}>
-            Fechas
-          </button>
-          <button className={active === "year" ? "active-filters" : "filters"} id={"year"} onClick={(event) => { getDataWithFilter("?year=1", event) }}>
-            Anual
-          </button>
-          <button className={active === "month-1" ? "active-filters" : "filters"} id={"month-1"} onClick={(event) => { getDataWithFilter("?month=1", event) }}>
-            Último mes
-          </button>
-          <button className={active === "quarter-1" ? "active-filters" : "filters"} id={"quarter-1"} onClick={(event) => { getDataWithFilter("?quarter=1", event) }}>
-            1erTrimestre
-          </button>
-          <button className={active === "quarter-2" ? "active-filters" : "filters"} id={"quarter-2"} onClick={(event) => { getDataWithFilter("?quarter=2", event) }}>
-            2ºTrimestre
-          </button>
-          <button className={active === "quarter-3" ? "active-filters" : "filters"} id={"quarter-3"} onClick={(event) => { getDataWithFilter("?quarter=3", event) }}>
-            3erTrimestre
-          </button>
-          <button className={active === "quarter-4" ? "active-filters" : "filters"} id={"quarter-4"} onClick={(event) => { getDataWithFilter("?quarter=4", event) }}>
-            4ºTrimestre
-          </button>
-          {showCalendar && (
-
-            <div className='calendar-overlay'>
-              <Calendar
-                selectRange
-                value={selectedRange}
-                onChange={handleSelect} />
-
-            </div>
-          )}
-        </div>
+        <ButtonBar 
+          getPanelData={getPanelData} />
         {isError && (
           <Alert severity="error" className="custom-alert" onClose={() => { setIsError(false) }}>
             Hubo un error al subir los ficheros
@@ -262,20 +176,20 @@ export const Dashboard = () => {
         <div className='row'>
           <div className="col-12 col-md-6">
             {/* Blue card */}
-            <DragAndDropCardComponent 
+            <DragAndDropCardComponent
               type="invoice"
-              userToken={userDataContext.userData.token} 
-              setIsError={(newValue) => {setIsError(newValue)}}
-              onFinishedUploading={() => {()=>{getPanelData()}}}
+              userToken={userDataContext.userData.token}
+              setIsError={(newValue) => { setIsError(newValue) }}
+              onFinishedUploading={() => { () => { getPanelData() } }}
             />
           </div>
           <div className="col-12 col-md-6 mt-3 mt-md-0">
             {/* Yellow card */}
-            <DragAndDropCardComponent 
+            <DragAndDropCardComponent
               type="ticket"
-              userToken={userDataContext.userData.token} 
-              setIsError={(newValue) => {setIsError(newValue)}}
-              onFinishedUploading={() => {()=>{getPanelData()}}}
+              userToken={userDataContext.userData.token}
+              setIsError={(newValue) => { setIsError(newValue) }}
+              onFinishedUploading={() => { () => { getPanelData() } }}
             />
           </div>
         </div>

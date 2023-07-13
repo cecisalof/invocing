@@ -11,10 +11,11 @@ import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
 import '../general-style.css'
 import { useNavigate } from 'react-router-dom';
 //import filterIcon from '../../assets/icons/Filtrar.png';
-import deleteIcon from '../../assets/icons/trash.svg';
-import deleteIconD from '../../assets/icons/trashDeactive.svg';
+// import deleteIcon from '../../assets/icons/trash.svg';
+// import deleteIconD from '../../assets/icons/trashDeactive.svg';
 import PropTypes from 'prop-types';
 import HeaderColumn from '../HeaderColumn';
+import Modal from '../../components/modal/Modal';
 
 export const Suppliers = () => {
   const location = useLocation();
@@ -23,7 +24,7 @@ export const Suppliers = () => {
 
   const gridRef = useRef(); // Optional - for accessing Grid's API
   const [rowData, setRowData] = useState(); // Set rowData to Array of Objects, one Object per Row
-  const [rowSelection ,setRowSelection] = useState(false);
+  const [rowSelection, setRowSelection] = useState(false);
 
   const userDataContext = useContext(Context);
 
@@ -126,6 +127,15 @@ export const Suppliers = () => {
     }
   }
 
+  useEffect(() => {
+    const getTrashButton = document.getElementById('trash');
+    if (rowSelection) {
+      getTrashButton.removeAttribute("disabled", "");
+    } else {
+      getTrashButton.setAttribute("disabled", "");
+    }
+  }, [rowSelection])
+
   function handleTrashClick() {
     const selectedNodes = gridRef.current.api.getSelectedNodes();
     const selectedData = selectedNodes.map((node) => node.data);
@@ -175,10 +185,16 @@ export const Suppliers = () => {
       <div>
         <AppBar location={location} />
       </div>
-      <div className='mx-1'>
-        <button type="button" className="btn btn-primary rounded-pill px-4 mx-2 addBtn opacity-hover-05" onClick={handleAddProvider}>Añadir proveedor</button>
-        {/* <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} /> */}
-        <img src={rowSelection ? deleteIcon : deleteIconD} alt="Delete icon" onClick={handleTrashClick} className='trashIcon' />
+      <div className='d-flex mt-4'>
+        <div className='mx-3'>
+          <button type="button" className="btn btn-primary rounded-pill px-4 opacity-hover-05" onClick={handleAddProvider}>Añadir factura</button>
+          {/* <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} /> */}
+          {/* <img type="button" disabled src={rowSelection ? deleteIcon : deleteIconD} alt="Delete icon" data-bs-toggle="modal" data-bs-target="#mainModal" className='trashIcon' /> */}
+        </div>
+        <div className='mx-1'>
+          <button type="button" id="trash"  disabled className={rowSelection ? "btn btn-outline-primary bi bi-trash3-fill mx-3" : "btn btn-outline-primary bi bi-trash3 mx-3"} data-bs-toggle="modal" data-bs-target="#mainModal"></button>
+        </div>
+        <Modal handleTrashClick={handleTrashClick} />
       </div>
       <div className="ag-theme-alpine mx-3 gridStyle">
         <AgGridReact

@@ -2,7 +2,7 @@ import { useLocation } from 'react-router-dom'
 import { AppBar } from "../../components/appBar/AppBar";
 import { AgGridReact } from 'ag-grid-react'; // the AG Grid React Component
 import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
-import { getExpenseTicket, deleteExpenseTicket, patchExpenseTicket, patchProviderExpenseTicket } from "./services";
+import { getExpenseTicket, deleteExpenseTicket, patchExpenseTicket, patchProviderExpenseTicket, expensesTicketsExcel } from "./services";
 import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
 import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
 import './style.css';
@@ -15,12 +15,15 @@ import CustomElement from '../customElement.jsx';
 import { useNavigate } from 'react-router-dom';
 import close from '../../assets/icons/close.png';
 //import eye from '../../assets/icons/Eye.png';
-import deleteIcon from '../../assets/icons/trash.svg';
-import deleteIconD from '../../assets/icons/trashDeactive.svg';
+// import deleteIcon from '../../assets/icons/trash.svg';
+// import deleteIconD from '../../assets/icons/trashDeactive.svg';
 import { ProgressBar } from 'react-bootstrap';
 import { Alert } from '@mui/material';
 import { DragAndDropCardComponent } from "../../components/dragAndDropCard";
 import PropTypes from 'prop-types';
+import { saveAs } from 'file-saver';
+import Modal from '../../components/modal/Modal';
+import ButtonBar from '../../components/buttonBar/ButtonBar';
 
 
 export const ExpenseTickets = () => {
@@ -82,7 +85,7 @@ export const ExpenseTickets = () => {
     {
       field: 'date',
       headerName: "Fecha",
-      sort: 'asc'
+      sort: 'desc'
     },
     { field: 'concept', headerName: 'Concepto' },
     {
@@ -165,22 +168,23 @@ export const ExpenseTickets = () => {
   ]);
 
   useEffect(() => {
-    getPanelData();
+    getPanelData('?year=1');
   }, [userDataContext.userData.token]);
 
   let isLoading = false; // Class variable to avoid taking too long to save that we are loading (state is not enough to control this). Also avoids multiple request under 1 second
-  const getPanelData = async () => {
+
+  const getPanelData = async (filters = null) => {
     if (!userDataContext.userData.token || isLoading) return
     isLoading = true
     await getDataProviders();
-    await getDataExpenseTicket();
+    await getDataExpenseTicket(filters);
     setTimeout(() => { isLoading = false }, 1000)
   }
 
   // Get data
-  const getDataExpenseTicket = async () => {
+  const getDataExpenseTicket = async (filters = null) => {
     try {
-      const data = await getExpenseTicket(userDataContext.userData.token);
+      const data = await getExpenseTicket(userDataContext.userData.token, filters);
       setRowData(data || []);
     } catch (error) {
       setRowData([]);
@@ -319,7 +323,9 @@ export const ExpenseTickets = () => {
         {
           field: 'file',
           headerName: 'Descargar',
-          cellRenderer: CustomElement
+          cellRenderer: CustomElement,
+          sortable: false,
+          filter: false
         },
       ];
 
@@ -350,12 +356,12 @@ export const ExpenseTickets = () => {
         }
       });
       data = { "uuid": updateSender };
-      patchProviderExpenseTicket(event.data.uuid, data).then(() => {
+      patchProviderExpenseTicket(event.data.uuid, data, userDataContext.userData.token).then(() => {
         // Espera a que se complete la solicitud PATCH y luego carga los datos
         getPanelData();
       });
     } else {
-      patchExpenseTicket(event.data.uuid, data).then(() => {
+      patchExpenseTicket(event.data.uuid, data, userDataContext.userData.token).then(() => {
         // Espera a que se complete la solicitud PATCH y luego carga los datos
         getPanelData();
       });
@@ -399,6 +405,15 @@ export const ExpenseTickets = () => {
     }
   }
 
+  useEffect(() => {
+    const getTrashButton = document.getElementById('trash');
+    if (rowSelection) {
+      getTrashButton.removeAttribute("disabled", "");
+    } else {
+      getTrashButton.setAttribute("disabled", "");
+    }
+  }, [rowSelection])
+
   function getRowStyle(props) {
     if (props.node.rowIndex % 2 === 0) {
       // Fila par
@@ -425,7 +440,7 @@ export const ExpenseTickets = () => {
         // Wait one second until the data is reloaded after deleting the row, to display disabled trash icon again.
         setTimeout(() => {
           setRowSelection(false);
-        }, 1000); 
+        }, 1000);
       })
       .catch((error) => {
         console.log(error);
@@ -442,41 +457,63 @@ export const ExpenseTickets = () => {
     userDataContext.toggleLoadingEx()
   }
 
+  const handleDownloadFile = async () => {
+    try {
+      // getting excel file from backend
+      const response = await expensesTicketsExcel(userDataContext.userData.token);
+      // Reading Blob file
+      if (response.data) {
+        saveAs(response.data, 'gastos.xlsx');
+      }
+    } catch (error) {
+      console.log('Error', error);
+    }
+  }
+
   return (
     <>
       <div>
         <AppBar location={location} />
       </div>
-
+      <ButtonBar getPanelData={getPanelData} />
       {isError && (
         <Alert severity="error" className="custom-alert" onClose={() => { setIsError(false) }}>
           Hubo un error al subir los ficheros
         </Alert>)}
 
-        {/* yellow card */}
-        <DragAndDropCardComponent 
-          type="ticket"
-          userToken={userDataContext.userData.token} 
-          setIsError={(newValue) => {setIsError(newValue)}}
-          onFinishedUploading={() => {()=>{getPanelData()}}}
-        />
+      {/* yellow card */}
+      <DragAndDropCardComponent
+        type="ticket"
+        userToken={userDataContext.userData.token}
+        setIsError={(newValue) => { setIsError(newValue) }}
+        onFinishedUploading={() => { () => { getPanelData() } }}
+      />
 
       {userDataContext.isLoadingRefEx && (
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
 
-        <ProgressBar
-          now={userDataContext.progressEx}
-          label={userDataContext.progressEx === 0 ? "0%" : `${userDataContext.progressEx}%`}
-          animated={userDataContext.progressEx === 0}
-          variant="custom-color"
-          className="mb-3 custom-width-progess custom-progress"
-        />
-        <img src={close} alt="Close icon" onClick={handleCloseClick} style={{ marginRight: '20px', width: '20px', height: '20px', marginTop: '-2px' }} />
-      </div>)}
-      <div className='mx-3 mt-4'>
-        <button type="button" className="btn btn-primary rounded-pill px-4 opacity-hover-05" onClick={handleAddExpenses}>Añadir gasto</button>
-        {/* <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} /> */}
-        <img src={rowSelection ? deleteIcon : deleteIconD} alt="Delete icon" onClick={handleTrashClick} className='trashIcon' />
+          <ProgressBar
+            now={userDataContext.progressEx}
+            label={userDataContext.progressEx === 0 ? "0%" : `${userDataContext.progressEx}%`}
+            animated={userDataContext.progressEx === 0}
+            variant="custom-color"
+            className="mb-3 custom-width-progess custom-progress"
+          />
+          <img src={close} alt="Close icon" onClick={handleCloseClick} style={{ marginRight: '20px', width: '20px', height: '20px', marginTop: '-2px' }} />
+        </div>)}
+      <div className='d-flex mt-4'>
+        <div className='mx-3'>
+          <button type="button" className="btn btn-primary rounded-pill px-4 opacity-hover-05" onClick={handleAddExpenses}>Añadir factura</button>
+          {/* <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} /> */}
+          {/* <img type="button" disabled src={rowSelection ? deleteIcon : deleteIconD} alt="Delete icon" data-bs-toggle="modal" data-bs-target="#mainModal" className='trashIcon' /> */}
+        </div>
+        <div className='mx-1'>
+          <button type="button" id="trash" disabled={!rowSelection} className={"btn bi mx-3 " + (rowSelection ? "btn-outline-primary bi-trash3-fill" : "btn-outline-secondary bi-trash3")} data-bs-toggle="modal" data-bs-target="#mainModal"></button>
+        </div>
+        <Modal handleTrashClick={handleTrashClick} />
+        <div className='mx-1'>
+          <button type="button" className="btn btn-outline-primary bi bi-download" onClick={handleDownloadFile}></button>
+        </div>
       </div>
       <div className="ag-theme-alpine mx-3 gridStyle">
         <AgGridReact

@@ -4,8 +4,8 @@ import { AgGridReact } from 'ag-grid-react'; // the AG Grid React Component
 import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import {
   getInvoices,
-  deleteInvoice,
   patchInvoice,
+  deleteInvoice,
   patchProviderInvoice,
   invoiceToPayExcel
 } from "./services";
@@ -16,8 +16,8 @@ import '../general-style.css'
 import Context from '../../contexts/context';
 import { useContext } from 'react';
 //import filterIcon from '../../assets/icons/Filtrar.png';
-import deleteIcon from '../../assets/icons/trash.svg';
-import deleteIconD from '../../assets/icons/trashDeactive.svg';
+// import deleteIcon from '../../assets/icons/trash.svg';
+// import deleteIconD from '../../assets/icons/trashDeactive.svg';
 import HeaderColumn from '../HeaderColumn';
 import CustomElement from '../customElement.jsx';
 import { getProviders } from "../suppliers/services";
@@ -28,6 +28,8 @@ import PropTypes from 'prop-types';
 import { Alert } from '@mui/material';
 import { DragAndDropCardComponent } from "../../components/dragAndDropCard";
 import { saveAs } from 'file-saver';
+import Modal from '../../components/modal/Modal';
+import ButtonBar from '../../components/buttonBar/ButtonBar';
 
 export const InvoicesToPay = () => {
   const location = useLocation();
@@ -38,8 +40,7 @@ export const InvoicesToPay = () => {
   const [rowProviders, setRowProviders] = useState(); // Set rowData to Array of Objects, one Object per Row
   const [providersLoaded, setProvidersLoaded] = useState(false);
   const [isError, setIsError] = useState(false);
-  const [rowSelection ,setRowSelection] = useState(false);
- 
+  const [rowSelection, setRowSelection] = useState(false);
   const userDataContext = useContext(Context);
 
   const ragRenderer = (props) => {
@@ -111,7 +112,7 @@ export const InvoicesToPay = () => {
     {
       field: 'date',
       headerName: "Fecha",
-      sort: 'asc'
+      sort: 'desc'
     },
 
     { field: 'concept', headerName: 'Concepto' },
@@ -192,28 +193,27 @@ export const InvoicesToPay = () => {
     {
       field: 'file',
       headerName: 'Descargar',
-      cellRenderer: CustomElement
+      cellRenderer: CustomElement,
     },
   ]);
 
   useEffect(() => {
-    getPanelData();
+    getPanelData('?year=1');
   }, [userDataContext.userData.token]);
 
   let isLoading = false; // Class variable to avoid taking too long to save that we are loading (state is not enough to control this). Also avoids multiple request under 1 second
 
-  const getPanelData = async () => {
+  const getPanelData = async (filters = null) => {
     if (!userDataContext.userData.token || isLoading) return
     isLoading = true
     await getDataProviders();
-    await getDataInvoices();
+    await getDataInvoices(filters);
     setTimeout(() => { isLoading = false }, 1000)
   }
 
   const getDataProviders = async () => {
     try {
       const data = await getProviders(userDataContext.userData.token);
-      console.log('data providers', data);
       setRowProviders(data || []);
       setProvidersLoaded(true);
     } catch (error) {
@@ -223,10 +223,9 @@ export const InvoicesToPay = () => {
     }
   };
 
-  const getDataInvoices = async () => {
+  const getDataInvoices = async (filters = null) => {
     try {
-      const data = await getInvoices(userDataContext.userData.token);
-      console.log('data invoice', data);
+      const data = await getInvoices(userDataContext.userData.token, filters);
       setRowData(data || []);
     } catch (error) {
       setRowData([]);
@@ -376,7 +375,9 @@ export const InvoicesToPay = () => {
         {
           field: 'file',
           headerName: 'Descargar',
-          cellRenderer: CustomElement
+          cellRenderer: CustomElement,
+          sortable: false,
+          filter: false
         },
       ];
 
@@ -420,12 +421,12 @@ export const InvoicesToPay = () => {
         }
       });
       data = { "uuid": updateSender };
-      patchProviderInvoice(event.data.uuid, data).then(() => {
+      patchProviderInvoice(event.data.uuid, data, userDataContext.userData.token).then(() => {
         // Espera a que se complete la solicitud PATCH y luego carga los datos
         getPanelData();
       });
     } else {
-      patchInvoice(event.data.uuid, data).then(() => {
+      patchInvoice(event.data.uuid, data, userDataContext.userData.token).then(() => {
         // Espera a que se complete la solicitud PATCH y luego carga los datos
         getPanelData();
       });
@@ -478,6 +479,15 @@ export const InvoicesToPay = () => {
     }
   }
 
+  useEffect(() => {
+    const getTrashButton = document.getElementById('trash');
+    if (rowSelection) {
+      getTrashButton.removeAttribute("disabled", "");
+    } else {
+      getTrashButton.setAttribute("disabled", "");
+    }
+  }, [rowSelection])
+
   function handleTrashClick() {
     const selectedNodes = gridRef.current.api.getSelectedNodes();
     const selectedData = selectedNodes.map((node) => node.data);
@@ -494,7 +504,7 @@ export const InvoicesToPay = () => {
         // Wait one second until the data is reloaded after deleting the row, to display disabled trash icon again.
         setTimeout(() => {
           setRowSelection(false);
-        }, 1000); 
+        }, 1000);
       })
       .catch((error) => {
         console.log(error);
@@ -530,18 +540,21 @@ export const InvoicesToPay = () => {
       <div>
         <AppBar location={location} />
       </div>
+
+      <ButtonBar getPanelData={getPanelData} />
+
       {isError && (
         <Alert severity="error" className="custom-alert" onClose={() => { setIsError(false) }}>
           Hubo un error al subir los ficheros
         </Alert>)}
 
-        {/* Blue card */}
-        <DragAndDropCardComponent 
-          type="invoice"
-          userToken={userDataContext.userData.token} 
-          setIsError={(newValue) => {setIsError(newValue)}}
-          onFinishedUploading={() => {()=>{getPanelData()}}}
-        />
+      {/* Blue card */}
+      <DragAndDropCardComponent
+        type="invoice"
+        userToken={userDataContext.userData.token}
+        setIsError={(newValue) => { setIsError(newValue) }}
+        onFinishedUploading={() => { () => { getPanelData() } }}
+      />
 
       {userDataContext.isLoadingRef && (
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -558,13 +571,17 @@ export const InvoicesToPay = () => {
         <div className='mx-3'>
           <button type="button" className="btn btn-primary rounded-pill px-4 opacity-hover-05" onClick={handleAddInvoice}>Añadir factura</button>
           {/* <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} /> */}
-          <img src={rowSelection ? deleteIcon : deleteIconD} alt="Delete icon" onClick={handleTrashClick} className='trashIcon' />
+          {/* <img type="button" disabled src={rowSelection ? deleteIcon : deleteIconD} alt="Delete icon" data-bs-toggle="modal" data-bs-target="#mainModal" className='trashIcon' /> */}
         </div>
-        <div className='mx-3'>
+        <div className='mx-1'>
+          <button type="button" id="trash" disabled={!rowSelection} className={"btn bi mx-3 " + (rowSelection ? "btn-outline-primary bi-trash3-fill" : "btn-outline-secondary bi-trash3")} data-bs-toggle="modal" data-bs-target="#mainModal"></button>
+        </div>
+        <Modal handleTrashClick={handleTrashClick} />
+        <div className='mx-1'>
           <button type="button" className="btn btn-outline-primary bi bi-download" onClick={handleDownloadFile}></button>
         </div>
       </div>
-      <div className="ag-theme-alpine mx-3 gridStyle">
+      <div className="ag-theme-alpine m-3 gridStyle">
         <AgGridReact
           onGridReady={onGridReady}
           ref={gridRef} // Ref for accessing Grid's API
