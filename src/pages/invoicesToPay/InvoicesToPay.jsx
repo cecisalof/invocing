@@ -29,6 +29,7 @@ import { Alert } from '@mui/material';
 import { DragAndDropCardComponent } from "../../components/dragAndDropCard";
 import { saveAs } from 'file-saver';
 import Modal from '../../components/modal/Modal';
+import ButtonBar from '../../components/buttonBar/ButtonBar';
 
 export const InvoicesToPay = () => {
   const location = useLocation();
@@ -213,7 +214,6 @@ export const InvoicesToPay = () => {
   const getDataProviders = async () => {
     try {
       const data = await getProviders(userDataContext.userData.token);
-      console.log('data providers', data);
       setRowProviders(data || []);
       setProvidersLoaded(true);
     } catch (error) {
@@ -226,7 +226,6 @@ export const InvoicesToPay = () => {
   const getDataInvoices = async () => {
     try {
       const data = await getInvoices(userDataContext.userData.token);
-      console.log('data invoice', data);
       setRowData(data || []);
     } catch (error) {
       setRowData([]);
@@ -541,6 +540,9 @@ export const InvoicesToPay = () => {
       <div>
         <AppBar location={location} />
       </div>
+
+      <ButtonBar getPanelData={getPanelData} />
+      
       {isError && (
         <Alert severity="error" className="custom-alert" onClose={() => { setIsError(false) }}>
           Hubo un error al subir los ficheros

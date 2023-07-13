@@ -23,6 +23,7 @@ import { DragAndDropCardComponent } from "../../components/dragAndDropCard";
 import PropTypes from 'prop-types';
 import { saveAs } from 'file-saver';
 import Modal from '../../components/modal/Modal';
+import ButtonBar from '../../components/buttonBar/ButtonBar';
 
 
 export const ExpenseTickets = () => {
@@ -403,7 +404,7 @@ export const ExpenseTickets = () => {
     }
   }
 
-  useEffect(() => {
+    useEffect(() => {
     const getTrashButton = document.getElementById('trash');
     if (rowSelection) {
       getTrashButton.removeAttribute("disabled", "");
@@ -456,7 +457,6 @@ export const ExpenseTickets = () => {
   }
 
   const handleDownloadFile = async () => {
-    console.log('click');
     try {
       // getting excel file from backend
       const response = await expensesTicketsExcel(userDataContext.userData.token);
@@ -474,7 +474,7 @@ export const ExpenseTickets = () => {
       <div>
         <AppBar location={location} />
       </div>
-
+      <ButtonBar getPanelData={getPanelData}/>
       {isError && (
         <Alert severity="error" className="custom-alert" onClose={() => { setIsError(false) }}>
           Hubo un error al subir los ficheros
