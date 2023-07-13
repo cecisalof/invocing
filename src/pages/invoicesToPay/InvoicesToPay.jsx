@@ -4,8 +4,8 @@ import { AgGridReact } from 'ag-grid-react'; // the AG Grid React Component
 import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import {
   getInvoices,
-  deleteInvoice,
   patchInvoice,
+  deleteInvoice,
   patchProviderInvoice,
   invoiceToPayExcel
 } from "./services";
@@ -16,8 +16,8 @@ import '../general-style.css'
 import Context from '../../contexts/context';
 import { useContext } from 'react';
 //import filterIcon from '../../assets/icons/Filtrar.png';
-import deleteIcon from '../../assets/icons/trash.svg';
-import deleteIconD from '../../assets/icons/trashDeactive.svg';
+// import deleteIcon from '../../assets/icons/trash.svg';
+// import deleteIconD from '../../assets/icons/trashDeactive.svg';
 import HeaderColumn from '../HeaderColumn';
 import CustomElement from '../customElement.jsx';
 import { getProviders } from "../suppliers/services";
@@ -28,6 +28,7 @@ import PropTypes from 'prop-types';
 import { Alert } from '@mui/material';
 import { DragAndDropCardComponent } from "../../components/dragAndDropCard";
 import { saveAs } from 'file-saver';
+import Modal from '../../components/modal/Modal';
 
 export const InvoicesToPay = () => {
   const location = useLocation();
@@ -38,8 +39,7 @@ export const InvoicesToPay = () => {
   const [rowProviders, setRowProviders] = useState(); // Set rowData to Array of Objects, one Object per Row
   const [providersLoaded, setProvidersLoaded] = useState(false);
   const [isError, setIsError] = useState(false);
-  const [rowSelection ,setRowSelection] = useState(false);
- 
+  const [rowSelection, setRowSelection] = useState(false);
   const userDataContext = useContext(Context);
 
   const ragRenderer = (props) => {
@@ -480,6 +480,15 @@ export const InvoicesToPay = () => {
     }
   }
 
+  useEffect (()=> {
+    const getTrashButton = document.getElementById('trash');
+    if (rowSelection) {
+      getTrashButton.removeAttribute("disabled", "");
+    } else {
+      getTrashButton.setAttribute("disabled", "");
+    }
+  }, [rowSelection])
+
   function handleTrashClick() {
     const selectedNodes = gridRef.current.api.getSelectedNodes();
     const selectedData = selectedNodes.map((node) => node.data);
@@ -496,7 +505,7 @@ export const InvoicesToPay = () => {
         // Wait one second until the data is reloaded after deleting the row, to display disabled trash icon again.
         setTimeout(() => {
           setRowSelection(false);
-        }, 1000); 
+        }, 1000);
       })
       .catch((error) => {
         console.log(error);
@@ -537,13 +546,13 @@ export const InvoicesToPay = () => {
           Hubo un error al subir los ficheros
         </Alert>)}
 
-        {/* Blue card */}
-        <DragAndDropCardComponent 
-          type="invoice"
-          userToken={userDataContext.userData.token} 
-          setIsError={(newValue) => {setIsError(newValue)}}
-          onFinishedUploading={() => {()=>{getPanelData()}}}
-        />
+      {/* Blue card */}
+      <DragAndDropCardComponent
+        type="invoice"
+        userToken={userDataContext.userData.token}
+        setIsError={(newValue) => { setIsError(newValue) }}
+        onFinishedUploading={() => { () => { getPanelData() } }}
+      />
 
       {userDataContext.isLoadingRef && (
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -560,13 +569,17 @@ export const InvoicesToPay = () => {
         <div className='mx-3'>
           <button type="button" className="btn btn-primary rounded-pill px-4 opacity-hover-05" onClick={handleAddInvoice}>Añadir factura</button>
           {/* <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} /> */}
-          <img src={rowSelection ? deleteIcon : deleteIconD} alt="Delete icon" onClick={handleTrashClick} className='trashIcon' />
+          {/* <img type="button" disabled src={rowSelection ? deleteIcon : deleteIconD} alt="Delete icon" data-bs-toggle="modal" data-bs-target="#exampleModal" className='trashIcon' /> */}
         </div>
-        <div className='mx-3'>
+        <div className='mx-1'>
+          <button type="button" id="trash"  disabled className={rowSelection ? "btn btn-outline-primary bi bi-trash3-fill mx-3" : "btn btn-outline-primary bi bi-trash3 mx-3"} data-bs-toggle="modal" data-bs-target="#exampleModal"></button>
+        </div>
+        <Modal handleTrashClick={handleTrashClick} />
+        <div className='mx-1'>
           <button type="button" className="btn btn-outline-primary bi bi-download" onClick={handleDownloadFile}></button>
         </div>
       </div>
-      <div className="ag-theme-alpine mx-3 gridStyle">
+      <div className="ag-theme-alpine m-3 gridStyle">
         <AgGridReact
           onGridReady={onGridReady}
           ref={gridRef} // Ref for accessing Grid's API
