@@ -9,6 +9,7 @@ import {
   patchProviderInvoice,
   invoiceToPayExcel
 } from "./services";
+import { AG_GRID_LOCALE_ES } from '../../locale/es.js';
 import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
 import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
 import './style.css';
@@ -42,6 +43,8 @@ export const InvoicesToPay = () => {
   const [isError, setIsError] = useState(false);
   const [rowSelection, setRowSelection] = useState(false);
   const userDataContext = useContext(Context);
+
+  const localeText = AG_GRID_LOCALE_ES;
 
   const ragRenderer = (props) => {
     return <span className="rag-element">{props.value}</span>;
@@ -452,7 +455,6 @@ export const InvoicesToPay = () => {
       },
       floatingFilter: true,
       minWidth: 300,
-
     };
   }, []);
 
@@ -596,6 +598,7 @@ export const InvoicesToPay = () => {
           components={{ agColumnHeader: HeaderColumn }}
           onRowSelected={onRowSelected}
           onSelectionChanged={onSelectionChanged}
+          localeText={localeText}
         />
       </div>
     </>

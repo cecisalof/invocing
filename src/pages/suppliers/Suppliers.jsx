@@ -10,6 +10,7 @@ import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
 // import './style.css';
 import '../general-style.css'
 import { useNavigate } from 'react-router-dom';
+import { AG_GRID_LOCALE_ES } from '../../locale/es.js';
 //import filterIcon from '../../assets/icons/Filtrar.png';
 // import deleteIcon from '../../assets/icons/trash.svg';
 // import deleteIconD from '../../assets/icons/trashDeactive.svg';
@@ -27,6 +28,8 @@ export const Suppliers = () => {
   const [rowSelection, setRowSelection] = useState(false);
 
   const userDataContext = useContext(Context);
+
+  const localeText = AG_GRID_LOCALE_ES;
 
   // Each Column Definition results in one Column.
   const [columnDefs] = useState([
@@ -211,6 +214,7 @@ export const Suppliers = () => {
           components={{ agColumnHeader: HeaderColumn }}
           onSelectionChanged={onSelectionChanged}
           onRowSelected={onRowSelected}
+          localeText={localeText}
         />
       </div>
     </>
