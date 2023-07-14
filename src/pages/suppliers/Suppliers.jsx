@@ -187,7 +187,7 @@ export const Suppliers = () => {
       </div>
       <div className='d-flex mt-4'>
         <div className='mx-3'>
-          <button type="button" className="btn btn-primary rounded-pill px-4 opacity-hover-05" onClick={handleAddProvider}>Añadir factura</button>
+          <button type="button" className="btn btn-primary rounded-pill px-4 opacity-hover-05" onClick={handleAddProvider}>Añadir proveedor</button>
           {/* <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} /> */}
           {/* <img type="button" disabled src={rowSelection ? deleteIcon : deleteIconD} alt="Delete icon" data-bs-toggle="modal" data-bs-target="#mainModal" className='trashIcon' /> */}
         </div>
