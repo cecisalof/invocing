@@ -24,6 +24,7 @@ import PropTypes from 'prop-types';
 import { saveAs } from 'file-saver';
 import Modal from '../../components/modal/Modal';
 import ButtonBar from '../../components/buttonBar/ButtonBar';
+import { AG_GRID_LOCALE_ES } from '../../locale/es.js';
 
 
 export const ExpenseTickets = () => {
@@ -37,6 +38,8 @@ export const ExpenseTickets = () => {
   const [rowProviders, setrowProviders] = useState(); // Set rowData to Array of Objects, one Object per Row
   const [providersLoaded, setProvidersLoaded] = useState(false);
   const [isError, setIsError] = useState(false);
+
+  const localeText = AG_GRID_LOCALE_ES;
 
   const userDataContext = useContext(Context);
   const providerCellRenderer = (params) => {
@@ -510,7 +513,7 @@ export const ExpenseTickets = () => {
         <div className='mx-1'>
           <button type="button" id="trash" disabled={!rowSelection} className={"btn bi mx-3 " + (rowSelection ? "btn-outline-primary bi-trash3-fill" : "btn-outline-secondary bi-trash3")} data-bs-toggle="modal" data-bs-target="#mainModal"></button>
         </div>
-        <Modal handleTrashClick={handleTrashClick} />
+        <Modal handleTrashClick={handleTrashClick} page={'tickets'}/>
         <div className='mx-1'>
           <button type="button" className="btn btn-outline-primary bi bi-download" onClick={handleDownloadFile}></button>
         </div>
@@ -530,6 +533,7 @@ export const ExpenseTickets = () => {
           components={{ agColumnHeader: HeaderColumn }}
           onRowSelected={onRowSelected}
           onSelectionChanged={onSelectionChanged}
+          localeText={localeText}
         />
       </div>
     </>

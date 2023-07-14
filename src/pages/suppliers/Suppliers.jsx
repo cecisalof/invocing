@@ -10,6 +10,7 @@ import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
 // import './style.css';
 import '../general-style.css'
 import { useNavigate } from 'react-router-dom';
+import { AG_GRID_LOCALE_ES } from '../../locale/es.js';
 //import filterIcon from '../../assets/icons/Filtrar.png';
 // import deleteIcon from '../../assets/icons/trash.svg';
 // import deleteIconD from '../../assets/icons/trashDeactive.svg';
@@ -27,6 +28,8 @@ export const Suppliers = () => {
   const [rowSelection, setRowSelection] = useState(false);
 
   const userDataContext = useContext(Context);
+
+  const localeText = AG_GRID_LOCALE_ES;
 
   // Each Column Definition results in one Column.
   const [columnDefs] = useState([
@@ -187,14 +190,14 @@ export const Suppliers = () => {
       </div>
       <div className='d-flex mt-4'>
         <div className='mx-3'>
-          <button type="button" className="btn btn-primary rounded-pill px-4 opacity-hover-05" onClick={handleAddProvider}>Añadir factura</button>
+          <button type="button" className="btn btn-primary rounded-pill px-4 opacity-hover-05" onClick={handleAddProvider}>Añadir proveedor</button>
           {/* <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} /> */}
           {/* <img type="button" disabled src={rowSelection ? deleteIcon : deleteIconD} alt="Delete icon" data-bs-toggle="modal" data-bs-target="#mainModal" className='trashIcon' /> */}
         </div>
         <div className='mx-1'>
           <button type="button" id="trash"  disabled className={rowSelection ? "btn btn-outline-primary bi bi-trash3-fill mx-3" : "btn btn-outline-primary bi bi-trash3 mx-3"} data-bs-toggle="modal" data-bs-target="#mainModal"></button>
         </div>
-        <Modal handleTrashClick={handleTrashClick} />
+        <Modal handleTrashClick={handleTrashClick} page={'suppliers'}/>
       </div>
       <div className="ag-theme-alpine mx-3 gridStyle">
         <AgGridReact
@@ -211,6 +214,7 @@ export const Suppliers = () => {
           components={{ agColumnHeader: HeaderColumn }}
           onSelectionChanged={onSelectionChanged}
           onRowSelected={onRowSelected}
+          localeText={localeText}
         />
       </div>
     </>
