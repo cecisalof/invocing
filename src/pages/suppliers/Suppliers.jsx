@@ -194,7 +194,7 @@ export const Suppliers = () => {
         <div className='mx-1'>
           <button type="button" id="trash"  disabled className={rowSelection ? "btn btn-outline-primary bi bi-trash3-fill mx-3" : "btn btn-outline-primary bi bi-trash3 mx-3"} data-bs-toggle="modal" data-bs-target="#mainModal"></button>
         </div>
-        <Modal handleTrashClick={handleTrashClick} />
+        <Modal handleTrashClick={handleTrashClick} page={'suppliers'}/>
       </div>
       <div className="ag-theme-alpine mx-3 gridStyle">
         <AgGridReact

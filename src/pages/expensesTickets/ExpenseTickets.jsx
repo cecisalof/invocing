@@ -510,7 +510,7 @@ export const ExpenseTickets = () => {
         <div className='mx-1'>
           <button type="button" id="trash" disabled={!rowSelection} className={"btn bi mx-3 " + (rowSelection ? "btn-outline-primary bi-trash3-fill" : "btn-outline-secondary bi-trash3")} data-bs-toggle="modal" data-bs-target="#mainModal"></button>
         </div>
-        <Modal handleTrashClick={handleTrashClick} />
+        <Modal handleTrashClick={handleTrashClick} page={'tickets'}/>
         <div className='mx-1'>
           <button type="button" className="btn btn-outline-primary bi bi-download" onClick={handleDownloadFile}></button>
         </div>
