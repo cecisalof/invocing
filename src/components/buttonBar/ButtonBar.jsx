@@ -7,7 +7,7 @@ export default function ButtonBar(props) {
 
     const { getPanelData } = props;
 
-    const [selectedRange, setSelectedRange] = useState([new Date(), new Date()]);
+    const [selectedRange, setSelectedRange] = useState([]);
     const [showCalendar, setShowCalendar] = useState(false);
     const [active, setActive] = useState("year");
 
@@ -42,15 +42,16 @@ export default function ButtonBar(props) {
     };
 
     const handleSelect = (date) => {
+        console.log(date);
         if (selectedRange.length === 2) {
-            setSelectedRange([date, date]);
+            setSelectedRange(date, date);
             selectRange([date, date])
         } else if (selectedRange.length === 1) {
             const [startDate] = selectedRange;
             if (date < startDate) {
-                setSelectedRange([date, startDate]);
+                setSelectedRange(date, startDate);
             } else {
-                setSelectedRange([startDate, date]);
+                setSelectedRange(startDate, date);
 
 
             }
