@@ -16,7 +16,6 @@ export const AppBar = (props)  => {
 
   const userDataContext = useContext(Context);
 
-  
   useEffect(() => {
     if (userDataContext.userData.name !== null) {
       setUserName(userDataContext.userData.name)
