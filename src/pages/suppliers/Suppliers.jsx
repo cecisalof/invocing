@@ -17,6 +17,7 @@ import { AG_GRID_LOCALE_ES } from '../../locale/es.js';
 import PropTypes from 'prop-types';
 import HeaderColumn from '../HeaderColumn';
 import Modal from '../../components/modal/Modal';
+import AddButton from '../../atoms/AddButton'
 
 export const Suppliers = () => {
   const location = useLocation();
@@ -190,14 +191,14 @@ export const Suppliers = () => {
       </div>
       <div className='d-flex mt-4'>
         <div className='mx-3'>
-          <button type="button" className="btn btn-primary rounded-pill px-4 opacity-hover-05" onClick={handleAddProvider}>Añadir proveedor</button>
-          {/* <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} /> */}
-          {/* <img type="button" disabled src={rowSelection ? deleteIcon : deleteIconD} alt="Delete icon" data-bs-toggle="modal" data-bs-target="#mainModal" className='trashIcon' /> */}
+          <AddButton
+            handleAdd={handleAddProvider}
+            text={'Añadir proveedor'} />
         </div>
         <div className='mx-1'>
-          <button type="button" id="trash"  disabled className={rowSelection ? "btn btn-outline-primary bi bi-trash3-fill mx-3" : "btn btn-outline-primary bi bi-trash3 mx-3"} data-bs-toggle="modal" data-bs-target="#mainModal"></button>
+          <button type="button" id="trash" disabled className={rowSelection ? "btn btn-outline-primary bi bi-trash3-fill mx-3" : "btn btn-outline-primary bi bi-trash3 mx-3"} data-bs-toggle="modal" data-bs-target="#mainModal"></button>
         </div>
-        <Modal handleTrashClick={handleTrashClick} page={'suppliers'}/>
+        <Modal handleTrashClick={handleTrashClick} page={'suppliers'} />
       </div>
       <div className="ag-theme-alpine mx-3 gridStyle">
         <AgGridReact
