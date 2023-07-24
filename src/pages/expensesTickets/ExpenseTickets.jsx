@@ -25,6 +25,7 @@ import { saveAs } from 'file-saver';
 import Modal from '../../components/modal/Modal';
 import ButtonBar from '../../components/buttonBar/ButtonBar';
 import { AG_GRID_LOCALE_ES } from '../../locale/es.js';
+import AddButton from '../../atoms/AddButton'
 
 
 export const ExpenseTickets = () => {
@@ -506,9 +507,9 @@ export const ExpenseTickets = () => {
         </div>)}
       <div className='d-flex mt-4'>
         <div className='mx-3'>
-          <button type="button" className="btn btn-primary rounded-pill px-4 opacity-hover-05" onClick={handleAddExpenses}>Añadir factura</button>
-          {/* <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} /> */}
-          {/* <img type="button" disabled src={rowSelection ? deleteIcon : deleteIconD} alt="Delete icon" data-bs-toggle="modal" data-bs-target="#mainModal" className='trashIcon' /> */}
+          <AddButton 
+            handleAdd={handleAddExpenses}
+            text={'Añadir ticket de gasto'} />
         </div>
         <div className='mx-1'>
           <button type="button" id="trash" disabled={!rowSelection} className={"btn bi mx-3 " + (rowSelection ? "btn-outline-primary bi-trash3-fill" : "btn-outline-secondary bi-trash3")} data-bs-toggle="modal" data-bs-target="#mainModal"></button>

@@ -19,5 +19,6 @@ export const API_URL = {
     INVOICE_TO_PAY_COUNT: 'invoice-to-pay-count/',
     INVOICE_TO_EMIT_COUNT: 'invoice-to-emit-count/',
     INVOICE_TO_PAY_EXCEL: 'invoice-to-pay-excel/',
-    EXPENSES_TICKETS_EXCEL: 'expenses-excel/'
+    EXPENSES_TICKETS_EXCEL: 'expenses-excel/',
+    INVOICE_TO_PAY_STATUS: 'invoice-to-pay-automatic/status' /* TODO BACKEND: Homologar este endpoint con la / del final */
   };
