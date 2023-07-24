@@ -492,8 +492,15 @@ min-height: 135px !important;
 .ag-theme-alpine .ag-popup {
   background-color: red;
 }
-/*--------------------------------*/
+/* -------------------------------- */
 
 .modal-dialog {
   margin-top: 20rem;
+}
+
+
+/* -----------CALENDAR------------------- */
+.calendar-overlay {
+  position: absolute;
+  z-index: 2;
 }
