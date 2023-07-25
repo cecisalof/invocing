@@ -9,7 +9,7 @@ export default function ButtonBar(props) {
 
     const { getPanelData } = props;
 
-    const [active, setActive] = useState("year");
+    const [active, setActive] = useState();
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
 
@@ -22,8 +22,10 @@ export default function ButtonBar(props) {
     useEffect( () => {
         if (startDate == null && endDate == null) {
             getPanelData("?year=1");
+            setActive("year");
         } else {
             selectRange(startDate, endDate);
+            setActive("");
         }
     }, [startDate, endDate])
 
