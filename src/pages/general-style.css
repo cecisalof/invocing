@@ -504,3 +504,16 @@ min-height: 135px !important;
   position: absolute;
   z-index: 2;
 }
+
+.react-datepicker__input-container > input[type="text"] {
+  border-radius: 50px;
+  border: 2px solid #ADB9FB;
+  color: #ADB9FB;
+  height: 1.8rem;
+  padding-left: 15px;
+  width: 18vw;
+}
+
+.react-datepicker__close-icon::after{
+  background-color: #ADB9FB !important;
+} 

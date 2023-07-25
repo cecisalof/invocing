@@ -56,7 +56,10 @@ export default function ButtonBar(props) {
                     setStartDate(start);
                     setEndDate(end);
                 }}
+                locale="es-ES"
+                dateFormat="yyyy/MM/dd"
                 isClearable={true}
+                placeholderText="Buscar por fecha"
             />
             <button className={active === "year" ? "active-filters" : "filters"} id={"year"} onClick={(event) => { getDataWithFilter("?year=1", event) }}>
                 Anual
