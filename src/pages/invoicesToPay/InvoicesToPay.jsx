@@ -524,7 +524,6 @@ export const InvoicesToPay = () => {
   }
 
   const handleDownloadFile = async () => {
-    console.log('click');
     try {
       // getting excel file from backend
       const response = await invoiceToPayExcel(userDataContext.userData.token);

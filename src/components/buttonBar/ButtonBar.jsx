@@ -10,9 +10,7 @@ export default function ButtonBar(props) {
     const { getPanelData } = props;
 
     const [active, setActive] = useState('year');
-    console.log('active', active);
     const [filters, setFilters] = useState("?year=1");
-    console.log('filters', filters);
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
 
