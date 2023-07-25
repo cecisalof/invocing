@@ -9,7 +9,10 @@ export default function ButtonBar(props) {
 
     const { getPanelData } = props;
 
-    const [active, setActive] = useState();
+    const [active, setActive] = useState('year');
+    console.log('active', active);
+    const [filters, setFilters] = useState("?year=1");
+    console.log('filters', filters);
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
 
@@ -17,17 +20,27 @@ export default function ButtonBar(props) {
     const getDataWithFilter = async (filters, event) => {
         await getPanelData(filters);
         setActive(event.target.id);
+        setFilters(filters);
     };
 
     useEffect( () => {
-        if (startDate == null && endDate == null) {
-            getPanelData("?year=1");
-            setActive("year");
-        } else {
+        if (startDate == null && endDate == null) { // if there is no date range selected, active year filter by default
+            getPanelData(filters);
+            setActive(active);
+        } else { // id there is a date range selected, clear/desactivate button period filter
             selectRange(startDate, endDate);
-            setActive("");
+            setActive(null);
+            setFilters(null);
         }
     }, [startDate, endDate])
+
+
+    useEffect( () => {
+        if (active !== null && filters !== null) { // if a button period is selected, clear date range
+            setStartDate(null);
+            setEndDate(null);
+        }
+    }, [active, filters])
 
 
     const selectRange = async (startDate, endDate) => {
@@ -58,7 +71,6 @@ export default function ButtonBar(props) {
                     setStartDate(start);
                     setEndDate(end);
                 }}
-                locale="es-ES"
                 dateFormat="yyyy/MM/dd"
                 isClearable={true}
                 placeholderText="Buscar por fecha"
