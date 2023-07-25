@@ -560,7 +560,7 @@ export const InvoicesToPay = () => {
   return (
     <>
       <div>
-        <AppBar location={location} />
+        <AppBar location={location} subtitle="Añade o edita las facturas con sus impuestos correspondientes"/>
       </div>
 
       <ButtonBar getPanelData={getPanelData} />

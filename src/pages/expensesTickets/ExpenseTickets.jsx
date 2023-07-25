@@ -477,7 +477,7 @@ export const ExpenseTickets = () => {
   return (
     <>
       <div>
-        <AppBar location={location} />
+        <AppBar location={location} subtitle="Añade o edita los gastos de los que no se contarán IVA o IRPF"/>
       </div>
       <ButtonBar getPanelData={getPanelData} />
       {isError && (

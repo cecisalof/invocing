@@ -6,6 +6,7 @@ import Context from '../../contexts/context';
 import logo from '../../assets/icons/logotramitgo.svg'
 import { useContext } from 'react';
 import eye from '../../assets/icons/Eye.png';
+import eyeHidden from '../../assets/icons/EyeHidden.png';
 
 export const Login = () => {
   const [email, setEmail] = useState("");
@@ -107,7 +108,7 @@ export const Login = () => {
               onChange={handlePasswordChange}
             />
             <div className="input-group-append eye-password-icon">
-              <span className="input-group-text bg-white"> <img src={eye} alt="Eye" onClick={() => { setPasswordVisible(!passwordVisible) }} /></span>
+              <span className="input-group-text bg-white"> <img src={passwordVisible ? eye : eyeHidden} alt="Eye" onClick={() => { setPasswordVisible(!passwordVisible) }} /></span>
             </div>
           </div>
 

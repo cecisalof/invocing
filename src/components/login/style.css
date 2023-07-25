@@ -39,6 +39,10 @@
     cursor: pointer;
   }
 
+  .eye-password-icon img{
+    height: 30px;
+  }
+
   .eye-password-icon span:hover{
     opacity: 0.8;
   }
