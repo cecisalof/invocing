@@ -27,7 +27,7 @@ export default function ButtonBar(props) {
         if (startDate == null && endDate == null) { // if there is no date range selected, active year filter by default
             getPanelData(filters);
             setActive(active);
-        } else { // id there is a date range selected, clear/desactivate button period filter
+        } else { // if there is a date range selected, clear/desactivate button period filter
             selectRange(startDate, endDate);
             setActive(null);
             setFilters(null);
