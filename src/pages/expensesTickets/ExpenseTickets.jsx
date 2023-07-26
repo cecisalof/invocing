@@ -59,6 +59,11 @@ export const ExpenseTickets = () => {
       showDisabledCheckboxes: true,
     },
     {
+      field: 'date',
+      headerName: "Fecha",
+      sort: 'desc'
+    },
+    {
       field: 'total', headerName: "Importe",
       valueFormatter: (params) => {
         const value = params.value;
@@ -86,24 +91,7 @@ export const ExpenseTickets = () => {
         cellRenderer: providerCellRenderer,
       },
     },
-    {
-      field: 'date',
-      headerName: "Fecha",
-      sort: 'desc'
-    },
     { field: 'concept', headerName: 'Concepto' },
-    {
-      field: 'retention_percentage', headerName: '% Retención', valueFormatter: (params) => {
-        const value = params.value;
-        return value ? `${value} %` : '';
-      },
-    },
-    {
-      field: 'taxes_percentage', headerName: '% Impuestos', valueFormatter: (params) => {
-        const value = params.value;
-        return value ? `${value} %` : '';
-      },
-    },
     {
       field: 'total_pretaxes', headerName: 'Total sin impuestos',
       valueFormatter: (params) => {
@@ -125,23 +113,9 @@ export const ExpenseTickets = () => {
       },
     },
     {
-      field: 'total_retention', headerName: 'Total retenciones',
-      valueFormatter: (params) => {
+      field: 'taxes_percentage', headerName: '% Impuestos', valueFormatter: (params) => {
         const value = params.value;
-        const currency = params.data.currency;
-
-        let currencySymbol = '';
-        if (currency === 'EUR') {
-          currencySymbol = '€';
-        } else if (currency === 'USD') {
-          currencySymbol = '$';
-        } else {
-          // Otros formatos de moneda
-          // Puedes agregar lógica adicional para manejar otras monedas según sea necesario
-          currencySymbol = currency; // En caso de que el valor de currency sea directamente el símbolo de la moneda
-        }
-
-        return value ? `${value} ${currencySymbol}` : '';
+        return value ? `${value} %` : '';
       },
     },
     {
@@ -219,6 +193,11 @@ export const ExpenseTickets = () => {
           showDisabledCheckboxes: true,
         },
         {
+          field: 'date',
+          headerName: "Fecha",
+          sort: 'asc'
+        },
+        {
           field: 'total', headerName: "Importe",
           valueFormatter: (params) => {
             const value = params.value;
@@ -246,24 +225,7 @@ export const ExpenseTickets = () => {
             cellRenderer: providerCellRenderer,
           },
         },
-        {
-          field: 'date',
-          headerName: "Fecha",
-          sort: 'asc'
-        },
         { field: 'concept', headerName: 'Concepto' },
-        {
-          field: 'retention_percentage', headerName: '% Retención', valueFormatter: (params) => {
-            const value = params.value;
-            return value ? `${value} %` : '';
-          },
-        },
-        {
-          field: 'taxes_percentage', headerName: '% Impuestos', valueFormatter: (params) => {
-            const value = params.value;
-            return value ? `${value} %` : '';
-          },
-        },
         {
           field: 'total_pretaxes', headerName: 'Total sin impuestos',
           valueFormatter: (params) => {
@@ -285,23 +247,9 @@ export const ExpenseTickets = () => {
           },
         },
         {
-          field: 'total_retention', headerName: 'Total retenciones',
-          valueFormatter: (params) => {
+          field: 'taxes_percentage', headerName: '% Impuestos', valueFormatter: (params) => {
             const value = params.value;
-            const currency = params.data.currency;
-
-            let currencySymbol = '';
-            if (currency === 'EUR') {
-              currencySymbol = '€';
-            } else if (currency === 'USD') {
-              currencySymbol = '$';
-            } else {
-              // Otros formatos de moneda
-              // Puedes agregar lógica adicional para manejar otras monedas según sea necesario
-              currencySymbol = currency; // En caso de que el valor de currency sea directamente el símbolo de la moneda
-            }
-
-            return value ? `${value} ${currencySymbol}` : '';
+            return value ? `${value} %` : '';
           },
         },
         {
