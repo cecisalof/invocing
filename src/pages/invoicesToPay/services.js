@@ -163,9 +163,9 @@ export const invoiceToPayExcel = async (token) => {
     }
 };
 
-export const invoiceToPayStatus = async (token) => {
+export const taskStatus = async (token) => {
     try {
-        const response = await axios.get(BASE_URL + API_URL.INVOICE_TO_PAY_STATUS, {
+        const response = await axios.get(BASE_URL + API_URL.TASKS_STATUS, {
             headers: {
                 'accept': 'application/json',
                 'Authorization': `Token ${token}`,
