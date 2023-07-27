@@ -73,7 +73,7 @@ export const DragAndDropCardComponent = ({ type, userToken, setError, onFinished
 
     if (!response || response.status < 200 || response.status >= 300) {
       if (response.status == 402) {
-        setError("Has excedido tu cutoa de facturas mensual. Escribe a info@codepremium.es para aumentarla")
+        setError("Has excedido tu cuota de facturas mensual. Escribe a info@codepremium.es para aumentarla")
       }else{
         setError("Hubo un error al subir los ficheros")
       }

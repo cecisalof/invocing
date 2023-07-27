@@ -170,7 +170,7 @@ export const Dashboard = () => {
         <ButtonBar 
           getPanelData={getPanelData} />
       {(error != false && error != "") && (
-          <Alert severity="error" className="custom-alert" onClose={() => { setError(false) }}>
+          <Alert severity="error" className="custom-alert mt-1 mb-3" onClose={() => { setError(false) }}>
             {error}
           </Alert>)}
         <div className='row'>
