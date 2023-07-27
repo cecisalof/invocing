@@ -5,7 +5,7 @@ import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
 import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
 import '../general-style.css'
 import './calendar.css'
-import { DragAndDropCardComponent } from "../../components/dragAndDropCard";
+import { DragAndDropCardComponent } from "../../components/dragAndDropCard/DragAndDrop";
 import { getInvoicesCount, getInvoicesStates, getInvoicesTotals } from "./services";
 import Context from '../../contexts/context';
 import { useContext } from 'react';

@@ -19,7 +19,7 @@ import close from '../../assets/icons/close.png';
 // import deleteIconD from '../../assets/icons/trashDeactive.svg';
 import { ProgressBar } from 'react-bootstrap';
 import { Alert } from '@mui/material';
-import { DragAndDropCardComponent } from "../../components/dragAndDropCard";
+import { DragAndDropCardComponent } from "../../components/dragAndDropCard/DragAndDrop";
 import PropTypes from 'prop-types';
 import { saveAs } from 'file-saver';
 import Modal from '../../components/modal/Modal';
