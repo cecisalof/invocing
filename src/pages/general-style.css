@@ -511,3 +511,7 @@ min-height: 135px !important;
 .react-datepicker__close-icon::after{
   background-color: #ADB9FB !important;
 } 
+
+.react-datepicker__tab-loop{
+  display: inline-flex;
+}
