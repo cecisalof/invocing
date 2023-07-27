@@ -1,73 +1,78 @@
-import React, { useState } from 'react';
-import Calendar from 'react-calendar';
+import React, { useState, useEffect } from 'react';
+import DatePicker from "react-datepicker";
 import 'react-calendar/dist/Calendar.css';
+import "react-datepicker/dist/react-datepicker.css";
+import '../../pages/general-style.css';
 import PropTypes from 'prop-types';
 
 export default function ButtonBar(props) {
 
     const { getPanelData } = props;
 
-    const [selectedRange, setSelectedRange] = useState([]);
-    const [showCalendar, setShowCalendar] = useState(false);
-    const [active, setActive] = useState("year");
+    const [active, setActive] = useState('year');
+    const [filters, setFilters] = useState("?year=1");
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
+
 
     const getDataWithFilter = async (filters, event) => {
         await getPanelData(filters);
         setActive(event.target.id);
+        setFilters(filters);
     };
 
-    const selectRange = async (dateParam) => {
-
-        //if (selectedRange || selectedRange.length === 2) {
-        // Verificar si selectedRange es nulo o no tiene dos fechas
-        const startDate = dateParam[0][0]
-        const endDate = dateParam[0][1]
-        const startYear = startDate.getFullYear(); // Obtener el año (ejemplo: 2023)
-        const startMonth = ('0' + (startDate.getMonth() + 1)).slice(-2); // Obtener el mes, agregando 1 al índice base 0 y asegurándose de tener dos dígitos (ejemplo: 06)
-        const startDay = ('0' + startDate.getDate()).slice(-2); // Obtener el día y asegurarse de tener dos dígitos (ejemplo: 05)
-        const formattedStartDate = `${startYear}-${startMonth}-${startDay}`; // Formatear la fecha en formato yyyy-mm-dd
-
-        const endYear = endDate.getFullYear(); // Obtener el año (ejemplo: 2023)
-        const endMonth = ('0' + (endDate.getMonth() + 1)).slice(-2); // Obtener el mes, agregando 1 al índice base 0 y asegurándose de tener dos dígitos (ejemplo: 06)
-        const endDay = ('0' + endDate.getDate()).slice(-2); // Obtener el día y asegurarse de tener dos dígitos (ejemplo: 05)
-        const formattedEndDate = `${endYear}-${endMonth}-${endDay}`; // Formatear la fecha en formato yyyy-mm-dd
-
-        const filters = "?start_date=" + formattedStartDate + "&end_date=" + formattedEndDate;
-        await getPanelData(filters);
-
-        setSelectedRange([new Date(), new Date()]);
-
-        //}
-
-    };
-
-    const handleSelect = (date) => {
-        console.log(date);
-        if (selectedRange.length === 2) {
-            setSelectedRange(date, date);
-            selectRange([date, date])
-        } else if (selectedRange.length === 1) {
-            const [startDate] = selectedRange;
-            if (date < startDate) {
-                setSelectedRange(date, startDate);
-            } else {
-                setSelectedRange(startDate, date);
+    useEffect( () => {
+        if (startDate == null && endDate == null) { // if there is no date range selected, active year filter by default
+            getPanelData(filters);
+            setActive(active);
+        } else { // if there is a date range selected, clear/desactivate button period filter
+            selectRange(startDate, endDate);
+            setActive(null);
+            setFilters(null);
+        }
+    }, [startDate, endDate])
 
 
-            }
+    useEffect( () => {
+        if (active !== null && filters !== null) { // if a button period is selected, clear date range
+            setStartDate(null);
+            setEndDate(null);
+        }
+    }, [active, filters])
+
+
+    const selectRange = async (startDate, endDate) => {
+
+        if (startDate !== null && endDate !== null) {
+            const startYear = startDate.getFullYear(); // Obtener el año (ejemplo: 2023)
+            const startMonth = ('0' + (startDate.getMonth() + 1)).slice(-2); // Obtener el mes, agregando 1 al índice base 0 y asegurándose de tener dos dígitos (ejemplo: 06)
+            const startDay = ('0' + startDate.getDate()).slice(-2); // Obtener el día y asegurarse de tener dos dígitos (ejemplo: 05)
+            const formattedStartDate = `${startYear}-${startMonth}-${startDay}`; // Formatear la fecha en formato yyyy-mm-dd
+
+            const endYear = endDate.getFullYear(); // Obtener el año (ejemplo: 2023)
+            const endMonth = ('0' + (endDate.getMonth() + 1)).slice(-2); // Obtener el mes, agregando 1 al índice base 0 y asegurándose de tener dos dígitos (ejemplo: 06)
+            const endDay = ('0' + endDate.getDate()).slice(-2); // Obtener el día y asegurarse de tener dos dígitos (ejemplo: 05)
+            const formattedEndDate = `${endYear}-${endMonth}-${endDay}`; // Formatear la fecha en formato yyyy-mm-dd
+            const filters = "?start_date=" + formattedStartDate + "&end_date=" + formattedEndDate;
+            await getPanelData(filters);
         }
     };
 
-    const handleButtonClick = () => {
-        setSelectedRange([new Date(), new Date()]);
-        setShowCalendar(!showCalendar);
-    };
-
     return (
-        <div className='my-3'>
-            <button className='filters' onClick={handleButtonClick}>
-                Fechas
-            </button>
+        <div className='mx-2 my-3'>
+            <DatePicker
+                selectsRange={true}
+                startDate={startDate}
+                endDate={endDate}
+                onChange={(update) => {
+                    const [start, end] = update;
+                    setStartDate(start);
+                    setEndDate(end);
+                }}
+                dateFormat="yyyy/MM/dd"
+                isClearable={true}
+                placeholderText="Buscar por fecha"
+            />
             <button className={active === "year" ? "active-filters" : "filters"} id={"year"} onClick={(event) => { getDataWithFilter("?year=1", event) }}>
                 Anual
             </button>
@@ -86,15 +91,6 @@ export default function ButtonBar(props) {
             <button className={active === "quarter-4" ? "active-filters" : "filters"} id={"quarter-4"} onClick={(event) => { getDataWithFilter("?quarter=4", event) }}>
                 4ºTrimestre
             </button>
-            {showCalendar && (
-
-                <div className='calendar-overlay'>
-                    <Calendar
-                        selectRange
-                        value={selectedRange}
-                        onChange={handleSelect} />
-                </div>
-            )}
         </div>
     )
 }
