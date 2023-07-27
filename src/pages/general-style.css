@@ -7,7 +7,6 @@ body {
   font-weight: 400;
   font-size: 20px;
   line-height: 48px;
-  margin: 1rem;
 }
 
 .text-drop {
@@ -208,8 +207,6 @@ body {
 .card {
   border: none;
   border-radius: 20px;
-  margin: 1rem;
-  padding: 0.5rem;
   text-align: left;
   font-size: 18px;
   width: 40vw;

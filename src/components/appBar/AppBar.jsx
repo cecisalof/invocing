@@ -7,7 +7,7 @@ import Avatar from '../../assets/icons/avatar.png';
 import Context from '../../contexts/context';
 import { useContext } from 'react';
 import { ProgressBar } from 'react-bootstrap';
-
+import PropTypes from 'prop-types';
 
 export const AppBar = (props)  => {
   const [userName, setUserName] = useState('');
@@ -16,7 +16,6 @@ export const AppBar = (props)  => {
 
   const userDataContext = useContext(Context);
 
-  
   useEffect(() => {
     if (userDataContext.userData.name !== null) {
       setUserName(userDataContext.userData.name)
@@ -44,14 +43,10 @@ export const AppBar = (props)  => {
 
   return (
     <>
-        <div className="appBarContainer">
-          {userName !== null ? ( 
-            <h1 className="title" style={{ color: '#000000' }}>Hola <span className='userName' style={{ color: '#005CFF' }}>{userName}</span></h1>
-            ) : (
-              <h1 className="title" style={{ color: '#000000' }}>Hola</h1>
-            )
-          }
-        
+        <div className="appBarContainer d-flex justify-content-between align-items-center mt-0">   
+          <h1 className="title mb-0" style={{ color: '#000000' }}>Hola 
+            {userName !== null && (<span className='userName ms-1' style={{ color: '#005CFF' }}>{userName}</span>)}
+          </h1>     
           {/* <form className="d-flex searchBar" role="search" onSubmit={handleSubmit}>
             <img src={SearchIcon} alt="Search icon" style={{ marginRight: '10px' } } />
             <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
@@ -62,7 +57,7 @@ export const AppBar = (props)  => {
           {(userDataContext.isLoadingRef || userDataContext.isLoadingRefEx) && (
           <div className="notification-dot" /> // Agregamos un div con clase para el punto rojo
       )}
-          {mostrarNotificaciones && (
+      {mostrarNotificaciones && (
         <div className="processes-panel">
           <label className="label" htmlFor="taxes_percentage">Notificaciones</label>
           {userDataContext.isLoadingRef && (<label style={{ fontFamily: 'Nunito', color: '#999999', fontSize: '12px'}} >Procesando facturas</label>)}
@@ -108,7 +103,11 @@ export const AppBar = (props)  => {
           }
           </div>
         </div>
+        <p className="mb-3">{props.subtitle}</p>
     </>
-
   )
 }
+
+AppBar.propTypes = {
+  subtitle: PropTypes.string,
+};

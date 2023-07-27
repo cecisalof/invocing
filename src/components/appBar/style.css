@@ -1,24 +1,10 @@
-.title{
-    font-style: normal;
-    font-weight: 400;
-    font-size: 35px;
-    line-height: 48px;
-    color: #000000;
-    flex: 1;
-}
-
 .searchBar {
     flex: 1;
     width: 100%;
 }
 
 .appBarContainer{
-    display: flex;
     flex-wrap: wrap;
-    width: 98%;
-    align-items: center;
-    margin-top: 1rem;
-    margin-right: 50px;
 }
 
 .tools {

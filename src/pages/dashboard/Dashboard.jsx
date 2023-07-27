@@ -165,7 +165,7 @@ export const Dashboard = () => {
     <>
       <div className="root">
         <div>
-          <AppBar location={location} />
+          <AppBar location={location} subtitle="Bienvenido a tu panel de control" />
         </div>
         <ButtonBar 
           getPanelData={getPanelData} />
@@ -193,10 +193,8 @@ export const Dashboard = () => {
             />
           </div>
         </div>
-        <div style={{ display: 'flex' }}>
-          <div
-            className="card"
-          >
+        <div className='d-flex mt-4'>
+          <div className="card mx-2">
             {/* Total sales card */}
             <div className="container text-left">
               <img src={cashIconBlue} alt="dragDrop" className='card-img' />
@@ -210,18 +208,16 @@ export const Dashboard = () => {
                 </div>
                 <div className="col">
                   <div className="card-container">
-                    <div className="totals">{`${totals.total_amount || 0} €`}</div>
-                    <div className="totals">{`${totals.total_taxes || 0} €`}</div>
-                    <div className="totals">{`${totals.total_retention || 0} €`}</div>
+                    <div className="totals">{`${parseFloat(totals.total_amount || 0).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2})} €`}</div>
+                    <div className="totals">{`${(totals.total_taxes || 0).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2})} €`}</div>
+                    <div className="totals">{`${(totals.total_retention || 0).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2})} €`}</div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
           {/* Invoice card */}
-          <div
-            className="card"
-          >
+          <div className="card mx-2">
             <div className="container text-left">
               <img src={dragDrop} alt="dragDrop" className='card-img' />
               <div className="row align-items-center">
