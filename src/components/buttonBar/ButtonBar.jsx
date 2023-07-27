@@ -64,7 +64,7 @@ export default function ButtonBar(props) {
     };
 
     return (
-        <div className='mx-2 my-3'>
+        <div className='my-3'>
             <button className='filters' onClick={handleButtonClick}>
                 Fechas
             </button>

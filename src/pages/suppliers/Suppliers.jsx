@@ -187,10 +187,10 @@ export const Suppliers = () => {
   return (
     <>
       <div>
-        <AppBar location={location} />
+        <AppBar location={location} subtitle="Añade o edita proveedores para modificar los datos asociados a las facturas y gastos"/>
       </div>
       <div className='d-flex mt-4'>
-        <div className='mx-3'>
+        <div className=''>
           <AddButton
             handleAdd={handleAddProvider}
             text={'Añadir proveedor'} />
@@ -200,7 +200,7 @@ export const Suppliers = () => {
         </div>
         <Modal handleTrashClick={handleTrashClick} page={'suppliers'} />
       </div>
-      <div className="ag-theme-alpine mx-3 gridStyle">
+      <div className="ag-theme-alpine gridStyle">
         <AgGridReact
           onGridReady={onGridReady}
           ref={gridRef} // Ref for accessing Grid's API
