@@ -8,7 +8,7 @@ import {
   deleteInvoice,
   patchProviderInvoice,
   invoiceToPayExcel,
-  invoiceToPayStatus,
+  taskStatus,
 } from "./services";
 import { AG_GRID_LOCALE_ES } from '../../locale/es.js';
 import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
@@ -553,9 +553,9 @@ export const InvoicesToPay = () => {
     }
   }
 
-  const getDataInvoicesStatus = async () => {
+  const getTasksStatus = async () => {
     try {
-      const data = await invoiceToPayStatus(userDataContext.userData.token);
+      const data = await taskStatus(userDataContext.userData.token);
       setInvoiceStatus(data.data || []);
     } catch (error) {
       setInvoiceStatus([]);
@@ -580,7 +580,7 @@ export const InvoicesToPay = () => {
       <DragAndDropCardComponent
         type="invoice"
         invoiceStatus={invoiceStatus}
-        getDataInvoicesStatus={getDataInvoicesStatus}
+        getTasksStatus={getTasksStatus}
         userToken={userDataContext.userData.token}
         setIsError={(newValue) => { setIsError(newValue) }}
         onFinishedUploading={() => { () => { getPanelData() } }}
