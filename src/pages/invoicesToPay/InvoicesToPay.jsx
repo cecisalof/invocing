@@ -76,6 +76,11 @@ export const InvoicesToPay = () => {
       showDisabledCheckboxes: true,
     },
     {
+      field: 'date',
+      headerName: "Fecha",
+      sort: 'desc'
+    },
+    {
       field: 'total', headerName: "Importe",
       valueFormatter: (params) => {
         const value = params.value;
@@ -115,27 +120,15 @@ export const InvoicesToPay = () => {
       },
       cellStyle: { color: 'white', fontSize: '10px' },// agregar estilo al texto de la celda
     },
-    {
-      field: 'date',
-      headerName: "Fecha",
-      sort: 'desc'
-    },
-
+    // {
+    //   field: 'payment_type',
+    //   headerName: 'Tipo de pago',
+    //   cellEditor: 'agSelectCellEditor',
+    //   cellEditorParams: {
+    //     values: ['Domiciliación', 'Cheque', 'Transferencia', 'Efectivo', 'Tarjeta'],
+    //   },
+    // },
     { field: 'concept', headerName: 'Concepto' },
-    {
-      field: 'retention_percentage', headerName: '% Retención',
-      valueFormatter: (params) => {
-        const value = params.value;
-        return value ? `${value} %` : '';
-      },
-    },
-    {
-      field: 'taxes_percentage', headerName: '% Impuestos',
-      valueFormatter: (params) => {
-        const value = params.value;
-        return value ? `${value} %` : '';
-      },
-    },
     {
       field: 'total_pretaxes', headerName: 'Total sin impuestos',
       valueFormatter: (params) => {
@@ -157,6 +150,13 @@ export const InvoicesToPay = () => {
       },
     },
     {
+      field: 'retention_percentage', headerName: '% Retención',
+      valueFormatter: (params) => {
+        const value = params.value;
+        return value ? `${value} %` : '';
+      },
+    },
+    {
       field: 'total_retention', headerName: 'Total retenciones',
       valueFormatter: (params) => {
         const value = params.value;
@@ -174,6 +174,13 @@ export const InvoicesToPay = () => {
         }
 
         return value ? `${value} ${currencySymbol}` : '';
+      },
+    },
+    {
+      field: 'taxes_percentage', headerName: '% Impuestos',
+      valueFormatter: (params) => {
+        const value = params.value;
+        return value ? `${value} %` : '';
       },
     },
     {
@@ -258,6 +265,9 @@ export const InvoicesToPay = () => {
           showDisabledCheckboxes: true
         },
         {
+          field: 'date', headerName: "Fecha"
+        },
+        {
           field: 'total', headerName: "Importe",
           valueFormatter: (params) => {
             const value = params.value;
@@ -298,34 +308,16 @@ export const InvoicesToPay = () => {
           cellStyle: { color: 'white', fontSize: '10px' },// agregar estilo al texto de la celda
         },
 
-        {
-          field: 'payment_type',
-          headerName: 'Tipo de pago',
-          cellEditor: 'agSelectCellEditor',
-          cellEditorParams: {
-            values: ['Domiciliación', 'Cheque', 'Transferencia', 'Efectivo', 'Tarjeta'],
-          },
-        },
-
-        {
-          field: 'date', headerName: "Fecha"
-        },
+        // {
+        //   field: 'payment_type',
+        //   headerName: 'Tipo de pago',
+        //   cellEditor: 'agSelectCellEditor',
+        //   cellEditorParams: {
+        //     values: ['Domiciliación', 'Cheque', 'Transferencia', 'Efectivo', 'Tarjeta'],
+        //   },
+        // },
 
         { field: 'concept', headerName: 'Concepto' },
-        {
-          field: 'retention_percentage', headerName: '% Retención',
-          valueFormatter: (params) => {
-            const value = params.value;
-            return value ? `${value} %` : '';
-          },
-        },
-        {
-          field: 'taxes_percentage', headerName: '% Impuestos',
-          valueFormatter: (params) => {
-            const value = params.value;
-            return value ? `${value} %` : '';
-          },
-        },
         {
           field: 'total_pretaxes', headerName: 'Total sin impuestos',
           valueFormatter: (params) => {
@@ -347,6 +339,13 @@ export const InvoicesToPay = () => {
           },
         },
         {
+          field: 'retention_percentage', headerName: '% Retención',
+          valueFormatter: (params) => {
+            const value = params.value;
+            return value ? `${value} %` : '';
+          },
+        },
+        {
           field: 'total_retention', headerName: 'Total retenciones',
           valueFormatter: (params) => {
             const value = params.value;
@@ -364,6 +363,13 @@ export const InvoicesToPay = () => {
             }
 
             return value ? `${value} ${currencySymbol}` : '';
+          },
+        },
+        {
+          field: 'taxes_percentage', headerName: '% Impuestos',
+          valueFormatter: (params) => {
+            const value = params.value;
+            return value ? `${value} %` : '';
           },
         },
         {

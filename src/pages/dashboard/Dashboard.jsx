@@ -208,9 +208,9 @@ export const Dashboard = () => {
                 </div>
                 <div className="col">
                   <div className="card-container">
-                    <div className="totals">{`${totals.total_amount || 0} €`}</div>
-                    <div className="totals">{`${totals.total_taxes || 0} €`}</div>
-                    <div className="totals">{`${totals.total_retention || 0} €`}</div>
+                    <div className="totals">{`${parseFloat(totals.total_amount || 0).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2})} €`}</div>
+                    <div className="totals">{`${(totals.total_taxes || 0).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2})} €`}</div>
+                    <div className="totals">{`${(totals.total_retention || 0).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2})} €`}</div>
                   </div>
                 </div>
               </div>
