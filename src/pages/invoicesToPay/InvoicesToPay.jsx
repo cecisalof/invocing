@@ -42,7 +42,7 @@ export const InvoicesToPay = () => {
   const [rowData, setRowData] = useState(); // Set rowData to Array of Objects, one Object per Row
   const [rowProviders, setRowProviders] = useState(); // Set rowData to Array of Objects, one Object per Row
   const [providersLoaded, setProvidersLoaded] = useState(false);
-  const [isError, setIsError] = useState(false);
+  const [error, setError] = useState(false);
   const [rowSelection, setRowSelection] = useState(false);
   const userDataContext = useContext(Context);
   const [tasksStatus, setTasksStatus] = useState([]);
@@ -571,9 +571,9 @@ export const InvoicesToPay = () => {
 
       <ButtonBar getPanelData={getPanelData} />
 
-      {isError && (
-        <Alert severity="error" className="custom-alert" onClose={() => { setIsError(false) }}>
-          Hubo un error al subir los ficheros
+      {(error != false && error != "") && (
+        <Alert severity="error" className="custom-alert" onClose={() => { setError(false) }}>
+          {error}
         </Alert>)}
 
       {/* Blue card */}
@@ -582,7 +582,7 @@ export const InvoicesToPay = () => {
         taskStatus={tasksStatus}
         getTasksStatus={getTasksStatus}
         userToken={userDataContext.userData.token}
-        setIsError={(newValue) => { setIsError(newValue) }}
+        setError={(newValue) => { setError(newValue) }}
         onFinishedUploading={() => { () => { getPanelData() } }}
       />
       {/* Progress Bar New */}

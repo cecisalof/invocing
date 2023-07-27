@@ -9,7 +9,7 @@ import cashYellow from '../../assets/icons/cashYellow.png';
 import dragDrop from '../../assets/icons/drag-and-drop.png';
 import "./style.css"
 
-export const DragAndDropCardComponent = ({ type, userToken, setIsError, onFinishedUploading, getTasksStatus }) => {
+export const DragAndDropCardComponent = ({ type, userToken, setError, onFinishedUploading, getTasksStatus }) => {
   const [isFileUploaded, setIsFileUploaded] = useState(false);
   const [isFileUploading, setIsFileUploading] = useState(false);
   const inputRef = useRef(null);
@@ -70,10 +70,16 @@ export const DragAndDropCardComponent = ({ type, userToken, setIsError, onFinish
     }
     await onFinishedUploading() // getPanelData
     setIsFileUploading(false)
-    setIsFileUploaded(true)
 
-    if (!response) {
-      setIsError(true)
+    if (!response || response.status < 200 || response.status >= 300) {
+      if (response.status == 402) {
+        setError("Has excedido tu cutoa de facturas mensual. Escribe a info@codepremium.es para aumentarla")
+      }else{
+        setError("Hubo un error al subir los ficheros")
+      }
+      return
+    }else{
+      setIsFileUploaded(true)
     }
     setTimeout(() => {
       setIsFileUploaded(false);
@@ -132,7 +138,7 @@ export const DragAndDropCardComponent = ({ type, userToken, setIsError, onFinish
 DragAndDropCardComponent.propTypes = {
   userToken: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
-  setIsError: PropTypes.func.isRequired,
+  setError: PropTypes.func.isRequired,
   onFinishedUploading: PropTypes.func,
   getTasksStatus: PropTypes.func
 };

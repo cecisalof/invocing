@@ -38,7 +38,7 @@ export const ExpenseTickets = () => {
   const [rowSelection, setRowSelection] = useState(false);
   const [rowProviders, setrowProviders] = useState(); // Set rowData to Array of Objects, one Object per Row
   const [providersLoaded, setProvidersLoaded] = useState(false);
-  const [isError, setIsError] = useState(false);
+  const [error, setError] = useState(false);
 
   const localeText = AG_GRID_LOCALE_ES;
 
@@ -428,16 +428,16 @@ export const ExpenseTickets = () => {
         <AppBar location={location} subtitle="Añade o edita los gastos de los que no se contarán IVA o IRPF"/>
       </div>
       <ButtonBar getPanelData={getPanelData} />
-      {isError && (
-        <Alert severity="error" className="custom-alert" onClose={() => { setIsError(false) }}>
-          Hubo un error al subir los ficheros
+      {(error != false && error != "") && (
+        <Alert severity="error" className="custom-alert" onClose={() => { setError(false) }}>
+          {error}
         </Alert>)}
 
       {/* yellow card */}
       <DragAndDropCardComponent
         type="ticket"
         userToken={userDataContext.userData.token}
-        setIsError={(newValue) => { setIsError(newValue) }}
+        setError={(newValue) => { setError(newValue) }}
         onFinishedUploading={() => { () => { getPanelData() } }}
       />
 

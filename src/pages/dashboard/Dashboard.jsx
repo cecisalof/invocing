@@ -27,7 +27,7 @@ export const Dashboard = () => {
   //const [invoiceEmitCount, setInvoiceEmitCount] = useState({});
   //const [invoiceEmitStates, setInvoiceEmitStates] = useState({});
   const [totals, setTotals] = useState({});
-  const [isError, setIsError] = useState(false);
+  const [error, setError] = useState(false);
 
   const userDataContext = useContext(Context);
 
@@ -169,9 +169,9 @@ export const Dashboard = () => {
         </div>
         <ButtonBar 
           getPanelData={getPanelData} />
-        {isError && (
-          <Alert severity="error" className="custom-alert" onClose={() => { setIsError(false) }}>
-            Hubo un error al subir los ficheros
+      {(error != false && error != "") && (
+          <Alert severity="error" className="custom-alert" onClose={() => { setError(false) }}>
+            {error}
           </Alert>)}
         <div className='row'>
           <div className="col-12 col-md-6">
@@ -179,7 +179,7 @@ export const Dashboard = () => {
             <DragAndDropCardComponent
               type="invoice"
               userToken={userDataContext.userData.token}
-              setIsError={(newValue) => { setIsError(newValue) }}
+              setError={(newValue) => { setError(newValue) }}
               onFinishedUploading={() => { () => { getPanelData() } }}
             />
           </div>
@@ -188,7 +188,7 @@ export const Dashboard = () => {
             <DragAndDropCardComponent
               type="ticket"
               userToken={userDataContext.userData.token}
-              setIsError={(newValue) => { setIsError(newValue) }}
+              setError={(newValue) => { setError(newValue) }}
               onFinishedUploading={() => { () => { getPanelData() } }}
             />
           </div>
