@@ -69,7 +69,7 @@ const HeaderColumn = (props) => {
 
   return (
     <div style={{display: 'flex'}}>
-      <div className="customHeaderLabel">{displayName}</div>
+      <div className="customHeaderLabel font-nunito">{displayName}</div>
       {sort}
     </div>
   );

@@ -207,7 +207,7 @@ export const Dashboard = () => {
                   </div>
                 </div>
                 <div className="col">
-                  <div className="card-container">
+                  <div className="card-container font-nunito">
                     <div className="totals">{`${parseFloat(totals.total_amount || 0).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2})} €`}</div>
                     <div className="totals">{`${(totals.total_taxes || 0).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2})} €`}</div>
                     <div className="totals">{`${(totals.total_retention || 0).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2})} €`}</div>
@@ -283,7 +283,7 @@ export const Dashboard = () => {
   
                 <div className="dashboard-titles" > {`${invoiceCount.count} Facturas `}</div>
                 <div className="dashboard-text">SUBIDAS DURANTE</div>
-                <div className="dashboard-subtext"> {`${invoiceCount.text}`}</div>
+                <div className="dashboard-subtext font-nunito"> {`${invoiceCount.text}`}</div>
               </div>
               <div style={{ flexBasis: '50%' }}>
                 <div style={{ display: 'flex' }}>
@@ -341,7 +341,7 @@ export const Dashboard = () => {
   
                 <div className="dashboard-titles" > {`${invoiceCount.count} Facturas `}</div>
                 <div className="dashboard-text">SUBIDAS DURANTE</div>
-                <div className="dashboard-subtext"> {`${invoiceCount.text}`}</div>
+                <div className="dashboard-subtext font-nunito"> {`${invoiceCount.text}`}</div>
               </div>
               <div style={{ flexBasis: '50%' }}>
                 <div style={{ display: 'flex' }}>
@@ -391,7 +391,7 @@ export const Dashboard = () => {
   
                 <div className="dashboard-titles" > {`${invoiceEmitCount.count} Ventas `}</div>
                 <div className="dashboard-text">SUBIDAS DURANTE</div>
-                <div className="dashboard-subtext">{`${invoiceEmitCount.text}`}</div>
+                <div className="dashboard-subtext font-nunito">{`${invoiceEmitCount.text}`}</div>
               </div>
               <div style={{ flexBasis: '50%' }}>
                 <div style={{ display: 'flex' }}>

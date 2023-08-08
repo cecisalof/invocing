@@ -2,6 +2,10 @@ body {
   font-family: 'Nunito';
 }
 
+font-nunito{
+  font-family: 'Nunito';
+}
+
 .title {
   color: #005CFF;
   font-weight: 400;
@@ -142,7 +146,6 @@ body {
 }
 
 .dashboard-subtext {
-  font-family: 'Nunito';
   font-weight: 100;
   font-size: 9px;
   line-height: 20px;
@@ -193,14 +196,6 @@ body {
 .upload-icon {
   color: green;
   margin-right: 5px;
-}
-
-.upload-text {
-  font-weight: 400;
-  font-size: 17px;
-  font-family: 'Nunito';
-  line-height: 25px;
-  margin-top: 20px;
 }
 
 /* Dashboard cards */
@@ -366,7 +361,6 @@ body {
 }
 
 .totals {
-  font-family: 'Nunito';
   font-weight: 300;
   font-size: 17px;
   line-height: 25px;
@@ -409,7 +403,6 @@ body {
 .customHeaderLabel {
   float: left;
   font-weight: 400;
-  font-family: 'Nunito';
   margin: 0 0 0 3px;
 }
 

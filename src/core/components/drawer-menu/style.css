@@ -85,32 +85,6 @@
     line-height: 26px;
   }
 
-  .sub-nav-link {
-    color: #005CFF !important;
-    font-family: 'Nunito';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 26px;
-    margin-left: 60px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    text-decoration: none;
-  }
-
-  .nav-item {
-    margin: 9px;
-    margin-left: 8px;
-    list-style-type: none;
-    width: 15vw;
-  }
-
-  @media (max-width: 992px) {
-    .nav-item {
-      width: 100%;
-    }
-  }
-
   .logoutItem {
     position: relative;
     margin-bottom: 8px;
@@ -125,23 +99,44 @@
     }
   }
 
+  .collapse.show .menuItemContainer, .collapse.collapsing .menuItemContainer {
+    background-color: rgba(0, 92, 255, 0.03);
+    -webkit-transition: background-color 100ms linear;
+    -ms-transition: background-color 100ms linear;
+    transition: background-color 100ms linear;
+  }
+
   .menuItemContainer {
     display: flex;
     justify-content: left;
     align-items: center;
-    width: 15vw;
   }
 
   .menuItemContainer:hover, .accordion-button:hover img, .accordion-button:hover span, .navbarlogo:hover{
     opacity: 0.5;
   }
 
+  .accordion-button{
+    color: rgb(0, 92, 255);
+  }
+  
   .accordion-button.open{
-    background: rgba(0, 92, 255, 0.03); 
+    background-color: rgba(0, 92, 255, 0.03); 
+    -webkit-transition: background-color 100ms linear;
+    -ms-transition: background-color 100ms linear;
+    transition: background-color 100ms linear;
+    -webkit-transition-delay: 400ms; /* Safari */
+    transition-delay: 400ms;
+    color: #005CFF;
   }
   
   .accordion-button.close{
     background: transparent;
+    -webkit-transition: background-color 100ms linear;
+    -ms-transition: background-color 100ms linear;
+    transition: background-color 100ms linear;
+    -webkit-transition-delay: 400ms; /* Safari */
+    transition-delay: 400ms;
   }
 
   @media (max-width: 992px) {
@@ -156,17 +151,8 @@
     margin-right: 30px;
   }
 
-  .active {
-    font-size: 19px;
-    text-decoration: none;
-  }
-  .subactive{
-    background-color: transparent;
-    opacity: 0.5;
-    margin-left: 60px;
-    text-decoration: none;
-    margin-top: 10px;
-    margin-bottom: 10px;
+  .sub-nav-link {
+    color: #005CFF !important;
   }
 
   .rotate-up {
