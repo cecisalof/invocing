@@ -8,7 +8,6 @@ import {
   deleteInvoice,
   patchProviderInvoice,
   invoiceToPayExcel,
-  taskStatus,
 } from "./services";
 import { AG_GRID_LOCALE_ES } from '../../locale/es.js';
 import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
@@ -26,7 +25,6 @@ import { getProviders } from "../suppliers/services";
 import { useNavigate } from 'react-router-dom';
 import AddButton from '../../atoms/AddButton'
 // import close from '../../assets/icons/close.png';
-import { ProgressBar } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import { Alert } from '@mui/material';
 import { DragAndDropCardComponent } from "../../components/dragAndDropCard/DragAndDrop";
@@ -45,7 +43,6 @@ export const InvoicesToPay = () => {
   const [isError, setIsError] = useState(false);
   const [rowSelection, setRowSelection] = useState(false);
   const userDataContext = useContext(Context);
-  const [tasksStatus, setTasksStatus] = useState([]);
 
   const localeText = AG_GRID_LOCALE_ES;
 
@@ -60,6 +57,7 @@ export const InvoicesToPay = () => {
     'rag-pending-outer': (props) => props.value === 'pending' || props.value === 'Pendiente',
     'rag-undefined-outer': (props) => props.value === 'undefined' || props.value === 'Sin definir',
   };
+
   const providerCellRenderer = (params) => {
     if (params.value) {
       return params.value.name; // Mostrar el nombre del proveedor
@@ -245,14 +243,6 @@ export const InvoicesToPay = () => {
       console.log('No hay datos para mostrar.');
     }
   };
-
-  // const getInoviceStatus = async (filters = null) => {
-  //   if (!userDataContext.userData.token || isLoading) return
-  //   isLoading = true
-  //   await getDataProviders();
-  //   await getDataInvoices(filters);
-  //   setTimeout(() => { isLoading = false }, 1000)
-  // }
 
   useEffect(() => {
     if (providersLoaded) {
@@ -553,20 +543,10 @@ export const InvoicesToPay = () => {
     }
   }
 
-  const getTasksStatus = async () => {
-    try {
-      const data = await taskStatus(userDataContext.userData.token);
-      setTasksStatus(data.data || []);
-    } catch (error) {
-      setTasksStatus([]);
-      console.log('No hay datos para mostrar.');
-    }
-  };
-
   return (
     <>
       <div>
-        <AppBar location={location} subtitle="Añade o edita las facturas con sus impuestos correspondientes"/>
+        <AppBar location={location} subtitle="Añade o edita las facturas con sus impuestos correspondientes" />
       </div>
 
       <ButtonBar getPanelData={getPanelData} />
@@ -579,42 +559,20 @@ export const InvoicesToPay = () => {
       {/* Blue card */}
       <DragAndDropCardComponent
         type="invoice"
-        taskStatus={tasksStatus}
-        getTasksStatus={getTasksStatus}
         userToken={userDataContext.userData.token}
         setIsError={(newValue) => { setIsError(newValue) }}
         onFinishedUploading={() => { () => { getPanelData() } }}
       />
-      {/* Progress Bar New */}
-      <ProgressBar
-          // now={}
-          label={`100%`}
-          // animated={userDataContext.progress === 0}
-          variant="custom-color"
-          className="mb-3"
-          style={{ width: '200px' }}
-        />
-      {/* {userDataContext.isLoadingRef && (
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <ProgressBar
-            now={userDataContext.progress}
-            label={userDataContext.progress === 0 ? "0%" : `${userDataContext.progress}%`}
-            animated={userDataContext.progress === 0}
-            variant="custom-color"
-            className="mb-3 custom-width-progess custom-progress"
-          />
-          <img src={close} alt="Close icon" onClick={handleCloseClick} style={{ marginRight: '20px', width: '20px', height: '20px', marginTop: '-2px' }} />
-        </div>)} */}
       <div className='d-flex mt-4'>
         <div className='mx-3'>
-          <AddButton 
+          <AddButton
             handleAdd={handleAddInvoice}
             text={'Añadir factura'} />
         </div>
         <div className='mx-1'>
           <button type="button" id="trash" disabled={!rowSelection} className={"btn bi mx-3 " + (rowSelection ? "btn-outline-primary bi-trash3-fill" : "btn-outline-secondary bi-trash3")} data-bs-toggle="modal" data-bs-target="#mainModal"></button>
         </div>
-        <Modal handleTrashClick={handleTrashClick} page={'invoices'}/>
+        <Modal handleTrashClick={handleTrashClick} page={'invoices'} />
         <div className='mx-1'>
           <button type="button" className="btn btn-outline-primary bi bi-download" onClick={handleDownloadFile}></button>
         </div>

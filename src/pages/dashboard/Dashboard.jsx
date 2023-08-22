@@ -171,7 +171,7 @@ export const Dashboard = () => {
           getPanelData={getPanelData} />
         {isError && (
           <Alert severity="error" className="custom-alert" onClose={() => { setIsError(false) }}>
-            Hubo un error al subir los ficheros
+            Hubo un error al subir los archivos
           </Alert>)}
         <div className='row'>
           <div className="col-12 col-md-6">
