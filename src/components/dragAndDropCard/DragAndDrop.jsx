@@ -167,16 +167,8 @@ export const DragAndDropCardComponent = ({ type, userToken, setIsError, onFinish
     if (type == "invoice") {
       response = await postInvoiceAutomatic(userToken, files)
 
-      // if (response !== null) {
-      //   await getTasksStatus() // file queue uploading status result
-      // }
-
     } else {
       response = await postExpenseTicketAutomatic(userToken, files)
-
-      // if (response !== null) {
-      //   await getTasksStatus() // file queue uploading status result
-      // }
     }
 
     if (!response) {
