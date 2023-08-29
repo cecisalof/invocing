@@ -85,7 +85,7 @@ export const DragAndDropCardComponent = (props) => {
 
       // to do!!!!: ES AQUÍ CECI: 
       // Debe hacerlo simultáneo con la cola e ir arrojando acciones, pero sin repetir acciones con archivos ya en estado success
-      i == 0 && fileQueue.items.map((item, index) => {
+      i == 0 && fileQueue.items.map((item) => {
         if (item.result == null) {
           console.log('getTasksStatus again!')
           setTimeout(() => {
