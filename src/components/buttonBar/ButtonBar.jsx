@@ -22,7 +22,7 @@ export default function ButtonBar(props) {
     };
 
     useEffect( () => {
-        if (startDate == null && endDate == null) { // if there is no date range selected, active year filter by default
+        if (startDate == null && endDate == null) { // if there is no date range selected, year filter will be activated by default
             getPanelData(filters);
             setActive(active);
         } else { // if there is a date range selected, clear/desactivate button period filter

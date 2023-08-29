@@ -438,7 +438,7 @@ export const ExpenseTickets = () => {
         type="ticket"
         userToken={userDataContext.userData.token}
         setIsError={(newValue) => { setIsError(newValue) }}
-        onFinishedUploading={() => { () => { getPanelData() } }}
+        getPanelData={getPanelData}
       />
 
       {userDataContext.isLoadingRefEx && (

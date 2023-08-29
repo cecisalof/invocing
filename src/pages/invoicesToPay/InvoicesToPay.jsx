@@ -561,7 +561,7 @@ export const InvoicesToPay = () => {
         type="invoice"
         userToken={userDataContext.userData.token}
         setIsError={(newValue) => { setIsError(newValue) }}
-        onFinishedUploading={() => { () => { getPanelData() } }}
+        getPanelData={getPanelData}
       />
       <div className='d-flex mt-4'>
         <div className='mx-3'>

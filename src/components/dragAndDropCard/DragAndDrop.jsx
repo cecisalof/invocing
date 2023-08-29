@@ -13,7 +13,9 @@ import {
   taskStatus
 } from "../../pages/invoicesToPay/services";
 
-export const DragAndDropCardComponent = ({ type, userToken, setIsError, onFinishedUploading }) => {
+export const DragAndDropCardComponent = (props) => {
+
+  const { type, userToken, setIsError, getPanelData } = props;
 
   // const [isFileUploaded, setIsFileUploaded] = useState(false)
   const [successProgressBarPercentage, setSuccessProgressBarPercentage] = useState(10)
@@ -76,89 +78,45 @@ export const DragAndDropCardComponent = ({ type, userToken, setIsError, onFinish
     }
   };
 
-  // const processFiles = async (files) => {
-  //   setIsFileUploading(true) // SHOWING BAR
-  //   console.log("Procesando archivos automáticamente...")
-  //   getTasksStatus() // file processing status result
-  //   let response = null
-  //   // let scheduleStatus = null;
-  //   if (type == "invoice") {
-  //     response = await postInvoiceAutomatic(userToken, files)
-  //     // if (response) {
-  //     await checkStatus(response) // checks file upload process
-  //     // }
-  //     // console.log(response);
-  //     // scheduleStatus = await getSchenduleStatus(userToken, response.data.schedules);
-  //     // setFileLoadingProcessResponse(scheduleStatus);
-  //   } else {
-  //     response = await postExpenseTicketAutomatic(userToken, files)
-  //   }
-
-  //   setTimeout(
-  //     await onFinishedUploading(),
-  //     setIsFileUploading(false),
-  //     setIsFileUploaded(true)
-  //     , 5000) // getPanelData()
-
-  //   if (!response) {
-  //     setIsError(true)
-  //   }
-  //   setTimeout(() => {
-  //     setIsFileUploaded(false);
-  //   }, 5000)
-  // };
-
-
   const updateBarPercentage = () => {
     for (const [i, fileQueue] of tasksState.entries()) { // fileQueue represents each file queue in getTasksStatus().
 
-      // if (fileQueue.success + fileQueue.fail < fileQueue.totals) { // not all files had been uploaded
-      //   console.log('getTasksStatus again!');
-      //   setTimeout(() => {
-      //     getTasksStatus() // Wait 10 secs & re-run getTasksStatus()
-      //   }, 10000);
-      // }
+      // fileQueue.items is an array with processed files in each file queue
 
-      // fileQueue.items is an array with processed files in each file queue in getTasksStatus().
-      i == 0 && fileQueue.items.map((items) => {
-        console.log(items);
-        if (items.result == null) {
+      // to do!!!!: ES AQUÍ CECI: 
+      // Debe hacerlo simultáneo con la cola e ir arrojando acciones, pero sin repetir acciones con archivos ya en estado success
+      i == 0 && fileQueue.items.map((item, index) => {
+        if (item.result == null) {
           console.log('getTasksStatus again!')
           setTimeout(() => {
             getTasksStatus() // Wait 10 secs & re-run getTasksStatus()
           }, 10000);
 
-        } else if (items.result.success) {
-          console.log('Archivo success!')
+        } else if (item.result.success) {
+          console.log('Archivo procesado y subido!')
+          // TO DO: quitar/ignorar este lemento del array fileQueue
+          // #
+          // #
 
           // change bar percentage first
           setSuccessProgressBarPercentage(Math.round((fileQueue.success * 100) / fileQueue.total))
 
-          setTimeout(async () => {
-            console.log('getting panel data!');
-            await onFinishedUploading // getPanelData() to show files in the grid
-            // change card view, hide progress bar, setting isFileUploading to false.
-            setIsFileUploading(false);
-          }, 3000);
+        } else if (item.result.error) {
+          console.log('some items fails:', item.result.detail);
 
-        } else if (items.result.error) {
-          console.log('some items fails:', items.result.detail);
+          // TO DO: quitar/ignorar este lemento del array fileQueue
+          // #
+          // #
 
           // change bar percentage first
           setFailProgressBarPercentage(Math.round((fileQueue.fail * 100) / fileQueue.total));
-
-          setTimeout(async () => {
-            console.log('getting panel data!');
-            await onFinishedUploading; // getPanelData() to show files in the grid
-             // change card view, hide progress bar, setting isFileUploading to false.
-             setIsFileUploading(false);
-          }, 3000);
         }
       })
     }
   }
 
   const processFiles = async (files) => {
+
     setIsFileUploading(true) // Showing progress bar
     console.log("Procesando archivos automáticamente...");
 
@@ -167,8 +125,17 @@ export const DragAndDropCardComponent = ({ type, userToken, setIsError, onFinish
     if (type == "invoice") {
       response = await postInvoiceAutomatic(userToken, files)
 
+      if (response) {
+        getTasksStatus();
+      }
+
     } else {
       response = await postExpenseTicketAutomatic(userToken, files)
+
+      if (response) {
+        getTasksStatus();
+      }
+
     }
 
     if (!response) {
@@ -179,6 +146,20 @@ export const DragAndDropCardComponent = ({ type, userToken, setIsError, onFinish
     //   setIsFileUploaded(false);
     // }, 5000)
   }
+
+  useEffect(() => {
+    if (successProgressBarPercentage + failProgressBarPercentage == 100) {
+      setTimeout(async () => {
+        console.log('requesting data to show files in the grid!');
+        await getPanelData('?year=1'); // getPanelData() to show files in the grid
+
+        // change card view, hide progress bar, setting isFileUploading to false.
+        setIsFileUploading(false);
+
+      }, 3000);
+    }
+
+  }, [successProgressBarPercentage, failProgressBarPercentage])
 
   useEffect(() => {
     if (tasksState.length !== 0) {
@@ -260,7 +241,7 @@ DragAndDropCardComponent.propTypes = {
   userToken: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
   setIsError: PropTypes.func.isRequired,
-  onFinishedUploading: PropTypes.func,
+  getPanelData: PropTypes.func,
   getTasksStatus: PropTypes.func,
   tasksState: PropTypes.array
 }

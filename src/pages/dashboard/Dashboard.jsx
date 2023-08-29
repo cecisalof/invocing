@@ -180,7 +180,7 @@ export const Dashboard = () => {
               type="invoice"
               userToken={userDataContext.userData.token}
               setIsError={(newValue) => { setIsError(newValue) }}
-              onFinishedUploading={() => { () => { getPanelData() } }}
+              getPanelData={getPanelData}
             />
           </div>
           <div className="col-12 col-md-6 mt-3 mt-md-0">
@@ -189,7 +189,7 @@ export const Dashboard = () => {
               type="ticket"
               userToken={userDataContext.userData.token}
               setIsError={(newValue) => { setIsError(newValue) }}
-              onFinishedUploading={() => { () => { getPanelData() } }}
+              getPanelData={getPanelData}
             />
           </div>
         </div>
