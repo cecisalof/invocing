@@ -12,7 +12,7 @@ export const API_URL = {
     INVOICE_TO_EMIT_PDF: 'invoice-to-emit-pdf/',
     INVOICE_TO_PAY_AUTOMATIC: 'invoice-to-pay-automatic/',
     SCHENDULE_STATUS: 'schendule-status/',
-    INVOICE_TO_PAY_STATES: 'invoice-to-pay-state-count/',
+    INVOICE_TO_PAY_STATES: 'invoice-to-pay-status-count',
     INVOICE_TO_EMIT_STATES: 'invoice-to-emit-state-count/',
     INVOICE_TO_PAY_TOTALS: 'invoice-to-pay-totals/',
     INVOICE_TO_EMIT_TOTALS: 'invoice-to-emit-totals/',

@@ -289,7 +289,7 @@ export const AddInvoicesToPay = () => {
                 >
                   <option value="pending">Pendiente</option>
                   <option value="received">Recibida</option>
-                  <option value="payed">Pagada</option>
+                  <option value="paid">Pagada</option>
                   <option value="rejected">Rechazado</option>
                 </select>
               </div>

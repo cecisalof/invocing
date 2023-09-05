@@ -291,7 +291,7 @@ export const ExpenseTickets = () => {
     const stateMappings = {
       'Pendiente': 'pending',
       'Recibida': 'received',
-      'Pagada': 'payed',
+      'Pagada': 'paid',
       'Rechazado': 'rejected'
     };
 

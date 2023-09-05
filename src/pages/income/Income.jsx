@@ -35,7 +35,7 @@ export const Income = () => {
   };
 
   const ragCellClassRules = {
-    'rag-green-outer': (props) => props.value === 'payed' || props.value === 'Pagada',
+    'rag-green-outer': (props) => props.value === 'paid' || props.value === 'Pagada',
     'rag-yellow-outer': (props) => props.value === 'received' || props.value === 'Recibida',
     'rag-red-outer': (props) => props.value === 'rejected' || props.value === 'Rechazado',
     'rag-orange-outer': (props) => props.value === 'pending' || props.value === 'Pendiente',
@@ -132,7 +132,7 @@ export const Income = () => {
     const stateMappings = {
       'Pendiente': 'pending',
       'Recibida': 'received',
-      'Pagada': 'payed',
+      'Pagada': 'paid',
       'Rechazado': 'rejected'
     };
 

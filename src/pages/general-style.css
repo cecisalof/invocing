@@ -70,7 +70,7 @@ body {
   padding: 0.4em 0.7em;
 }
 
-.rag-payed-outer .rag-element {
+.rag-paid-outer .rag-element {
   background-color: #00C7E2;
   border-radius: 1em;
   padding: 0.4em 0.7em;
@@ -312,7 +312,7 @@ body {
   background: #FF6A36;
 }
 
-.payed {
+.paid {
   background: #00C7E2
 }
 
