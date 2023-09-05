@@ -19,9 +19,60 @@ export const DragAndDropCardComponent = (props) => {
 
   // const [isFileUploaded, setIsFileUploaded] = useState(false)
   const [successProgressBarPercentage, setSuccessProgressBarPercentage] = useState(10)
-  const [failProgressBarPercentage, setFailProgressBarPercentage] = useState(0);
+  const [failProgressBarPercentage, setFailProgressBarPercentage] = useState(0)
   const [isFileUploading, setIsFileUploading] = useState(false)
-  const [tasksState, setTasksState] = useState([])
+  const [tasksState, setTasksState] = useState([
+    // {
+    //   "uuid": "690d6d4a-8d99-4f07-b2d2-fe0f511688c4",
+    //   "success": 0,
+    //   "fail": 1,
+    //   "total": 1,
+    //   "items": [
+    //     {
+    //       "bulk_uuid": "690d6d4a-8d99-4f07-b2d2-fe0f511688c4",
+    //       "result": null,
+    //       "name": "typeform_invoice_BTLYoRTkMTvz5VGv.pdf",
+    //       "created_at": "2023-07-18T13:13:10.248578Z"
+    //     },
+    //     {
+    //       "bulk_uuid": "690d6d4a-8d99-4f07-b2d2-fe0f511688c4",
+    //       "success": true,
+    //       "name": "typeform_invoice_BTLYoRTkMTvz5VGv.pdf",
+    //       "created_at": "2023-07-18T13:13:10.248578Z"
+    //     }, {
+    //       "bulk_uuid": "690d6d4a-8d99-4f07-b2d2-fe0f511688c4",
+    //       "error": true,
+    //       "name": "typeform_invoice_BTLYoRTkMTvz5VGv.pdf",
+    //       "created_at": "2023-07-18T13:13:10.248578Z"
+    //     }
+    //   ]
+    // },
+    // {
+    //   "uuid": "690d6d4a-8d99-4f07-b2d2-fe0f511688c4",
+    //   "success": 0,
+    //   "fail": 1,
+    //   "total": 1,
+    //   "items": [
+    //     {
+    //       "bulk_uuid": "690d6d4a-8d99-4f07-b2d2-fe0f511688c4",
+    //       "result": null,
+    //       "name": "typeform_invoice_BTLYoRTkMTvz5VGv.pdf",
+    //       "created_at": "2023-07-18T13:13:10.248578Z"
+    //     },
+    //     {
+    //       "bulk_uuid": "690d6d4a-8d99-4f07-b2d2-fe0f511688c4",
+    //       "success": true,
+    //       "name": "typeform_invoice_BTLYoRTkMTvz5VGv.pdf",
+    //       "created_at": "2023-07-18T13:13:10.248578Z"
+    //     }, {
+    //       "bulk_uuid": "690d6d4a-8d99-4f07-b2d2-fe0f511688c4",
+    //       "error": true,
+    //       "name": "typeform_invoice_BTLYoRTkMTvz5VGv.pdf",
+    //       "created_at": "2023-07-18T13:13:10.248578Z"
+    //     }
+    //   ]
+    // },
+  ])
 
   const inputRef = useRef(null)
   const cardRef = useRef(null)
@@ -68,7 +119,6 @@ export const DragAndDropCardComponent = (props) => {
   };
 
   const getTasksStatus = async () => {
-    console.log('Checking file upload status')
     try {
       const data = await taskStatus(userToken)
       setTasksState(data.data)
@@ -78,14 +128,46 @@ export const DragAndDropCardComponent = (props) => {
     }
   };
 
+  // const checkingLoadedFiles = (file) => {
+  //   console.log(file);
+  //   if (file && file.result && file.result == null) {
+  //     //     fileStatus.push(file);
+  //     //   }
+      
+  //   }
+  // }
+
+      // let finalStatusQueueArray = [];
+    // let pendingFilesToLoad = tasksState;
+    // pendingFilesToLoad.map((item, i) => {
+    //   if (i == 0) { // primera cola de archivos
+    //     for (const file of item.items) {
+    //       for (const [key] of Object.entries(file.result)) {
+    //         if (key == 'null') {
+    //           console.log(item);
+    //         }
+    //       } 
+    //     }
+    //   }
+    // });
+
+
+  // let fileStatus = [];
+  // console.log(tasksState[0].items);
+  // tasksState && tasksState[0].items.map((file) => {
+  //   if (file && file.result && file.result == null) {
+  //     fileStatus.push(file);
+  //   }
+  // });
+  // console.log(fileStatus);
+
   const updateBarPercentage = () => {
     for (const [i, fileQueue] of tasksState.entries()) { // fileQueue represents each file queue in getTasksStatus().
 
       // fileQueue.items is an array with processed files in each file queue
-
-      // to do!!!!: ES AQUÍ CECI: 
-      // Debe hacerlo simultáneo con la cola e ir arrojando acciones, pero sin repetir acciones con archivos ya en estado success
       i == 0 && fileQueue.items.map((item) => {
+        console.log(item);
+        // checkingLoadedFiles(item);
         if (item.result == null) {
           console.log('getTasksStatus again!')
           setTimeout(() => {
@@ -93,30 +175,27 @@ export const DragAndDropCardComponent = (props) => {
           }, 10000);
 
         } else if (item.result.success) {
-          console.log('Archivo procesado y subido!')
-          // TO DO: quitar/ignorar este lemento del array fileQueue
-          // #
-          // #
+          console.log('Archivo procesado y subido:', item.name)
 
           // change bar percentage first
           setSuccessProgressBarPercentage(Math.round((fileQueue.success * 100) / fileQueue.total))
 
+          // TO DO: acumular en un arreglo y comporbar si existe en taskState. Si existe, sacarlo de taskState para que no se repita su comprobación.       
+          
         } else if (item.result.error) {
-          console.log('some items fails:', item.result.detail);
+          console.log(`El archivo ${item.name} ha fallado:`, item.result.detail);
 
-          // TO DO: quitar/ignorar este lemento del array fileQueue
-          // #
-          // #
-
-          // change bar percentage first
+          // reset successProgressBarPercentage first!
+          setSuccessProgressBarPercentage(0)
+          // set failProgressBarPercentage
           setFailProgressBarPercentage(Math.round((fileQueue.fail * 100) / fileQueue.total));
         }
       })
     }
   }
 
-  const processFiles = async (files) => {
 
+  const processFiles = async (files) => {
     setIsFileUploading(true) // Showing progress bar
     console.log("Procesando archivos automáticamente...");
 
@@ -124,22 +203,14 @@ export const DragAndDropCardComponent = (props) => {
 
     if (type == "invoice") {
       response = await postInvoiceAutomatic(userToken, files)
-
-      if (response) {
-        getTasksStatus();
-      }
-
     } else {
       response = await postExpenseTicketAutomatic(userToken, files)
-
-      if (response) {
-        getTasksStatus();
-      }
-
     }
 
     if (!response) {
       setIsError(true)
+    } else {
+      getTasksStatus();
     }
 
     // setTimeout(() => {
@@ -150,12 +221,14 @@ export const DragAndDropCardComponent = (props) => {
   useEffect(() => {
     if (successProgressBarPercentage + failProgressBarPercentage == 100) {
       setTimeout(async () => {
-        console.log('requesting data to show files in the grid!');
+        console.log('Updating grid data...');
         await getPanelData('?year=1'); // getPanelData() to show files in the grid
 
         // change card view, hide progress bar, setting isFileUploading to false.
         setIsFileUploading(false);
-
+        // reset progessBar Percentages
+        setSuccessProgressBarPercentage(10)
+        setFailProgressBarPercentage(0)
       }, 3000);
     }
 
@@ -163,7 +236,7 @@ export const DragAndDropCardComponent = (props) => {
 
   useEffect(() => {
     if (tasksState.length !== 0) {
-      updateBarPercentage()
+      updateBarPercentage();
     }
   }, [tasksState])
 

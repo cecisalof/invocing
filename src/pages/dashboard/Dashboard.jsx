@@ -18,7 +18,6 @@ import ButtonBar from '../../components/buttonBar/ButtonBar';
 //import { getIncome } from "./../income/services";
 //import { AgChartsReact } from 'ag-charts-react';
 
-
 export const Dashboard = () => {
   const location = useLocation();
 
@@ -72,7 +71,7 @@ export const Dashboard = () => {
   };
 
   let isLoading = false; // Class variable to avoid taking too long to save that we are loading (state is not enough to control this). Also avoids multiple request under 1 second
-  
+
   const getPanelData = async (filters = null) => {
     if (!userDataContext.userData.token || isLoading) return
     isLoading = true
@@ -167,8 +166,10 @@ export const Dashboard = () => {
         <div>
           <AppBar location={location} subtitle="Bienvenido a tu panel de control" />
         </div>
-        <ButtonBar 
-          getPanelData={getPanelData} />
+        <ButtonBar
+          getPanelData={getPanelData}
+          userToken={userDataContext.userData.token}
+        />
         {isError && (
           <Alert severity="error" className="custom-alert" onClose={() => { setIsError(false) }}>
             Hubo un error al subir los archivos
@@ -208,9 +209,9 @@ export const Dashboard = () => {
                 </div>
                 <div className="col">
                   <div className="card-container">
-                    <div className="totals">{`${parseFloat(totals.total_amount || 0).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2})} €`}</div>
-                    <div className="totals">{`${(totals.total_taxes || 0).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2})} €`}</div>
-                    <div className="totals">{`${(totals.total_retention || 0).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2})} €`}</div>
+                    <div className="totals">{`${parseFloat(totals.total_amount || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €`}</div>
+                    <div className="totals">{`${(totals.total_taxes || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €`}</div>
+                    <div className="totals">{`${(totals.total_retention || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €`}</div>
                   </div>
                 </div>
               </div>
@@ -234,7 +235,7 @@ export const Dashboard = () => {
                       <p className='states pending'>PENDIENTE</p>
                     </div>
                     <div>
-                      <p className='states payed'>PAGADA</p>
+                      <p className='states paid'>PAGADA</p>
                     </div>
                     <div>
                       <p className='states received '>RECIBIDA</p>
@@ -296,7 +297,7 @@ export const Dashboard = () => {
                 </div>
   
                 <div style={{ display: 'flex' }}>
-                  <div className='states payed'>
+                  <div className='states paid'>
                     PAGADA
                   </div>
                   <div className='count-states'>
@@ -354,7 +355,7 @@ export const Dashboard = () => {
                 </div>
   
                 <div style={{ display: 'flex' }}>
-                  <div className='states payed'>
+                  <div className='states paid'>
                     PAGADA
                   </div>
                   <div className='count-states'>
@@ -404,7 +405,7 @@ export const Dashboard = () => {
                 </div>
   
                 <div style={{ display: 'flex' }}>
-                  <div className='states payed'>
+                  <div className='states paid'>
                     PAGADA
                   </div>
                   <div className='count-states'>
