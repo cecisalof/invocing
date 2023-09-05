@@ -51,7 +51,7 @@ export const InvoicesToPay = () => {
   };
 
   const ragCellClassRules = {
-    'rag-payed-outer': (props) => props.value === 'payed' || props.value === 'Pagada',
+    'rag-paid-outer': (props) => props.value === 'paid' || props.value === 'Pagada',
     'rag-received-outer': (props) => props.value === 'received' || props.value === 'Recibida',
     'rag-rejected-outer': (props) => props.value === 'rejected' || props.value === 'Rechazado',
     'rag-pending-outer': (props) => props.value === 'pending' || props.value === 'Pendiente',
@@ -401,7 +401,7 @@ export const InvoicesToPay = () => {
     const stateMappings = {
       'Pendiente': 'pending',
       'Recibida': 'received',
-      'Pagada': 'payed',
+      'Pagada': 'paid',
       'Rechazado': 'rejected',
       'Sin definir': 'undefined',
     };
@@ -549,7 +549,10 @@ export const InvoicesToPay = () => {
         <AppBar location={location} subtitle="Añade o edita las facturas con sus impuestos correspondientes" />
       </div>
 
-      <ButtonBar getPanelData={getPanelData} />
+      <ButtonBar
+        getPanelData={getPanelData}
+        userToken={userDataContext.userData.token}
+      />
 
       {isError && (
         <Alert severity="error" className="custom-alert" onClose={() => { setIsError(false) }}>

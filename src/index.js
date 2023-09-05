@@ -5,6 +5,8 @@ import { App } from './App'
 import * as Sentry from "@sentry/react";
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
+import store from './store/store'
+import { Provider } from 'react-redux'
 
 if (process.env.NODE_ENV && process.env.NODE_ENV !== 'development') {
   Sentry.init({
@@ -28,7 +30,9 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <App />
+      <Provider store={store}>
+        <App />
+      </Provider>
     </BrowserRouter>
   </React.StrictMode>
 );

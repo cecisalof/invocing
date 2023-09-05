@@ -427,7 +427,10 @@ export const ExpenseTickets = () => {
       <div>
         <AppBar location={location} subtitle="Añade o edita los gastos de los que no se contarán IVA o IRPF"/>
       </div>
-      <ButtonBar getPanelData={getPanelData} />
+      <ButtonBar
+        getPanelData={getPanelData}
+        userToken={userDataContext.userData.token}
+      />
       {isError && (
         <Alert severity="error" className="custom-alert" onClose={() => { setIsError(false) }}>
           Hubo un error al subir los ficheros
