@@ -4,79 +4,15 @@ import 'react-calendar/dist/Calendar.css';
 import "react-datepicker/dist/react-datepicker.css";
 import '../../pages/general-style.css';
 import PropTypes from 'prop-types';
-import {
-    taskStatus
-} from "../../pages/invoicesToPay/services";
-import { useSelector, useDispatch } from 'react-redux'
-import { tasksAdded } from '../../store/slice'
 
 export default function ButtonBar(props) {
-    const { getPanelData, userToken } = props;
+    const { getPanelData } = props;
 
     const [active, setActive] = useState('year');
     const [filters, setFilters] = useState("?year=1");
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
-    const [tasksState, setTasksState] = useState([
-        // {
-        //   "uuid": "690d6d4a-8d99-4f07-b2d2-fe0f511688c4",
-        //   "success": 0,
-        //   "fail": 1,
-        //   "total": 1,
-        //   "items": [
-        //     {
-        //       "bulk_uuid": "690d6d4a-8d99-4f07-b2d2-fe0f511688c4",
-        //       "result": null,
-        //       "name": "typeform_invoice_BTLYoRTkMTvz5VGv.pdf",
-        //       "created_at": "2023-07-18T13:13:10.248578Z"
-        //     },
-        //     {
-        //       "bulk_uuid": "690d6d4a-8d99-4f07-b2d2-fe0f511688c4",
-        //       "success": true,
-        //       "name": "typeform_invoice_BTLYoRTkMTvz5VGv.pdf",
-        //       "created_at": "2023-07-18T13:13:10.248578Z"
-        //     }, {
-        //       "bulk_uuid": "690d6d4a-8d99-4f07-b2d2-fe0f511688c4",
-        //       "error": true,
-        //       "name": "typeform_invoice_BTLYoRTkMTvz5VGv.pdf",
-        //       "created_at": "2023-07-18T13:13:10.248578Z"
-        //     }
-        //   ]
-        // },
-        // {
-        //   "uuid": "690d6d4a-8d99-4f07-b2d2-fe0f511688c4",
-        //   "success": 0,
-        //   "fail": 1,
-        //   "total": 1,
-        //   "items": [
-        //     {
-        //       "bulk_uuid": "690d6d4a-8d99-4f07-b2d2-fe0f511688c4",
-        //       "result": null,
-        //       "name": "typeform_invoice_BTLYoRTkMTvz5VGv.pdf",
-        //       "created_at": "2023-07-18T13:13:10.248578Z"
-        //     },
-        //     {
-        //       "bulk_uuid": "690d6d4a-8d99-4f07-b2d2-fe0f511688c4",
-        //       "success": true,
-        //       "name": "typeform_invoice_BTLYoRTkMTvz5VGv.pdf",
-        //       "created_at": "2023-07-18T13:13:10.248578Z"
-        //     }, {
-        //       "bulk_uuid": "690d6d4a-8d99-4f07-b2d2-fe0f511688c4",
-        //       "error": true,
-        //       "name": "typeform_invoice_BTLYoRTkMTvz5VGv.pdf",
-        //       "created_at": "2023-07-18T13:13:10.248578Z"
-        //     }
-        //   ]
-        // },
-    ])
 
-    // BRING INITIAL REDUX STATE 
-    useSelector(state => state.tasks);
-
-    // DISPATCH NEW TASKSTATE TO GLOBAL REDUX STATE
-    const dispatch = useDispatch();
-    dispatch(tasksAdded(tasksState));
-    
     const getDataWithFilter = async (filters, event) => {
         await getPanelData(filters);
         setActive(event.target.id);
@@ -94,67 +30,12 @@ export default function ButtonBar(props) {
         }
     }, [startDate, endDate])
 
-    const getTasksStatus = async () => {
-        try {
-            const data = await taskStatus(userToken)
-            setTasksState(data.data)
-            dispatch(tasksAdded(data.data.map(task => task )));
-        } catch (error) {
-            setTasksState([])
-            console.log('No hay datos para mostrar.')
-        }
-    };
-
-    // const updateBarPercentage = () => {
-    //     for (const [i, fileQueue] of tasksState.entries()) { // fileQueue represents each file queue in getTasksStatus().
-
-    //         // fileQueue.items is an array with processed files in each file queue
-    //         i == 0 && fileQueue.items.map((item) => {
-    //             console.log(item);
-    //             // checkingLoadedFiles(item);
-    //             if (item.result == null) {
-    //                 console.log('getTasksStatus again!')
-    //                 setTimeout(() => {
-    //                     getTasksStatus() // Wait 10 secs & re-run getTasksStatus()
-    //                 }, 10000);
-
-    //             } else if (item.result.success) {
-    //                 console.log('Archivo procesado y subido:', item.name)
-
-    //                 // change bar percentage first
-    //                 setSuccessProgressBarPercentage(Math.round((fileQueue.success * 100) / fileQueue.total))
-
-    //                 // TO DO: acumular en un arreglo y comporbar si existe en taskState. Si existe, sacarlo de taskState para que no se repita su comprobación.       
-
-    //             } else if (item.result.error) {
-    //                 console.log(`El archivo ${item.name} ha fallado:`, item.result.detail);
-
-    //                 // reset successProgressBarPercentage first!
-    //                 setSuccessProgressBarPercentage(0)
-    //                 // set failProgressBarPercentage
-    //                 setFailProgressBarPercentage(Math.round((fileQueue.fail * 100) / fileQueue.total));
-    //             }
-    //         })
-    //     }
-    // }
-
-
     useEffect(() => {
         if (active !== null && filters !== null) { // if a button period is selected, clear date range
             setStartDate(null);
             setEndDate(null);
         }
     }, [active, filters])
-
-    useEffect(() => {
-        //Implementing the setInterval method
-        const interval = setInterval(() => {
-            getTasksStatus();
-        }, 10000);
-        //Clearing the interval: stop the interval when the component unmounts.
-        return () => clearInterval(interval);
-    }, []);
-
 
     const selectRange = async (startDate, endDate) => {
 
