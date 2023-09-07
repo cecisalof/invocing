@@ -429,7 +429,6 @@ export const ExpenseTickets = () => {
       </div>
       <ButtonBar
         getPanelData={getPanelData}
-        userToken={userDataContext.userData.token}
       />
       {isError && (
         <Alert severity="error" className="custom-alert" onClose={() => { setIsError(false) }}>

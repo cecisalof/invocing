@@ -9,9 +9,7 @@ import cashYellow from '../../assets/icons/cashYellow.png';
 import dragDrop from '../../assets/icons/drag-and-drop.png';
 import { ProgressBar } from 'react-bootstrap';
 import "./style.css"
-import {
-  taskStatus
-} from "../../pages/invoicesToPay/services";
+import { useSelector } from 'react-redux'
 
 export const DragAndDropCardComponent = (props) => {
 
@@ -21,58 +19,9 @@ export const DragAndDropCardComponent = (props) => {
   const [successProgressBarPercentage, setSuccessProgressBarPercentage] = useState(10)
   const [failProgressBarPercentage, setFailProgressBarPercentage] = useState(0)
   const [isFileUploading, setIsFileUploading] = useState(false)
-  const [tasksState, setTasksState] = useState([
-    // {
-    //   "uuid": "690d6d4a-8d99-4f07-b2d2-fe0f511688c4",
-    //   "success": 0,
-    //   "fail": 1,
-    //   "total": 1,
-    //   "items": [
-    //     {
-    //       "bulk_uuid": "690d6d4a-8d99-4f07-b2d2-fe0f511688c4",
-    //       "result": null,
-    //       "name": "typeform_invoice_BTLYoRTkMTvz5VGv.pdf",
-    //       "created_at": "2023-07-18T13:13:10.248578Z"
-    //     },
-    //     {
-    //       "bulk_uuid": "690d6d4a-8d99-4f07-b2d2-fe0f511688c4",
-    //       "success": true,
-    //       "name": "typeform_invoice_BTLYoRTkMTvz5VGv.pdf",
-    //       "created_at": "2023-07-18T13:13:10.248578Z"
-    //     }, {
-    //       "bulk_uuid": "690d6d4a-8d99-4f07-b2d2-fe0f511688c4",
-    //       "error": true,
-    //       "name": "typeform_invoice_BTLYoRTkMTvz5VGv.pdf",
-    //       "created_at": "2023-07-18T13:13:10.248578Z"
-    //     }
-    //   ]
-    // },
-    // {
-    //   "uuid": "690d6d4a-8d99-4f07-b2d2-fe0f511688c4",
-    //   "success": 0,
-    //   "fail": 1,
-    //   "total": 1,
-    //   "items": [
-    //     {
-    //       "bulk_uuid": "690d6d4a-8d99-4f07-b2d2-fe0f511688c4",
-    //       "result": null,
-    //       "name": "typeform_invoice_BTLYoRTkMTvz5VGv.pdf",
-    //       "created_at": "2023-07-18T13:13:10.248578Z"
-    //     },
-    //     {
-    //       "bulk_uuid": "690d6d4a-8d99-4f07-b2d2-fe0f511688c4",
-    //       "success": true,
-    //       "name": "typeform_invoice_BTLYoRTkMTvz5VGv.pdf",
-    //       "created_at": "2023-07-18T13:13:10.248578Z"
-    //     }, {
-    //       "bulk_uuid": "690d6d4a-8d99-4f07-b2d2-fe0f511688c4",
-    //       "error": true,
-    //       "name": "typeform_invoice_BTLYoRTkMTvz5VGv.pdf",
-    //       "created_at": "2023-07-18T13:13:10.248578Z"
-    //     }
-    //   ]
-    // },
-  ])
+
+  // Reading tasks global state 
+  const tasksState = useSelector(state => state.tasks);
 
   const inputRef = useRef(null)
   const cardRef = useRef(null)
@@ -118,49 +67,6 @@ export const DragAndDropCardComponent = (props) => {
     event.target.value = null;
   };
 
-  const getTasksStatus = async () => {
-    try {
-      const data = await taskStatus(userToken)
-      setTasksState(data.data)
-    } catch (error) {
-      setTasksState([])
-      console.log('No hay datos para mostrar.')
-    }
-  };
-
-  // const checkingLoadedFiles = (file) => {
-  //   console.log(file);
-  //   if (file && file.result && file.result == null) {
-  //     //     fileStatus.push(file);
-  //     //   }
-      
-  //   }
-  // }
-
-      // let finalStatusQueueArray = [];
-    // let pendingFilesToLoad = tasksState;
-    // pendingFilesToLoad.map((item, i) => {
-    //   if (i == 0) { // primera cola de archivos
-    //     for (const file of item.items) {
-    //       for (const [key] of Object.entries(file.result)) {
-    //         if (key == 'null') {
-    //           console.log(item);
-    //         }
-    //       } 
-    //     }
-    //   }
-    // });
-
-
-  // let fileStatus = [];
-  // console.log(tasksState[0].items);
-  // tasksState && tasksState[0].items.map((file) => {
-  //   if (file && file.result && file.result == null) {
-  //     fileStatus.push(file);
-  //   }
-  // });
-  // console.log(fileStatus);
-
   const updateBarPercentage = () => {
     for (const [i, fileQueue] of tasksState.entries()) { // fileQueue represents each file queue in getTasksStatus().
 
@@ -169,11 +75,7 @@ export const DragAndDropCardComponent = (props) => {
         console.log(item);
         // checkingLoadedFiles(item);
         if (item.result == null) {
-          console.log('getTasksStatus again!')
-          setTimeout(() => {
-            getTasksStatus() // Wait 10 secs & re-run getTasksStatus()
-          }, 10000);
-
+          return
         } else if (item.result.success) {
           console.log('Archivo procesado y subido:', item.name)
 
@@ -181,7 +83,7 @@ export const DragAndDropCardComponent = (props) => {
           setSuccessProgressBarPercentage(Math.round((fileQueue.success * 100) / fileQueue.total))
 
           // TO DO: acumular en un arreglo y comporbar si existe en taskState. Si existe, sacarlo de taskState para que no se repita su comprobación.       
-          
+
         } else if (item.result.error) {
           console.log(`El archivo ${item.name} ha fallado:`, item.result.detail);
 
@@ -193,7 +95,6 @@ export const DragAndDropCardComponent = (props) => {
       })
     }
   }
-
 
   const processFiles = async (files) => {
     setIsFileUploading(true) // Showing progress bar
@@ -209,8 +110,6 @@ export const DragAndDropCardComponent = (props) => {
 
     if (!response) {
       setIsError(true)
-    } else {
-      getTasksStatus();
     }
 
     // setTimeout(() => {

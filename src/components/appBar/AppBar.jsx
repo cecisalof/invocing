@@ -8,13 +8,21 @@ import Context from '../../contexts/context';
 import { useContext } from 'react';
 import { ProgressBar } from 'react-bootstrap';
 import PropTypes from 'prop-types';
+import {
+  taskStatus
+} from "../../pages/invoicesToPay/services";
+import { useDispatch } from 'react-redux'
+import { tasksAdded } from '../../features/tasks/taskSlice'
 
-export const AppBar = (props)  => {
+export const AppBar = (props) => {
+
   const [userName, setUserName] = useState('');
   const [userPhoto, setUserPhoto] = useState('');
   const [mostrarNotificaciones, setMostrarNotificaciones] = useState(false);
-
   const userDataContext = useContext(Context);
+
+  // DISPATCH NEW TASKSTATE TO GLOBAL REDUX STATE
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (userDataContext.userData.name !== null) {
@@ -28,9 +36,8 @@ export const AppBar = (props)  => {
 
   // function handleSettingsClick() {
   //   console.log('Botón de ajustes clickeado');
-    
-
   // }
+
   const handleNotificationClick = () => {
     setMostrarNotificaciones(!mostrarNotificaciones);
   };
@@ -41,43 +48,63 @@ export const AppBar = (props)  => {
   //   // Aquí puedes agregar la lógica para manejar la búsqueda
   // }
 
+  const getTasksStatus = async () => {
+    try {
+      const data = await taskStatus(userDataContext.userData.token)
+      dispatch(tasksAdded(data.data));
+    } catch (error) {
+      dispatch(tasksAdded([]));
+      console.log('No hay datos para mostrar.')
+    }
+  };
+
+
+  useEffect(() => {
+    //Implementing the setInterval method
+    const interval = setInterval(() => {
+      getTasksStatus();
+    }, 10000);
+    //Clearing the interval: stop the interval when the component unmounts.
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <>
-        <div className="appBarContainer d-flex justify-content-between align-items-center mt-0">   
-          <h1 className="title mb-0" style={{ color: '#000000' }}>Hola 
-            {userName !== null && (<span className='userName ms-1' style={{ color: '#005CFF' }}>{userName}</span>)}
-          </h1>     
-          {/* <form className="d-flex searchBar" role="search" onSubmit={handleSubmit}>
+      <div className="appBarContainer d-flex justify-content-between align-items-center mt-0">
+        <h1 className="title mb-0" style={{ color: '#000000' }}>Hola
+          {userName !== null && (<span className='userName ms-1' style={{ color: '#005CFF' }}>{userName}</span>)}
+        </h1>
+        {/* <form className="d-flex searchBar" role="search" onSubmit={handleSubmit}>
             <img src={SearchIcon} alt="Search icon" style={{ marginRight: '10px' } } />
             <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
           </form> */}
 
-          <div className='tools d-none'>
+        <div className='tools'>
           <img src={notificationIcon} alt="Notificatoin icon" onClick={handleNotificationClick} />
           {(userDataContext.isLoadingRef || userDataContext.isLoadingRefEx) && (
-          <div className="notification-dot" /> // Agregamos un div con clase para el punto rojo
-      )}
-      {mostrarNotificaciones && (
-        <div className="processes-panel">
-          <label className="label" htmlFor="taxes_percentage">Notificaciones</label>
-          {userDataContext.isLoadingRef && (<label style={{ fontFamily: 'Nunito', color: '#999999', fontSize: '12px'}} >Procesando facturas</label>)}
+            <div className="notification-dot" /> // Agregamos un div con clase para el punto rojo
+          )}
+          {mostrarNotificaciones && (
+            <div className="processes-panel">
+              <label className="label" htmlFor="taxes_percentage">Notificaciones</label>
+              {userDataContext.isLoadingRef && (<label style={{ fontFamily: 'Nunito', color: '#999999', fontSize: '12px' }} >Procesando facturas</label>)}
               {userDataContext.isLoadingRef && (
 
-                <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                
-                <ProgressBar
-                  now={userDataContext.progress}
-                  label={userDataContext.progress === 0 ? "0%" : `${userDataContext.progress}%`}
-                  animated={userDataContext.progress === 0}
-                  variant="custom-color"
-                  className="mb-3"
-                  style={{ width: '200px' }}
-                />
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+
+                  <ProgressBar
+                    now={userDataContext.progress}
+                    label={userDataContext.progress === 0 ? "0%" : `${userDataContext.progress}%`}
+                    animated={userDataContext.progress === 0}
+                    variant="custom-color"
+                    className="mb-3"
+                    style={{ width: '200px' }}
+                  />
                 </div>)}
-                {userDataContext.isLoadingRefEx && (<label style={{fontFamily: 'Nunito', color: '#999999', fontSize: '12px'}} >Procesando gastos</label>)}
-                {userDataContext.isLoadingRefEx && (
-                  <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                    
+              {userDataContext.isLoadingRefEx && (<label style={{ fontFamily: 'Nunito', color: '#999999', fontSize: '12px' }} >Procesando gastos</label>)}
+              {userDataContext.isLoadingRefEx && (
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+
                   <ProgressBar
                     now={userDataContext.progressEx}
                     label={userDataContext.progressEx === 0 ? "0%" : `${userDataContext.progressEx}%`}
@@ -86,24 +113,24 @@ export const AppBar = (props)  => {
                     className="mb-3"
                     style={{ width: '200px' }}
                   />
-                  </div>)}
-        </div>
-        
+                </div>)}
+            </div>
+
           )}
-          
 
-          </div>
 
-          <div className="circle">
-          {userPhoto[0] !== null ? ( 
-            <img src={userPhoto} alt="Avatar icon" /> 
-            ) : (
-              <img src={Avatar} alt="General"/>
-            )
-          }
-          </div>
         </div>
-        <p className="mb-3">{props.subtitle}</p>
+
+        <div className="circle">
+          {userPhoto[0] !== null ? (
+            <img src={userPhoto} alt="Avatar icon" />
+          ) : (
+            <img src={Avatar} alt="General" />
+          )
+          }
+        </div>
+      </div>
+      <p className="mb-3">{props.subtitle}</p>
     </>
   )
 }

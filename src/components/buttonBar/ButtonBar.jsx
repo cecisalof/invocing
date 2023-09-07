@@ -93,5 +93,4 @@ export default function ButtonBar(props) {
 
 ButtonBar.propTypes = {
     getPanelData: PropTypes.func,
-    userToken: PropTypes.string.isRequired,
 };

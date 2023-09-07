@@ -551,7 +551,6 @@ export const InvoicesToPay = () => {
 
       <ButtonBar
         getPanelData={getPanelData}
-        userToken={userDataContext.userData.token}
       />
 
       {isError && (
