@@ -5,7 +5,7 @@ import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
 import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
 import '../general-style.css'
 import './calendar.css'
-import { DragAndDropCardComponent } from "../../components/dragAndDropCard";
+import { DragAndDropCardComponent } from "../../components/dragAndDropCard/DragAndDrop";
 import { getInvoicesCount, getInvoicesStates, getInvoicesTotals } from "./services";
 import Context from '../../contexts/context';
 import { useContext } from 'react';
@@ -27,7 +27,7 @@ export const Dashboard = () => {
   //const [invoiceEmitCount, setInvoiceEmitCount] = useState({});
   //const [invoiceEmitStates, setInvoiceEmitStates] = useState({});
   const [totals, setTotals] = useState({});
-  const [isError, setIsError] = useState(false);
+  const [error, setError] = useState(false);
 
   const userDataContext = useContext(Context);
 
@@ -165,13 +165,13 @@ export const Dashboard = () => {
     <>
       <div className="root">
         <div>
-          <AppBar location={location} />
+          <AppBar location={location} subtitle="Bienvenido a tu panel de control" />
         </div>
         <ButtonBar 
           getPanelData={getPanelData} />
-        {isError && (
-          <Alert severity="error" className="custom-alert" onClose={() => { setIsError(false) }}>
-            Hubo un error al subir los ficheros
+      {(error != false && error != "") && (
+          <Alert severity="error" className="custom-alert mt-1 mb-3" onClose={() => { setError(false) }}>
+            {error}
           </Alert>)}
         <div className='row'>
           <div className="col-12 col-md-6">
@@ -179,7 +179,7 @@ export const Dashboard = () => {
             <DragAndDropCardComponent
               type="invoice"
               userToken={userDataContext.userData.token}
-              setIsError={(newValue) => { setIsError(newValue) }}
+              setError={(newValue) => { setError(newValue) }}
               onFinishedUploading={() => { () => { getPanelData() } }}
             />
           </div>
@@ -188,15 +188,13 @@ export const Dashboard = () => {
             <DragAndDropCardComponent
               type="ticket"
               userToken={userDataContext.userData.token}
-              setIsError={(newValue) => { setIsError(newValue) }}
+              setError={(newValue) => { setError(newValue) }}
               onFinishedUploading={() => { () => { getPanelData() } }}
             />
           </div>
         </div>
-        <div style={{ display: 'flex' }}>
-          <div
-            className="card"
-          >
+        <div className='d-flex mt-4'>
+          <div className="card mx-2">
             {/* Total sales card */}
             <div className="container text-left">
               <img src={cashIconBlue} alt="dragDrop" className='card-img' />
@@ -209,19 +207,17 @@ export const Dashboard = () => {
                   </div>
                 </div>
                 <div className="col">
-                  <div className="card-container">
-                    <div className="totals">{`${totals.total_amount || 0} €`}</div>
-                    <div className="totals">{`${totals.total_taxes || 0} €`}</div>
-                    <div className="totals">{`${totals.total_retention || 0} €`}</div>
+                  <div className="card-container font-nunito">
+                    <div className="totals">{`${parseFloat(totals.total_amount || 0).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2})} €`}</div>
+                    <div className="totals">{`${(totals.total_taxes || 0).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2})} €`}</div>
+                    <div className="totals">{`${(totals.total_retention || 0).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2})} €`}</div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
           {/* Invoice card */}
-          <div
-            className="card"
-          >
+          <div className="card mx-2">
             <div className="container text-left">
               <img src={dragDrop} alt="dragDrop" className='card-img' />
               <div className="row align-items-center">
@@ -287,7 +283,7 @@ export const Dashboard = () => {
   
                 <div className="dashboard-titles" > {`${invoiceCount.count} Facturas `}</div>
                 <div className="dashboard-text">SUBIDAS DURANTE</div>
-                <div className="dashboard-subtext"> {`${invoiceCount.text}`}</div>
+                <div className="dashboard-subtext font-nunito"> {`${invoiceCount.text}`}</div>
               </div>
               <div style={{ flexBasis: '50%' }}>
                 <div style={{ display: 'flex' }}>
@@ -345,7 +341,7 @@ export const Dashboard = () => {
   
                 <div className="dashboard-titles" > {`${invoiceCount.count} Facturas `}</div>
                 <div className="dashboard-text">SUBIDAS DURANTE</div>
-                <div className="dashboard-subtext"> {`${invoiceCount.text}`}</div>
+                <div className="dashboard-subtext font-nunito"> {`${invoiceCount.text}`}</div>
               </div>
               <div style={{ flexBasis: '50%' }}>
                 <div style={{ display: 'flex' }}>
@@ -395,7 +391,7 @@ export const Dashboard = () => {
   
                 <div className="dashboard-titles" > {`${invoiceEmitCount.count} Ventas `}</div>
                 <div className="dashboard-text">SUBIDAS DURANTE</div>
-                <div className="dashboard-subtext">{`${invoiceEmitCount.text}`}</div>
+                <div className="dashboard-subtext font-nunito">{`${invoiceEmitCount.text}`}</div>
               </div>
               <div style={{ flexBasis: '50%' }}>
                 <div style={{ display: 'flex' }}>

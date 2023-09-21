@@ -17,14 +17,15 @@ import close from '../../assets/icons/close.png';
 //import eye from '../../assets/icons/Eye.png';
 // import deleteIcon from '../../assets/icons/trash.svg';
 // import deleteIconD from '../../assets/icons/trashDeactive.svg';
-import { ProgressBar } from 'react-bootstrap';
+// import { ProgressBar } from 'react-bootstrap';
 import { Alert } from '@mui/material';
-import { DragAndDropCardComponent } from "../../components/dragAndDropCard";
+import { DragAndDropCardComponent } from "../../components/dragAndDropCard/DragAndDrop";
 import PropTypes from 'prop-types';
 import { saveAs } from 'file-saver';
 import Modal from '../../components/modal/Modal';
 import ButtonBar from '../../components/buttonBar/ButtonBar';
 import { AG_GRID_LOCALE_ES } from '../../locale/es.js';
+import AddButton from '../../atoms/AddButton'
 
 
 export const ExpenseTickets = () => {
@@ -37,7 +38,7 @@ export const ExpenseTickets = () => {
   const [rowSelection, setRowSelection] = useState(false);
   const [rowProviders, setrowProviders] = useState(); // Set rowData to Array of Objects, one Object per Row
   const [providersLoaded, setProvidersLoaded] = useState(false);
-  const [isError, setIsError] = useState(false);
+  const [error, setError] = useState(false);
 
   const localeText = AG_GRID_LOCALE_ES;
 
@@ -56,6 +57,11 @@ export const ExpenseTickets = () => {
       headerCheckboxSelection: false,
       checkboxSelection: true,
       showDisabledCheckboxes: true,
+    },
+    {
+      field: 'date',
+      headerName: "Fecha",
+      sort: 'desc'
     },
     {
       field: 'total', headerName: "Importe",
@@ -85,24 +91,7 @@ export const ExpenseTickets = () => {
         cellRenderer: providerCellRenderer,
       },
     },
-    {
-      field: 'date',
-      headerName: "Fecha",
-      sort: 'desc'
-    },
     { field: 'concept', headerName: 'Concepto' },
-    {
-      field: 'retention_percentage', headerName: '% Retención', valueFormatter: (params) => {
-        const value = params.value;
-        return value ? `${value} %` : '';
-      },
-    },
-    {
-      field: 'taxes_percentage', headerName: '% Impuestos', valueFormatter: (params) => {
-        const value = params.value;
-        return value ? `${value} %` : '';
-      },
-    },
     {
       field: 'total_pretaxes', headerName: 'Total sin impuestos',
       valueFormatter: (params) => {
@@ -124,23 +113,9 @@ export const ExpenseTickets = () => {
       },
     },
     {
-      field: 'total_retention', headerName: 'Total retenciones',
-      valueFormatter: (params) => {
+      field: 'taxes_percentage', headerName: '% Impuestos', valueFormatter: (params) => {
         const value = params.value;
-        const currency = params.data.currency;
-
-        let currencySymbol = '';
-        if (currency === 'EUR') {
-          currencySymbol = '€';
-        } else if (currency === 'USD') {
-          currencySymbol = '$';
-        } else {
-          // Otros formatos de moneda
-          // Puedes agregar lógica adicional para manejar otras monedas según sea necesario
-          currencySymbol = currency; // En caso de que el valor de currency sea directamente el símbolo de la moneda
-        }
-
-        return value ? `${value} ${currencySymbol}` : '';
+        return value ? `${value} %` : '';
       },
     },
     {
@@ -218,6 +193,11 @@ export const ExpenseTickets = () => {
           showDisabledCheckboxes: true,
         },
         {
+          field: 'date',
+          headerName: "Fecha",
+          sort: 'asc'
+        },
+        {
           field: 'total', headerName: "Importe",
           valueFormatter: (params) => {
             const value = params.value;
@@ -245,24 +225,7 @@ export const ExpenseTickets = () => {
             cellRenderer: providerCellRenderer,
           },
         },
-        {
-          field: 'date',
-          headerName: "Fecha",
-          sort: 'asc'
-        },
         { field: 'concept', headerName: 'Concepto' },
-        {
-          field: 'retention_percentage', headerName: '% Retención', valueFormatter: (params) => {
-            const value = params.value;
-            return value ? `${value} %` : '';
-          },
-        },
-        {
-          field: 'taxes_percentage', headerName: '% Impuestos', valueFormatter: (params) => {
-            const value = params.value;
-            return value ? `${value} %` : '';
-          },
-        },
         {
           field: 'total_pretaxes', headerName: 'Total sin impuestos',
           valueFormatter: (params) => {
@@ -284,23 +247,9 @@ export const ExpenseTickets = () => {
           },
         },
         {
-          field: 'total_retention', headerName: 'Total retenciones',
-          valueFormatter: (params) => {
+          field: 'taxes_percentage', headerName: '% Impuestos', valueFormatter: (params) => {
             const value = params.value;
-            const currency = params.data.currency;
-
-            let currencySymbol = '';
-            if (currency === 'EUR') {
-              currencySymbol = '€';
-            } else if (currency === 'USD') {
-              currencySymbol = '$';
-            } else {
-              // Otros formatos de moneda
-              // Puedes agregar lógica adicional para manejar otras monedas según sea necesario
-              currencySymbol = currency; // En caso de que el valor de currency sea directamente el símbolo de la moneda
-            }
-
-            return value ? `${value} ${currencySymbol}` : '';
+            return value ? `${value} %` : '';
           },
         },
         {
@@ -476,39 +425,39 @@ export const ExpenseTickets = () => {
   return (
     <>
       <div>
-        <AppBar location={location} />
+        <AppBar location={location} subtitle="Añade o edita los gastos de los que no se contarán IVA o IRPF"/>
       </div>
       <ButtonBar getPanelData={getPanelData} />
-      {isError && (
-        <Alert severity="error" className="custom-alert" onClose={() => { setIsError(false) }}>
-          Hubo un error al subir los ficheros
+      {(error != false && error != "") && (
+        <Alert severity="error" className="custom-alert mt-1 mb-3" onClose={() => { setError(false) }}>
+          {error}
         </Alert>)}
 
       {/* yellow card */}
       <DragAndDropCardComponent
         type="ticket"
         userToken={userDataContext.userData.token}
-        setIsError={(newValue) => { setIsError(newValue) }}
+        setError={(newValue) => { setError(newValue) }}
         onFinishedUploading={() => { () => { getPanelData() } }}
       />
 
       {userDataContext.isLoadingRefEx && (
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
 
-          <ProgressBar
+          {/* <ProgressBar
             now={userDataContext.progressEx}
             label={userDataContext.progressEx === 0 ? "0%" : `${userDataContext.progressEx}%`}
             animated={userDataContext.progressEx === 0}
             variant="custom-color"
             className="mb-3 custom-width-progess custom-progress"
-          />
+          /> */}
           <img src={close} alt="Close icon" onClick={handleCloseClick} style={{ marginRight: '20px', width: '20px', height: '20px', marginTop: '-2px' }} />
         </div>)}
       <div className='d-flex mt-4'>
         <div className='mx-3'>
-          <button type="button" className="btn btn-primary rounded-pill px-4 opacity-hover-05" onClick={handleAddExpenses}>Añadir factura</button>
-          {/* <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} /> */}
-          {/* <img type="button" disabled src={rowSelection ? deleteIcon : deleteIconD} alt="Delete icon" data-bs-toggle="modal" data-bs-target="#mainModal" className='trashIcon' /> */}
+          <AddButton 
+            handleAdd={handleAddExpenses}
+            text={'Añadir ticket de gasto'} />
         </div>
         <div className='mx-1'>
           <button type="button" id="trash" disabled={!rowSelection} className={"btn bi mx-3 " + (rowSelection ? "btn-outline-primary bi-trash3-fill" : "btn-outline-secondary bi-trash3")} data-bs-toggle="modal" data-bs-target="#mainModal"></button>

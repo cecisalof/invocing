@@ -9,7 +9,7 @@ import cashYellow from '../../assets/icons/cashYellow.png';
 import dragDrop from '../../assets/icons/drag-and-drop.png';
 import "./style.css"
 
-export const DragAndDropCardComponent = ({type, userToken, setIsError, onFinishedUploading}) => {
+export const DragAndDropCardComponent = ({ type, userToken, setError, onFinishedUploading, getTasksStatus = null }) => {
   const [isFileUploaded, setIsFileUploaded] = useState(false);
   const [isFileUploading, setIsFileUploading] = useState(false);
   const inputRef = useRef(null);
@@ -41,11 +41,11 @@ export const DragAndDropCardComponent = ({type, userToken, setIsError, onFinishe
   };
 
   const handleClick = () => {
-    if(isFileUploading) return
+    if (isFileUploading) return
     inputRef.current.click();
   }
 
-  const handleFileUpload = async(event) =>{
+  const handleFileUpload = async (event) => {
     const fileObj = event.target.files;
     if (!fileObj) {
       return;
@@ -60,22 +60,28 @@ export const DragAndDropCardComponent = ({type, userToken, setIsError, onFinishe
   const processFiles = async (files) => {
     console.log(files);
     console.log("Procesando archivos automáticamente...");
-    
+    getTasksStatus && getTasksStatus();
     let response = null
     setIsFileUploading(true)
-    if(type=="invoice"){
-      response= await postInvoiceAutomatic(userToken, files);
-    }else{
+    if (type == "invoice") {
+      response = await postInvoiceAutomatic(userToken, files);
+    } else {
       response = await postExpenseTicketAutomatic(userToken, files);
     }
-    await onFinishedUploading()
+    await onFinishedUploading() // getPanelData
     setIsFileUploading(false)
-    setIsFileUploaded(true)
-    
-    if (!response){
-      setIsError(true)
+
+    if (!response || response.status < 200 || response.status >= 300) {
+      if (response.status == 402) {
+        setError("Has excedido tu cuota de facturas mensual. Escribe a info@codepremium.es para aumentarla")
+      }else{
+        setError("Hubo un error al subir los ficheros")
+      }
+      return
+    }else{
+      setIsFileUploaded(true)
     }
-    setTimeout(()=>{
+    setTimeout(() => {
       setIsFileUploaded(false);
     }, 3000)
   };
@@ -106,20 +112,20 @@ export const DragAndDropCardComponent = ({type, userToken, setIsError, onFinishe
           <div className="upload-indicator">
             <FaCheckCircle className="upload-icon" />
             <span className="">Archivos subidos</span>
-            <span className="text-drop text-success color-drop small"><br/>
+            <span className="text-drop text-success color-drop small"><br />
               Tu archivo se va a procesar y aparecerá reflejado en unos segundos
             </span>
           </div>
         )}
         {!isFileUploading && !isFileUploaded && (
+          <div>
+            <img src={type == "invoice" ? dragDrop : cashYellow} alt="dragDrop" className='cards-logo' />
             <div>
-              <img src={type == "invoice" ? dragDrop : cashYellow} alt="dragDrop" className='cards-logo' />
-              <div>
               <span className="text-drop color-drop">
-                Procesar {type=="invoice" ? "facturas" : "gastos"} automáticamente
+                Procesar {type == "invoice" ? "facturas" : "gastos"} automáticamente
               </span>
-              <span className="text-drop color-drop small"><br/>
-                Haz click para buscar tus {type=="invoice" ? "facturas" : "gastos"} o arrastrálos directamente aquí
+              <span className="text-drop color-drop small"><br />
+                Haz click para buscar tus {type == "invoice" ? "facturas" : "gastos"} o arrastrálos directamente aquí
               </span>
             </div>
           </div>
@@ -132,6 +138,7 @@ export const DragAndDropCardComponent = ({type, userToken, setIsError, onFinishe
 DragAndDropCardComponent.propTypes = {
   userToken: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
-  setIsError: PropTypes.func.isRequired,
+  setError: PropTypes.func.isRequired,
   onFinishedUploading: PropTypes.func,
+  getTasksStatus: PropTypes.func
 };

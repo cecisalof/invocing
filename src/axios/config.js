@@ -19,5 +19,6 @@ export const API_URL = {
     INVOICE_TO_PAY_COUNT: 'invoice-to-pay-count/',
     INVOICE_TO_EMIT_COUNT: 'invoice-to-emit-count/',
     INVOICE_TO_PAY_EXCEL: 'invoice-to-pay-excel/',
-    EXPENSES_TICKETS_EXCEL: 'expenses-excel/'
+    EXPENSES_TICKETS_EXCEL: 'expenses-excel/',
+    TASKS_STATUS: 'tasks/status'
   };

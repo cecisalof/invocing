@@ -2,12 +2,15 @@ body {
   font-family: 'Nunito';
 }
 
+font-nunito{
+  font-family: 'Nunito';
+}
+
 .title {
   color: #005CFF;
   font-weight: 400;
   font-size: 20px;
   line-height: 48px;
-  margin: 1rem;
 }
 
 .text-drop {
@@ -40,6 +43,12 @@ body {
   border-bottom: none;
 }
 
+.ag-theme-alpine div .ag-ltr input[class^=ag-][type=text]{
+  border-radius: 0;
+  margin: 0;
+  padding: 4px;
+}
+
 .ag-theme-alpine ::-webkit-scrollbar {
   width: 12px;
   background-color: #f5f5f5;
@@ -58,7 +67,8 @@ body {
 }
 
 .ag-root-wrapper {
-  border-radius: 20px
+  border-radius: 20px;
+  border-radius: 0;
 }
 
 :focus {
@@ -143,7 +153,6 @@ body {
 }
 
 .dashboard-subtext {
-  font-family: 'Nunito';
   font-weight: 100;
   font-size: 9px;
   line-height: 20px;
@@ -196,20 +205,10 @@ body {
   margin-right: 5px;
 }
 
-.upload-text {
-  font-weight: 400;
-  font-size: 17px;
-  font-family: 'Nunito';
-  line-height: 25px;
-  margin-top: 20px;
-}
-
 /* Dashboard cards */
 .card {
   border: none;
   border-radius: 20px;
-  margin: 1rem;
-  padding: 0.5rem;
   text-align: left;
   font-size: 18px;
   width: 40vw;
@@ -358,9 +357,6 @@ body {
 
 .custom-alert {
   background-color: #f0f0f0;
-  width: 500px;
-  margin-bottom: 30px;
-  margin: 1rem;
 }
 
 .ag-header-cell-resize::after {
@@ -372,7 +368,6 @@ body {
 }
 
 .totals {
-  font-family: 'Nunito';
   font-weight: 300;
   font-size: 17px;
   line-height: 25px;
@@ -415,7 +410,6 @@ body {
 .customHeaderLabel {
   float: left;
   font-weight: 400;
-  font-family: 'Nunito';
   margin: 0 0 0 3px;
 }
 
@@ -492,8 +486,32 @@ min-height: 135px !important;
 .ag-theme-alpine .ag-popup {
   background-color: red;
 }
-/*--------------------------------*/
+/* -------------------------------- */
 
 .modal-dialog {
   margin-top: 20rem;
+}
+
+
+/* -----------CALENDAR------------------- */
+.calendar-overlay {
+  position: absolute;
+  z-index: 2;
+}
+
+.react-datepicker__input-container > input[type="text"] {
+  border-radius: 50px;
+  border: 2px solid #ADB9FB;
+  color: #ADB9FB;
+  height: 1.8rem;
+  padding-left: 15px;
+  width: 18vw;
+}
+
+.react-datepicker__close-icon::after{
+  background-color: #ADB9FB !important;
+} 
+
+.react-datepicker__tab-loop{
+  display: inline-flex;
 }

@@ -116,6 +116,9 @@ export const postInvoiceAutomatic = async (token, fileList) => {
                 limit: 500,
                 offset: 0
             },
+            validateStatus: function (status) {
+                return status > 199 && status < 500; // Reject only if the status code is greater than or equal to 500
+            }
         })
 
         return response;
@@ -156,6 +159,20 @@ export const invoiceToPayExcel = async (token) => {
                 offset: 0
             },
             responseType: 'blob'
+        });
+        return response;
+    } catch (error) {
+        return console.log('error');
+    }
+};
+
+export const taskStatus = async (token) => {
+    try {
+        const response = await axios.get(BASE_URL + API_URL.TASKS_STATUS, {
+            headers: {
+                'accept': 'application/json',
+                'Authorization': `Token ${token}`,
+            },
         });
         return response;
     } catch (error) {

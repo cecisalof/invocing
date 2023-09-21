@@ -7,7 +7,8 @@ import {
   patchInvoice,
   deleteInvoice,
   patchProviderInvoice,
-  invoiceToPayExcel
+  invoiceToPayExcel,
+  // taskStatus,
 } from "./services";
 import { AG_GRID_LOCALE_ES } from '../../locale/es.js';
 import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
@@ -23,11 +24,12 @@ import HeaderColumn from '../HeaderColumn';
 import CustomElement from '../customElement.jsx';
 import { getProviders } from "../suppliers/services";
 import { useNavigate } from 'react-router-dom';
-import close from '../../assets/icons/close.png';
-import { ProgressBar } from 'react-bootstrap';
+import AddButton from '../../atoms/AddButton'
+// import close from '../../assets/icons/close.png';
+// import { ProgressBar } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import { Alert } from '@mui/material';
-import { DragAndDropCardComponent } from "../../components/dragAndDropCard";
+import { DragAndDropCardComponent } from "../../components/dragAndDropCard/DragAndDrop";
 import { saveAs } from 'file-saver';
 import Modal from '../../components/modal/Modal';
 import ButtonBar from '../../components/buttonBar/ButtonBar';
@@ -40,9 +42,10 @@ export const InvoicesToPay = () => {
   const [rowData, setRowData] = useState(); // Set rowData to Array of Objects, one Object per Row
   const [rowProviders, setRowProviders] = useState(); // Set rowData to Array of Objects, one Object per Row
   const [providersLoaded, setProvidersLoaded] = useState(false);
-  const [isError, setIsError] = useState(false);
+  const [error, setError] = useState(false);
   const [rowSelection, setRowSelection] = useState(false);
   const userDataContext = useContext(Context);
+  // const [tasksStatus, setTasksStatus] = useState([]);
 
   const localeText = AG_GRID_LOCALE_ES;
 
@@ -71,6 +74,11 @@ export const InvoicesToPay = () => {
       headerCheckboxSelection: false,
       checkboxSelection: true,
       showDisabledCheckboxes: true,
+    },
+    {
+      field: 'date',
+      headerName: "Fecha",
+      sort: 'desc'
     },
     {
       field: 'total', headerName: "Importe",
@@ -112,27 +120,15 @@ export const InvoicesToPay = () => {
       },
       cellStyle: { color: 'white', fontSize: '10px' },// agregar estilo al texto de la celda
     },
-    {
-      field: 'date',
-      headerName: "Fecha",
-      sort: 'desc'
-    },
-
+    // {
+    //   field: 'payment_type',
+    //   headerName: 'Tipo de pago',
+    //   cellEditor: 'agSelectCellEditor',
+    //   cellEditorParams: {
+    //     values: ['Domiciliación', 'Cheque', 'Transferencia', 'Efectivo', 'Tarjeta'],
+    //   },
+    // },
     { field: 'concept', headerName: 'Concepto' },
-    {
-      field: 'retention_percentage', headerName: '% Retención',
-      valueFormatter: (params) => {
-        const value = params.value;
-        return value ? `${value} %` : '';
-      },
-    },
-    {
-      field: 'taxes_percentage', headerName: '% Impuestos',
-      valueFormatter: (params) => {
-        const value = params.value;
-        return value ? `${value} %` : '';
-      },
-    },
     {
       field: 'total_pretaxes', headerName: 'Total sin impuestos',
       valueFormatter: (params) => {
@@ -154,6 +150,13 @@ export const InvoicesToPay = () => {
       },
     },
     {
+      field: 'retention_percentage', headerName: '% Retención',
+      valueFormatter: (params) => {
+        const value = params.value;
+        return value ? `${value} %` : '';
+      },
+    },
+    {
       field: 'total_retention', headerName: 'Total retenciones',
       valueFormatter: (params) => {
         const value = params.value;
@@ -171,6 +174,13 @@ export const InvoicesToPay = () => {
         }
 
         return value ? `${value} ${currencySymbol}` : '';
+      },
+    },
+    {
+      field: 'taxes_percentage', headerName: '% Impuestos',
+      valueFormatter: (params) => {
+        const value = params.value;
+        return value ? `${value} %` : '';
       },
     },
     {
@@ -236,6 +246,14 @@ export const InvoicesToPay = () => {
     }
   };
 
+  // const getInoviceStatus = async (filters = null) => {
+  //   if (!userDataContext.userData.token || isLoading) return
+  //   isLoading = true
+  //   await getDataProviders();
+  //   await getDataInvoices(filters);
+  //   setTimeout(() => { isLoading = false }, 1000)
+  // }
+
   useEffect(() => {
     if (providersLoaded) {
       const updatedColumnDefs = [
@@ -245,6 +263,9 @@ export const InvoicesToPay = () => {
           headerCheckboxSelection: false,
           checkboxSelection: true,
           showDisabledCheckboxes: true
+        },
+        {
+          field: 'date', headerName: "Fecha"
         },
         {
           field: 'total', headerName: "Importe",
@@ -287,34 +308,16 @@ export const InvoicesToPay = () => {
           cellStyle: { color: 'white', fontSize: '10px' },// agregar estilo al texto de la celda
         },
 
-        {
-          field: 'payment_type',
-          headerName: 'Tipo de pago',
-          cellEditor: 'agSelectCellEditor',
-          cellEditorParams: {
-            values: ['Domiciliación', 'Cheque', 'Transferencia', 'Efectivo', 'Tarjeta'],
-          },
-        },
-
-        {
-          field: 'date', headerName: "Fecha"
-        },
+        // {
+        //   field: 'payment_type',
+        //   headerName: 'Tipo de pago',
+        //   cellEditor: 'agSelectCellEditor',
+        //   cellEditorParams: {
+        //     values: ['Domiciliación', 'Cheque', 'Transferencia', 'Efectivo', 'Tarjeta'],
+        //   },
+        // },
 
         { field: 'concept', headerName: 'Concepto' },
-        {
-          field: 'retention_percentage', headerName: '% Retención',
-          valueFormatter: (params) => {
-            const value = params.value;
-            return value ? `${value} %` : '';
-          },
-        },
-        {
-          field: 'taxes_percentage', headerName: '% Impuestos',
-          valueFormatter: (params) => {
-            const value = params.value;
-            return value ? `${value} %` : '';
-          },
-        },
         {
           field: 'total_pretaxes', headerName: 'Total sin impuestos',
           valueFormatter: (params) => {
@@ -336,6 +339,13 @@ export const InvoicesToPay = () => {
           },
         },
         {
+          field: 'retention_percentage', headerName: '% Retención',
+          valueFormatter: (params) => {
+            const value = params.value;
+            return value ? `${value} %` : '';
+          },
+        },
+        {
           field: 'total_retention', headerName: 'Total retenciones',
           valueFormatter: (params) => {
             const value = params.value;
@@ -353,6 +363,13 @@ export const InvoicesToPay = () => {
             }
 
             return value ? `${value} ${currencySymbol}` : '';
+          },
+        },
+        {
+          field: 'taxes_percentage', headerName: '% Impuestos',
+          valueFormatter: (params) => {
+            const value = params.value;
+            return value ? `${value} %` : '';
           },
         },
         {
@@ -517,14 +534,13 @@ export const InvoicesToPay = () => {
     navigate('/add-invoices-to-pay'); // Reemplaza '/ruta-del-formulario' con la ruta de tu formulario
   };
 
-  function handleCloseClick() {
-    userDataContext.updateProgress(0)
-    userDataContext.updateFiles([])
-    userDataContext.toggleLoading()
-  }
+  // function handleCloseClick() {
+  //   userDataContext.updateProgress(0)
+  //   userDataContext.updateFiles([])
+  //   userDataContext.toggleLoading()
+  // }
 
   const handleDownloadFile = async () => {
-    console.log('click');
     try {
       // getting excel file from backend
       const response = await invoiceToPayExcel(userDataContext.userData.token);
@@ -537,28 +553,48 @@ export const InvoicesToPay = () => {
     }
   }
 
+  // const getTasksStatus = async () => {
+  //   try {
+  //     const data = await taskStatus(userDataContext.userData.token);
+  //     setTasksStatus(data.data || []);
+  //   } catch (error) {
+  //     setTasksStatus([]);
+  //     console.log('No hay datos para mostrar.');
+  //   }
+  // };
+
   return (
     <>
       <div>
-        <AppBar location={location} />
+        <AppBar location={location} subtitle="Añade o edita las facturas con sus impuestos correspondientes"/>
       </div>
 
       <ButtonBar getPanelData={getPanelData} />
 
-      {isError && (
-        <Alert severity="error" className="custom-alert" onClose={() => { setIsError(false) }}>
-          Hubo un error al subir los ficheros
+      {(error != false && error != "") && (
+        <Alert severity="error" className="custom-alert mt-1 mb-3" onClose={() => { setError(false) }}>
+          {error}
         </Alert>)}
 
       {/* Blue card */}
       <DragAndDropCardComponent
         type="invoice"
+        // taskStatus={tasksStatus}
+        // getTasksStatus={getTasksStatus}
         userToken={userDataContext.userData.token}
-        setIsError={(newValue) => { setIsError(newValue) }}
+        setError={(newValue) => { setError(newValue) }}
         onFinishedUploading={() => { () => { getPanelData() } }}
       />
-
-      {userDataContext.isLoadingRef && (
+      {/* Progress Bar New */}
+      {/* <ProgressBar
+          // now={}
+          label={`100%`}
+          // animated={userDataContext.progress === 0}
+          variant="custom-color"
+          className="mb-3"
+          style={{ width: '200px' }}
+        /> */}
+      {/* {userDataContext.isLoadingRef && (
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <ProgressBar
             now={userDataContext.progress}
@@ -568,12 +604,12 @@ export const InvoicesToPay = () => {
             className="mb-3 custom-width-progess custom-progress"
           />
           <img src={close} alt="Close icon" onClick={handleCloseClick} style={{ marginRight: '20px', width: '20px', height: '20px', marginTop: '-2px' }} />
-        </div>)}
+        </div>)} */}
       <div className='d-flex mt-4'>
         <div className='mx-3'>
-          <button type="button" className="btn btn-primary rounded-pill px-4 opacity-hover-05" onClick={handleAddInvoice}>Añadir factura</button>
-          {/* <img src={filterIcon} alt="Filter icon" onClick={handleFilterClick} style={{ marginRight: '20px',  marginLeft: '50px'  }} /> */}
-          {/* <img type="button" disabled src={rowSelection ? deleteIcon : deleteIconD} alt="Delete icon" data-bs-toggle="modal" data-bs-target="#mainModal" className='trashIcon' /> */}
+          <AddButton 
+            handleAdd={handleAddInvoice}
+            text={'Añadir factura'} />
         </div>
         <div className='mx-1'>
           <button type="button" id="trash" disabled={!rowSelection} className={"btn bi mx-3 " + (rowSelection ? "btn-outline-primary bi-trash3-fill" : "btn-outline-secondary bi-trash3")} data-bs-toggle="modal" data-bs-target="#mainModal"></button>
@@ -604,10 +640,12 @@ export const InvoicesToPay = () => {
     </>
   )
 };
+
 InvoicesToPay.propTypes = {
   value: PropTypes.object,
   displayName: PropTypes.object,
   api: PropTypes.object,
   node: PropTypes.object,
 };
+
 export default InvoicesToPay;
