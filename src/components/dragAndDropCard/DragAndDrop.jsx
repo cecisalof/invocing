@@ -9,7 +9,7 @@ import cashYellow from '../../assets/icons/cashYellow.png';
 import dragDrop from '../../assets/icons/drag-and-drop.png';
 import "./style.css"
 
-export const DragAndDropCardComponent = ({ type, userToken, setError, onFinishedUploading, getTasksStatus }) => {
+export const DragAndDropCardComponent = ({ type, userToken, setError, onFinishedUploading, getTasksStatus = null }) => {
   const [isFileUploaded, setIsFileUploaded] = useState(false);
   const [isFileUploading, setIsFileUploading] = useState(false);
   const inputRef = useRef(null);
@@ -60,7 +60,7 @@ export const DragAndDropCardComponent = ({ type, userToken, setError, onFinished
   const processFiles = async (files) => {
     console.log(files);
     console.log("Procesando archivos automáticamente...");
-    getTasksStatus();
+    getTasksStatus && getTasksStatus();
     let response = null
     setIsFileUploading(true)
     if (type == "invoice") {

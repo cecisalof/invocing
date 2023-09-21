@@ -17,7 +17,7 @@ import close from '../../assets/icons/close.png';
 //import eye from '../../assets/icons/Eye.png';
 // import deleteIcon from '../../assets/icons/trash.svg';
 // import deleteIconD from '../../assets/icons/trashDeactive.svg';
-import { ProgressBar } from 'react-bootstrap';
+// import { ProgressBar } from 'react-bootstrap';
 import { Alert } from '@mui/material';
 import { DragAndDropCardComponent } from "../../components/dragAndDropCard/DragAndDrop";
 import PropTypes from 'prop-types';
@@ -444,13 +444,13 @@ export const ExpenseTickets = () => {
       {userDataContext.isLoadingRefEx && (
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
 
-          <ProgressBar
+          {/* <ProgressBar
             now={userDataContext.progressEx}
             label={userDataContext.progressEx === 0 ? "0%" : `${userDataContext.progressEx}%`}
             animated={userDataContext.progressEx === 0}
             variant="custom-color"
             className="mb-3 custom-width-progess custom-progress"
-          />
+          /> */}
           <img src={close} alt="Close icon" onClick={handleCloseClick} style={{ marginRight: '20px', width: '20px', height: '20px', marginTop: '-2px' }} />
         </div>)}
       <div className='d-flex mt-4'>

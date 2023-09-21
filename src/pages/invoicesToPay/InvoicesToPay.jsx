@@ -8,7 +8,7 @@ import {
   deleteInvoice,
   patchProviderInvoice,
   invoiceToPayExcel,
-  taskStatus,
+  // taskStatus,
 } from "./services";
 import { AG_GRID_LOCALE_ES } from '../../locale/es.js';
 import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
@@ -26,7 +26,7 @@ import { getProviders } from "../suppliers/services";
 import { useNavigate } from 'react-router-dom';
 import AddButton from '../../atoms/AddButton'
 // import close from '../../assets/icons/close.png';
-import { ProgressBar } from 'react-bootstrap';
+// import { ProgressBar } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import { Alert } from '@mui/material';
 import { DragAndDropCardComponent } from "../../components/dragAndDropCard/DragAndDrop";
@@ -45,7 +45,7 @@ export const InvoicesToPay = () => {
   const [error, setError] = useState(false);
   const [rowSelection, setRowSelection] = useState(false);
   const userDataContext = useContext(Context);
-  const [tasksStatus, setTasksStatus] = useState([]);
+  // const [tasksStatus, setTasksStatus] = useState([]);
 
   const localeText = AG_GRID_LOCALE_ES;
 
@@ -553,15 +553,15 @@ export const InvoicesToPay = () => {
     }
   }
 
-  const getTasksStatus = async () => {
-    try {
-      const data = await taskStatus(userDataContext.userData.token);
-      setTasksStatus(data.data || []);
-    } catch (error) {
-      setTasksStatus([]);
-      console.log('No hay datos para mostrar.');
-    }
-  };
+  // const getTasksStatus = async () => {
+  //   try {
+  //     const data = await taskStatus(userDataContext.userData.token);
+  //     setTasksStatus(data.data || []);
+  //   } catch (error) {
+  //     setTasksStatus([]);
+  //     console.log('No hay datos para mostrar.');
+  //   }
+  // };
 
   return (
     <>
@@ -579,21 +579,21 @@ export const InvoicesToPay = () => {
       {/* Blue card */}
       <DragAndDropCardComponent
         type="invoice"
-        taskStatus={tasksStatus}
-        getTasksStatus={getTasksStatus}
+        // taskStatus={tasksStatus}
+        // getTasksStatus={getTasksStatus}
         userToken={userDataContext.userData.token}
         setError={(newValue) => { setError(newValue) }}
         onFinishedUploading={() => { () => { getPanelData() } }}
       />
       {/* Progress Bar New */}
-      <ProgressBar
+      {/* <ProgressBar
           // now={}
           label={`100%`}
           // animated={userDataContext.progress === 0}
           variant="custom-color"
           className="mb-3"
           style={{ width: '200px' }}
-        />
+        /> */}
       {/* {userDataContext.isLoadingRef && (
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <ProgressBar
