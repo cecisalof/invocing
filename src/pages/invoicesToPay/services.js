@@ -170,6 +170,10 @@ export const taskStatus = async (token) => {
                 'accept': 'application/json',
                 'Authorization': `Token ${token}`,
             },
+            params: {
+                limit: 500,
+                offset: 0
+            },
         });
         return response;
     } catch (error) {
