@@ -79,55 +79,57 @@ export const AppBar = (props) => {
             <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
           </form> */}
 
-        <div className='tools'>
-          <img src={notificationIcon} alt="Notificatoin icon" onClick={handleNotificationClick} />
-          {(userDataContext.isLoadingRef || userDataContext.isLoadingRefEx) && (
-            <div className="notification-dot" /> // Agregamos un div con clase para el punto rojo
-          )}
-          {mostrarNotificaciones && (
-            <div className="processes-panel">
-              <label className="label" htmlFor="taxes_percentage">Notificaciones</label>
-              {userDataContext.isLoadingRef && (<label style={{ fontFamily: 'Nunito', color: '#999999', fontSize: '12px' }} >Procesando facturas</label>)}
-              {userDataContext.isLoadingRef && (
+        <div className="d-flex justify-content-between align-items-center mt-0">
+          <div className='tools'>
+            <img src={notificationIcon} alt="Notificatoin icon" onClick={handleNotificationClick} />
+            {(userDataContext.isLoadingRef || userDataContext.isLoadingRefEx) && (
+              <div className="notification-dot" /> // Agregamos un div con clase para el punto rojo
+            )}
+            {mostrarNotificaciones && (
+              <div className="processes-panel bg-white">
+                <label className="label" htmlFor="taxes_percentage">Notificaciones</label>
+                {userDataContext.isLoadingRef && (<label style={{ fontFamily: 'Nunito', color: '#999999', fontSize: '12px' }} >Procesando facturas</label>)}
+                {userDataContext.isLoadingRef && (
 
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
 
-                  <ProgressBar
-                    now={userDataContext.progress}
-                    label={userDataContext.progress === 0 ? "0%" : `${userDataContext.progress}%`}
-                    animated={userDataContext.progress === 0}
-                    variant="custom-color"
-                    className="mb-3"
-                    style={{ width: '200px' }}
-                  />
-                </div>)}
-              {userDataContext.isLoadingRefEx && (<label style={{ fontFamily: 'Nunito', color: '#999999', fontSize: '12px' }} >Procesando gastos</label>)}
-              {userDataContext.isLoadingRefEx && (
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <ProgressBar
+                      now={userDataContext.progress}
+                      label={userDataContext.progress === 0 ? "0%" : `${userDataContext.progress}%`}
+                      animated={userDataContext.progress === 0}
+                      variant="custom-color"
+                      className="mb-3"
+                      style={{ width: '200px' }}
+                    />
+                  </div>)}
+                {userDataContext.isLoadingRefEx && (<label style={{ fontFamily: 'Nunito', color: '#999999', fontSize: '12px' }} >Procesando gastos</label>)}
+                {userDataContext.isLoadingRefEx && (
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
 
-                  <ProgressBar
-                    now={userDataContext.progressEx}
-                    label={userDataContext.progressEx === 0 ? "0%" : `${userDataContext.progressEx}%`}
-                    animated={userDataContext.progressEx === 0}
-                    variant="custom-color"
-                    className="mb-3"
-                    style={{ width: '200px' }}
-                  />
-                </div>)}
-            </div>
+                    <ProgressBar
+                      now={userDataContext.progressEx}
+                      label={userDataContext.progressEx === 0 ? "0%" : `${userDataContext.progressEx}%`}
+                      animated={userDataContext.progressEx === 0}
+                      variant="custom-color"
+                      className="mb-3"
+                      style={{ width: '200px' }}
+                    />
+                  </div>)}
+              </div>
 
-          )}
+            )}
 
 
-        </div>
+          </div>
 
-        <div className="circle">
-          {userPhoto[0] !== null ? (
-            <img src={userPhoto} alt="Avatar icon" />
-          ) : (
-            <img src={Avatar} alt="General" />
-          )
-          }
+          <div className="circle">
+            {userPhoto[0] !== null ? (
+              <img src={userPhoto} alt="Avatar icon" />
+            ) : (
+              <img src={Avatar} alt="General" />
+            )
+            }
+          </div>
         </div>
       </div>
       <p className="mb-3">{props.subtitle}</p>
