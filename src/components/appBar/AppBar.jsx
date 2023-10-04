@@ -11,18 +11,24 @@ import PropTypes from 'prop-types';
 import {
   taskStatus
 } from "../../pages/invoicesToPay/services";
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { tasksAdded } from '../../features/tasks/taskSlice'
 
 export const AppBar = (props) => {
 
   const [userName, setUserName] = useState('');
   const [userPhoto, setUserPhoto] = useState('');
+  const [currentTask, setCurrentTask] = useState({});
   const [mostrarNotificaciones, setMostrarNotificaciones] = useState(false);
   const userDataContext = useContext(Context);
 
-  // DISPATCH NEW TASKSTATE TO GLOBAL REDUX STATE
   const dispatch = useDispatch();
+
+  // Reading tasks global state 
+  const tasksState = useSelector(state => state.tasks);
+
+  // getting current task state
+  const processedFiles = useSelector(state => state.processedFiles);
 
   useEffect(() => {
     if (userDataContext.userData.name !== null) {
@@ -51,6 +57,7 @@ export const AppBar = (props) => {
   const getTasksStatus = async () => {
     try {
       const data = await taskStatus(userDataContext.userData.token)
+      // setTaskResponse(data.data);
       dispatch(tasksAdded(data.data));
     } catch (error) {
       dispatch(tasksAdded([]));
@@ -60,13 +67,66 @@ export const AppBar = (props) => {
 
 
   useEffect(() => {
-    //Implementing the setInterval method
+    getTasksStatus();
+    // Implementing the setInterval method
     const interval = setInterval(() => {
       getTasksStatus();
     }, 10000);
-    //Clearing the interval: stop the interval when the component unmounts.
+    // Clearing the interval: stop the interval when the component unmounts.
     return () => clearInterval(interval);
   }, []);
+
+  useEffect(() => {
+    processedFiles.processed.success.map((item) => {
+      setCurrentTask(JSON.parse(item));
+    });
+  }, [processedFiles])
+
+  // if (processedFiles && processedFiles.processed && processedFiles.processed.success.length > 1) {
+  //   setTimeout(() => {
+  //     setMostrarNotificaciones(!mostrarNotificaciones);
+  //   }, 4000);
+  // }
+
+  const humanizeDuration = (taskCreationDate) => {
+    // Make a fuzzy time
+    let currentDate = Math.round((new Date() - taskCreationDate) / 1000);
+
+    let minute = 60;
+    let hour = minute * 60;
+    let day = hour * 24;
+    let week = day * 7;
+    // let month = day * 30;
+    // let year = month * 12;
+
+    let textToPrint;
+
+    if (currentDate < 30) {
+      textToPrint = 'ahora mismo.';
+    } else if (currentDate < minute) {
+      textToPrint = 'hace ' + currentDate + ' segundos';
+    } else if (currentDate < 2 * minute) {
+      textToPrint = 'hace un minuto.'
+    } else if (currentDate < hour) {
+      textToPrint = 'hace ' + Math.floor(currentDate / minute) + ' minutos.';
+    } else if (Math.floor(currentDate / hour) == 1) {
+      textToPrint = 'hace 1 hora.'
+    } else if (currentDate < day) {
+      textToPrint = 'hace ' + Math.floor(currentDate / hour) + ' horas';
+    } else if (currentDate < day * 2) {
+      textToPrint = 'ayer';
+    } else if(currentDate < day * 3){
+      textToPrint = 'hace más de dos días';
+    } else if (currentDate < week * 2) {  // needs review!
+      textToPrint = Math.floor(currentDate / week) + ' semanas.';
+    } else if (currentDate < week * 4) {  // needs review!
+      textToPrint = 'hace un mes.';
+    } else if (currentDate < week * 5) { // needs review!
+      textToPrint = 'hace más de un mes.';
+    }
+
+    return textToPrint;
+  }
 
   return (
     <>
@@ -87,21 +147,22 @@ export const AppBar = (props) => {
             )}
             {mostrarNotificaciones && (
               <div className="processes-panel bg-white">
-                <label className="label" htmlFor="taxes_percentage">Notificaciones</label>
-                {userDataContext.isLoadingRef && (<label style={{ fontFamily: 'Nunito', color: '#999999', fontSize: '12px' }} >Procesando facturas</label>)}
-                {userDataContext.isLoadingRef && (
-
-                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-
-                    <ProgressBar
-                      now={userDataContext.progress}
-                      label={userDataContext.progress === 0 ? "0%" : `${userDataContext.progress}%`}
-                      animated={userDataContext.progress === 0}
-                      variant="custom-color"
-                      className="mb-3"
-                      style={{ width: '200px' }}
-                    />
-                  </div>)}
+                <div className="label" htmlFor="taxes_percentage">Notificaciones</div>
+                {processedFiles && processedFiles.processed && processedFiles.processed.success.length > 1 &&
+                  <div className='mt-3'> El archivo <span className='fw-bold'>{currentTask.name}</span> se ha procesado {currentTask.result.success === true ? 'exitosamente' : 'con fallos'}</div>
+                }
+                {/* {processedFiles && processedFiles.processed && processedFiles.processed.success.length === 1 && */}
+                <div className='mt-3'> <span className='fw-bold'>Últimos archivos procesados:</span>
+                  <ul>
+                    {tasksState && tasksState.results.map((item, index) => {
+                      if (index < 20) {
+                        return <li key={index}>{item.name} <span className='text-secondary fst-italic'>{humanizeDuration(new Date(item.created_at))}</span></li>
+                      }
+                    })
+                    }
+                  </ul>
+                </div>
+                {/* } */}
                 {userDataContext.isLoadingRefEx && (<label style={{ fontFamily: 'Nunito', color: '#999999', fontSize: '12px' }} >Procesando gastos</label>)}
                 {userDataContext.isLoadingRefEx && (
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}>

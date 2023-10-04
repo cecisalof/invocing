@@ -2,16 +2,22 @@ import { createSlice } from '@reduxjs/toolkit'
 
 export const filesStateSlice = createSlice({
     name: 'processedFile',
-    initialState: false,
+    initialState: {
+        processed: {
+            success: [],
+            fail: []
+        }
+    },
     reducers: {
-        failedProcessedFileState: (state, action) => {
-            // console.log(action);
-            return action.payload
+        processedFileState: (state, action) => {
+            // state.processed.success.push(action.payload)
+            // AVOID DUPLICATING FILE INSIDE ARRAY
+            state.processed.success = [...(new Set([...state.processed.success, JSON.stringify(action.payload)]))];
+
         }
     }
 })
-
 // Action creators are generated for each case reducer function
-export const { failedProcessedFileState } = filesStateSlice.actions
+export const { processedFileState } = filesStateSlice.actions
 
 export default filesStateSlice.reducer

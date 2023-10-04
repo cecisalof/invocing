@@ -11,7 +11,7 @@ import dragDrop from '../../assets/icons/drag-and-drop.png';
 import "./style.css"
 import { useSelector, useDispatch } from 'react-redux'
 // import { Alert } from '@mui/material';
-import { failedProcessedFileState } from '../../features/processingFiles/filesSlice'
+import { processedFileState } from '../../features/processingFiles/filesSlice'
 // import FileWatcherComponent from '../fileWatcher/FileWatcher';
 
 export const DragAndDropCardComponent = (props) => {
@@ -23,12 +23,10 @@ export const DragAndDropCardComponent = (props) => {
   const [failProgressBarPercentage, setFailProgressBarPercentage] = useState(0)
   const [isFileUploading, setIsFileUploading] = useState(false)
 
-  // DISPATCH NEW TASKSTATE TO GLOBAL REDUX STATE
   const dispatch = useDispatch();
 
   // Reading tasks global state 
   const tasksState = useSelector(state => state.tasks);
-  console.log(tasksState && tasksState.results);
 
   const inputRef = useRef(null)
   const cardRef = useRef(null)
@@ -74,34 +72,23 @@ export const DragAndDropCardComponent = (props) => {
     event.target.value = null;
   };
 
-  // const updateBarPercentage = () => {
-  //   for (const [i, fileQueue] of tasksState.entries()) { // fileQueue represents each file queue in getTasksStatus().
-
-  //     // fileQueue.items is an array with processed files in each file queue
-  //     i == 0 && fileQueue.items.map((item) => {
-  //       console.log(item);
-  //       // checkingLoadedFiles(item);
-  //       if (item.result == null) {
-  //         return
-  //       } else if (item.result.success) {
-  //         console.log('Archivo procesado y subido:', item.name)
-
-  //         // change bar percentage first
-  //         setSuccessProgressBarPercentage(Math.round((fileQueue.success * 100) / fileQueue.total))
-
-  //         // TO DO: acumular en un arreglo y comporbar si existe en taskState. Si existe, sacarlo de taskState para que no se repita su comprobación.       
-
-  //       } else if (item.result.error) {
-  //         console.log(`El archivo ${item.name} ha fallado:`, item.result.detail);
-
-  //         // reset successProgressBarPercentage first!
-  //         setSuccessProgressBarPercentage(0)
-  //         // set failProgressBarPercentage
-  //         setFailProgressBarPercentage(Math.round((fileQueue.fail * 100) / fileQueue.total));
-  //       }
-  //     })
-  //   }
-  // }
+  const updateNotificationState = () => {
+    tasksState && tasksState.results.map((task, index) => {
+      if (index === 0) {
+        if (task.result == null) {
+          // empujar esta task a notificaciones con estado "procesando"
+          console.log('Procesando archivo:', task);
+        } else if (task.result.success) {
+          // empujar esta task a notificaciones con estado "procesado exitosamente"
+          dispatch(processedFileState(task))
+          console.log('Archivo procesado y subido:', task.name, index)
+        } else if (task.result.error) {
+          // empujar esta task a notificaciones con estado "procesado con errores"
+          console.log(`El archivo ${task.name} ha fallado:`, task.result.detail);
+        }
+      }
+    })
+  }
 
   const processFiles = async (files) => {
     setIsFileUploading(true) // Showing progress bar
@@ -119,7 +106,7 @@ export const DragAndDropCardComponent = (props) => {
 
     if (!response) {
       // changing global state
-      dispatch(failedProcessedFileState(true));
+      // dispatch(failedProcessedFileState(true));
       setIsError(true)
     }
 
@@ -145,11 +132,11 @@ export const DragAndDropCardComponent = (props) => {
 
   }, [successProgressBarPercentage, failProgressBarPercentage])
 
-  // useEffect(() => {
-  //   if (tasksState.length !== 0) {
-  //     updateBarPercentage();
-  //   }
-  // }, [tasksState])
+  useEffect(() => {
+    if (tasksState && tasksState.results !== undefined) {
+      updateNotificationState();
+    }
+  }, [tasksState])
 
   return (
     <>
@@ -230,5 +217,5 @@ DragAndDropCardComponent.propTypes = {
   setIsError: PropTypes.func.isRequired,
   getPanelData: PropTypes.func,
   getTasksStatus: PropTypes.func,
-  tasksState: PropTypes.array
+  tasksState: PropTypes.array,
 }
