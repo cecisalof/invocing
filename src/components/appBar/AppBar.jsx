@@ -134,8 +134,21 @@ export const AppBar = (props) => {
                   <ul>
                     {tasksState && tasksState.results.map((item, index) => {
                       // avoid printing unprocessed files
-                      if (index < 20 && item.result !== null) {
+                      if (item.result !== null && item && item.result && !item.result.error) {
                         return <li key={index}>{item.name} <span className='text-secondary fst-italic'>{humanizeDuration(new Date(item.created_at))}</span></li>
+                      } else {
+                        if (item && item.result && item.result.error) {
+                          console.log(item && item.result && item.result.error.includes('itp_fff_1'));
+                          if (item && item.result && item.result.error.includes('cia_1') || item && item.result && item.result.error.includes('cea_1')) {
+                            return <li key={index}>{item.name + ` procesado con errores: ${item && item.result && item.result.error} = Error de lectura de archivo, inténtelo más tarde`} <span className='text-secondary fst-italic'>{humanizeDuration(new Date(item.created_at))}</span></li>
+                          } else if (item && item.result && item.result.error.includes('ewi_fff_1') || item && item.result && item.result.error.includes('itp_fff_1')) {
+                            return <li key={index}>{item.name + ` procesado con errores: ${item && item.result && item.result.error} = Error al procesar la factura/gasto, inténtelo de nuevo.`} <span className='text-secondary fst-italic'>{humanizeDuration(new Date(item.created_at))}</span></li>
+                          } else if (item && item.result && item.result.error.includes('ewi_fff_2') || item && item.result && item.result.error.includes('itp_fff_2')) {
+                            return <li key={index}>{item.name + ` procesado con errores: ${item && item.result && item.result.error} = Error al rellenar los datos de la factura/gasto, inténtelo de nuevo.`} <span className='text-secondary fst-italic'>{humanizeDuration(new Date(item.created_at))}</span></li>
+                          } else {
+                            return <li key={index}>{item.name + ` procesado con errores: Error al procesar la factura/gasto, inténtelo de nuevo.`} <span className='text-secondary fst-italic'>{humanizeDuration(new Date(item.created_at))}</span></li>
+                          }
+                        }
                       }
                     })
                     }
