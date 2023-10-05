@@ -1,12 +1,9 @@
 import { useEffect, useState } from 'react';
 import './style.css'
-// import settingsIcon from '../../assets/icons/Ajustes.png';
 import notificationIcon from '../../assets/icons/Notificacion.png';
-// import SearchIcon from '../../assets/icons/Buscar.png';
 import Avatar from '../../assets/icons/avatar.png';
 import Context from '../../contexts/context';
 import { useContext } from 'react';
-import { ProgressBar } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import {
   taskStatus
@@ -61,28 +58,15 @@ export const AppBar = (props) => {
     return () => clearInterval(interval);
   }, []);
 
-  // useEffect(() => {
-  //   if (processedFiles.processed.length > 0) {
-  //     processedFiles.processed.map((item) => {
-  //       let itemParse = JSON.parse(item);
-  //       setCurrentTasks(currentTasks => [...currentTasks, itemParse]);
-  //       // currentTasks.push(itemParse);
-  //       // if (item !== undefined) {
-  //       //   let itemParse =JSON.parse(item);
-  //       //   currentTasks.push(itemParse);
-  //       // }
-  //     });
-  //   }
-  // }, [processedFiles])
-
-  // console.log('currentTasks', currentTasks);
-
-  // open notification poop-up
-  // if (processedFiles && processedFiles.processed && processedFiles.processed.success.length > 1) {
-  //   setTimeout(() => {
-  //     setMostrarNotificaciones(!mostrarNotificaciones);
-  //   }, 4000);
-  // }
+  useEffect(() => {
+    if (tasksState && tasksState.results !== undefined) {
+      tasksState && tasksState.results.map((item) => {
+        if (new Date(item.created_at).toLocaleDateString() === new Date().toLocaleDateString()) {
+          item.result == null && setMostrarNotificaciones(true);
+        }
+      });
+    }
+  }, [tasksState])
 
   const humanizeDuration = (taskCreationDate) => {
     // Make a fuzzy time
@@ -157,24 +141,9 @@ export const AppBar = (props) => {
                     }
                   </ul>
                 </div>
-                {userDataContext.isLoadingRefEx && (<label style={{ fontFamily: 'Nunito', color: '#999999', fontSize: '12px' }} >Procesando gastos</label>)}
-                {userDataContext.isLoadingRefEx && (
-                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-
-                    <ProgressBar
-                      now={userDataContext.progressEx}
-                      label={userDataContext.progressEx === 0 ? "0%" : `${userDataContext.progressEx}%`}
-                      animated={userDataContext.progressEx === 0}
-                      variant="custom-color"
-                      className="mb-3"
-                      style={{ width: '200px' }}
-                    />
-                  </div>)}
               </div>
 
             )}
-
-
           </div>
 
           <div className="circle">
