@@ -3,17 +3,12 @@ import { createSlice } from '@reduxjs/toolkit'
 export const filesStateSlice = createSlice({
     name: 'processedFile',
     initialState: {
-        processed: {
-            success: [],
-            fail: []
-        }
+        processed: [],
     },
     reducers: {
-        processedFileState: (state, action) => {
-            // state.processed.success.push(action.payload)
+        processedFileState: (state, action) => {            
             // AVOID DUPLICATING FILE INSIDE ARRAY
-            state.processed.success = [...(new Set([...state.processed.success, JSON.stringify(action.payload)]))];
-
+            state.processed = [...(new Set([...state.processed, JSON.stringify(action.payload)]))];
         }
     }
 })

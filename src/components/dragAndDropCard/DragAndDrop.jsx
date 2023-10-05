@@ -1,32 +1,18 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { postInvoiceAutomatic } from "../../pages/invoicesToPay/services";
 import { postExpenseTicketAutomatic } from "../../pages/expensesTickets/services";
-// import spinner from '../../assets/icons/spinner.svg';
-// import spinnerYellow from '../../assets/icons/spinnerYellow.svg';
 import PropTypes from 'prop-types';
 import { FaCheckCircle } from 'react-icons/fa';
 import cashYellow from '../../assets/icons/cashYellow.png';
 import dragDrop from '../../assets/icons/drag-and-drop.png';
-// import { ProgressBar } from 'react-bootstrap';
 import "./style.css"
-import { useSelector, useDispatch } from 'react-redux'
-// import { Alert } from '@mui/material';
-import { processedFileState } from '../../features/processingFiles/filesSlice'
-// import FileWatcherComponent from '../fileWatcher/FileWatcher';
 
 export const DragAndDropCardComponent = (props) => {
 
-  const { type, userToken, setIsError, getPanelData } = props;
+  const { type, userToken, setIsError } = props;
 
   const [isFileUploaded, setIsFileUploaded] = useState(false)
-  const [successProgressBarPercentage, setSuccessProgressBarPercentage] = useState(10)
-  const [failProgressBarPercentage, setFailProgressBarPercentage] = useState(0)
   const [isFileUploading, setIsFileUploading] = useState(false)
-
-  const dispatch = useDispatch();
-
-  // Reading tasks global state 
-  const tasksState = useSelector(state => state.tasks);
 
   const inputRef = useRef(null)
   const cardRef = useRef(null)
@@ -44,20 +30,15 @@ export const DragAndDropCardComponent = (props) => {
   };
 
   const handleDrop = (event) => {
-    // if (isFileUploading) {
-    //   alert("Se está cargando otros archivos, espera a que termine la carga anterior")
-    // } else {
     event.preventDefault();
     event.stopPropagation();
     cardRef.current.classList.remove('opacity-05');
 
     const files = event.dataTransfer.files;
     processFiles(files)
-    // }
   };
 
   const handleClick = () => {
-    // if (isFileUploading) return
     inputRef.current.click()
   }
 
@@ -71,24 +52,6 @@ export const DragAndDropCardComponent = (props) => {
     // 👇️ reset file input
     event.target.value = null;
   };
-
-  const updateNotificationState = () => {
-    tasksState && tasksState.results.map((task, index) => {
-      if (index === 0) {
-        if (task.result == null) {
-          // empujar esta task a notificaciones con estado "procesando"
-          console.log('Procesando archivo:', task);
-        } else if (task.result.success) {
-          // empujar esta task a notificaciones con estado "procesado exitosamente"
-          dispatch(processedFileState(task))
-          console.log('Archivo procesado y subido:', task.name, index)
-        } else if (task.result.error) {
-          // empujar esta task a notificaciones con estado "procesado con errores"
-          console.log(`El archivo ${task.name} ha fallado:`, task.result.detail);
-        }
-      }
-    })
-  }
 
   const processFiles = async (files) => {
     setIsFileUploading(true) // Showing progress bar
@@ -105,8 +68,6 @@ export const DragAndDropCardComponent = (props) => {
     }
 
     if (!response) {
-      // changing global state
-      // dispatch(failedProcessedFileState(true));
       setIsError(true)
     }
 
@@ -115,28 +76,6 @@ export const DragAndDropCardComponent = (props) => {
       setIsFileUploading(false);
     }, 5000)
   }
-
-  useEffect(() => {
-    if (successProgressBarPercentage + failProgressBarPercentage == 100) {
-      setTimeout(async () => {
-        console.log('Updating grid data...');
-        await getPanelData('?year=1'); // getPanelData() to show files in the grid
-
-        // change card view, hide progress bar, setting isFileUploading to false.
-        // setIsFileUploading(false);
-        // reset progessBar Percentages
-        setSuccessProgressBarPercentage(10)
-        setFailProgressBarPercentage(0)
-      }, 3000);
-    }
-
-  }, [successProgressBarPercentage, failProgressBarPercentage])
-
-  useEffect(() => {
-    if (tasksState && tasksState.results !== undefined) {
-      updateNotificationState();
-    }
-  }, [tasksState])
 
   return (
     <>
@@ -155,12 +94,6 @@ export const DragAndDropCardComponent = (props) => {
           onChange={handleFileUpload}
         />
         <div className="p-0 m-0">
-          {/* {isFileUploading && (
-          <div>
-            <img src={type == "invoice" ? spinner : spinnerYellow} className="loading-icon" />
-            <div>Subiendo archivos... </div>
-          </div>
-        )} */}
           {isFileUploaded && (
             <div className="upload-indicator">
               <FaCheckCircle className="upload-icon" />
@@ -183,30 +116,8 @@ export const DragAndDropCardComponent = (props) => {
               </div>
             </div>
           )}
-          {/* Progress Bar New: Make it visible when task progress starts */}
-          {/* {isFileUploading && (
-          <ProgressBar className='my-3'>
-            <ProgressBar
-              animated
-              now={successProgressBarPercentage}
-              key={1}
-              style={{
-                borderRadius: '100px 0 0 100px',
-                backgroundColor: '#97A4FF',
-              }} />
-            <ProgressBar
-              animated
-              now={failProgressBarPercentage}
-              key={2}
-              style={{
-                borderRadius: '100px 0 0 100px',
-                backgroundColor: '#FF6A36',
-              }} />
-          </ProgressBar>
-        )} */}
         </div>
       </div>
-      {/* <FileWatcherComponent /> */}
     </>
   );
 };

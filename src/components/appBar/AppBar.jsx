@@ -18,7 +18,6 @@ export const AppBar = (props) => {
 
   const [userName, setUserName] = useState('');
   const [userPhoto, setUserPhoto] = useState('');
-  const [currentTask, setCurrentTask] = useState({});
   const [mostrarNotificaciones, setMostrarNotificaciones] = useState(false);
   const userDataContext = useContext(Context);
 
@@ -26,9 +25,6 @@ export const AppBar = (props) => {
 
   // Reading tasks global state 
   const tasksState = useSelector(state => state.tasks);
-
-  // getting current task state
-  const processedFiles = useSelector(state => state.processedFiles);
 
   useEffect(() => {
     if (userDataContext.userData.name !== null) {
@@ -40,24 +36,13 @@ export const AppBar = (props) => {
 
   }, [props]);
 
-  // function handleSettingsClick() {
-  //   console.log('Botón de ajustes clickeado');
-  // }
-
   const handleNotificationClick = () => {
     setMostrarNotificaciones(!mostrarNotificaciones);
   };
 
-  // function handleSubmit(event) {
-  //   event.preventDefault();
-  //   console.log('Search');
-  //   // Aquí puedes agregar la lógica para manejar la búsqueda
-  // }
-
   const getTasksStatus = async () => {
     try {
       const data = await taskStatus(userDataContext.userData.token)
-      // setTaskResponse(data.data);
       dispatch(tasksAdded(data.data));
     } catch (error) {
       dispatch(tasksAdded([]));
@@ -76,12 +61,23 @@ export const AppBar = (props) => {
     return () => clearInterval(interval);
   }, []);
 
-  useEffect(() => {
-    processedFiles.processed.success.map((item) => {
-      setCurrentTask(JSON.parse(item));
-    });
-  }, [processedFiles])
+  // useEffect(() => {
+  //   if (processedFiles.processed.length > 0) {
+  //     processedFiles.processed.map((item) => {
+  //       let itemParse = JSON.parse(item);
+  //       setCurrentTasks(currentTasks => [...currentTasks, itemParse]);
+  //       // currentTasks.push(itemParse);
+  //       // if (item !== undefined) {
+  //       //   let itemParse =JSON.parse(item);
+  //       //   currentTasks.push(itemParse);
+  //       // }
+  //     });
+  //   }
+  // }, [processedFiles])
 
+  // console.log('currentTasks', currentTasks);
+
+  // open notification poop-up
   // if (processedFiles && processedFiles.processed && processedFiles.processed.success.length > 1) {
   //   setTimeout(() => {
   //     setMostrarNotificaciones(!mostrarNotificaciones);
@@ -115,7 +111,7 @@ export const AppBar = (props) => {
       textToPrint = 'hace ' + Math.floor(currentDate / hour) + ' horas';
     } else if (currentDate < day * 2) {
       textToPrint = 'ayer';
-    } else if(currentDate < day * 3){
+    } else if (currentDate < day * 3) {
       textToPrint = 'hace más de dos días';
     } else if (currentDate < week * 2) {  // needs review!
       textToPrint = Math.floor(currentDate / week) + ' semanas.';
@@ -134,11 +130,6 @@ export const AppBar = (props) => {
         <h1 className="title mb-0" style={{ color: '#000000' }}>Hola
           {userName !== null && (<span className='userName ms-1' style={{ color: '#005CFF' }}>{userName}</span>)}
         </h1>
-        {/* <form className="d-flex searchBar" role="search" onSubmit={handleSubmit}>
-            <img src={SearchIcon} alt="Search icon" style={{ marginRight: '10px' } } />
-            <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-          </form> */}
-
         <div className="d-flex justify-content-between align-items-center mt-0">
           <div className='tools'>
             <img src={notificationIcon} alt="Notificatoin icon" onClick={handleNotificationClick} />
@@ -148,21 +139,24 @@ export const AppBar = (props) => {
             {mostrarNotificaciones && (
               <div className="processes-panel bg-white">
                 <div className="label" htmlFor="taxes_percentage">Notificaciones</div>
-                {processedFiles && processedFiles.processed && processedFiles.processed.success.length > 1 &&
-                  <div className='mt-3'> El archivo <span className='fw-bold'>{currentTask.name}</span> se ha procesado {currentTask.result.success === true ? 'exitosamente' : 'con fallos'}</div>
-                }
-                {/* {processedFiles && processedFiles.processed && processedFiles.processed.success.length === 1 && */}
+                {tasksState && tasksState.results.map((current, index) => {
+                  if (new Date(current.created_at).toLocaleDateString() === new Date().toLocaleDateString()) {
+                    if (current.result == null) {
+                      return <div key={index} className='mt-3'> El archivo <span className='fw-bold'>{current.name}</span> se está procesando.</div>
+                    }
+                  }
+                })}
                 <div className='mt-3'> <span className='fw-bold'>Últimos archivos procesados:</span>
                   <ul>
                     {tasksState && tasksState.results.map((item, index) => {
-                      if (index < 20) {
+                      // avoid printing unprocessed files
+                      if (index < 20 && item.result !== null) {
                         return <li key={index}>{item.name} <span className='text-secondary fst-italic'>{humanizeDuration(new Date(item.created_at))}</span></li>
                       }
                     })
                     }
                   </ul>
                 </div>
-                {/* } */}
                 {userDataContext.isLoadingRefEx && (<label style={{ fontFamily: 'Nunito', color: '#999999', fontSize: '12px' }} >Procesando gastos</label>)}
                 {userDataContext.isLoadingRefEx && (
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
