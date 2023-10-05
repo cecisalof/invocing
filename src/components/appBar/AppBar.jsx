@@ -146,7 +146,7 @@ export const AppBar = (props) => {
               <div className="notification-dot" /> // Agregamos un div con clase para el punto rojo
             )}
             {mostrarNotificaciones && (
-              <div className="processes-panel bg-white">
+              <div className="processes-panel bg-white py-2 px-4">
                 <div className="label" htmlFor="taxes_percentage">Notificaciones</div>
                 {processedFiles && processedFiles.processed && processedFiles.processed.success.length > 1 &&
                   <div className='mt-3'> El archivo <span className='fw-bold'>{currentTask.name}</span> se ha procesado {currentTask.result.success === true ? 'exitosamente' : 'con fallos'}</div>
