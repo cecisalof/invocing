@@ -137,7 +137,7 @@ export const AppBar = (props) => {
               <div className="notification-dot" /> // Agregamos un div con clase para el punto rojo
             )}
             {mostrarNotificaciones && (
-              <div className="processes-panel bg-white">
+              <div className="processes-panel bg-white py-2 px-4">
                 <div className="label" htmlFor="taxes_percentage">Notificaciones</div>
                 {tasksState && tasksState.results.map((current, index) => {
                   if (new Date(current.created_at).toLocaleDateString() === new Date().toLocaleDateString()) {
