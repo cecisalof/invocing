@@ -58,16 +58,6 @@ export const AppBar = (props) => {
     return () => clearInterval(interval);
   }, []);
 
-  useEffect(() => {
-    if (tasksState && tasksState.results !== undefined) {
-      tasksState && tasksState.results.map((item) => {
-        if (new Date(item.created_at).toLocaleDateString() === new Date().toLocaleDateString()) {
-          item.result == null && setMostrarNotificaciones(true);
-        }
-      });
-    }
-  }, [tasksState])
-
   const humanizeDuration = (taskCreationDate) => {
     // Make a fuzzy time
     let currentDate = Math.round((new Date() - taskCreationDate) / 1000);
@@ -100,7 +90,7 @@ export const AppBar = (props) => {
     } else if (currentDate < week) {
       textToPrint = 'hace menos de una semana.';
     } else if (currentDate < week * 2) {
-      textToPrint = Math.round(currentDate / week) <= 1 ? 'hace' + Math.round(currentDate / week) + ' semana.' : 'hace' + Math.round(currentDate / week) + ' semanas.' ;
+      textToPrint = Math.round(currentDate / week) <= 1 ? 'hace' + Math.round(currentDate / week) + ' semana.' : 'hace' + Math.round(currentDate / week) + ' semanas.';
     } else if (currentDate < month) {
       textToPrint = 'hace menos de un mes.';
     } else if (currentDate < month * 2) {
@@ -123,9 +113,14 @@ export const AppBar = (props) => {
         <div className="d-flex justify-content-between align-items-center mt-0">
           <div className='tools'>
             <img src={notificationIcon} alt="Notificatoin icon" onClick={handleNotificationClick} />
-            {(userDataContext.isLoadingRef || userDataContext.isLoadingRefEx) && (
-              <div className="notification-dot" /> // Agregamos un div con clase para el punto rojo
-            )}
+            {tasksState && tasksState.results !== undefined && 
+              tasksState && tasksState.results.map((item, index) => {
+              if (new Date(item.created_at).toLocaleDateString() === new Date().toLocaleDateString()) {
+                if (item.result == null) {
+                 return <div key={index} className="notification-dot" /> // Agregamos un div con clase para el punto rojo
+                }
+              }
+            })}
             {mostrarNotificaciones && (
               <div className="processes-panel bg-white py-2 px-4">
                 <div className="label" htmlFor="taxes_percentage">Notificaciones</div>
