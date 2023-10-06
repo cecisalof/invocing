@@ -75,9 +75,10 @@ export const AppBar = (props) => {
     let minute = 60;
     let hour = minute * 60;
     let day = hour * 24;
+    // console.log(day);
     let week = day * 7;
-    // let month = day * 30;
-    // let year = month * 12;
+    let month = day * 30;
+    let year = month * 12;
 
     let textToPrint;
 
@@ -96,13 +97,19 @@ export const AppBar = (props) => {
     } else if (currentDate < day * 2) {
       textToPrint = 'ayer';
     } else if (currentDate < day * 3) {
-      textToPrint = 'hace más de dos días';
-    } else if (currentDate < week * 2) {  // needs review!
-      textToPrint = Math.floor(currentDate / week) + ' semanas.';
-    } else if (currentDate < week * 4) {  // needs review!
-      textToPrint = 'hace un mes.';
-    } else if (currentDate < week * 5) { // needs review!
-      textToPrint = 'hace más de un mes.';
+      textToPrint = 'hace ' + Math.round(currentDate / day) + ' días';
+    } else if (currentDate < week) {
+      textToPrint = 'hace menos de una semana.';
+    } else if (currentDate < week * 2) {
+      textToPrint = Math.round(currentDate / week) <= 1 ? 'hace' + Math.round(currentDate / week) + ' semana.' : 'hace' + Math.round(currentDate / week) + ' semanas.' ;
+    } else if (currentDate < month) {
+      textToPrint = 'hace menos de un mes.';
+    } else if (currentDate < month * 2) {
+      textToPrint = Math.round(currentDate / month) <= 1 ? 'hace ' + Math.round(currentDate / month) + ' mes' : 'hace ' + Math.round(currentDate / month) + ' meses.';
+    } else if (currentDate < year) {
+      textToPrint = 'hace menos de un año.';
+    } else if (currentDate < year * 2) {
+      textToPrint = Math.round(currentDate / year) <= 1 ? 'hace ' + Math.round(currentDate / month) + ' año' : 'hace ' + Math.round(currentDate / month) + ' años.';
     }
 
     return textToPrint;
@@ -138,7 +145,6 @@ export const AppBar = (props) => {
                         return <li key={index}>{item.name} <span className='text-secondary fst-italic'>{humanizeDuration(new Date(item.created_at))}</span></li>
                       } else {
                         if (item && item.result && item.result.error) {
-                          console.log(item && item.result && item.result.error.includes('itp_fff_1'));
                           if (item && item.result && item.result.error.includes('cia_1') || item && item.result && item.result.error.includes('cea_1')) {
                             return <li key={index}>{item.name + ` procesado con errores: ${item && item.result && item.result.error} = Error de lectura de archivo, inténtelo más tarde`} <span className='text-secondary fst-italic'>{humanizeDuration(new Date(item.created_at))}</span></li>
                           } else if (item && item.result && item.result.error.includes('ewi_fff_1') || item && item.result && item.result.error.includes('itp_fff_1')) {
