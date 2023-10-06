@@ -15,6 +15,8 @@ export const AppBar = (props) => {
 
   const [userName, setUserName] = useState('');
   const [userPhoto, setUserPhoto] = useState('');
+  const [currentTaskInProgress, setCurrentTaskInProgress] = useState(false);
+  const [currentTasks, setCurrentTasks] = useState([]);
   const [mostrarNotificaciones, setMostrarNotificaciones] = useState(false);
   const userDataContext = useContext(Context);
 
@@ -40,6 +42,7 @@ export const AppBar = (props) => {
   const getTasksStatus = async () => {
     try {
       const data = await taskStatus(userDataContext.userData.token)
+      setCurrentTasks(data.data);
       dispatch(tasksAdded(data.data));
     } catch (error) {
       dispatch(tasksAdded([]));
@@ -57,6 +60,21 @@ export const AppBar = (props) => {
     // Clearing the interval: stop the interval when the component unmounts.
     return () => clearInterval(interval);
   }, []);
+
+  // let currentTask= [];
+
+  useEffect(() => {
+    if (currentTasks && currentTasks.results !== undefined) {
+      currentTasks && currentTasks.results.map((item) => {
+        if (new Date(item.created_at).toLocaleDateString() === new Date().toLocaleDateString()) {
+          if (item.result === null) {
+            console.log(item);
+            setCurrentTaskInProgress(true);
+          }
+        }
+      })
+    }
+  }, [currentTasks])
 
   const humanizeDuration = (taskCreationDate) => {
     // Make a fuzzy time
@@ -113,49 +131,51 @@ export const AppBar = (props) => {
         <div className="d-flex justify-content-between align-items-center mt-0">
           <div className='tools'>
             <img src={notificationIcon} alt="Notificatoin icon" onClick={handleNotificationClick} />
-            {tasksState && tasksState.results !== undefined && 
-              tasksState && tasksState.results.map((item, index) => {
-              if (new Date(item.created_at).toLocaleDateString() === new Date().toLocaleDateString()) {
-                if (item.result == null) {
-                 return <div key={index} className="notification-dot" /> // Agregamos un div con clase para el punto rojo
-                }
-              }
-            })}
+            {currentTaskInProgress === true &&
+              <div className="notification-dot" /> // Agregamos un div con clase para el punto rojo
+            }
             {mostrarNotificaciones && (
               <div className="processes-panel bg-white py-2 px-4">
                 <div className="label" htmlFor="taxes_percentage">Notificaciones</div>
-                {tasksState && tasksState.results.map((current, index) => {
-                  if (new Date(current.created_at).toLocaleDateString() === new Date().toLocaleDateString()) {
-                    if (current.result == null) {
-                      return <div key={index} className='mt-3'> El archivo <span className='fw-bold'>{current.name}</span> se está procesando.</div>
-                    }
+                <div>
+                  {currentTaskInProgress === true &&
+                    <div className='mt-3'> <span className='fw-bold'>Archivos en proceso:</span>
+                      <ul>
+                        {tasksState && tasksState.results.map((current, index) => {
+                          if (new Date(current.created_at).toLocaleDateString() === new Date().toLocaleDateString()) {
+                            if (current.result == null) {
+                              return <li key={index}><span>{current.name}</span></li>
+                            }
+                          }
+                        })}
+                      </ul>
+                    </div>
                   }
-                })}
-                <div className='mt-3'> <span className='fw-bold'>Últimos archivos procesados:</span>
-                  <ul>
-                    {tasksState && tasksState.results.map((item, index) => {
-                      // avoid printing unprocessed files
-                      if (item.result !== null && item && item.result && !item.result.error) {
-                        return <li key={index}>{item.name} <span className='text-secondary fst-italic'>{humanizeDuration(new Date(item.created_at))}</span></li>
-                      } else {
-                        if (item && item.result && item.result.error) {
-                          if (item && item.result && item.result.error.includes('cia_1') || item && item.result && item.result.error.includes('cea_1')) {
-                            return <li key={index}>{item.name + ` procesado con errores: ${item && item.result && item.result.error} = Error de lectura de archivo, inténtelo más tarde`} <span className='text-secondary fst-italic'>{humanizeDuration(new Date(item.created_at))}</span></li>
-                          } else if (item && item.result && item.result.error.includes('ewi_fff_1') || item && item.result && item.result.error.includes('itp_fff_1')) {
-                            return <li key={index}>{item.name + ` procesado con errores: ${item && item.result && item.result.error} = Error al procesar la factura/gasto, inténtelo de nuevo.`} <span className='text-secondary fst-italic'>{humanizeDuration(new Date(item.created_at))}</span></li>
-                          } else if (item && item.result && item.result.error.includes('ewi_fff_2') || item && item.result && item.result.error.includes('itp_fff_2')) {
-                            return <li key={index}>{item.name + ` procesado con errores: ${item && item.result && item.result.error} = Error al rellenar los datos de la factura/gasto, inténtelo de nuevo.`} <span className='text-secondary fst-italic'>{humanizeDuration(new Date(item.created_at))}</span></li>
-                          } else {
-                            return <li key={index}>{item.name + ` procesado con errores: Error al procesar la factura/gasto, inténtelo de nuevo.`} <span className='text-secondary fst-italic'>{humanizeDuration(new Date(item.created_at))}</span></li>
+                  <div className='mt-3'> <span className='fw-bold'>Últimos archivos procesados:</span>
+                    <ul>
+                      {tasksState && tasksState.results.map((item, index) => {
+                        // avoid printing unprocessed files
+                        if (item.result !== null && item && item.result && !item.result.error) {
+                          return <li key={index}>{item.name} <span className='text-secondary fst-italic'>{humanizeDuration(new Date(item.created_at))}</span></li>
+                        } else {
+                          if (item && item.result && item.result.error) {
+                            if (item && item.result && item.result.error.includes('cia_1') || item && item.result && item.result.error.includes('cea_1')) {
+                              return <li key={index}>{item.name + ` procesado con errores: ${item && item.result && item.result.error} = Error de lectura de archivo, inténtelo más tarde`} <span className='text-secondary fst-italic'>{humanizeDuration(new Date(item.created_at))}</span></li>
+                            } else if (item && item.result && item.result.error.includes('ewi_fff_1') || item && item.result && item.result.error.includes('itp_fff_1')) {
+                              return <li key={index}>{item.name + ` procesado con errores: ${item && item.result && item.result.error} = Error al procesar la factura/gasto, inténtelo de nuevo.`} <span className='text-secondary fst-italic'>{humanizeDuration(new Date(item.created_at))}</span></li>
+                            } else if (item && item.result && item.result.error.includes('ewi_fff_2') || item && item.result && item.result.error.includes('itp_fff_2')) {
+                              return <li key={index}>{item.name + ` procesado con errores: ${item && item.result && item.result.error} = Error al rellenar los datos de la factura/gasto, inténtelo de nuevo.`} <span className='text-secondary fst-italic'>{humanizeDuration(new Date(item.created_at))}</span></li>
+                            } else {
+                              return <li key={index}>{item.name + ` procesado con errores: Error al procesar la factura/gasto, inténtelo de nuevo.`} <span className='text-secondary fst-italic'>{humanizeDuration(new Date(item.created_at))}</span></li>
+                            }
                           }
                         }
+                      })
                       }
-                    })
-                    }
-                  </ul>
+                    </ul>
+                  </div>
                 </div>
               </div>
-
             )}
           </div>
 
