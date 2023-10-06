@@ -15,6 +15,8 @@ import dragDrop from '../../assets/icons/drag-and-drop.png';
 import 'react-calendar/dist/Calendar.css';
 import { Alert } from '@mui/material';
 import ButtonBar from '../../components/buttonBar/ButtonBar';
+import { useSelector } from 'react-redux'
+
 //import { getIncome } from "./../income/services";
 //import { AgChartsReact } from 'ag-charts-react';
 
@@ -27,6 +29,12 @@ export const Dashboard = () => {
   //const [invoiceEmitStates, setInvoiceEmitStates] = useState({});
   const [totals, setTotals] = useState({});
   const [isError, setIsError] = useState(false);
+
+  // Reading filters global state 
+  const filterState = useSelector(state => state.filters);
+
+  // Reading tasks global state 
+  const tasksState = useSelector(state => state.tasks);
 
   const userDataContext = useContext(Context);
 
@@ -85,6 +93,16 @@ export const Dashboard = () => {
     getPanelData('?year=1');
   }, [userDataContext.userData.token]);
 
+  // Update grid data when all tasks in taskState are processed
+  useEffect(() => {
+    if (tasksState && tasksState.results !== undefined) {
+      tasksState && tasksState.results.map((item) => {
+        if (new Date(item.created_at).toLocaleDateString() === new Date().toLocaleDateString()) {
+          item.result !== null && getPanelData(filterState);
+        }
+      });
+    }
+  }, [tasksState])
 
   // const chartData = (income) => {
   //   const groupedData = {};
