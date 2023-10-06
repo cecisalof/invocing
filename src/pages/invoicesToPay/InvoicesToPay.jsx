@@ -31,6 +31,7 @@ import { DragAndDropCardComponent } from "../../components/dragAndDropCard/DragA
 import { saveAs } from 'file-saver';
 import Modal from '../../components/modal/Modal';
 import ButtonBar from '../../components/buttonBar/ButtonBar';
+import { useSelector } from 'react-redux'
 
 export const InvoicesToPay = () => {
   const location = useLocation();
@@ -45,6 +46,13 @@ export const InvoicesToPay = () => {
   const userDataContext = useContext(Context);
 
   const localeText = AG_GRID_LOCALE_ES;
+
+  // Reading filters global state 
+  const filterState = useSelector(state => state.filters);
+
+  // Reading tasks global state 
+  const tasksState = useSelector(state => state.tasks);
+
 
   const ragRenderer = (props) => {
     return <span className="rag-element">{props.value}</span>;
@@ -211,6 +219,18 @@ export const InvoicesToPay = () => {
   useEffect(() => {
     getPanelData('?year=1');
   }, [userDataContext.userData.token]);
+
+  // Update grid data when all tasks in taskState are processed
+  useEffect(() => {
+    if (tasksState && tasksState.results !== undefined) {
+      tasksState && tasksState.results.map((item) => {
+        if (new Date(item.created_at).toLocaleDateString() === new Date().toLocaleDateString()) {
+          item.result !== null && getPanelData(filterState);
+        }
+      });
+    }
+  }, [tasksState])
+
 
   let isLoading = false; // Class variable to avoid taking too long to save that we are loading (state is not enough to control this). Also avoids multiple request under 1 second
 
@@ -546,7 +566,9 @@ export const InvoicesToPay = () => {
   return (
     <>
       <div>
-        <AppBar location={location} subtitle="Añade o edita las facturas con sus impuestos correspondientes" />
+        <AppBar
+          location={location}
+          subtitle="Añade o edita las facturas con sus impuestos correspondientes" />
       </div>
 
       <ButtonBar

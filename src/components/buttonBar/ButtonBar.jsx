@@ -4,6 +4,8 @@ import 'react-calendar/dist/Calendar.css';
 import "react-datepicker/dist/react-datepicker.css";
 import '../../pages/general-style.css';
 import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux'
+import { dateFilterState } from '../../features/filters/filtersSlice'
 
 export default function ButtonBar(props) {
     const { getPanelData } = props;
@@ -12,6 +14,8 @@ export default function ButtonBar(props) {
     const [filters, setFilters] = useState("?year=1");
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
+
+    const dispatch = useDispatch();
 
     const getDataWithFilter = async (filters, event) => {
         await getPanelData(filters);
@@ -34,6 +38,7 @@ export default function ButtonBar(props) {
         if (active !== null && filters !== null) { // if a button period is selected, clear date range
             setStartDate(null);
             setEndDate(null);
+            dispatch(dateFilterState(filters))
         }
     }, [active, filters])
 

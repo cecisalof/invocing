@@ -75,7 +75,6 @@ export const AppBar = (props) => {
     let minute = 60;
     let hour = minute * 60;
     let day = hour * 24;
-    // console.log(day);
     let week = day * 7;
     let month = day * 30;
     let year = month * 12;
