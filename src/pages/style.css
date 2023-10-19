@@ -1,5 +1,4 @@
 .root {
-    left: 18em;
     position: relative;
     background-color: white;
     padding: 2rem 4rem;
@@ -9,7 +8,6 @@
 
 @media (min-width: 1441px) {
     .root {
-        left: 24em;
     }
 }
 
@@ -21,7 +19,6 @@
 
 @media (max-width: 991px) {
     .root {
-        left: 0;
         width: 100vw;
         padding: 1rem;
         height: 100%;

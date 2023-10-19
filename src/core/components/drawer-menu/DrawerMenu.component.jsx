@@ -318,6 +318,8 @@ export const DrawerMenuComponent = ({ user }) => {
           </div>
         </div>
       </nav>
+      {/* Dumy filling */}
+      <div style={{"width": "20vw"}}></div> 
       <Outlet />
     </>
   );
