@@ -9,7 +9,7 @@ import "./style.css"
 
 export const DragAndDropCardComponent = (props) => {
 
-  const { type, userToken, setIsError } = props;
+  const { type, userToken, setError, getTasksStatus } = props;
 
   const [isFileUploaded, setIsFileUploaded] = useState(false)
   const [isFileUploading, setIsFileUploading] = useState(false)
@@ -56,7 +56,7 @@ export const DragAndDropCardComponent = (props) => {
   const processFiles = async (files) => {
     setIsFileUploading(true) // Showing progress bar
     console.log("Procesando archivos automáticamente...");
-
+    getTasksStatus && getTasksStatus();
     let response = null
 
     if (type == "invoice") {
@@ -66,9 +66,17 @@ export const DragAndDropCardComponent = (props) => {
       response = await postExpenseTicketAutomatic(userToken, files)
       setIsFileUploaded(true)
     }
+    setIsFileUploading(false)
 
-    if (!response) {
-      setIsError(true)
+    if (!response || response.status < 200 || response.status >= 300) {
+      if (response.status == 402) {
+        setError("Has excedido tu cuota de facturas mensual. Escribe a info@codepremium.es para aumentarla")
+      }else{
+        setError("Hubo un error al subir los ficheros")
+      }
+      return
+    }else{
+      setIsFileUploaded(true)
     }
 
     setTimeout(() => {
@@ -103,7 +111,7 @@ export const DragAndDropCardComponent = (props) => {
               </span>
             </div>
           )}
-          {!isFileUploading && (
+          {!isFileUploading && !isFileUploaded && (
             <div>
               <img src={type == "invoice" ? dragDrop : cashYellow} alt="dragDrop" className='cards-logo' />
               <div>
@@ -116,6 +124,13 @@ export const DragAndDropCardComponent = (props) => {
               </div>
             </div>
           )}
+          {isFileUploading && (
+            <div className="upload-indicator">
+              <span>
+                Subiendo archivos... <span className="spinner-border spinner-border-sm" role="status"></span>
+              </span>
+            </div>
+          )}
         </div>
       </div>
     </>
@@ -125,8 +140,8 @@ export const DragAndDropCardComponent = (props) => {
 DragAndDropCardComponent.propTypes = {
   userToken: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
-  setIsError: PropTypes.func.isRequired,
+  setError: PropTypes.func.isRequired,
   getPanelData: PropTypes.func,
   getTasksStatus: PropTypes.func,
   tasksState: PropTypes.array,
-}
+};

@@ -17,7 +17,7 @@ import close from '../../assets/icons/close.png';
 //import eye from '../../assets/icons/Eye.png';
 // import deleteIcon from '../../assets/icons/trash.svg';
 // import deleteIconD from '../../assets/icons/trashDeactive.svg';
-import { ProgressBar } from 'react-bootstrap';
+// import { ProgressBar } from 'react-bootstrap';
 import { Alert } from '@mui/material';
 import { DragAndDropCardComponent } from "../../components/dragAndDropCard/DragAndDrop";
 import PropTypes from 'prop-types';
@@ -38,7 +38,7 @@ export const ExpenseTickets = () => {
   const [rowSelection, setRowSelection] = useState(false);
   const [rowProviders, setrowProviders] = useState(); // Set rowData to Array of Objects, one Object per Row
   const [providersLoaded, setProvidersLoaded] = useState(false);
-  const [isError, setIsError] = useState(false);
+  const [error, setError] = useState(false);
 
   const localeText = AG_GRID_LOCALE_ES;
 
@@ -427,32 +427,30 @@ export const ExpenseTickets = () => {
       <div>
         <AppBar location={location} subtitle="Añade o edita los gastos de los que no se contarán IVA o IRPF"/>
       </div>
-      <ButtonBar
-        getPanelData={getPanelData}
-      />
-      {isError && (
-        <Alert severity="error" className="custom-alert" onClose={() => { setIsError(false) }}>
-          Hubo un error al subir los ficheros
+      <ButtonBar getPanelData={getPanelData} />
+      {(error != false && error != "") && (
+        <Alert severity="error" className="custom-alert mt-1 mb-3" onClose={() => { setError(false) }}>
+          {error}
         </Alert>)}
 
       {/* yellow card */}
       <DragAndDropCardComponent
         type="ticket"
         userToken={userDataContext.userData.token}
-        setIsError={(newValue) => { setIsError(newValue) }}
+        setError={(newValue) => { setError(newValue) }}
         getPanelData={getPanelData}
       />
 
       {userDataContext.isLoadingRefEx && (
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
 
-          <ProgressBar
+          {/* <ProgressBar
             now={userDataContext.progressEx}
             label={userDataContext.progressEx === 0 ? "0%" : `${userDataContext.progressEx}%`}
             animated={userDataContext.progressEx === 0}
             variant="custom-color"
             className="mb-3 custom-width-progess custom-progress"
-          />
+          /> */}
           <img src={close} alt="Close icon" onClick={handleCloseClick} style={{ marginRight: '20px', width: '20px', height: '20px', marginTop: '-2px' }} />
         </div>)}
       <div className='d-flex mt-4'>

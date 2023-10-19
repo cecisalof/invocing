@@ -162,12 +162,12 @@ export const AddInvoicesToPay = () => {
       <div className="title">Nueva factura</div>
 
       {isSuccess && (
-        <Alert onClose={() => { setIsSuccess(false) }} severity="success" className="custom-alert">
+        <Alert onClose={() => { setIsSuccess(false) }} severity="success" className="custom-alert mt-1 mb-3">
           La operación se realizó correctamente.
         </Alert>
       )}
       {isError && (
-        <Alert severity="error" className="custom-alert" onClose={() => { setIsError(false) }}>
+        <Alert severity="error" className="custom-alert mt-1 mb-3" onClose={() => { setIsError(false) }}>
           Hubo un error al realizar la operación.
         </Alert>)}
 

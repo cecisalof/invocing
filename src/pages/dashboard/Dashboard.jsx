@@ -28,7 +28,7 @@ export const Dashboard = () => {
   //const [invoiceEmitCount, setInvoiceEmitCount] = useState({});
   //const [invoiceEmitStates, setInvoiceEmitStates] = useState({});
   const [totals, setTotals] = useState({});
-  const [isError, setIsError] = useState(false);
+  const [error, setError] = useState(false);
 
   // Reading filters global state 
   const filterState = useSelector(state => state.filters);
@@ -184,12 +184,11 @@ export const Dashboard = () => {
         <div>
           <AppBar location={location} subtitle="Bienvenido a tu panel de control" />
         </div>
-        <ButtonBar
-          getPanelData={getPanelData}
-        />
-        {isError && (
-          <Alert severity="error" className="custom-alert" onClose={() => { setIsError(false) }}>
-            Hubo un error al subir los archivos
+        <ButtonBar 
+          getPanelData={getPanelData} />
+      {(error != false && error != "") && (
+          <Alert severity="error" className="custom-alert mt-1 mb-3" onClose={() => { setError(false) }}>
+            {error}
           </Alert>)}
         <div className='row'>
           <div className="col-12 col-md-6">
@@ -197,7 +196,7 @@ export const Dashboard = () => {
             <DragAndDropCardComponent
               type="invoice"
               userToken={userDataContext.userData.token}
-              setIsError={(newValue) => { setIsError(newValue) }}
+              setError={(newValue) => { setError(newValue) }}
               getPanelData={getPanelData}
             />
           </div>
@@ -206,7 +205,7 @@ export const Dashboard = () => {
             <DragAndDropCardComponent
               type="ticket"
               userToken={userDataContext.userData.token}
-              setIsError={(newValue) => { setIsError(newValue) }}
+              setError={(newValue) => { setError(newValue) }}
               getPanelData={getPanelData}
             />
           </div>
@@ -225,10 +224,10 @@ export const Dashboard = () => {
                   </div>
                 </div>
                 <div className="col">
-                  <div className="card-container">
-                    <div className="totals">{`${parseFloat(totals.total_amount || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €`}</div>
-                    <div className="totals">{`${(totals.total_taxes || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €`}</div>
-                    <div className="totals">{`${(totals.total_retention || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €`}</div>
+                  <div className="card-container font-nunito">
+                    <div className="totals">{`${parseFloat(totals.total_amount || 0).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2})} €`}</div>
+                    <div className="totals">{`${(totals.total_taxes || 0).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2})} €`}</div>
+                    <div className="totals">{`${(totals.total_retention || 0).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2})} €`}</div>
                   </div>
                 </div>
               </div>
@@ -301,7 +300,7 @@ export const Dashboard = () => {
   
                 <div className="dashboard-titles" > {`${invoiceCount.count} Facturas `}</div>
                 <div className="dashboard-text">SUBIDAS DURANTE</div>
-                <div className="dashboard-subtext"> {`${invoiceCount.text}`}</div>
+                <div className="dashboard-subtext font-nunito"> {`${invoiceCount.text}`}</div>
               </div>
               <div style={{ flexBasis: '50%' }}>
                 <div style={{ display: 'flex' }}>
@@ -359,7 +358,7 @@ export const Dashboard = () => {
   
                 <div className="dashboard-titles" > {`${invoiceCount.count} Facturas `}</div>
                 <div className="dashboard-text">SUBIDAS DURANTE</div>
-                <div className="dashboard-subtext"> {`${invoiceCount.text}`}</div>
+                <div className="dashboard-subtext font-nunito"> {`${invoiceCount.text}`}</div>
               </div>
               <div style={{ flexBasis: '50%' }}>
                 <div style={{ display: 'flex' }}>
@@ -409,7 +408,7 @@ export const Dashboard = () => {
   
                 <div className="dashboard-titles" > {`${invoiceEmitCount.count} Ventas `}</div>
                 <div className="dashboard-text">SUBIDAS DURANTE</div>
-                <div className="dashboard-subtext">{`${invoiceEmitCount.text}`}</div>
+                <div className="dashboard-subtext font-nunito">{`${invoiceEmitCount.text}`}</div>
               </div>
               <div style={{ flexBasis: '50%' }}>
                 <div style={{ display: 'flex' }}>

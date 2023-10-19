@@ -116,6 +116,9 @@ export const postExpenseTicketAutomatic = async (token, fileList) => {
                 limit: 500,
                 offset: 0
             },
+            validateStatus: function (status) {
+                return status > 199 && status < 500; // Reject only if the status code is greater than or equal to 500
+            }
         })
 
         return response;
