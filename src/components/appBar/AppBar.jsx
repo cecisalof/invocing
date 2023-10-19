@@ -108,7 +108,7 @@ export const AppBar = (props) => {
     } else if (currentDate < week) {
       textToPrint = 'hace menos de una semana.';
     } else if (currentDate < week * 2) {
-      textToPrint = Math.round(currentDate / week) <= 1 ? 'hace' + Math.round(currentDate / week) + ' semana.' : 'hace' + Math.round(currentDate / week) + ' semanas.';
+      textToPrint = Math.round(currentDate / week) <= 1 ? 'hace ' + Math.round(currentDate / week) + ' semana.' : 'hace' + Math.round(currentDate / week) + ' semanas.';
     } else if (currentDate < month) {
       textToPrint = 'hace menos de un mes.';
     } else if (currentDate < month * 2) {
