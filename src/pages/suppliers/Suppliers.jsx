@@ -177,7 +177,7 @@ export const Suppliers = () => {
       newValue = stateMappings[newValue] || newValue;
     }
     const data = { [event.colDef.field]: newValue };
-    patchProvider(event.data.uuid, data).then(() => {
+    patchProvider(event.data.uuid, data, userDataContext.userData.token).then(() => {
       // Espera a que se complete la solicitud PATCH y luego carga los datos
       getPanelData();
     });
